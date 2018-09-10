@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\Eclipses;
 
 use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 
 class SolarEclipse
 {
@@ -74,7 +75,7 @@ class SolarEclipse
      * @param SolarEclipseCircumstances $circumstances
      * @return \DateTime
      */
-    public function getDateTime(SolarEclipseCircumstances $circumstances = null)
+    public function getTimeOfInterest(SolarEclipseCircumstances $circumstances = null): TimeOfInterest
     {
         if (!isset($circumstances)) {
             $circumstances = $this->getCircumstancesMax();
@@ -111,6 +112,8 @@ class SolarEclipse
         $b = $a + 1525.0;
         $c = floor(($b - 122.1) / 365.25);
         $d = floor(365.25 * $c);
+
+        // Date
         $month = floor(($b - $d) / 30.6001);
         $day = $b - $d - floor(30.6001 * $month);
 
@@ -131,15 +134,10 @@ class SolarEclipse
         $min = ($t - floor($t)) * 60;
         $sec = ($min - floor($min)) * 60;
 
-        // TODO ...
-//        var_dump($t, $min, $s);die();
+        $toi = new TimeOfInterest();
+        $toi->setTime($year, $month, $day, $hour, $min, $sec);
 
-        $dateTime = new \DateTime();
-        $dateTime->setDate($year, $month, $day);
-        $dateTime->setTime($hour, $min, $sec);
-        $dateTime->setTimezone($this->timeZone);
-
-        return $dateTime;
+        return $toi;
     }
 
 
