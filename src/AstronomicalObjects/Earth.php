@@ -87,9 +87,11 @@ class Earth extends AstronomicalObject
     private $sumEps = 0;
 
 
-    public function __construct()
+    public function __construct(TimeOfInterest $toi = null)
     {
         parent::__construct();
+
+        $this->toi = $toi ? $toi : new TimeOfInterest();
         $this->initializeSumParameter();
     }
 

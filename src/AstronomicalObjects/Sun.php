@@ -4,6 +4,7 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
 use Andrmoel\AstronomyBundle\Coordinates\EclipticalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HorizontalCoordinates;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Util;
@@ -29,13 +30,20 @@ class Sun extends AstronomicalObject
     }
 
 
+    public function getEclipticalCoordinates(): EclipticalCoordinates
+    {
+        $equatorialCoordinates = $this->getEquatorialCoordinates();
+
+        return $equatorialCoordinates->getEclipticalCoordinates();
+    }
+
+
     public function getEquatorialCoordinates(): EquatorialCoordinates
     {
         $T = $this->T;
 
         // Get obliquity of ecliptic
-        $earth = new Earth();
-        $earth->setTimeOfInterest($this->toi);
+        $earth = new Earth($this->toi);
         $eps = $earth->getTrueObliquityOfEcliptic();
         $eps = deg2rad($eps);
 
@@ -74,11 +82,24 @@ class Sun extends AstronomicalObject
     }
 
 
-    public function getEclipticalCoordinates(): EclipticalCoordinates
+    public function getGeocentricCoordinates(): GeocentricCoordinates
     {
-        $equatorialCoordinates = $this->getEquatorialCoordinates();
+        // TODO ...
 
-        return $equatorialCoordinates->getEclipticalCoordinates();
+        // Get obliquity of ecliptic
+        $earth = new Earth($this->toi);
+        $eps = $earth->getTrueObliquityOfEcliptic();
+        $eps = deg2rad($eps);
+
+        $R = 0.99760775;
+
+//        $x = $R * cos($b) * cos($t);
+
+        $x = 0;
+        $y = 0;
+        $z = 0;
+
+        return new GeocentricCoordinates($x, $y, $z, $this->toi);
     }
 
 
