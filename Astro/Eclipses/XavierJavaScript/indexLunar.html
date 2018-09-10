@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<script type="text/javascript" src="lunarEclipseCalc.js"></script>
+
+<script type="text/javascript">
+    var elements = new Array(
+        2458504.717674, 5.0,   69.3, 2.1684, 1.1953, 1,
+        13.01858997,   1.02163994,   0.27836999,
+        -2.37188005,  -1.41529000,  -0.29227999,   0.22418000,   0.74085999,   1.86389995,   2.81976008,
+        122.96899414,   0.67148000,  -0.00025000, // right ascension
+        20.35490990,  -0.07966000,  -0.00129500 // declination
+    );
+
+    recalculate('en', -38.70886, -73.16788, 0, 2);
+    getcoverage('en');
+</script>
+
+</body>
+</html>
