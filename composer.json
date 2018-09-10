@@ -1,0 +1,20 @@
+{
+    "name": "andrmoel/astronomy-bundle",
+    "description": "Astronomy Bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andreas Möller",
+            "email": "andrmoel@googlemail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Andrmoel\\AstronomyBundle\\": "src/"
+        }
+    }
+}
