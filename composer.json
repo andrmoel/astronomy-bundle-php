@@ -16,5 +16,13 @@
         "psr-4": {
             "Andrmoel\\AstronomyBundle\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Andrmoel\\AstronomyBundle\\tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "^4.1"
     }
 }

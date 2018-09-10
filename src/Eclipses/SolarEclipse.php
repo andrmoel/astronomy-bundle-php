@@ -2,6 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\Eclipses;
 
+use Andrmoel\AstronomyBundle\Location;
+
 class SolarEclipse
 {
     const TYPE_NONE = 'none';
@@ -32,14 +34,10 @@ class SolarEclipse
     private $dT = 0.0;
 
     // Observer
+    /** @var Location */
+    private $location;
     private $lat = 0.0;
     private $lon = 0.0;
-    private $latRad = 0.0;
-    private $lonRad = 0.0;
-    private $elevation = 0.0;
-
-    private $rhoSinOs = 0.0;
-    private $rhoCosOs = 0.0;
 
 
     public function __construct(BesselianElements $besselianElements)
@@ -47,27 +45,17 @@ class SolarEclipse
         $this->besselianElements = $besselianElements;
         $this->timeZone = new \DateTimeZone('UTC');
         $this->dT = $besselianElements->getDeltaT();
+
+        $this->location = new Location();
     }
 
 
-    /**
-     * Set location on earth
-     * @param $lat
-     * @param $lon
-     * @param float $elevation
-     */
-    public function setLocation($lat, $lon, $elevation = 0.0)
+    public function setLocation(Location $location): void
     {
-        $this->lat = $lat;
-        $this->lon = $lon;
-        $this->latRad = deg2rad($lat);
-        $this->lonRad = -1 * deg2rad($lon);
-        $this->elevation = $elevation >= 0.0 ? $elevation : $elevation;
+        $this->location = $location;
 
-        // Get the observer's geocentric position
-        $tmp = atan(0.996647189335 * tan($this->latRad));
-        $this->rhoSinOs = 0.996647189335 * sin($tmp) + $this->elevation * sin($this->latRad) / 6378137.0;
-        $this->rhoCosOs = cos($tmp) + $this->elevation * sin($this->latRad) / 6378137.0;
+        $this->lat = $location->getLatitude();
+        $this->lon = $location->getLongitude();
     }
 
 
@@ -671,14 +659,18 @@ class SolarEclipse
         $tanF2 = $this->besselianElements->getTanF2();
         $f2 = atan($tanF2);
 
-        $h = $muRad - $this->lonRad - ($this->dT / 13713.440924999626077);
+        $lonRad = -1 * $this->location->getLongitudeRad();
+        $h = $muRad - $lonRad - ($this->dT / 13713.440924999626077);
         $sinH = sin($h);
         $cosH = cos($h);
 
-        $xi = $this->rhoCosOs * $sinH;
-        $eta = $this->rhoSinOs * $cosD - $this->rhoCosOs * $cosH * $sinD;
-        $zeta = $this->rhoSinOs * $sinD + $this->rhoCosOs * $cosH * $cosD;
-        $dxi = $dMuRad * $this->rhoCosOs * $cosH;
+        $rhoSinOs = $this->location->getRhoSinOs();
+        $rhoCosOs = $this->location->getRhoCosOs();
+
+        $xi = $rhoCosOs * $sinH;
+        $eta = $rhoSinOs * $cosD - $rhoCosOs * $cosH * $sinD;
+        $zeta = $rhoSinOs * $sinD + $rhoCosOs * $cosH * $cosD;
+        $dxi = $dMuRad * $rhoCosOs * $cosH;
         $deta = $dMuRad * $xi * $sinD - $zeta * $dDRad;
 
         $u = $x - $xi;
@@ -753,8 +745,9 @@ class SolarEclipse
 
         $p = atan2($contacttype * $u, $contacttype * $v);
 
-        $sinLat = sin($this->latRad);
-        $cosLat = cos($this->latRad);
+        $lat = $this->location->getLatitudeRad();
+        $sinLat = sin($lat);
+        $cosLat = cos($lat);
 
         // Altitude and azimuth of the sun on the observers surface
         $alt = asin($sinD * $sinLat + $cosD * $cosLat * $cosH);

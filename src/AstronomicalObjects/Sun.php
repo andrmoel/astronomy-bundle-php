@@ -16,40 +16,21 @@ class Sun extends AstronomicalObject
     const TWILIGHT_ASTRONOMICAL = 3;
     const TWILIGHT_NIGHT = 4;
 
-    /** @var null|EquatorialCoordinates cache */
-    private $equatorialCoordinates = null;
-    
-    
-    /**
-     * Constructor
-     */
+
     public function __construct()
     {
         parent::__construct();
     }
-    
 
-    /**
-     * Set time of interest
-     * @param TimeOfInterest $toi
-     */
-    public function setTimeOfInterest($toi)
+
+    public function setTimeOfInterest(TimeOfInterest $toi): void
     {
         parent::setTimeOfInterest($toi);
-        $this->equatorialCoordinates = null;
     }
 
 
-    /**
-     * Get equatorial coordinates
-     * @return EquatorialCoordinates
-     */
-    public function getEquatorialCoordinates()
+    public function getEquatorialCoordinates(): EquatorialCoordinates
     {
-        if (isset($this->equatorialCoordinates)) {
-            return $this->equatorialCoordinates;
-        }
-        
         $T = $this->T;
 
         // Get obliquity of ecliptic
@@ -89,40 +70,23 @@ class Sun extends AstronomicalObject
         $d = asin(sin($eps) * sin($o_rad));
         $d = rad2deg($d);
 
-        $this->equatorialCoordinates = new EquatorialCoordinates($a, $d, $this->toi);
-
-        return $this->equatorialCoordinates;
+        return new EquatorialCoordinates($a, $d, $this->toi);
     }
 
 
-    /**
-     * Get ecliptical coordinates
-     * @return EclipticalCoordinates
-     */
-    public function getEclipticalCoordinates()
+    public function getEclipticalCoordinates(): EclipticalCoordinates
     {
-        if (!isset($this->equatorialCoordinates)) {
-            $this->equatorialCoordinates = $this->getEquatorialCoordinates();
-        }
+        $equatorialCoordinates = $this->getEquatorialCoordinates();
 
-        $eclipticalCoordinates = $this->equatorialCoordinates->getEclipticalCoordinates();
-
-        return $eclipticalCoordinates;
+        return $equatorialCoordinates->getEclipticalCoordinates();
     }
 
 
-    /**
-     * Get horizontal coordinates
-     * @param Earth $earth
-     * @return HorizontalCoordinates
-     */
-    public function getHorizontalCoordinates(Earth $earth)
+    public function getHorizontalCoordinates(Earth $earth): HorizontalCoordinates
     {
-        if (!isset($this->equatorialCoordinates)) {
-            $this->equatorialCoordinates = $this->getEquatorialCoordinates();
-        }
+        $equatorialCoordinates = $this->getEquatorialCoordinates();
 
-        return $this->equatorialCoordinates->getHorizontalCoordinates($earth);
+        return $equatorialCoordinates->getHorizontalCoordinates($earth);
     }
 
 
@@ -136,12 +100,7 @@ class Sun extends AstronomicalObject
     }
 
 
-    /**
-     * Get twilight
-     * @param Earth $earth
-     * @return int
-     */
-    public function getTwilight(Earth $earth)
+    public function getTwilight(Earth $earth): int
     {
         $horizontalCoordinates = $this->getHorizontalCoordinates($earth);
         $alt = $horizontalCoordinates->getAltitude();

@@ -24,23 +24,14 @@ abstract class Coordinates
     }
 
 
-    /**
-     * Set time of interest
-     * @param TimeOfInterest $toi
-     */
-    public function setTimeOfInterest(TimeOfInterest $toi)
+    public function setTimeOfInterest(TimeOfInterest $toi): void
     {
         $this->toi = $toi;
         $this->earth->setTimeOfInterest($toi);
     }
 
 
-    /**
-     * Set equatorial coordinates
-     * @param $RA
-     * @param $dec
-     */
-    public function setEquatorialCoordinates($RA, $dec)
+    public function setEquatorialCoordinates(float $RA, float $dec): void
     {
         // TODO Needed???
         $this->rightAscension = $RA;

@@ -32,9 +32,6 @@ class TimeOfInterest
     private $second = 0;
 
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $tmpTime = date('Y,m,d,H,i,s', time());

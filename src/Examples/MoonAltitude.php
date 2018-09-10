@@ -1,28 +1,20 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Andreas
- * Date: 01.06.15
- * Time: 20:22
- */
 
 namespace Andrmoel\AstronomyBundle\Examples;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Earth;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 
 class MoonAltitude
 {
-    /**
-     * Run example
-     */
     public function run()
     {
         // Berlin
         $lat = 52.518611;
         $lon = 13.408333;
+        $location = new Location($lat, $lon);
 
         // Time of interest is today
         $toi = new TimeOfInterest();
@@ -31,7 +23,7 @@ class MoonAltitude
         // Create earth
         $earth = new Earth();
         $earth->setTimeOfInterest($toi);
-        $earth->setLocation($lat, $lon);
+        $earth->setLocation($location);
 
         // Create moon
         $moon = new Moon();

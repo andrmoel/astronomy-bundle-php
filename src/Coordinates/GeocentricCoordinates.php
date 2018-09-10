@@ -6,54 +6,35 @@ use Andrmoel\AstronomyBundle\TimeOfInterest;
 
 class GeocentricCoordinates extends Coordinates
 {
-    private $X = 0;
-    private $Y = 0;
-    private $Z = 0;
+    private $x = 0;
+    private $y = 0;
+    private $z = 0;
 
 
-    /**
-     * Constructor
-     * @param float $X
-     * @param float $Y
-     * @param float $Z
-     * @param TimeOfInterest $toi
-     */
-    public function __construct($X, $Y, $Z, TimeOfInterest $toi)
+    public function __construct(float $x, float $y, float $z, TimeOfInterest $toi)
     {
         parent::__construct($toi);
 
-        $this->X = $X;
-        $this->Y = $Y;
-        $this->Z = $Z;
+        $this->x = $x;
+        $this->y = $y;
+        $this->z = $z;
     }
 
 
-    /**
-     * Get X
-     * @return float
-     */
-    public function getX()
+    public function getX(): float
     {
-        return $this->X;
+        return $this->x;
     }
 
 
-    /**
-     * Get Y
-     * @return float
-     */
-    public function getY()
+    public function getY(): float
     {
-        return $this->Y;
+        return $this->y;
     }
 
 
-    /**
-     * Get Z
-     * @return float
-     */
-    public function getZ()
+    public function getZ(): float
     {
-        return $this->Z;
+        return $this->z;
     }
 }

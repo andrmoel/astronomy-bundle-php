@@ -12,13 +12,7 @@ class EquatorialCoordinates extends Coordinates
     private $declination = 0;
 
 
-    /**
-     * Constructor
-     * @param float $rightAscension
-     * @param float $declination
-     * @param TimeOfInterest $toi
-     */
-    public function __construct($rightAscension, $declination, TimeOfInterest $toi)
+    public function __construct(float $rightAscension, float $declination, TimeOfInterest $toi)
     {
         parent::__construct($toi);
 
@@ -27,31 +21,19 @@ class EquatorialCoordinates extends Coordinates
     }
 
 
-    /**
-     * Get right ascension
-     * @return float
-     */
-    public function getRightAscension()
+    public function getRightAscension(): float
     {
         return $this->rightAscension;
     }
 
 
-    /**
-     * Get declination
-     * @return float
-     */
-    public function getDeclination()
+    public function getDeclination(): float
     {
         return $this->declination;
     }
 
 
-    /**
-     * Get ecliptical coordinates
-     * @return EclipticalCoordinates
-     */
-    public function getEclipticalCoordinates()
+    public function getEclipticalCoordinates(): EclipticalCoordinates
     {
         $a = deg2rad($this->rightAscension);
         $d = deg2rad($this->declination);
@@ -62,20 +44,15 @@ class EquatorialCoordinates extends Coordinates
         $lat = asin(sin($d) * cos($e) - cos($d) * sin($e) * sin($a));
         $lat = rad2deg($lat);
 
-        return new EclipticalCoordinates($lat, $lon, 0, $this->toi);
+        return new EclipticalCoordinates($lat, $lon, $this->toi);
     }
 
 
-    /**
-     * Get horizontal coordinates
-     * @param Earth $earth
-     * @return HorizontalCoordinates
-     */
-    public function getHorizontalCoordinates(Earth $earth)
+    public function getHorizontalCoordinates(Earth $earth): HorizontalCoordinates
     {
-        $obsLat = $earth->getLatitude();
+        $obsLat = $earth->getLocation()->getLatitude();
         $obsLatRad = deg2rad($obsLat);
-        $obsLon = $earth->getLongitudeAstro();
+        $obsLon = -1 * $earth->getLocation()->getLongitude();
         $gmst = $this->toi->getApparentGreenwichMeanSiderealTime();
         $d = deg2rad($this->declination);
 

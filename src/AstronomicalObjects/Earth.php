@@ -2,6 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Util;
 
@@ -10,12 +11,10 @@ class Earth extends AstronomicalObject
     // Constants
     const RADIUS = 6378137.0; // Earth radius in km
     const FLATTENING = 0.00335281317789691440603238146967; // (1 / 298.257) Earth's flattening
+    const EARTH_AXIS_RATIO = 0.996647189335;
 
     // Location of observer
-    private $lat = 0;
-    private $lon = 0;
-    private $lonAstro = 0;
-    private $elevation = 0;
+    private $location;
 
     private $argumentsNutation = array(
         [0, 0, 0, 0, 1, -171996, -174.2, 92025, 8.9],
@@ -95,21 +94,7 @@ class Earth extends AstronomicalObject
     }
 
 
-    /**
-     * Set time of interest
-     * @param TimeOfInterest $toi
-     */
-    public function setTimeOfInterest(TimeOfInterest $toi)
-    {
-        parent::setTimeOfInterest($toi);
-        $this->initializeSumParameter();
-    }
-
-
-    /**
-     * Initialize sum parameter
-     */
-    private function initializeSumParameter()
+    private function initializeSumParameter(): void
     {
         $T = $this->T;
 
@@ -156,66 +141,22 @@ class Earth extends AstronomicalObject
     }
 
 
-    /**
-     * Set location
-     * @param float $lat
-     * @param float $lon
-     */
-    public function setLocation($lat, $lon)
+    public function setTimeOfInterest(TimeOfInterest $toi): void
     {
-        $this->lat = $lat;
-        $this->lon = $lon;
-        $this->lonAstro = -$lon;
+        parent::setTimeOfInterest($toi);
+        $this->initializeSumParameter();
     }
 
 
-    /**
-     * Set observer's elevation above sea level
-     * @param float $elevation
-     */
-    public function setElevation($elevation)
+    public function setLocation(Location $location): void
     {
-        $this->elevation = $elevation;
+        $this->location = $location;
     }
 
 
-    /**
-     * Get latitude of observer
-     * @return float
-     */
-    public function getLatitude()
+    public function getLocation(): Location
     {
-        return $this->lat;
-    }
-
-
-    /**
-     * Get longitude of observer
-     * @return float
-     */
-    public function getLongitude()
-    {
-        return $this->lon;
-    }
-
-
-    /**
-     * Get negative longitude of observer
-     * @return float
-     */
-    public function getLongitudeAstro()
-    {
-        return $this->lonAstro;
-    }
-
-
-    /**
-     * Get elevation of observer
-     * @return int
-     */
-    public function getElevation()
-    {
-        return $this->elevation;
+        return $this->location;
     }
 
 
@@ -223,7 +164,7 @@ class Earth extends AstronomicalObject
      * Get earth radius at equator
      * @return float
      */
-    public function getRadius()
+    public function getRadius(): float
     {
         return self::RADIUS / 100;
     }
@@ -233,7 +174,7 @@ class Earth extends AstronomicalObject
      * Get earth's flattening
      * @return float
      */
-    public function getFlattening()
+    public function getFlattening(): float
     {
         return self::FLATTENING;
     }
@@ -243,7 +184,7 @@ class Earth extends AstronomicalObject
      * Get eccentricity of earth's meridian
      * @return float
      */
-    public function getEccentricity()
+    public function getEccentricity(): float
     {
         $e = sqrt(2 * self::FLATTENING - pow(self::FLATTENING, 2));
 
@@ -251,21 +192,13 @@ class Earth extends AstronomicalObject
     }
 
 
-    /**
-     * Get nutation
-     * return float
-     */
-    public function getNutation()
+    public function getNutation(): float
     {
         return $this->sumPhi;
     }
 
 
-    /**
-     * Get obliquity of ecliptic
-     * @return float
-     */
-    public function getObliquityOfEcliptic()
+    public function getObliquityOfEcliptic(): float
     {
         $T = $this->T;
         $U = $T / 100;
@@ -290,7 +223,7 @@ class Earth extends AstronomicalObject
      * Get apparent (true) obliquity of ecliptic
      * return float
      */
-    public function getTrueObliquityOfEcliptic()
+    public function getTrueObliquityOfEcliptic(): float
     {
         $e0 = $this->getObliquityOfEcliptic();
         $e = $e0 + $this->sumEps;
@@ -300,15 +233,18 @@ class Earth extends AstronomicalObject
 
 
     /**
-     * Get distance between 2 points on earths surface in km
-     * @param $lat1
-     * @param $lon1
-     * @param $lat2
-     * @param $lon2
+     * Get distance between 2 points on earths surface in meters
+     * @param Location $location1
+     * @param Location $location2
      * @return float
      */
-    public function getDistance($lat1, $lon1, $lat2, $lon2)
+    public static function getDistance(Location $location1, Location $location2): float
     {
+        $lat1 = $location1->getLatitude();
+        $lon1 = $location1->getLongitude();
+        $lat2 = $location2->getLatitude();
+        $lon2 = $location2->getLongitude();
+
         $F = deg2rad(($lat1 + $lat2) / 2);
         $G = deg2rad(($lat1 - $lat2) / 2);
         $l = deg2rad(($lon1 - $lon2) / 2);
@@ -326,27 +262,6 @@ class Earth extends AstronomicalObject
         $s = $D * (1 + self::FLATTENING * $H1 * pow(sin($F), 2) * pow(cos($G), 2)
             - self::FLATTENING * $H2 * pow(cos($F), 2) * pow(sin($G), 2));
 
-        return $s;
-    }
-
-
-    /**
-     * TODO wird zur SoFi Berechnung benötigt ...
-     * @return array
-     */
-    public function getXY()
-    {
-        $lat = deg2rad($this->lat);
-        $lon = deg2rad($this->lat);
-        $r = (self::RADIUS / 100) * 1000;
-
-        $u = atan(0.99664719 * tan($lat));
-        $x = cos($u) + $this->elevation / $r * cos($lat);
-        $y = 0.99664719 * sin($u) + $this->elevation / $r * sin($lat);
-
-        return array(
-            'x' => $x,
-            'y' => $y,
-        );
+        return $s * 1000;
     }
 }

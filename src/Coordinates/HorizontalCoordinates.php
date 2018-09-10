@@ -10,13 +10,7 @@ class HorizontalCoordinates extends Coordinates
     private $altitude = 0;
 
 
-    /**
-     * Constructor
-     * @param float $azimuth
-     * @param float $altitude
-     * @param TimeOfInterest $toi
-     */
-    public function __construct($azimuth, $altitude, TimeOfInterest $toi)
+    public function __construct(float $azimuth, float $altitude, TimeOfInterest $toi)
     {
         parent::__construct($toi);
 
@@ -25,21 +19,13 @@ class HorizontalCoordinates extends Coordinates
     }
 
 
-    /**
-     * Get azimuth
-     * @return float
-     */
-    public function getAzimuth()
+    public function getAzimuth(): float
     {
         return $this->azimuth;
     }
 
 
-    /**
-     * Get altitude
-     * @return mixed
-     */
-    public function getAltitude()
+    public function getAltitude(): float
     {
         return $this->altitude;
     }

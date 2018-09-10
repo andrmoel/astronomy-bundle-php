@@ -143,9 +143,6 @@ class Moon extends AstronomicalObject
     private $sumB = 0;
 
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         parent::__construct();
@@ -153,20 +150,13 @@ class Moon extends AstronomicalObject
     }
 
 
-    /**
-     * Set time of interest
-     * @param TimeOfInterest $toi
-     */
-    public function setTimeOfInterest($toi)
+    public function setTimeOfInterest(TimeOfInterest $toi): void
     {
         parent::setTimeOfInterest($toi);
         $this->initializeSumParameter();
     }
 
 
-    /**
-     * Initialize sum parameter
-     */
     private function initializeSumParameter()
     {
         $T = $this->T;
@@ -271,14 +261,14 @@ class Moon extends AstronomicalObject
 
 
     /**
-     * Get distance to earth [km]
+     * Get distance to earth in meters
      * @return float
      */
-    public function getDistanceToEarth()
+    public function getDistanceToEarth(): float
     {
         $d = 385000.56 + ($this->sumR / 1000);
 
-        return $d;
+        return $d * 1000;
     }
 
 
@@ -286,7 +276,7 @@ class Moon extends AstronomicalObject
      * Get latitude [°]
      * @return float
      */
-    public function getLatitude()
+    public function getLatitude(): float
     {
         $b = $this->sumB / 1000000;
 
@@ -294,11 +284,7 @@ class Moon extends AstronomicalObject
     }
 
 
-    /**
-     * Get mean longitude
-     * @return float
-     */
-    public function getMeanLongitude()
+    public function getMeanLongitude(): float
     {
         $T = $this->T;
 
@@ -313,7 +299,7 @@ class Moon extends AstronomicalObject
      * Get longitude [°]
      * @return float
      */
-    public function getLongitude()
+    public function getLongitude(): float
     {
         $L = $this->getMeanLongitude();
         $l = $L + ($this->sumL / 1000000);
@@ -326,7 +312,7 @@ class Moon extends AstronomicalObject
      * Get apparent longitude
      * @return float
      */
-    public function getApparentLongitude()
+    public function getApparentLongitude(): float
     {
         $l = $this->getLongitude();
 
@@ -340,36 +326,24 @@ class Moon extends AstronomicalObject
     }
 
 
-    /**
-     * Get ecpliptical coordinates
-     * @return EclipticalCoordinates
-     */
-    public function getEclipticalCoordinates()
+    public function getEclipticalCoordinates(): EclipticalCoordinates
     {
         $lat = $this->getLatitude();
         $lon = $this->getApparentLongitude();
-        return new EclipticalCoordinates($lat, $lon, 0, $this->toi);
+
+        return new EclipticalCoordinates($lat, $lon, $this->toi);
     }
 
 
-    /**
-     * Get equatorial coordinates
-     * @return EquatorialCoordinates
-     */
-    public function getEquatorialCoordinates()
+    public function getEquatorialCoordinates(): EquatorialCoordinates
     {
-        $coor = $this->getEclipticalCoordinates();
+        $eclipticalCoordinates = $this->getEclipticalCoordinates();
 
-        return $coor->getEquatorialCoordinates();
+        return $eclipticalCoordinates->getEquatorialCoordinates();
     }
 
 
-    /**
-     * Get horizontal coordinates
-     * @param Earth $earth
-     * @return HorizontalCoordinates
-     */
-    public function getHorizontalCoordinates(Earth $earth)
+    public function getHorizontalCoordinates(Earth $earth): HorizontalCoordinates
     {
         $equatorialCoordinates = $this->getEquatorialCoordinates();
 
@@ -377,11 +351,7 @@ class Moon extends AstronomicalObject
     }
 
 
-    /**
-     * get equatorial horizontal parallax
-     * @return float
-     */
-    public function getEquatorialHorizontalParallax()
+    public function getEquatorialHorizontalParallax(): float
     {
         $d = $this->getDistanceToEarth();
         $pi = rad2deg(asin(6378.14 / $d));
@@ -390,11 +360,7 @@ class Moon extends AstronomicalObject
     }
 
 
-    /**
-     * Get illuminated fraction of the moon
-     * @return float
-     */
-    public function getIlluminatedFraction()
+    public function getIlluminatedFraction(): float
     {
         $equatorialCoordinates = $this->getEquatorialCoordinates();
         $aMoon = $equatorialCoordinates->getRightAscension();
@@ -427,11 +393,7 @@ class Moon extends AstronomicalObject
     }
 
 
-    /**
-     * Is the moon a waxing moon
-     * @return bool
-     */
-    public function isWaxingMoon()
+    public function isWaxingMoon(): bool
     {
         $moonPhase1 = $this->getIlluminatedFraction();
 
@@ -452,7 +414,7 @@ class Moon extends AstronomicalObject
      * TODO evaluate (MEEUS 346)
      * @return float
      */
-    public function getPositionAngleOfMoonsBrightLimb()
+    public function getPositionAngleOfMoonsBrightLimb(): float
     {
         $equatorialCoordinates = $this->getEquatorialCoordinates();
         $aMoon = $equatorialCoordinates->getRightAscension();

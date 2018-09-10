@@ -2,68 +2,36 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Earth;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 
 class EclipticalCoordinates extends Coordinates
 {
     private $longitude = 0.0;
     private $latitude = 0.0;
-    private $elevation = 0.0;
 
 
-    /**
-     * Constructor
-     * @param float $latitude
-     * @param float $longitude
-     * @param float $elevation
-     * @param TimeOfInterest $toi
-     */
-    public function __construct($latitude, $longitude, $elevation, TimeOfInterest $toi)
+    public function __construct(float $latitude, float $longitude, TimeOfInterest $toi)
     {
         parent::__construct($toi);
 
         $this->latitude = $latitude;
         $this->longitude = $longitude;
-        $this->elevation = $elevation;
     }
 
 
-    /**
-     * Get ecliptical latitude
-     * @return float
-     */
-    public function getLatitude()
+    public function getLatitude(): float
     {
         return $this->latitude;
     }
 
 
-    /**
-     * Get ecliptical longitude
-     * @return float
-     */
-    public function getLongitude()
+    public function getLongitude(): float
     {
         return $this->longitude;
     }
 
 
-    /**
-     * Get elevation
-     * @return float
-     */
-    public function getElevation()
-    {
-        return $this->elevation;
-    }
-
-
-    /**
-     * Get equatorial coordinates
-     * @return EquatorialCoordinates
-     */
-    public function getEquatorialCoordinates()
+    public function getEquatorialCoordinates(): EquatorialCoordinates
     {
         $eps = $this->earth->getTrueObliquityOfEcliptic();
         $eps = deg2rad($eps);
