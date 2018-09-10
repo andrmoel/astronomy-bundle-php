@@ -7,16 +7,14 @@ use Andrmoel\AstronomyBundle\Eclipses\SolarEclipse;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 
-$besselianElements = new BesselianElements(include __DIR__ . '/testData/besselianElements.php');
-
 // Madras, Oregon
 $lat = 44.61040;
 $lon = -121.23848;
 $location = new Location($lat, $lon);
 
-// Time of interest is the 21th of August 2017
-$toi = new TimeOfInterest();
-$toi->setTime(2017, 8, 21);
+// Besselian elements for the given eclipse
+// https://eclipse.gsfc.nasa.gov/SEbeselm/SEbeselm2001/SE2017Aug21Tbeselm.html
+$besselianElements = new BesselianElements(include __DIR__ . '/testData/besselianElements.php');
 
 $solarEclipse = new SolarEclipse($besselianElements);
 $solarEclipse->setLocation($location);
