@@ -2,10 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Earth;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Util;
 
 class EquatorialCoordinates extends Coordinates
 {
@@ -61,11 +59,11 @@ class EquatorialCoordinates extends Coordinates
         $H = deg2rad($H);
 
         // Calculate azimuth and altitude
-        $A = atan(sin($H) / (cos($H) * sin($latRad) - tan($d) * cos($latRad)));
-        $A = rad2deg($A);
-        $h = asin(sin($latRad) * sin($d) + cos($latRad) * cos($d) * cos($H));
-        $h = rad2deg($h);
+        $azimuth = atan(sin($H) / (cos($H) * sin($latRad) - tan($d) * cos($latRad)));
+        $azimuth = rad2deg($azimuth);
+        $altitude = asin(sin($latRad) * sin($d) + cos($latRad) * cos($d) * cos($H));
+        $altitude = rad2deg($altitude);
 
-        return new LocalHorizontalCoordinates($A, $h);
+        return new LocalHorizontalCoordinates($azimuth, $altitude);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Location;
 
 class LocalHorizontalCoordinates extends Coordinates
 {
@@ -30,12 +30,24 @@ class LocalHorizontalCoordinates extends Coordinates
         return $this->altitude;
     }
 
-    public function getEquatorialCoordinates(): EquatorialCoordinates
+    /**
+     * TODO NOr working MEEUS 94
+     * @param Location $location
+     * @return EquatorialCoordinates
+     */
+    public function getEquatorialCoordinates(Location $location): EquatorialCoordinates
     {
-        $rightAscension = 0;
-        $declination = 0;
+        $latRad = $location->getLatitudeRad();
 
-        // TODO ... Meeus 94
-        return new EquatorialCoordinates($rightAscension, $declination, $this->toi);
+        // Calculate right ascension and declination
+        $azimuth = deg2rad($this->azimuth);
+        $altitude = deg2rad($this->altitude);
+
+        $rightAscension = atan(sin($azimuth) / (cos($azimuth) * sin($latRad) + tan($altitude) * cos($latRad)));
+        $rightAscension = rad2deg($rightAscension);
+        $declination = asin(sin($latRad) * sin($altitude) - cos($latRad) * cos($altitude) * cos($azimuth));
+        $declination = rad2deg($declination);
+
+        return new EquatorialCoordinates($rightAscension, $declination);
     }
 }
