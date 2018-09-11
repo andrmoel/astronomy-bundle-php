@@ -1,6 +1,6 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle\Tests\Complex;
+namespace Andrmoel\AstronomyBundle\Tests\Coordinates;
 
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
@@ -26,8 +26,9 @@ class LocalHorizontalCoordinatesTest extends TestCase
         $rightAscension = $equatorialCoordinates->getRightAscension();
         $declination = $equatorialCoordinates->getDeclination();
 
+        // TODO
         var_dump($rightAscension, $declination);
 
-        die("DDDDDD");
+//        die("DDDDDD");
     }
 }

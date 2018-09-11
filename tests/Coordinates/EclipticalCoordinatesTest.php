@@ -1,6 +1,6 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle\Tests\Complex;
+namespace Andrmoel\AstronomyBundle\Tests\Coordinates;
 
 use Andrmoel\AstronomyBundle\Coordinates\EclipticalCoordinates;
 use PHPUnit\Framework\TestCase;

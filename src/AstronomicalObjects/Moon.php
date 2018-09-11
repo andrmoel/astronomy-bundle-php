@@ -266,9 +266,9 @@ class Moon extends AstronomicalObject
      */
     public function getDistanceToEarth(): float
     {
-        $d = 385000.56 + ($this->sumR / 1000);
+        $d = (385000.56 + ($this->sumR / 1000)) * 100;
 
-        return $d * 1000;
+        return $d;
     }
 
 
@@ -320,6 +320,8 @@ class Moon extends AstronomicalObject
         $earth->setTimeOfInterest($this->toi);
         $phi = $earth->getNutation();
 
+        var_dump($l, $phi);
+
         $l = $l + $phi;
 
         return $l;
@@ -329,9 +331,9 @@ class Moon extends AstronomicalObject
     public function getEclipticalCoordinates(): EclipticalCoordinates
     {
         $lat = $this->getLatitude();
-        $lon = $this->getApparentLongitude();
+        $lon = $this->getLongitude();
 
-        return new EclipticalCoordinates($lat, $lon, $this->toi);
+        return new EclipticalCoordinates($lat, $lon);
     }
 
 
