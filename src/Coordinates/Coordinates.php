@@ -12,15 +12,11 @@ abstract class Coordinates
     protected  $earth;
 
 
-    /**
-     * Constructor
-     * @param TimeOfInterest $toi
-     */
-    public function __construct(TimeOfInterest $toi)
+    public function __construct()
     {
-        $this->toi = $toi;
+
         $this->earth = new Earth();
-        $this->earth->setTimeOfInterest($toi);
+//        $this->earth->setTimeOfInterest($toi);
     }
 
 

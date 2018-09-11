@@ -10,9 +10,9 @@ class LocalHorizontalCoordinates extends Coordinates
     private $altitude = 0;
 
 
-    public function __construct(float $azimuth, float $altitude, TimeOfInterest $toi)
+    public function __construct(float $azimuth, float $altitude)
     {
-        parent::__construct($toi);
+        parent::__construct();
 
         $this->azimuth = $azimuth;
         $this->altitude = $altitude;

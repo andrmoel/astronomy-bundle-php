@@ -382,8 +382,7 @@ class TimeOfInterest
     {
         $gmst = $this->getGreenwichMeanSiderealTime($normalized);
 
-        $earth = new Earth();
-        $earth->setTimeOfInterest($this);
+        $earth = new Earth($this);
 
         $p = $earth->getNutation();
         $e = deg2rad($earth->getTrueObliquityOfEcliptic());

@@ -10,8 +10,8 @@ use PHPUnit\Framework\TestCase;
 
 class MoonTest extends TestCase
 {
-//    public function testMoonRise()
-//    {
+    public function testMoonRise()
+    {
 //        // Berlin
 //        $lat = 52.518611;
 //        $lon = 13.408333;
@@ -47,6 +47,6 @@ class MoonTest extends TestCase
 //    Illuminated fraction: {$moon->getIlluminatedFraction()}
 //END;
 //
-//        $this->assertTrue(true);
-//    }
+        $this->assertTrue(true);
+    }
 }

@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Earth;
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Util;
 
@@ -12,9 +13,9 @@ class EquatorialCoordinates extends Coordinates
     private $declination = 0;
 
 
-    public function __construct(float $rightAscension, float $declination, TimeOfInterest $toi)
+    public function __construct(float $rightAscension, float $declination)
     {
-        parent::__construct($toi);
+        parent::__construct();
 
         $this->rightAscension = $rightAscension;
         $this->declination = $declination;
@@ -33,39 +34,38 @@ class EquatorialCoordinates extends Coordinates
     }
 
 
-    public function getEclipticalCoordinates(): EclipticalCoordinates
+    public function getEclipticalCoordinates(float $obliquityOfEcliptic): EclipticalCoordinates
     {
         $a = deg2rad($this->rightAscension);
         $d = deg2rad($this->declination);
-        $e = deg2rad($this->earth->getObliquityOfEcliptic());
+        $eps = deg2rad($obliquityOfEcliptic);
 
-        $lon = atan((sin($a) * cos($e) + tan($d) * sin($e)) / cos($a));
-        $lon = rad2deg($lon);
-        $lat = asin(sin($d) * cos($e) - cos($d) * sin($e) * sin($a));
+        $lon = atan((sin($a) * cos($eps) + tan($d) * sin($eps)) / cos($a));
+        $lon = rad2deg($lon) + 180; // TODO warum + 180? Laut buch nicht nötig...
+        $lat = asin(sin($d) * cos($eps) - cos($d) * sin($eps) * sin($a));
         $lat = rad2deg($lat);
 
-        return new EclipticalCoordinates($lat, $lon, $this->toi);
+        return new EclipticalCoordinates($lat, $lon);
     }
 
 
-    public function getLocalHorizontalCoordinates(Earth $earth): LocalHorizontalCoordinates
+    public function getLocalHorizontalCoordinates(Location $location, TimeOfInterest $toi): LocalHorizontalCoordinates
     {
-        $obsLat = $earth->getLocation()->getLatitude();
-        $obsLatRad = deg2rad($obsLat);
-        $obsLon = -1 * $earth->getLocation()->getLongitude();
-        $gmst = $this->toi->getApparentGreenwichMeanSiderealTime();
+        $latRad = $location->getLatitudeRad();
+        $lon = $location->getLongitudePositiveWest();
+        $agmst = $toi->getApparentGreenwichMeanSiderealTime();
         $d = deg2rad($this->declination);
 
         // Calculate hour angle
-        $H = Util::normalizeAngle($gmst - $obsLon - $this->rightAscension);
+        $H = $agmst - $lon - $this->rightAscension;
         $H = deg2rad($H);
 
         // Calculate azimuth and altitude
-        $A = atan(sin($H) / (cos($H) * sin($obsLatRad) - tan($d) * cos($obsLatRad)));
+        $A = atan(sin($H) / (cos($H) * sin($latRad) - tan($d) * cos($latRad)));
         $A = rad2deg($A);
-        $h = asin(sin($obsLatRad) * sin($d) + cos($obsLatRad) * cos($d) * cos($H));
+        $h = asin(sin($latRad) * sin($d) + cos($latRad) * cos($d) * cos($H));
         $h = rad2deg($h);
 
-        return new LocalHorizontalCoordinates($A, $h, $this->toi);
+        return new LocalHorizontalCoordinates($A, $h);
     }
 }

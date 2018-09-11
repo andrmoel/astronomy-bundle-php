@@ -64,9 +64,21 @@ class Location
     }
 
 
+    public function getLongitudePositiveWest(): float
+    {
+        return -1 * $this->longitude;
+    }
+
+
     public function getLongitudeRad(): float
     {
         return $this->longitudeRad;
+    }
+
+
+    public function getLongitudePositiveWestRad(): float
+    {
+        return -1 * $this->longitudeRad;
     }
 
 

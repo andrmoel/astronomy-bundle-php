@@ -657,7 +657,7 @@ class SolarEclipse
         $tanF2 = $this->besselianElements->getTanF2();
         $f2 = atan($tanF2);
 
-        $lonRad = -1 * $this->location->getLongitudeRad();
+        $lonRad = $this->location->getLongitudePositiveWestRad();
         $h = $muRad - $lonRad - ($this->dT / 13713.440924999626077);
         $sinH = sin($h);
         $cosH = cos($h);
