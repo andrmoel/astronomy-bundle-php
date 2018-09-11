@@ -4,7 +4,7 @@ namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 
-class GeocentricCoordinates extends Coordinates
+class GeocentricRectangularCoordinates extends Coordinates
 {
     private $x = 0;
     private $y = 0;

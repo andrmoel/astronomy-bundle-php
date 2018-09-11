@@ -4,7 +4,7 @@ namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 
-class HorizontalCoordinates extends Coordinates
+class LocalHorizontalCoordinates extends Coordinates
 {
     private $azimuth = 0;
     private $altitude = 0;
@@ -28,5 +28,14 @@ class HorizontalCoordinates extends Coordinates
     public function getAltitude(): float
     {
         return $this->altitude;
+    }
+
+    public function getEquatorialCoordinates(): EquatorialCoordinates
+    {
+        $rightAscension = 0;
+        $declination = 0;
+
+        // TODO ... Meeus 94
+        return new EquatorialCoordinates($rightAscension, $declination, $this->toi);
     }
 }

@@ -48,7 +48,7 @@ class EquatorialCoordinates extends Coordinates
     }
 
 
-    public function getHorizontalCoordinates(Earth $earth): HorizontalCoordinates
+    public function getLocalHorizontalCoordinates(Earth $earth): LocalHorizontalCoordinates
     {
         $obsLat = $earth->getLocation()->getLatitude();
         $obsLatRad = deg2rad($obsLat);
@@ -66,6 +66,6 @@ class EquatorialCoordinates extends Coordinates
         $h = asin(sin($obsLatRad) * sin($d) + cos($obsLatRad) * cos($d) * cos($H));
         $h = rad2deg($h);
 
-        return new HorizontalCoordinates($A, $h, $this->toi);
+        return new LocalHorizontalCoordinates($A, $h, $this->toi);
     }
 }

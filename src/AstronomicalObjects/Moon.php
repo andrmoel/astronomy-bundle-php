@@ -4,7 +4,7 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
 use Andrmoel\AstronomyBundle\Coordinates\EclipticalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\HorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Util;
 
@@ -343,7 +343,7 @@ class Moon extends AstronomicalObject
     }
 
 
-    public function getHorizontalCoordinates(Earth $earth): HorizontalCoordinates
+    public function getHorizontalCoordinates(Earth $earth): LocalHorizontalCoordinates
     {
         $equatorialCoordinates = $this->getEquatorialCoordinates();
 

@@ -5,7 +5,7 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 use Andrmoel\AstronomyBundle\Coordinates\EclipticalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\HorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Util;
 
@@ -62,20 +62,20 @@ class Sun extends AstronomicalObject
         $C += 0.000289 * sin(3 * deg2rad($M));
 
         $o = $L + $C;
-        $o_rad = deg2rad($o);
+        $oRad = deg2rad($o);
 
         $O = 125.04 - 1934.136 * $T;
-        $O_rad = deg2rad($O);
-        $lon = $o - 0.00569 - 0.00478 * sin($O_rad);
-        $lon_rad = deg2rad($lon);
+        $ORad = deg2rad($O);
+        $lon = $o - 0.00569 - 0.00478 * sin($ORad);
+        $lonRad = deg2rad($lon);
 
         // Corrections
-        $eps += 0.00256 * cos($O_rad);
+        $eps += 0.00256 * cos($ORad);
 
-        $a = atan2(cos($eps) * sin($lon_rad), cos($lon_rad));
+        $a = atan2(cos($eps) * sin($lonRad), cos($lonRad));
         $a = Util::normalizeAngle(rad2deg($a));
 
-        $d = asin(sin($eps) * sin($o_rad));
+        $d = asin(sin($eps) * sin($oRad));
         $d = rad2deg($d);
 
         return new EquatorialCoordinates($a, $d, $this->toi);
@@ -103,7 +103,7 @@ class Sun extends AstronomicalObject
     }
 
 
-    public function getHorizontalCoordinates(Earth $earth): HorizontalCoordinates
+    public function getHorizontalCoordinates(Earth $earth): LocalHorizontalCoordinates
     {
         $equatorialCoordinates = $this->getEquatorialCoordinates();
 
