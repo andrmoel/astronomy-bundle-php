@@ -44,6 +44,14 @@ class Util
     }
 
 
+    public static function time2angleDec($hour, $min, $sec)
+    {
+        $time = $hour + $min / 60 + $sec / 3600;
+
+        return $time * 15;
+    }
+
+
     /**
      * Normalize angle
      * @param double $angle
