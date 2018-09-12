@@ -6,6 +6,7 @@ use Andrmoel\AstronomyBundle\Coordinates\EclipticalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Util;
 
@@ -18,23 +19,14 @@ class Sun extends AstronomicalObject
     const TWILIGHT_NIGHT = 4;
 
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-
-    public function setTimeOfInterest(TimeOfInterest $toi): void
-    {
-        parent::setTimeOfInterest($toi);
-    }
-
-
     public function getEclipticalCoordinates(): EclipticalCoordinates
     {
-        $equatorialCoordinates = $this->getEquatorialCoordinates();
+        $earth = new Earth($this->toi);
+        $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
 
-        return $equatorialCoordinates->getEclipticalCoordinates();
+        return $this
+            ->getEquatorialCoordinates()
+            ->getEclipticalCoordinates($obliquityOfEcliptic);
     }
 
 
@@ -78,10 +70,14 @@ class Sun extends AstronomicalObject
         $d = asin(sin($eps) * sin($oRad));
         $d = rad2deg($d);
 
-        return new EquatorialCoordinates($a, $d, $this->toi);
+        return new EquatorialCoordinates($a, $d);
     }
 
 
+    /**
+     * TODO ...
+     * @return GeocentricCoordinates
+     */
     public function getGeocentricCoordinates(): GeocentricCoordinates
     {
         // TODO ...
@@ -103,11 +99,11 @@ class Sun extends AstronomicalObject
     }
 
 
-    public function getHorizontalCoordinates(Earth $earth): LocalHorizontalCoordinates
+    public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
-        $equatorialCoordinates = $this->getEquatorialCoordinates();
-
-        return $equatorialCoordinates->getHorizontalCoordinates($earth);
+        return $this
+            ->getEquatorialCoordinates()
+            ->getLocalHorizontalCoordinates($location, $this->toi);
     }
 
 
@@ -121,10 +117,10 @@ class Sun extends AstronomicalObject
     }
 
 
-    public function getTwilight(Earth $earth): int
+    public function getTwilight(Location $location): int
     {
-        $horizontalCoordinates = $this->getHorizontalCoordinates($earth);
-        $alt = $horizontalCoordinates->getAltitude();
+        $localHorizontalCoordinates = $this->getLocalHorizontalCoordinates($location);
+        $alt = $localHorizontalCoordinates->getAltitude();
 
         if ($alt > 0) {
             return self::TWILIGHT_DAY;

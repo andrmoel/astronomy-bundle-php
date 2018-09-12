@@ -50,7 +50,7 @@ class EquatorialCoordinatesTest extends TestCase
         $azimuth = $localHorizontalCoordinates->getAzimuth();
         $altitude = $localHorizontalCoordinates->getAltitude();
 
-        $this->assertEquals(68.0318, round($azimuth, 4));
-        $this->assertEquals(15.1268, round($altitude, 4));
+        $this->assertEquals(68.0317, round($azimuth, 4));
+        $this->assertEquals(15.1269, round($altitude, 4));
     }
 }

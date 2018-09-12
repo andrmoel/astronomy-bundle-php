@@ -13,6 +13,8 @@ class EclipticalCoordinates extends Coordinates
 
     public function __construct(float $latitude, float $longitude)
     {
+        parent::__construct();
+
         $this->latitude = $latitude;
         $this->longitude = $longitude;
     }

@@ -5,6 +5,7 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 use Andrmoel\AstronomyBundle\Coordinates\EclipticalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Util;
 
@@ -143,9 +144,9 @@ class Moon extends AstronomicalObject
     private $sumB = 0;
 
 
-    public function __construct()
+    public function __construct(TimeOfInterest $toi = null)
     {
-        parent::__construct();
+        parent::__construct($toi);
         $this->initializeSumParameter();
     }
 
@@ -261,12 +262,12 @@ class Moon extends AstronomicalObject
 
 
     /**
-     * Get distance to earth in meters
+     * Get distance to earth [km]
      * @return float
      */
     public function getDistanceToEarth(): float
     {
-        $d = (385000.56 + ($this->sumR / 1000)) * 100;
+        $d = (385000.56 + ($this->sumR / 1000));
 
         return $d;
     }
@@ -320,8 +321,6 @@ class Moon extends AstronomicalObject
         $earth->setTimeOfInterest($this->toi);
         $phi = $earth->getNutation();
 
-        var_dump($l, $phi);
-
         $l = $l + $phi;
 
         return $l;
@@ -339,17 +338,20 @@ class Moon extends AstronomicalObject
 
     public function getEquatorialCoordinates(): EquatorialCoordinates
     {
-        $eclipticalCoordinates = $this->getEclipticalCoordinates();
+        $earth = new Earth($this->toi);
+        $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
 
-        return $eclipticalCoordinates->getEquatorialCoordinates();
+        return $this
+            ->getEclipticalCoordinates()
+            ->getEquatorialCoordinates($obliquityOfEcliptic);
     }
 
 
-    public function getHorizontalCoordinates(Earth $earth): LocalHorizontalCoordinates
+    public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
-        $equatorialCoordinates = $this->getEquatorialCoordinates();
-
-        return $equatorialCoordinates->getHorizontalCoordinates($earth);
+        return $this
+            ->getEquatorialCoordinates()
+            ->getLocalHorizontalCoordinates($location, $this->toi);
     }
 
 
@@ -365,12 +367,12 @@ class Moon extends AstronomicalObject
     public function getIlluminatedFraction(): float
     {
         $equatorialCoordinates = $this->getEquatorialCoordinates();
+
         $aMoon = $equatorialCoordinates->getRightAscension();
         $dMoon = $equatorialCoordinates->getDeclination();
         $distMoon = $this->getDistanceToEarth();
 
-        $sun = new Sun();
-        $sun->setTimeOfInterest($this->toi);
+        $sun = new Sun($this->toi);
         $equatorialCoordinates = $sun->getEquatorialCoordinates();
         $aSun = $equatorialCoordinates->getRightAscension();
         $dSun = $equatorialCoordinates->getDeclination();
@@ -403,8 +405,7 @@ class Moon extends AstronomicalObject
         $second = $toi->getSecond() + 1;
         $toi->setTime($toi->getYear(), $toi->getMonth(), $toi->getDay(), $toi->getHour(), $toi->getMinute(), $second);
 
-        $moon = new self();
-        $moon->setTimeOfInterest($toi);
+        $moon = new self($toi);
         $moonPhase2 = $moon->getIlluminatedFraction();
 
         return $moonPhase2 > $moonPhase1;
@@ -418,7 +419,10 @@ class Moon extends AstronomicalObject
      */
     public function getPositionAngleOfMoonsBrightLimb(): float
     {
-        $equatorialCoordinates = $this->getEquatorialCoordinates();
+        $earth = new Earth($this->toi);
+        $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
+        $equatorialCoordinates = $this->getEquatorialCoordinates($obliquityOfEcliptic);
+
         $aMoon = $equatorialCoordinates->getRightAscension();
         $dMoon = $equatorialCoordinates->getDeclination();
 
