@@ -101,6 +101,9 @@ class Earth extends AstronomicalObject
     }
 
 
+    /**
+     * Meeus chapter 22
+     */
     private function initializeSumParameter(): void
     {
         $sun = new Sun($this->toi);
@@ -176,7 +179,7 @@ class Earth extends AstronomicalObject
      */
     public function getRadius(): float
     {
-        return self::RADIUS / 100;
+        return self::RADIUS;
     }
 
 
@@ -214,6 +217,10 @@ class Earth extends AstronomicalObject
     }
 
 
+    /**
+     * Meeus 22.3
+     * @return float
+     */
     public function getObliquityOfEcliptic(): float
     {
         $T = $this->T;
@@ -236,7 +243,7 @@ class Earth extends AstronomicalObject
 
 
     /**
-     * Get apparent (true) obliquity of ecliptic
+     * Get apparent (true) obliquity of ecliptic (Meeus chapter 22)
      * return float
      */
     public function getTrueObliquityOfEcliptic(): float
