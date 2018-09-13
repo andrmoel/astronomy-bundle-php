@@ -283,7 +283,8 @@ class Moon extends AstronomicalObject
     {
         $T = $this->T;
 
-//        $Mmoon = 134.9633964 + 477198.8675055 * $T + 0.0087414 * pow($T, 2) + pow($T, 3) / 69699 - pow($T, 4) / 1471200; // TODO besser, aber Woher???
+        // TODO besser, aber woher ist die Formel???
+//        $Mmoon = 134.9633964 + 477198.8675055 * $T + 0.0087414 * pow($T, 2) + pow($T, 3) / 69699 - pow($T, 4) / 1471200;
         $Mmoon = 134.96298 + 477198.867398 * $T + 0.0086972 * pow($T, 2) + pow($T, 3) / 56250;
         $Mmoon = Util::normalizeAngle($Mmoon);
 
