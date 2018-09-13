@@ -58,6 +58,18 @@ class Sun extends AstronomicalObject
     }
 
 
+    public function getEquationOfTime(): float
+    {
+        $T = $this->T / 10; // TODO Warum durch 10?
+        $L0 = $this->getMeanLongitude();
+
+        // Meeus 28.1
+        $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($eps);
+
+        return $E;
+    }
+
+
     public function getRadiusVector(): float
     {
         $earth = new Earth($this->toi);
