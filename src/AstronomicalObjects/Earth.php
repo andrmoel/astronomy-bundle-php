@@ -256,7 +256,7 @@ class Earth extends AstronomicalObject
 
 
     /**
-     * Get distance between 2 points on earths surface in meters
+     * Get distance between 2 points on earths surface [km]
      * @param Location $location1
      * @param Location $location2
      * @return float
@@ -285,6 +285,6 @@ class Earth extends AstronomicalObject
         $s = $D * (1 + self::FLATTENING * $H1 * pow(sin($F), 2) * pow(cos($G), 2)
                 - self::FLATTENING * $H2 * pow(cos($F), 2) * pow(sin($G), 2));
 
-        return $s * 1000;
+        return $s / 10;
     }
 }

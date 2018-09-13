@@ -82,4 +82,21 @@ class EarthTest extends TestCase
 
         $this->assertEquals(23.44356, round($e, 5));
     }
+
+    public function testGetDistance()
+    {
+        // Berlin
+        $lat = 52.518611;
+        $lon = 13.408333;
+        $location1 = new Location($lat, $lon);
+
+        // Munich
+        $lat = 48.137222;
+        $lon = 11.575556;
+        $location2 = new Location($lat, $lon);
+
+        $distance = Earth::getDistance($location1, $location2);
+
+        $this->assertEquals(504.50, round($distance, 2));
+    }
 }
