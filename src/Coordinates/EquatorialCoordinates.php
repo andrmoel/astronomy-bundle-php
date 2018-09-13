@@ -4,12 +4,12 @@ namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Util;
 
 class EquatorialCoordinates extends Coordinates
 {
     private $rightAscension = 0;
     private $declination = 0;
-
 
     public function __construct(float $rightAscension, float $declination)
     {
@@ -19,18 +19,15 @@ class EquatorialCoordinates extends Coordinates
         $this->declination = $declination;
     }
 
-
     public function getRightAscension(): float
     {
         return $this->rightAscension;
     }
 
-
     public function getDeclination(): float
     {
         return $this->declination;
     }
-
 
     public function getEclipticalCoordinates(float $obliquityOfEcliptic): EclipticalCoordinates
     {
@@ -46,7 +43,6 @@ class EquatorialCoordinates extends Coordinates
         return new EclipticalCoordinates($lat, $lon);
     }
 
-
     public function getLocalHorizontalCoordinates(Location $location, TimeOfInterest $toi): LocalHorizontalCoordinates
     {
         $latRad = $location->getLatitudeRad();
@@ -61,6 +57,7 @@ class EquatorialCoordinates extends Coordinates
         // Calculate azimuth and altitude
         $azimuth = atan(sin($H) / (cos($H) * sin($latRad) - tan($d) * cos($latRad)));
         $azimuth = rad2deg($azimuth);
+        $azimuth = Util::normalizeAngle($azimuth);
         $altitude = asin(sin($latRad) * sin($d) + cos($latRad) * cos($d) * cos($H));
         $altitude = rad2deg($altitude);
 

@@ -31,7 +31,6 @@ class TimeOfInterest
     private $minute = 0;
     private $second = 0;
 
-
     public function __construct()
     {
         $tmpTime = date('Y,m,d,H,i,s', time());
@@ -44,7 +43,6 @@ class TimeOfInterest
         $this->minute = (int)$tmpArr[4];
         $this->second = (int)$tmpArr[5];
     }
-
 
     public function setTime(
         int $year = 0,
@@ -62,7 +60,6 @@ class TimeOfInterest
         $this->minute = $minute;
         $this->second = $second;
     }
-
 
     public function setTimeByDayOfYear(
         int $year = 0,
@@ -84,7 +81,6 @@ class TimeOfInterest
         $this->second = $second;
     }
 
-
     public function setDateTime(\DateTime $dateTime): void
     {
         $this->year = $dateTime->format('Y');
@@ -94,7 +90,6 @@ class TimeOfInterest
         $this->minute = $dateTime->format('i');
         $this->second = $dateTime->format('s');
     }
-
 
     public function setJulianDay(float $jd): void
     {
@@ -130,7 +125,6 @@ class TimeOfInterest
         $this->second = (int)$second;
     }
 
-
     public function setUnixTime(int $unixTime): void
     {
         $tmpTime = date('Y,m,d,H,i,s', $unixTime);
@@ -143,7 +137,6 @@ class TimeOfInterest
         $this->minute = (int)$tmpArr[4];
         $this->second = (int)$tmpArr[5];
     }
-
 
     public function setTleEpoch($epoch): void // TODO type
     {
@@ -173,46 +166,35 @@ class TimeOfInterest
         $this->second = (int)$second;
     }
 
-
     public function getYear(): int
     {
         return $this->year;
     }
-
 
     public function getMonth(): int
     {
         return $this->month;
     }
 
-
     public function getDay(): int
     {
         return $this->day;
     }
-
 
     public function getHour(): int
     {
         return $this->hour;
     }
 
-
-    /**
-     * Get minute
-     * @return int
-     */
     public function getMinute(): int
     {
         return $this->minute;
     }
 
-
     public function getSecond(): int
     {
         return $this->second;
     }
-
 
     public function getDateTime(): \DateTime
     {
@@ -222,7 +204,6 @@ class TimeOfInterest
 
         return $dateTime;
     }
-
 
     public function getTimeString(): string
     {
@@ -235,7 +216,6 @@ class TimeOfInterest
 
         return $timeStr;
     }
-
 
     public function getFormattedTimeString(string $format): string
     {
@@ -255,7 +235,6 @@ class TimeOfInterest
 
         return $format;
     }
-
 
     public function getJulianDay(bool $jd0 = false): float  // TODO float or int
     {
@@ -286,12 +265,10 @@ class TimeOfInterest
         return $JD;
     }
 
-
     public function getJulianDay0(): float // TODO float or int
     {
         return $this->getJulianDay(true);
     }
-
 
     public function getJulianCenturiesSinceJ2000(): float
     {
@@ -301,7 +278,6 @@ class TimeOfInterest
         return $T;
     }
 
-
     public function getDayOfWeek(): int
     {
         $jd = $this->getJulianDay();
@@ -309,7 +285,6 @@ class TimeOfInterest
 
         return $dow;
     }
-
 
     public function getDayOfWeekString(): string
     {
@@ -336,7 +311,6 @@ class TimeOfInterest
         }
     }
 
-
     public function getDayOfYear(): int
     {
         $k = $this->isLeapYear($this->year) ? 1 : 2;
@@ -345,14 +319,12 @@ class TimeOfInterest
         return $n;
     }
 
-
     public function getUniversalTime(): int
     {
         // TODO write
         $ut = 0;
         return $ut;
     }
-
 
     public function getGreenwichMeanSiderealTime(bool $normalized = true): float
     {
@@ -368,7 +340,6 @@ class TimeOfInterest
         return $t0;
     }
 
-
     public function getGreenwichMeanSiderealTimeInHours(): float
     {
         $gmst = $this->getGreenwichMeanSiderealTime();
@@ -376,7 +347,6 @@ class TimeOfInterest
 
         return $t0;
     }
-
 
     public function getApparentGreenwichMeanSiderealTime(bool $normalized = true): float
     {
@@ -392,7 +362,6 @@ class TimeOfInterest
         return $gmst;
     }
 
-
     public function getLocalMeanSiderealTime(float $lon, bool $normalized = true): float
     {
         $lonEast = $lon >= 0 ? $lon : 360 + $lon;
@@ -407,7 +376,6 @@ class TimeOfInterest
         return $lmst;
     }
 
-
     public function getLocalMeanSiderealTimeInHours(float $lon): float
     {
         $lmst = $this->getLocalMeanSiderealTime($lon);
@@ -415,7 +383,6 @@ class TimeOfInterest
 
         return $lmst;
     }
-
 
     public function isLeapYear(int $year): bool
     {

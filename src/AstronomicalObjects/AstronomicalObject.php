@@ -16,7 +16,6 @@ class AstronomicalObject
     /** @var AstronomicalObjectCache */
     protected $cache;
 
-
     public function __construct(TimeOfInterest $toi = null)
     {
         $this->toi = $toi ? $toi : new TimeOfInterest();
@@ -24,13 +23,11 @@ class AstronomicalObject
         $this->cache = new AstronomicalObjectCache($this);
     }
 
-
     public function setTimeOfInterest(TimeOfInterest $toi): void
     {
         $this->toi = $toi;
         $this->T = $this->toi->getJulianCenturiesSinceJ2000();
     }
-
 
     public function getTimeOfInterest(): TimeOfInterest
     {

@@ -8,7 +8,6 @@ use Andrmoel\AstronomyBundle\Coordinates\GeocentricCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\RectangularGeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Util;
 
 class Sun extends AstronomicalObject
@@ -33,7 +32,13 @@ class Sun extends AstronomicalObject
     public function getMeanAnomaly(): float
     {
         $T = $this->T;
-        $M = 357.52772 + 35999.050340 * $T - 0.0001603 * pow($T, 2) - pow($T, 3) / 300000;
+
+        // Meeus chapter 22
+        // $M = 357.52772 + 35999.050340 * $T - 0.0001603 * pow($T, 2) - pow($T, 3) / 300000;
+
+        // Meeus 47.4
+        $M = 357.5291092 + 35999.0502909 * $T - 0.0001536 * pow($T, 2) + pow($T, 3) / 2449000;
+        $M = Util::normalizeAngle($M);
 
         return $M;
     }

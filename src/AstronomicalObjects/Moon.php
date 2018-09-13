@@ -160,21 +160,15 @@ class Moon extends AstronomicalObject
 
     private function initializeSumParameter()
     {
+        $sun = new Sun($this->toi);
+
         $T = $this->T;
 
-        // Mean longitude
         $L = $this->getMeanLongitude();
-        // Mean elongation of the moon
-        $D = 297.8501921 + 445267.1114034 * $T - 0.0018819 * pow($T, 2) + pow($T, 3) / 545868 - pow($T, 4) / 113065000;
-        $D = Util::normalizeAngle($D);
-        // Mean anomaly of the sun
-        $Msun = 357.5291092 + 35999.0502909 * $T - 0.0001536 * pow($T, 2) + pow($T, 3) / 24490000;
-        $Msun = Util::normalizeAngle($Msun);
-        // Mean anomaly of the moon
+        $D = $this->getMeanElongationFromSun();
+        $Msun = $sun->getMeanAnomaly();
         $Mmoon = $this->getMeanAnomaly();
-        // Argument of latitude
-        $F = 93.2720950 + 483202.0175233 * $T - 0.0036539 * pow($T, 2) - pow($T, 3) / 352600 + pow($T, 4) / 86331000;
-        $F = Util::normalizeAngle($F);
+        $F = $this->getArgumentOfLatitude();
 
         // Action of venus
         $A1 = Util::normalizeAngle(119.75 + 131.849 * $T);
@@ -259,53 +253,47 @@ class Moon extends AstronomicalObject
         $this->sumB = $sumB;
     }
 
-
-    /**
-     * Meeus chapter 22
-     * @return float
-     */
     public function getMeanElongationFromSun(): float
     {
         $T = $this->T;
 
-        $D = 297.85036 + 445267.111480 * $T - 0.0019142 * pow($T, 2) + pow($T, 3) / 189474;
+        // Meeus chapter 22
+        // $D = 297.85036 + 445267.111480 * $T - 0.0019142 * pow($T, 2) + pow($T, 3) / 189474;
+
+        // Meeus 47.2
+        $D = 297.8501921 + 445267.1114034 * $T - 0.0018819 * pow($T, 2) + pow($T, 3) / 545868 - pow($T, 4) / 113065000;
         $D = Util::normalizeAngle($D);
 
         return $D;
     }
 
-
-    /**
-     * Meeus chapter 22
-     * @return float
-     */
     public function getMeanAnomaly(): float
     {
         $T = $this->T;
 
-        // TODO besser, aber woher ist die Formel???
-//        $Mmoon = 134.9633964 + 477198.8675055 * $T + 0.0087414 * pow($T, 2) + pow($T, 3) / 69699 - pow($T, 4) / 1471200;
-        $Mmoon = 134.96298 + 477198.867398 * $T + 0.0086972 * pow($T, 2) + pow($T, 3) / 56250;
+        // Meeus chapter 22
+        // $Mmoon = 134.96298 + 477198.867398 * $T + 0.0086972 * pow($T, 2) + pow($T, 3) / 56250;
+
+        // Meeus 47.2
+        $Mmoon = 134.9633964 + 477198.8675055 * $T + 0.0087414 * pow($T, 2) + pow($T, 3) / 69699 - pow($T, 4) / 1471200;
         $Mmoon = Util::normalizeAngle($Mmoon);
 
         return $Mmoon;
     }
 
-
-    /**
-     * Meeus chapter 22
-     * @return float
-     */
     public function getArgumentOfLatitude(): float
     {
         $T = $this->T;
 
-        $F = 93.27191 + 483202.017538 * $T - 0.0036825 * pow($T, 2) + pow($T, 3) / 327270;
+        // Meeus chapter 22
+        // $F = 93.27191 + 483202.017538 * $T - 0.0036825 * pow($T, 2) + pow($T, 3) / 327270;
+
+        // Meeus 47.5
+        $F = 93.2720950 + 483202.0175233 * $T - 0.0036539 * pow($T, 2) - pow($T, 3) / 352600 + pow($T, 4) / 86331000;
         $F = Util::normalizeAngle($F);
 
         return $F;
     }
-
 
     /**
      * Get distance to earth [km]
@@ -376,7 +364,7 @@ class Moon extends AstronomicalObject
     public function getEclipticalCoordinates(): EclipticalCoordinates
     {
         $lat = $this->getLatitude();
-        $lon = $this->getLongitude();
+        $lon = $this->getApparentLongitude();
 
         return new EclipticalCoordinates($lat, $lon);
     }
@@ -385,7 +373,7 @@ class Moon extends AstronomicalObject
     public function getEquatorialCoordinates(): EquatorialCoordinates
     {
         $earth = new Earth($this->toi);
-        $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
+        $obliquityOfEcliptic = $earth->getTrueObliquityOfEcliptic();
 
         return $this
             ->getEclipticalCoordinates()
@@ -466,7 +454,7 @@ class Moon extends AstronomicalObject
     public function getPositionAngleOfMoonsBrightLimb(): float
     {
         $earth = new Earth($this->toi);
-        $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
+        $obliquityOfEcliptic = $earth->getTrueObliquityOfEcliptic();
         $equatorialCoordinates = $this->getEquatorialCoordinates($obliquityOfEcliptic);
 
         $aMoon = $equatorialCoordinates->getRightAscension();

@@ -86,20 +86,17 @@ class Earth extends AstronomicalObject
     private $sumPhi = 0;
     private $sumEps = 0;
 
-
     public function __construct(TimeOfInterest $toi = null)
     {
         parent::__construct($toi);
         $this->initializeSumParameter();
     }
 
-
     public function setTimeOfInterest(TimeOfInterest $toi): void
     {
         parent::setTimeOfInterest($toi);
         $this->initializeSumParameter();
     }
-
 
     /**
      * Meeus chapter 22
@@ -145,7 +142,6 @@ class Earth extends AstronomicalObject
         $this->sumEps = $sumEps;
     }
 
-
     /**
      * Same as sun's
      * @return float
@@ -154,24 +150,25 @@ class Earth extends AstronomicalObject
     {
         $T = $this->T;
 
-        $M = 357.52772 + 35999.050340 * $T - 0.0001603 * pow($T, 2) - pow($T, 3) / 300000;
+        // Meeus chapter 22
+        // $M = 357.52772 + 35999.050340 * $T - 0.0001603 * pow($T, 2) - pow($T, 3) / 300000;
+
+        // Meeus 47.4
+        $M = 357.5291092 + 35999.0502909 * $T - 0.0001536 * pow($T, 2) + pow($T, 3) / 2449000;
         $M = Util::normalizeAngle($M);
 
         return $M;
     }
-
 
     public function setLocation(Location $location): void
     {
         $this->location = $location;
     }
 
-
     public function getLocation(): Location
     {
         return $this->location;
     }
-
 
     /**
      * Get earth radius at equator
@@ -182,7 +179,6 @@ class Earth extends AstronomicalObject
         return self::RADIUS;
     }
 
-
     /**
      * Get earth's flattening
      * @return float
@@ -191,7 +187,6 @@ class Earth extends AstronomicalObject
     {
         return self::FLATTENING;
     }
-
 
     /**
      * Get eccentricity of earth's meridian
@@ -204,18 +199,15 @@ class Earth extends AstronomicalObject
         return $e;
     }
 
-
     public function getNutation(): float
     {
         return $this->sumPhi;
     }
 
-
     public function getNutationInObliquity(): float
     {
         return $this->sumEps;
     }
-
 
     /**
      * Meeus 22.3
@@ -241,7 +233,6 @@ class Earth extends AstronomicalObject
         return $e0;
     }
 
-
     /**
      * Get apparent (true) obliquity of ecliptic (Meeus chapter 22)
      * return float
@@ -253,7 +244,6 @@ class Earth extends AstronomicalObject
 
         return $e;
     }
-
 
     /**
      * Get distance between 2 points on earths surface [km]
