@@ -412,6 +412,9 @@ class Moon extends AstronomicalObject
         $dSun = $equatorialCoordinates->getDeclination();
         $distSun = $sun->getDistanceToEarth();
 
+        var_dump($aMoon, $dMoon);
+        var_dump($aSun, $dSun);die();
+
         $aMoon = deg2rad($aMoon);
         $aSun = deg2rad($aSun);
         $dMoon = deg2rad($dMoon);

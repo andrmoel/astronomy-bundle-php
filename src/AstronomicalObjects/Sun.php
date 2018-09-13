@@ -19,9 +19,23 @@ class Sun extends AstronomicalObject
     const TWILIGHT_NIGHT = 4;
 
 
-    public function getGeometricMeanLongitude(): float
+    public function getMeanLongitude(): float
     {
-        return 280.46646 + 36000.76983 * $this->T + 0.0003032 * pow($this->T, 2);
+        $T = $this->T / 10; // TODO Waru durch 10? // Meeus 28
+
+        // TODO Woher ...
+//        $L0 = 280.46646 + 36000.76983 * $T + 0.0003032 * pow($T, 2);
+
+        // Meeus 28.2
+        $L0 = 280.4664567
+            + 360007.6982779 * $T
+            + 0.03042028 * pow($T, 2)
+            + pow($T, 3) / 49931
+            - pow($T, 4) / 15300
+            + pow($T, 5) / 2000000;
+        $L0 = Util::normalizeAngle($L0);
+
+        return $L0;
     }
 
 
@@ -44,6 +58,31 @@ class Sun extends AstronomicalObject
     }
 
 
+    public function getRadiusVector(): float
+    {
+        $earth = new Earth($this->toi);
+
+        $T = $this->T;
+
+        $e = $earth->getEccentricity();
+        $M = $this->getMeanAnomaly();
+
+        // Meeus 25.4
+        $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M));
+        $C += (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M));
+        $C += 0.000289 * sin(3 * deg2rad($M));
+
+        $v = $M + $C;
+        $vRad = deg2rad($v);
+
+        // Meeus 25.5
+        $R = (1000001018 * (1 - pow($e, 2))) / (1 + $e * cos($vRad));
+        $R /= 1000000000;
+
+        return $R;
+    }
+
+
     public function getEclipticalCoordinates(): EclipticalCoordinates
     {
         $earth = new Earth($this->toi);
@@ -55,29 +94,25 @@ class Sun extends AstronomicalObject
     }
 
 
+    /**
+     * Meeus
+     * @return EquatorialCoordinates
+     */
     public function getEquatorialCoordinates(): EquatorialCoordinates
     {
+        $earth = new Earth($this->toi);
+
         $T = $this->T;
 
-        // Get obliquity of ecliptic
-        $earth = new Earth($this->toi);
-        $eps = $earth->getTrueObliquityOfEcliptic();
-        $epsRad = deg2rad($eps);
-
-//        var_dump($eps);die();
-
-        $L = $this->getGeometricMeanLongitude();
+        $L0 = $this->getMeanLongitude();
         $M = $this->getMeanAnomaly();
-
-        // Eccentricity of earth's orbit
-        // TODO needed? wenn ja, dann in earth!
-//        $e = 0.016708634 - 0.000042037 * $T - 0.0000001267 * pow($T, 2);
 
         $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M));
         $C += (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M));
         $C += 0.000289 * sin(3 * deg2rad($M));
 
-        $o = $L + $C;
+        // True longitude (o) and true anomaly (v)
+        $o = $L0 + $C;
         $oRad = deg2rad($o);
 
         $O = 125.04 - 1934.136 * $T;
@@ -86,36 +121,50 @@ class Sun extends AstronomicalObject
         $lonRad = deg2rad($lon);
 
         // Corrections
+        $eps = $earth->getTrueObliquityOfEcliptic();
         $eps += 0.00256 * cos($ORad);
+        $epsRad = deg2rad($eps);
 
-        $a = atan2(cos($eps) * sin($lonRad), cos($lonRad));
-        $a = Util::normalizeAngle(rad2deg($a));
+        $rightAscension = atan2(cos($epsRad) * sin($lonRad), cos($lonRad));
+        $rightAscension = Util::normalizeAngle(rad2deg($rightAscension));
 
-        $d = asin(sin($epsRad) * sin($oRad));
-        $d = rad2deg($d);
+        $declination = asin(sin($epsRad) * sin($oRad));
+        $declination = rad2deg($declination);
 
-        return new EquatorialCoordinates($a, $d);
+        return new EquatorialCoordinates($rightAscension, $declination);
     }
 
 
+    // TODO ...
     public function getRectangularGeocentricEquatorialCoordinates(): RectangularGeocentricEquatorialCoordinates
     {
-        // TODO ... Meeus Chapter 26
-
-        // Get obliquity of ecliptic
+        $R = $this->getRadiusVector();
         $earth = new Earth($this->toi);
+
+        $T = $this->T;
+
         $eps = $earth->getTrueObliquityOfEcliptic();
-        $eps = deg2rad($eps);
+        $epsRad = deg2rad($eps);
+        $L0 = $this->getMeanLongitude();
+        $M = $this->getMeanAnomaly();
+        $e = $earth->getEccentricity();
 
-        $R = 0.99760775;
+        $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M));
+        $C += (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M));
+        $C += 0.000289 * sin(3 * deg2rad($M));
 
-//        $x = $R * cos($b) * cos($t);
+        // True longitude (o) and true anomaly (v)
+        $o = $L0 + $C;
+        $oRad = deg2rad($o);
 
-        $x = 0;
-        $y = 0;
-        $z = 0;
+        // TODO Woher kommt bRad ??? ...
+        $bRad = Util::angle2dec(0, 0, 0.62);
 
-        return new GeocentricCoordinates($x, $y, $z, $this->toi);
+        $x = $R * cos($bRad) * cos($oRad);
+        $y = $R * (cos($bRad) * sin($oRad) * cos($epsRad) - sin($bRad) * sin($epsRad));
+        $z = $R * (cos($bRad) * sin($oRad) * sin($epsRad) + sin($bRad) * cos($epsRad));
+
+        return new GeocentricCoordinates($x, $y, $z);
     }
 
 

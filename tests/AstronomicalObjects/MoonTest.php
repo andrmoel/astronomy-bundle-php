@@ -131,7 +131,7 @@ class MoonTest extends TestCase
     /**
      * Meeus 48.a
      */
-    public function XtestGetIlluminatedFraction()
+    public function testGetIlluminatedFraction()
     {
         $toi = new TimeOfInterest();
         $toi->setTime(1992, 4, 12, 0, 0, 0);

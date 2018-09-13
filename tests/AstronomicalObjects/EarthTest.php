@@ -21,7 +21,21 @@ class EarthTest extends TestCase
         $earth = new Earth($toi);
         $M = $earth->getMeanAnomaly();
 
-        $this->assertEquals(94.9792, round($M, 4));
+        $this->assertEquals(94.9806, round($M, 4));
+    }
+
+    /**
+     * Meeus 25.a
+     */
+    public function testGetEccentricity()
+    {
+        $toi = new TimeOfInterest();
+        $toi->setTime(1992, 10, 12, 0, 0, 0);
+
+        $earth = new Earth($toi);
+        $e = $earth->getEccentricity();
+
+        $this->assertEquals(0.016711669, round($e, 9));
     }
 
     /**
