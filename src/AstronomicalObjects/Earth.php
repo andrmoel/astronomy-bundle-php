@@ -104,20 +104,16 @@ class Earth extends AstronomicalObject
 
     private function initializeSumParameter(): void
     {
+        $moon = new Moon($this->toi);
+
         $T = $this->T;
 
-        // Mean elongation of the moon from the sun
-        $D = 297.85036 + 445267.111480 * $T - 0.0019142 * pow($T, 2) + pow($T, 3) / 189474;
-        $D = Util::normalizeAngle($D);
+        $D = $moon->getMeanElongationFromSun();
         // Mean anomaly of the sun (earth)
         $Msun = 357.52772 + 35999.050340 * $T - 0.0001603 * pow($T, 2) - pow($T, 3) / 300000;
         $Msun = Util::normalizeAngle($Msun);
-        // Mean anomaly of the moon
-        $Mmoon = 134.96298 + 477198.867398 * $T + 0.0086972 * pow($T, 2) + pow($T, 3) / 56250;
-        $Mmoon = Util::normalizeAngle($Mmoon);
-        // Moon's argument of latitude
-        $F = 93.27191 + 483202.017538 * $T - 0.0036825 * pow($T, 2) + pow($T, 3) / 327270;
-        $F = Util::normalizeAngle($F);
+        $Mmoon = $moon->getMeanAnomaly();
+        $F = $moon->getArgumentOfLatitude();
         // Longitude of the ascending node of moon's mean orbit on ecliptic
         $O = 125.04452 - 1934.136261 * $T + 0.0020708 * pow($T, 2) + pow($T, 3) / 450000;
         $O = Util::normalizeAngle($O);
@@ -146,6 +142,25 @@ class Earth extends AstronomicalObject
 
         $this->sumPhi = $sumPhi;
         $this->sumEps = $sumEps;
+    }
+
+
+    /**
+     * Same as sun's
+     * @return float
+     */
+    public function getMeanAnomaly(): float
+    {
+        $T = $this->T;
+
+        $M = 357.52772 + 35999.050340 * $T - 0.0001603 * pow($T, 2) - pow($T, 3) / 300000;
+        var_dump($M);
+        $M = Util::normalizeAngle($M);
+
+        // TODO Not working...
+        var_dump($T, $M, ".-------b");
+
+        return $M;
     }
 
 
@@ -261,7 +276,7 @@ class Earth extends AstronomicalObject
         $H2 = (3 * $R + 1) / (2 * $S);
 
         $s = $D * (1 + self::FLATTENING * $H1 * pow(sin($F), 2) * pow(cos($G), 2)
-            - self::FLATTENING * $H2 * pow(cos($F), 2) * pow(sin($G), 2));
+                - self::FLATTENING * $H2 * pow(cos($F), 2) * pow(sin($G), 2));
 
         return $s * 1000;
     }

@@ -171,8 +171,7 @@ class Moon extends AstronomicalObject
         $Msun = 357.5291092 + 35999.0502909 * $T - 0.0001536 * pow($T, 2) + pow($T, 3) / 24490000;
         $Msun = Util::normalizeAngle($Msun);
         // Mean anomaly of the moon
-        $Mmoon = 134.9633964 + 477198.8675055 * $T + 0.0087414 * pow($T, 2) + pow($T, 3) / 69699 - pow($T, 4) / 1471200;
-        $Mmoon = Util::normalizeAngle($Mmoon);
+        $Mmoon = $this->getMeanAnomaly();
         // Argument of latitude
         $F = 93.2720950 + 483202.0175233 * $T - 0.0036539 * pow($T, 2) - pow($T, 3) / 352600 + pow($T, 4) / 86331000;
         $F = Util::normalizeAngle($F);
@@ -258,6 +257,52 @@ class Moon extends AstronomicalObject
         $this->sumL = $sumL;
         $this->sumR = $sumR;
         $this->sumB = $sumB;
+    }
+
+
+    /**
+     * Meeus chapter 22
+     * @return float
+     */
+    public function getMeanElongationFromSun(): float
+    {
+        $T = $this->T;
+
+        $D = 297.85036 + 445267.111480 * $T - 0.0019142 * pow($T, 2) + pow($T, 3) / 189474;
+        $D = Util::normalizeAngle($D);
+
+        return $D;
+    }
+
+
+    /**
+     * Meeus chapter 22
+     * @return float
+     */
+    public function getMeanAnomaly(): float
+    {
+        $T = $this->T;
+
+//        $Mmoon = 134.9633964 + 477198.8675055 * $T + 0.0087414 * pow($T, 2) + pow($T, 3) / 69699 - pow($T, 4) / 1471200; // TODO besser, aber Woher???
+        $Mmoon = 134.96298 + 477198.867398 * $T + 0.0086972 * pow($T, 2) + pow($T, 3) / 56250;
+        $Mmoon = Util::normalizeAngle($Mmoon);
+
+        return $Mmoon;
+    }
+
+
+    /**
+     * Meeus chapter 22
+     * @return float
+     */
+    public function getArgumentOfLatitude(): float
+    {
+        $T = $this->T;
+
+        $F = 93.27191 + 483202.017538 * $T - 0.0036825 * pow($T, 2) + pow($T, 3) / 327270;
+        $F = Util::normalizeAngle($F);
+
+        return $F;
     }
 
 

@@ -6,6 +6,7 @@ use Andrmoel\AstronomyBundle\Coordinates\EclipticalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\RectangularGeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Util;
@@ -17,6 +18,25 @@ class Sun extends AstronomicalObject
     const TWILIGHT_NAUTICAL = 2;
     const TWILIGHT_ASTRONOMICAL = 3;
     const TWILIGHT_NIGHT = 4;
+
+
+    public function getGeometricMeanLongitude(): float
+    {
+        return 280.46646 + 36000.76983 * $this->T + 0.0003032 * pow($this->T, 2);
+    }
+
+
+    /**
+     * Same as earth's
+     * @return float
+     */
+    public function getMeanAnomaly(): float
+    {
+        $T = $this->T;
+        $M = 357.52772 + 35999.050340 * $T - 0.0001603 * pow($T, 2) - pow($T, 3) / 300000;
+
+        return $M;
+    }
 
 
     public function getEclipticalCoordinates(): EclipticalCoordinates
@@ -37,16 +57,15 @@ class Sun extends AstronomicalObject
         // Get obliquity of ecliptic
         $earth = new Earth($this->toi);
         $eps = $earth->getTrueObliquityOfEcliptic();
-        $eps = deg2rad($eps);
+        $epsRad = deg2rad($eps);
 
-        // Geometric mean longitude of the sun
-        $L = 280.46646 + 36000.76983 * $T + 0.0003032 * pow($T, 2);
+//        var_dump($eps);die();
 
-        // Mean anomaly of the sun
-        $M = 357.52911 + 35999.05029 * $T - 0.0001537 * pow($T, 2);
+        $L = $this->getGeometricMeanLongitude();
+        $M = $this->getMeanAnomaly();
 
         // Eccentricity of earth's orbit
-        // TODO needed?
+        // TODO needed? wenn ja, dann in earth!
 //        $e = 0.016708634 - 0.000042037 * $T - 0.0000001267 * pow($T, 2);
 
         $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M));
@@ -67,20 +86,16 @@ class Sun extends AstronomicalObject
         $a = atan2(cos($eps) * sin($lonRad), cos($lonRad));
         $a = Util::normalizeAngle(rad2deg($a));
 
-        $d = asin(sin($eps) * sin($oRad));
+        $d = asin(sin($epsRad) * sin($oRad));
         $d = rad2deg($d);
 
         return new EquatorialCoordinates($a, $d);
     }
 
 
-    /**
-     * TODO ...
-     * @return GeocentricCoordinates
-     */
-    public function getGeocentricCoordinates(): GeocentricCoordinates
+    public function getRectangularGeocentricEquatorialCoordinates(): RectangularGeocentricEquatorialCoordinates
     {
-        // TODO ...
+        // TODO ... Meeus Chapter 26
 
         // Get obliquity of ecliptic
         $earth = new Earth($this->toi);
