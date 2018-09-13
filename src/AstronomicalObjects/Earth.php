@@ -89,8 +89,7 @@ class Earth extends AstronomicalObject
 
     public function __construct(TimeOfInterest $toi = null)
     {
-        parent::__construct();
-        $this->toi = $toi ? $toi : new TimeOfInterest();
+        parent::__construct($toi);
         $this->initializeSumParameter();
     }
 
@@ -104,14 +103,13 @@ class Earth extends AstronomicalObject
 
     private function initializeSumParameter(): void
     {
+        $sun = new Sun($this->toi);
         $moon = new Moon($this->toi);
 
         $T = $this->T;
 
         $D = $moon->getMeanElongationFromSun();
-        // Mean anomaly of the sun (earth)
-        $Msun = 357.52772 + 35999.050340 * $T - 0.0001603 * pow($T, 2) - pow($T, 3) / 300000;
-        $Msun = Util::normalizeAngle($Msun);
+        $Msun = $sun->getMeanAnomaly();
         $Mmoon = $moon->getMeanAnomaly();
         $F = $moon->getArgumentOfLatitude();
         // Longitude of the ascending node of moon's mean orbit on ecliptic
@@ -154,11 +152,7 @@ class Earth extends AstronomicalObject
         $T = $this->T;
 
         $M = 357.52772 + 35999.050340 * $T - 0.0001603 * pow($T, 2) - pow($T, 3) / 300000;
-        var_dump($M);
         $M = Util::normalizeAngle($M);
-
-        // TODO Not working...
-        var_dump($T, $M, ".-------b");
 
         return $M;
     }
@@ -211,6 +205,12 @@ class Earth extends AstronomicalObject
     public function getNutation(): float
     {
         return $this->sumPhi;
+    }
+
+
+    public function getNutationInObliquity(): float
+    {
+        return $this->sumEps;
     }
 
 
