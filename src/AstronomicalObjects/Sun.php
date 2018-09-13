@@ -77,7 +77,7 @@ class Sun extends AstronomicalObject
 
         // Meeus 25.5
         $R = (1000001018 * (1 - pow($e, 2))) / (1 + $e * cos($vRad));
-        $R /= 1000000000;
+        $R /= 1000000000; // TODO Warum durch das? ...
 
         return $R;
     }
