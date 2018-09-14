@@ -168,4 +168,18 @@ class MoonTest extends TestCase
 
         $this->assertEquals(0.68, round($illuminatedFraction, 2));
     }
+
+    /**
+     * Meeus 48.a
+     */
+    public function testGetPositionAngleOfMoonsBrightLimb()
+    {
+        $toi = new TimeOfInterest();
+        $toi->setTime(1992, 4, 12, 0, 0, 0);
+
+        $moon = new Moon($toi);
+        $x = $moon->getPositionAngleOfMoonsBrightLimb();
+
+        $this->assertEquals(285.0, round($x, 1));
+    }
 }

@@ -424,28 +424,26 @@ class Moon extends AstronomicalObject
         return $moonPhase2 > $moonPhase1;
     }
 
-    /**
-     * Get position angle of moon's bright limb
-     * TODO evaluate (MEEUS 346)
-     * @return float
-     */
     public function getPositionAngleOfMoonsBrightLimb(): float
     {
-        $earth = new Earth($this->toi);
-        $obliquityOfEcliptic = $earth->getTrueObliquityOfEcliptic();
-        $equatorialCoordinates = $this->getEquatorialCoordinates($obliquityOfEcliptic);
+        $sun = new Sun($this->toi);
 
-        $aMoon = $equatorialCoordinates->getRightAscension();
-        $dMoon = $equatorialCoordinates->getDeclination();
+        $equatorialCoordinatesMoon = $this->getEquatorialCoordinates();
+        $equatorialCoordinatesSun = $sun->getEquatorialCoordinates();
 
-        $sun = new Sun();
-        $sun->setTimeOfInterest($this->toi);
-        $equatorialCoordinates = $sun->getEquatorialCoordinates();
-        $aSun = $equatorialCoordinates->getRightAscension();
-        $dSun = $equatorialCoordinates->getDeclination();
+        $aMoon = $equatorialCoordinatesMoon->getRightAscension();
+        $dMoon = $equatorialCoordinatesMoon->getDeclination();
+        $aMoonRad = deg2rad($aMoon);
+        $dMoonRad = deg2rad($dMoon);
 
-        $numerator = cos($dSun) * sin($aSun - $aMoon);
-        $denominator = sin($dSun) * cos($dMoon) - cos($dSun) * sin($dMoon) * cos($aSun - $aMoon);
+        $aSun = $equatorialCoordinatesSun->getRightAscension();
+        $dSun = $equatorialCoordinatesSun->getDeclination();
+        $aSunRad = deg2rad($aSun);
+        $dSunRad = deg2rad($dSun);
+
+        // Meeus 48.5
+        $numerator = cos($dSunRad) * sin($aSunRad - $aMoonRad);
+        $denominator = sin($dSunRad) * cos($dMoonRad) - cos($dSunRad) * sin($dMoonRad) * cos($aSunRad - $aMoonRad);
 
         $x = rad2deg(atan($numerator / $denominator));
         $x = Util::normalizeAngle($x);
