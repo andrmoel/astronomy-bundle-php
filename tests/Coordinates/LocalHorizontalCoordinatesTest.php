@@ -26,8 +26,10 @@ class LocalHorizontalCoordinatesTest extends TestCase
         $rightAscension = $equatorialCoordinates->getRightAscension();
         $declination = $equatorialCoordinates->getDeclination();
 
+        $this->assertTrue(true);
+
         // TODO
-        var_dump($rightAscension, $declination);
+//        var_dump($rightAscension, $declination);
 
 //        die("DDDDDD");
     }

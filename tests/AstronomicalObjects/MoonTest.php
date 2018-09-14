@@ -54,6 +54,20 @@ class MoonTest extends TestCase
     /**
      * Meeus 47.a
      */
+    public function testGetMeanLongitude()
+    {
+        $toi = new TimeOfInterest();
+        $toi->setTime(1992, 4, 12, 0, 0, 0);
+
+        $moon = new Moon($toi);
+        $L = $moon->getMeanLongitude();
+
+        $this->assertEquals(134.290182, round($L, 6));
+    }
+
+    /**
+     * Meeus 47.a
+     */
     public function testGetDistanceToEarth()
     {
         $toi = new TimeOfInterest();
@@ -65,6 +79,19 @@ class MoonTest extends TestCase
         $this->assertEquals(368409.7, round($distance, 1));
     }
 
+    /**
+     * Meeus 47.a
+     */
+    public function testGetEquatorialHorizontalParallax()
+    {
+        $toi = new TimeOfInterest();
+        $toi->setTime(1992, 4, 12, 0, 0, 0);
+
+        $moon = new Moon($toi);
+        $distance = $moon->getEquatorialHorizontalParallax();
+
+        $this->assertEquals(0.991990, round($distance, 6));
+    }
 
     /**
      * Meeus 47.a
@@ -100,7 +127,7 @@ class MoonTest extends TestCase
         $azimuth = $localHorizontalCoordinates->getAzimuth();
         $altitude = $localHorizontalCoordinates->getAltitude();
 
-        var_dump($azimuth, $altitude);die();
+//        var_dump($azimuth, $altitude);die();
 
         // TODO Should be ... 212 / 47...
 
@@ -139,9 +166,6 @@ class MoonTest extends TestCase
         $moon = new Moon($toi);
         $illuminatedFraction = $moon->getIlluminatedFraction();
 
-        var_dump($illuminatedFraction);
-
-        // TODO Failed...
         $this->assertEquals(0.68, round($illuminatedFraction, 2));
     }
 }

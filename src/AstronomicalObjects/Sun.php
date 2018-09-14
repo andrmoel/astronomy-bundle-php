@@ -18,7 +18,6 @@ class Sun extends AstronomicalObject
     const TWILIGHT_ASTRONOMICAL = 3;
     const TWILIGHT_NIGHT = 4;
 
-
     public function getMeanLongitude(): float
     {
         $T = $this->T / 10; // TODO Waru durch 10? // Meeus 28
@@ -38,7 +37,6 @@ class Sun extends AstronomicalObject
         return $L0;
     }
 
-
     /**
      * Same as earth's
      * @return float
@@ -57,7 +55,6 @@ class Sun extends AstronomicalObject
         return $M;
     }
 
-
     public function getEquationOfTime(): float
     {
         $T = $this->T / 10; // TODO Warum durch 10?
@@ -68,7 +65,6 @@ class Sun extends AstronomicalObject
 
         return $E;
     }
-
 
     public function getRadiusVector(): float
     {
@@ -94,7 +90,6 @@ class Sun extends AstronomicalObject
         return $R;
     }
 
-
     public function getEclipticalCoordinates(): EclipticalCoordinates
     {
         $earth = new Earth($this->toi);
@@ -104,7 +99,6 @@ class Sun extends AstronomicalObject
             ->getEquatorialCoordinates()
             ->getEclipticalCoordinates($obliquityOfEcliptic);
     }
-
 
     /**
      * Meeus
@@ -146,7 +140,6 @@ class Sun extends AstronomicalObject
         return new EquatorialCoordinates($rightAscension, $declination);
     }
 
-
     // TODO ...
     public function getRectangularGeocentricEquatorialCoordinates(): RectangularGeocentricEquatorialCoordinates
     {
@@ -179,14 +172,12 @@ class Sun extends AstronomicalObject
         return new GeocentricCoordinates($x, $y, $z);
     }
 
-
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
         return $this
             ->getEquatorialCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->toi);
     }
-
 
     /**
      * Get distance to earth [km]
@@ -196,7 +187,6 @@ class Sun extends AstronomicalObject
     {
         return 149971520; // TODO
     }
-
 
     public function getTwilight(Location $location): int
     {

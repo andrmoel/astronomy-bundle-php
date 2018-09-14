@@ -82,7 +82,7 @@ class Earth extends AstronomicalObject
         [2, -1, 0, 2, 2, -3, 0, 0, 0],
     );
 
-    // Sum parameter
+    // Sum parameters
     private $sumPhi = 0;
     private $sumEps = 0;
 
@@ -98,9 +98,6 @@ class Earth extends AstronomicalObject
         $this->initializeSumParameter();
     }
 
-    /**
-     * Meeus chapter 22
-     */
     private function initializeSumParameter(): void
     {
         $sun = new Sun($this->toi);
@@ -108,6 +105,7 @@ class Earth extends AstronomicalObject
 
         $T = $this->T;
 
+        // Meeus chapter 22
         $D = $moon->getMeanElongationFromSun();
         $Msun = $sun->getMeanAnomaly();
         $Mmoon = $moon->getMeanAnomaly();
@@ -161,10 +159,6 @@ class Earth extends AstronomicalObject
         return self::RADIUS;
     }
 
-    /**
-     * Get earth's flattening
-     * @return float
-     */
     public function getFlattening(): float
     {
         return self::FLATTENING;
@@ -220,15 +214,12 @@ class Earth extends AstronomicalObject
         return $this->sumEps;
     }
 
-    /**
-     * Meeus 22.3
-     * @return float
-     */
     public function getObliquityOfEcliptic(): float
     {
         $T = $this->T;
         $U = $T / 100;
 
+        // Meeus 22.3
         $e0 = Util::angle2dec(23, 26, 21.448)
             - Util::angle2dec(0, 0, 4680.93) * $U
             - 1.55 * pow($U, 2)
@@ -244,13 +235,11 @@ class Earth extends AstronomicalObject
         return $e0;
     }
 
-    /**
-     * Get apparent (true) obliquity of ecliptic (Meeus chapter 22)
-     * return float
-     */
     public function getTrueObliquityOfEcliptic(): float
     {
         $e0 = $this->getObliquityOfEcliptic();
+
+        // Meeus chapter 22
         $e = $e0 + $this->sumEps;
 
         return $e;
