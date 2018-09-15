@@ -258,6 +258,7 @@ class Earth extends AstronomicalObject
         $lat2 = $location2->getLatitude();
         $lon2 = $location2->getLongitude();
 
+        // Meeus 11.1
         $F = deg2rad(($lat1 + $lat2) / 2);
         $G = deg2rad(($lat1 - $lat2) / 2);
         $l = deg2rad(($lon1 - $lon2) / 2);
