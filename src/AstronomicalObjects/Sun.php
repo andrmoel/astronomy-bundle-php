@@ -80,6 +80,7 @@ class Sun extends AstronomicalObject
         $C += (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M));
         $C += 0.000289 * sin(3 * deg2rad($M));
 
+        // True anomaly
         $v = $M + $C;
         $vRad = deg2rad($v);
 
@@ -113,9 +114,9 @@ class Sun extends AstronomicalObject
         $L0 = $this->getMeanLongitude();
         $M = $this->getMeanAnomaly();
 
-        $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M));
-        $C += (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M));
-        $C += 0.000289 * sin(3 * deg2rad($M));
+        $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M))
+            + (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M))
+            + 0.000289 * sin(3 * deg2rad($M));
 
         // True longitude (o) and true anomaly (v)
         $o = $L0 + $C;
@@ -158,7 +159,7 @@ class Sun extends AstronomicalObject
         $C += (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M));
         $C += 0.000289 * sin(3 * deg2rad($M));
 
-        // True longitude (o) and true anomaly (v)
+        // True longitude
         $o = $L0 + $C;
         $oRad = deg2rad($o);
 
@@ -185,7 +186,11 @@ class Sun extends AstronomicalObject
      */
     public function getDistanceToEarth()
     {
-        return 149971520; // TODO
+        $R = $this->getRadiusVector();
+
+        $r = $R * 149597870.7;
+
+        return $r;
     }
 
     public function getTwilight(Location $location): int

@@ -113,7 +113,8 @@ class Location
     {
         // Get the observer's geocentric position
         $tmp = atan(Earth::EARTH_AXIS_RATIO * tan($this->latitudeRad));
-        $this->rhoSinOs = Earth::EARTH_AXIS_RATIO * sin($tmp) + $this->elevation * sin($this->latitudeRad) / Earth::RADIUS;
+        $this->rhoSinOs = Earth::EARTH_AXIS_RATIO * sin($tmp)
+            + $this->elevation * sin($this->latitudeRad) / Earth::RADIUS;
         $this->rhoCosOs = cos($tmp) + $this->elevation * sin($this->latitudeRad) / Earth::RADIUS;
     }
 }

@@ -31,11 +31,14 @@ class EclipticalCoordinates extends Coordinates
         $lat = deg2rad($this->latitude);
         $lon = deg2rad($this->longitude);
 
-        $ra = atan2(sin($lon) * cos($eps) - (sin($lat) / cos($lat)) * sin($eps), cos($lon));
-        $ra = rad2deg($ra);
-        $d = asin(sin($lat) * cos($eps) + cos($lat) * sin($eps) * sin($lon));
-        $d = rad2deg($d);
+        // Meeus 13.3
+        $rightAscension = atan2(sin($lon) * cos($eps) - (sin($lat) / cos($lat)) * sin($eps), cos($lon));
+        $rightAscension = rad2deg($rightAscension);
 
-        return new EquatorialCoordinates($ra, $d);
+        // Meeus 13.4
+        $declination = asin(sin($lat) * cos($eps) + cos($lat) * sin($eps) * sin($lon));
+        $declination = rad2deg($declination);
+
+        return new EquatorialCoordinates($rightAscension, $declination);
     }
 }

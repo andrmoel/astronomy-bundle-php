@@ -192,18 +192,6 @@ class Earth extends AstronomicalObject
         return $e;
     }
 
-    /**
-     * TODO ...
-     * Get eccentricity of earth's meridian
-     * @return float
-     */
-//    public function getEccentricity(): float
-//    {
-//        $e = sqrt(2 * self::FLATTENING - pow(self::FLATTENING, 2));
-//
-//        return $e;
-//    }
-
     public function getNutation(): float
     {
         return $this->sumPhi;

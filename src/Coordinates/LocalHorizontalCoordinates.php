@@ -40,12 +40,13 @@ class LocalHorizontalCoordinates extends Coordinates
         $latRad = $location->getLatitudeRad();
 
         // Calculate right ascension and declination
-        $azimuth = deg2rad($this->azimuth);
-        $altitude = deg2rad($this->altitude);
+        $A = deg2rad($this->azimuth) - 180;
+        $h = deg2rad($this->altitude);
 
-        $rightAscension = atan(sin($azimuth) / (cos($azimuth) * sin($latRad) + tan($altitude) * cos($latRad)));
+        // Meeus 13
+        $rightAscension = atan(sin($A) / (cos($A) * sin($latRad) + tan($h) * cos($latRad)));
         $rightAscension = rad2deg($rightAscension);
-        $declination = asin(sin($latRad) * sin($altitude) - cos($latRad) * cos($altitude) * cos($azimuth));
+        $declination = asin(sin($latRad) * sin($h) - cos($latRad) * cos($h) * cos($A));
         $declination = rad2deg($declination);
 
         return new EquatorialCoordinates($rightAscension, $declination);

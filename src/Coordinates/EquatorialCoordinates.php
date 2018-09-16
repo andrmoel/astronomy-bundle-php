@@ -35,8 +35,11 @@ class EquatorialCoordinates extends Coordinates
         $d = deg2rad($this->declination);
         $eps = deg2rad($obliquityOfEcliptic);
 
+        // Meeus 13.1
         $lon = atan((sin($a) * cos($eps) + tan($d) * sin($eps)) / cos($a));
         $lon = rad2deg($lon) + 180; // TODO warum + 180? Laut buch nicht nötig...
+
+        // Meeus 13.2
         $lat = asin(sin($d) * cos($eps) - cos($d) * sin($eps) * sin($a));
         $lat = rad2deg($lat);
 

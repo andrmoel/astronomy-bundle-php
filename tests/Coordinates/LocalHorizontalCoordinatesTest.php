@@ -4,6 +4,8 @@ namespace Andrmoel\AstronomyBundle\Tests\Coordinates;
 
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Util;
 use PHPUnit\Framework\TestCase;
 
 class LocalHorizontalCoordinatesTest extends TestCase
@@ -17,8 +19,11 @@ class LocalHorizontalCoordinatesTest extends TestCase
         $lon = -77.06556;
         $location = new Location($lat, $lon);
 
-        $azimuth = 68.0318;
-        $altitude = 28.026183;
+        $toi = new TimeOfInterest();
+        $toi->setTime(1987, 4, 10, 19, 21, 0);
+
+        $azimuth = 68.0337;
+        $altitude = 15.1249;
 
         $localHorizontalCoordinates = new LocalHorizontalCoordinates($azimuth, $altitude);
         $equatorialCoordinates = $localHorizontalCoordinates->getEquatorialCoordinates($location);
@@ -26,11 +31,9 @@ class LocalHorizontalCoordinatesTest extends TestCase
         $rightAscension = $equatorialCoordinates->getRightAscension();
         $declination = $equatorialCoordinates->getDeclination();
 
-        $this->assertTrue(true);
-
         // TODO
-//        var_dump($rightAscension, $declination);
+        var_dump(Util::angleDec2time($rightAscension), $declination);
 
-//        die("DDDDDD");
+        die("DDDDDD");
     }
 }
