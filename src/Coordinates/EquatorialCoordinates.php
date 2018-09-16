@@ -52,12 +52,15 @@ class EquatorialCoordinates extends Coordinates
 
         // Calculate hour angle
         $H = $agmst - $lon - $this->rightAscension;
+        $H = Util::normalizeAngle($H);
         $H = deg2rad($H);
 
-        // Calculate azimuth and altitude
+        // Meeus 13.5
         $azimuth = atan(sin($H) / (cos($H) * sin($latRad) - tan($d) * cos($latRad)));
-        $azimuth = rad2deg($azimuth);
+        $azimuth = rad2deg($azimuth) + 180; // Add 180° to get azimuth from north (else it is from south)
         $azimuth = Util::normalizeAngle($azimuth);
+
+        // Meeus 13.6
         $altitude = asin(sin($latRad) * sin($d) + cos($latRad) * cos($d) * cos($H));
         $altitude = rad2deg($altitude);
 

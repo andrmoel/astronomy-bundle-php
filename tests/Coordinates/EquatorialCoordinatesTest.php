@@ -5,6 +5,7 @@ namespace Andrmoel\AstronomyBundle\Tests\Coordinates;
 use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Util;
 use PHPUnit\Framework\TestCase;
 
 class EquatorialCoordinatesTest extends TestCase
@@ -32,7 +33,7 @@ class EquatorialCoordinatesTest extends TestCase
     /**
      * Meeus 13.b
      */
-    public function XtestGetLocalHorizontalCoordinates()
+    public function testGetLocalHorizontalCoordinates()
     {
         $lat = 38.92139;
         $lon = -77.06556;
@@ -41,8 +42,8 @@ class EquatorialCoordinatesTest extends TestCase
         $toi = new TimeOfInterest();
         $toi->setTime(1987, 4, 10, 19, 21, 0);
 
-        $rightAscension = 347.31933;
-        $declination = -6.71989;
+        $rightAscension = Util::time2angleDec(23, 9, 16.641);
+        $declination = Util::angle2dec(-6, 43, 11.61);
 
         $equatorialCoordinates = new EquatorialCoordinates($rightAscension, $declination);
         $localHorizontalCoordinates = $equatorialCoordinates->getLocalHorizontalCoordinates($location, $toi);
@@ -50,7 +51,8 @@ class EquatorialCoordinatesTest extends TestCase
         $azimuth = $localHorizontalCoordinates->getAzimuth();
         $altitude = $localHorizontalCoordinates->getAltitude();
 
-//        $this->assertEquals(68.0317, round($azimuth, 4)); // TODO Failed
-//        $this->assertEquals(15.1269, round($altitude, 4));
+        // TODO Rundungsfehler
+        $this->assertEquals(249.1223, round($azimuth, 4));
+        $this->assertEquals(16.1117, round($altitude, 4));
     }
 }

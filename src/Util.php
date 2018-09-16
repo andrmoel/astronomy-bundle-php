@@ -30,6 +30,20 @@ class Util
         return $time * 15;
     }
 
+    public static function angleDec2time(float $angle): string
+    {
+        $time = $angle / 15;
+
+        $hour = (int)$time;
+        $x = ($time - $hour) * 60;
+        $min = (int)$x;
+        $sec = ($x - $min) * 60;
+
+        $time = $hour . 'h' . $min . 'm' . $sec . 's';
+
+        return $time;
+    }
+
     public static function normalizeAngle(float $angle, float $nAngle = 360.0): float
     {
         $angle = fmod($angle, $nAngle);

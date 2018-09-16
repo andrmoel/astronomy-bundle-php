@@ -134,6 +134,13 @@ class SolarEclipse
         $min = ($t - floor($t)) * 60;
         $sec = ($min - floor($min)) * 60;
 
+        // TODO ...
+        $toi = new TimeOfInterest();
+        $toi->setJulianDay($jd);
+
+        var_dump($year, $month, $day, $hour, $min, $sec);
+        var_dump($toi->getDateTime(), $t);die();
+
         $toi = new TimeOfInterest();
         $toi->setTime($year, $month, $day, $hour, $min, $sec);
 
