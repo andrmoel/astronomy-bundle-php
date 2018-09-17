@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Earth;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class TimeOfInterest
 {
@@ -322,7 +323,7 @@ class TimeOfInterest
             + 360.98564736629 * ($JD - 2451545)
             + 0.000387933 * pow($T, 2)
             + pow($T, 3) / 38710000;
-        $t0 = Util::normalizeAngle($t0);
+        $t0 = AngleUtil::normalizeAngle($t0);
 
         return $t0;
     }
@@ -362,7 +363,7 @@ class TimeOfInterest
         $gmst = $this->getGreenwichMeanSiderealTime(false);
         $lmst = $gmst + $lonEast;
 
-        $lmst = Util::normalizeAngle($lmst);
+        $lmst = AngleUtil::normalizeAngle($lmst);
 
         return $lmst;
     }

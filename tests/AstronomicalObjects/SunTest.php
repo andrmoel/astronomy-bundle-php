@@ -2,11 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObjects;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Earth;
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
-use Andrmoel\AstronomyBundle\Coordinates\EclipticalCoordinates;
-use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use PHPUnit\Framework\TestCase;
 

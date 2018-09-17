@@ -7,7 +7,7 @@ use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Util;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class Moon extends AstronomicalObject
 {
@@ -169,11 +169,11 @@ class Moon extends AstronomicalObject
         $F = $this->getArgumentOfLatitude();
 
         // Action of venus
-        $A1 = Util::normalizeAngle(119.75 + 131.849 * $T);
+        $A1 = AngleUtil::normalizeAngle(119.75 + 131.849 * $T);
         // Action of jupiter
-        $A2 = Util::normalizeAngle(53.09 + 479264.290 * $T);
-        $A3 = Util::normalizeAngle(313.45 + 481266.484 * $T);
-        $E = Util::normalizeAngle(1 - 0.002516 * $T - 0.0000074 * pow($T, 2));
+        $A2 = AngleUtil::normalizeAngle(53.09 + 479264.290 * $T);
+        $A3 = AngleUtil::normalizeAngle(313.45 + 481266.484 * $T);
+        $E = AngleUtil::normalizeAngle(1 - 0.002516 * $T - 0.0000074 * pow($T, 2));
 
         $sumL = 3958 * sin(deg2rad($A1))
             + 1962 * sin(deg2rad($L - $F))
@@ -260,7 +260,7 @@ class Moon extends AstronomicalObject
 
         // Meeus 47.2
         $D = 297.8501921 + 445267.1114034 * $T - 0.0018819 * pow($T, 2) + pow($T, 3) / 545868 - pow($T, 4) / 113065000;
-        $D = Util::normalizeAngle($D);
+        $D = AngleUtil::normalizeAngle($D);
 
         return $D;
     }
@@ -274,7 +274,7 @@ class Moon extends AstronomicalObject
 
         // Meeus 47.2
         $Mmoon = 134.9633964 + 477198.8675055 * $T + 0.0087414 * pow($T, 2) + pow($T, 3) / 69699 - pow($T, 4) / 1471200;
-        $Mmoon = Util::normalizeAngle($Mmoon);
+        $Mmoon = AngleUtil::normalizeAngle($Mmoon);
 
         return $Mmoon;
     }
@@ -288,7 +288,7 @@ class Moon extends AstronomicalObject
 
         // Meeus 47.5
         $F = 93.2720950 + 483202.0175233 * $T - 0.0036539 * pow($T, 2) - pow($T, 3) / 352600 + pow($T, 4) / 86331000;
-        $F = Util::normalizeAngle($F);
+        $F = AngleUtil::normalizeAngle($F);
 
         return $F;
     }
@@ -299,7 +299,7 @@ class Moon extends AstronomicalObject
 
         // Meeus 47.1
         $L = 218.3164477 + 481267.88123421 * $T - 0.0015786 * pow($T, 2) + pow($T, 3) / 538841 - pow($T, 4) / 65194000;
-        $L = Util::normalizeAngle($L);
+        $L = AngleUtil::normalizeAngle($L);
 
         return $L;
     }
@@ -402,7 +402,7 @@ class Moon extends AstronomicalObject
 
         // i must be between 0° and 180°
         $i = rad2deg($i);
-        $i = Util::normalizeAngle($i, 180);
+        $i = AngleUtil::normalizeAngle($i, 180);
         $i = deg2rad($i);
 
         $k = (1 + cos($i)) / 2;
@@ -447,7 +447,7 @@ class Moon extends AstronomicalObject
         $denominator = sin($dSunRad) * cos($dMoonRad) - cos($dSunRad) * sin($dMoonRad) * cos($aSunRad - $aMoonRad);
 
         $x = rad2deg(atan($numerator / $denominator));
-        $x = Util::normalizeAngle($x);
+        $x = AngleUtil::normalizeAngle($x);
 
         return $x;
     }

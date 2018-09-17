@@ -5,7 +5,7 @@ namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObjects;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Earth;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Util;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class EarthTest extends TestCase
@@ -49,7 +49,7 @@ class EarthTest extends TestCase
         $earth = new Earth($toi);
         $phi = $earth->getNutation();
 
-        $this->assertStringStartsWith('0°0\'-3.7879', Util::dec2angle($phi));
+        $this->assertStringStartsWith('0°0\'-3.788', AngleUtil::dec2angle($phi));
     }
 
     /**
@@ -63,7 +63,7 @@ class EarthTest extends TestCase
         $earth = new Earth($toi);
         $eps = $earth->getNutationInObliquity();
 
-        $this->assertStringStartsWith('0°0\'9.4425', Util::dec2angle($eps));
+        $this->assertStringStartsWith('0°0\'9.443', AngleUtil::dec2angle($eps));
     }
 
     /**

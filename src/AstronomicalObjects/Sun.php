@@ -8,7 +8,7 @@ use Andrmoel\AstronomyBundle\Coordinates\GeocentricCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\RectangularGeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\Util;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class Sun extends AstronomicalObject
 {
@@ -32,7 +32,7 @@ class Sun extends AstronomicalObject
             + pow($T, 3) / 49931
             - pow($T, 4) / 15300
             + pow($T, 5) / 2000000;
-        $L0 = Util::normalizeAngle($L0);
+        $L0 = AngleUtil::normalizeAngle($L0);
 
         return $L0;
     }
@@ -50,7 +50,7 @@ class Sun extends AstronomicalObject
 
         // Meeus 47.4
         $M = 357.5291092 + 35999.0502909 * $T - 0.0001536 * pow($T, 2) + pow($T, 3) / 2449000;
-        $M = Util::normalizeAngle($M);
+        $M = AngleUtil::normalizeAngle($M);
 
         return $M;
     }
@@ -133,7 +133,7 @@ class Sun extends AstronomicalObject
         $epsRad = deg2rad($eps);
 
         $rightAscension = atan2(cos($epsRad) * sin($lonRad), cos($lonRad));
-        $rightAscension = Util::normalizeAngle(rad2deg($rightAscension));
+        $rightAscension = AngleUtil::normalizeAngle(rad2deg($rightAscension));
 
         $declination = asin(sin($epsRad) * sin($oRad));
         $declination = rad2deg($declination);
@@ -164,7 +164,7 @@ class Sun extends AstronomicalObject
         $oRad = deg2rad($o);
 
         // TODO Woher kommt bRad ??? ...
-        $bRad = Util::angle2dec(0, 0, 0.62);
+        $bRad = AngleUtil::angle2dec(0, 0, 0.62);
 
         $x = $R * cos($bRad) * cos($oRad);
         $y = $R * (cos($bRad) * sin($oRad) * cos($epsRad) - sin($bRad) * sin($epsRad));

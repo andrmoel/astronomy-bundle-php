@@ -4,7 +4,7 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Util;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class Earth extends AstronomicalObject
 {
@@ -112,7 +112,7 @@ class Earth extends AstronomicalObject
         $F = $moon->getArgumentOfLatitude();
         // Longitude of the ascending node of moon's mean orbit on ecliptic
         $O = 125.04452 - 1934.136261 * $T + 0.0020708 * pow($T, 2) + pow($T, 3) / 450000;
-        $O = Util::normalizeAngle($O);
+        $O = AngleUtil::normalizeAngle($O);
 
         $sumPhi = 0;
         $sumEps = 0;
@@ -177,7 +177,7 @@ class Earth extends AstronomicalObject
 
         // Meeus 47.4
         $M = 357.5291092 + 35999.0502909 * $T - 0.0001536 * pow($T, 2) + pow($T, 3) / 2449000;
-        $M = Util::normalizeAngle($M);
+        $M = AngleUtil::normalizeAngle($M);
 
         return $M;
     }
@@ -208,8 +208,8 @@ class Earth extends AstronomicalObject
         $U = $T / 100;
 
         // Meeus 22.3
-        $e0 = Util::angle2dec(23, 26, 21.448)
-            - Util::angle2dec(0, 0, 4680.93) * $U
+        $e0 = AngleUtil::angle2dec(23, 26, 21.448)
+            - AngleUtil::angle2dec(0, 0, 4680.93) * $U
             - 1.55 * pow($U, 2)
             + 1999.25 * pow($U, 3)
             - 51.38 * pow($U, 4)

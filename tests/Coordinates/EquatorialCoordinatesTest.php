@@ -5,7 +5,7 @@ namespace Andrmoel\AstronomyBundle\Tests\Coordinates;
 use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Util;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class EquatorialCoordinatesTest extends TestCase
@@ -42,8 +42,8 @@ class EquatorialCoordinatesTest extends TestCase
         $toi = new TimeOfInterest();
         $toi->setTime(1987, 4, 10, 19, 21, 0);
 
-        $rightAscension = Util::time2angleDec(23, 9, 16.641);
-        $declination = Util::angle2dec(-6, 43, 11.61);
+        $rightAscension = AngleUtil::time2dec(23, 9, 16.641);
+        $declination = AngleUtil::angle2dec(-6, 43, 11.61);
 
         $equatorialCoordinates = new EquatorialCoordinates($rightAscension, $declination);
         $localHorizontalCoordinates = $equatorialCoordinates->getLocalHorizontalCoordinates($location, $toi);

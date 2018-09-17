@@ -5,7 +5,7 @@ namespace Andrmoel\AstronomyBundle\Tests;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Earth;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Util;
+use Andrmoel\AstronomyBundle\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class TimeOfInterestTest extends TestCase

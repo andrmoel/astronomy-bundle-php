@@ -4,7 +4,7 @@ namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Util;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class EquatorialCoordinates extends Coordinates
 {
@@ -55,13 +55,13 @@ class EquatorialCoordinates extends Coordinates
 
         // Calculate hour angle
         $H = $agmst - $lon - $this->rightAscension;
-        $H = Util::normalizeAngle($H);
+        $H = AngleUtil::normalizeAngle($H);
         $H = deg2rad($H);
 
         // Meeus 13.5
         $azimuth = atan(sin($H) / (cos($H) * sin($latRad) - tan($d) * cos($latRad)));
         $azimuth = rad2deg($azimuth) + 180; // Add 180° to get azimuth from north (else it is from south)
-        $azimuth = Util::normalizeAngle($azimuth);
+        $azimuth = AngleUtil::normalizeAngle($azimuth);
 
         // Meeus 13.6
         $altitude = asin(sin($latRad) * sin($d) + cos($latRad) * cos($d) * cos($H));
