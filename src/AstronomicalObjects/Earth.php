@@ -111,7 +111,10 @@ class Earth extends AstronomicalObject
         $Mmoon = $moon->getMeanAnomaly();
         $F = $moon->getArgumentOfLatitude();
         // Longitude of the ascending node of moon's mean orbit on ecliptic
-        $O = 125.04452 - 1934.136261 * $T + 0.0020708 * pow($T, 2) + pow($T, 3) / 450000;
+        $O = 125.04452
+            - 1934.136261 * $T
+            + 0.0020708 * pow($T, 2)
+            + pow($T, 3) / 450000;
         $O = AngleUtil::normalizeAngle($O);
 
         $sumPhi = 0;
@@ -173,10 +176,16 @@ class Earth extends AstronomicalObject
         $T = $this->T;
 
         // Meeus chapter 22
-//         $M = 357.52772 + 35999.050340 * $T - 0.0001603 * pow($T, 2) - pow($T, 3) / 300000;
+//        $M = 357.52772
+//            + 35999.050340 * $T
+//            - 0.0001603 * pow($T, 2)
+//            - pow($T, 3) / 300000;
 
         // Meeus 47.4
-        $M = 357.5291092 + 35999.0502909 * $T - 0.0001536 * pow($T, 2) + pow($T, 3) / 2449000;
+        $M = 357.5291092
+            + 35999.0502909 * $T
+            - 0.0001536 * pow($T, 2)
+            + pow($T, 3) / 2449000;
         $M = AngleUtil::normalizeAngle($M);
 
         return $M;
@@ -187,7 +196,9 @@ class Earth extends AstronomicalObject
         $T = $this->T;
 
         // Meeus 25.4
-        $e = 0.016708634 - 0.000042037 * $T - 0.0000001267 * pow($T, 2);
+        $e = 0.016708634
+            - 0.000042037 * $T
+            - 0.0000001267 * pow($T, 2);
 
         return $e;
     }
@@ -208,8 +219,8 @@ class Earth extends AstronomicalObject
         $U = $T / 100;
 
         // Meeus 22.3
-        $e0 = AngleUtil::angle2dec('23°26\'21.448"')
-            - AngleUtil::angle2dec('0°0\'4680.93"') * $U
+        $e0 = 84381.448
+            - 4680.93 * $U
             - 1.55 * pow($U, 2)
             + 1999.25 * pow($U, 3)
             - 51.38 * pow($U, 4)
@@ -219,6 +230,7 @@ class Earth extends AstronomicalObject
             + 27.87 * pow($U, 8)
             + 5.79 * pow($U, 9)
             + 2.45 * pow($U, 10);
+        $e0 = $e0 / 3600;
 
         return $e0;
     }

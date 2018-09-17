@@ -256,10 +256,17 @@ class Moon extends AstronomicalObject
         $T = $this->T;
 
         // Meeus chapter 22
-        // $D = 297.85036 + 445267.111480 * $T - 0.0019142 * pow($T, 2) + pow($T, 3) / 189474;
+//        $D = 297.85036
+//            + 445267.111480 * $T
+//            - 0.0019142 * pow($T, 2)
+//            + pow($T, 3) / 189474;
 
         // Meeus 47.2
-        $D = 297.8501921 + 445267.1114034 * $T - 0.0018819 * pow($T, 2) + pow($T, 3) / 545868 - pow($T, 4) / 113065000;
+        $D = 297.8501921
+            + 445267.1114034 * $T
+            - 0.0018819 * pow($T, 2)
+            + pow($T, 3) / 545868
+            - pow($T, 4) / 113065000;
         $D = AngleUtil::normalizeAngle($D);
 
         return $D;
@@ -270,10 +277,17 @@ class Moon extends AstronomicalObject
         $T = $this->T;
 
         // Meeus chapter 22
-        // $Mmoon = 134.96298 + 477198.867398 * $T + 0.0086972 * pow($T, 2) + pow($T, 3) / 56250;
+//        $Mmoon = 134.96298
+//            + 477198.867398 * $T
+//            + 0.0086972 * pow($T, 2)
+//            + pow($T, 3) / 56250;
 
         // Meeus 47.2
-        $Mmoon = 134.9633964 + 477198.8675055 * $T + 0.0087414 * pow($T, 2) + pow($T, 3) / 69699 - pow($T, 4) / 1471200;
+        $Mmoon = 134.9633964
+            + 477198.8675055 * $T
+            + 0.0087414 * pow($T, 2)
+            + pow($T, 3) / 69699
+            - pow($T, 4) / 1471200;
         $Mmoon = AngleUtil::normalizeAngle($Mmoon);
 
         return $Mmoon;
@@ -284,10 +298,17 @@ class Moon extends AstronomicalObject
         $T = $this->T;
 
         // Meeus chapter 22
-        // $F = 93.27191 + 483202.017538 * $T - 0.0036825 * pow($T, 2) + pow($T, 3) / 327270;
+//        $F = 93.27191
+//            + 483202.017538 * $T
+//            - 0.0036825 * pow($T, 2)
+//            + pow($T, 3) / 327270;
 
         // Meeus 47.5
-        $F = 93.2720950 + 483202.0175233 * $T - 0.0036539 * pow($T, 2) - pow($T, 3) / 352600 + pow($T, 4) / 86331000;
+        $F = 93.2720950
+            + 483202.0175233 * $T
+            - 0.0036539 * pow($T, 2)
+            - pow($T, 3) / 352600
+            + pow($T, 4) / 86331000;
         $F = AngleUtil::normalizeAngle($F);
 
         return $F;
@@ -298,7 +319,11 @@ class Moon extends AstronomicalObject
         $T = $this->T;
 
         // Meeus 47.1
-        $L = 218.3164477 + 481267.88123421 * $T - 0.0015786 * pow($T, 2) + pow($T, 3) / 538841 - pow($T, 4) / 65194000;
+        $L = 218.3164477
+            + 481267.88123421 * $T
+            - 0.0015786 * pow($T, 2)
+            + pow($T, 3) / 538841
+            - pow($T, 4) / 65194000;
         $L = AngleUtil::normalizeAngle($L);
 
         return $L;

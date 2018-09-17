@@ -77,7 +77,7 @@ class EarthTest extends TestCase
         $earth = new Earth($toi);
         $e0 = $earth->getMeanObliquityOfEcliptic();
 
-        $this->assertEquals(23.44094, round($e0, 5));
+        $this->assertEquals(23.44095, round($e0, 5));
     }
 
     /**
@@ -91,7 +91,7 @@ class EarthTest extends TestCase
         $earth = new Earth($toi);
         $e = $earth->getObliquityOfEcliptic();
 
-        $this->assertEquals(23.44356, round($e, 5));
+        $this->assertEquals(23.44357, round($e, 5));
     }
 
     public function testGetDistance()
