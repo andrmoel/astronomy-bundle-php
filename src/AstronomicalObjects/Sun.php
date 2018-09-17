@@ -45,10 +45,16 @@ class Sun extends AstronomicalObject
         $T = $this->T;
 
         // Meeus chapter 22
-        // $M = 357.52772 + 35999.050340 * $T - 0.0001603 * pow($T, 2) - pow($T, 3) / 300000;
+//        $M = 357.52772
+//            + 35999.050340 * $T
+//            - 0.0001603 * pow($T, 2)
+//            - pow($T, 3) / 300000;
 
         // Meeus 47.4
-        $M = 357.5291092 + 35999.0502909 * $T - 0.0001536 * pow($T, 2) + pow($T, 3) / 2449000;
+        $M = 357.5291092
+            + 35999.0502909 * $T
+            - 0.0001536 * pow($T, 2)
+            + pow($T, 3) / 2449000;
         $M = AngleUtil::normalizeAngle($M);
 
         return $M;

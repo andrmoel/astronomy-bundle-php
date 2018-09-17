@@ -36,6 +36,7 @@ class AngleUtil
 
     public static function time2dec(int $hour, int $min, float $sec): float
     {
+        // TODO ...
         if ($hour < 0) {
             $min = -1 * abs($min);
             $sec = -1 * abs($sec);
