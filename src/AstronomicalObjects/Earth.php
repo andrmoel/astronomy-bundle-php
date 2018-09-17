@@ -202,14 +202,14 @@ class Earth extends AstronomicalObject
         return $this->sumEps;
     }
 
-    public function getObliquityOfEcliptic(): float
+    public function getMeanObliquityOfEcliptic(): float
     {
         $T = $this->T;
         $U = $T / 100;
 
         // Meeus 22.3
-        $e0 = AngleUtil::angle2dec(23, 26, 21.448)
-            - AngleUtil::angle2dec(0, 0, 4680.93) * $U
+        $e0 = AngleUtil::angle2dec('23°26\'21.448"')
+            - AngleUtil::angle2dec('0°0\'4680.93"') * $U
             - 1.55 * pow($U, 2)
             + 1999.25 * pow($U, 3)
             - 51.38 * pow($U, 4)
@@ -223,9 +223,9 @@ class Earth extends AstronomicalObject
         return $e0;
     }
 
-    public function getTrueObliquityOfEcliptic(): float
+    public function getObliquityOfEcliptic(): float
     {
-        $e0 = $this->getObliquityOfEcliptic();
+        $e0 = $this->getMeanObliquityOfEcliptic();
 
         // Meeus chapter 22
         $e = $e0 + $this->sumEps;

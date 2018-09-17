@@ -292,12 +292,20 @@ class TimeOfInterest
         $this->second = (int)$second;
     }
 
-    public function getJulianCenturiesSinceJ2000(): float
+    public function getJulianCenturiesFromJ2000(): float
     {
         $jd = $this->getJulianDay();
         $T = ($jd - 2451545.0) / 36525.0;
 
         return $T;
+    }
+
+    public function getJulianMillenniaFromJ2000()
+    {
+        $T = $this->getJulianCenturiesFromJ2000();
+        $t = $T / 10;
+
+        return $t;
     }
 
     public function getUniversalTime(): int
@@ -310,7 +318,7 @@ class TimeOfInterest
     public function getGreenwichMeanSiderealTime(): float
     {
         $JD = $this->getJulianDay();
-        $T = $this->getJulianCenturiesSinceJ2000();
+        $T = $this->getJulianCenturiesFromJ2000();
 
         // Meeus 12.3
 //        $t0 = 100.46061837
@@ -343,7 +351,7 @@ class TimeOfInterest
 
         $t0 = $this->getGreenwichMeanSiderealTime();
         $p = $earth->getNutation();
-        $e = deg2rad($earth->getTrueObliquityOfEcliptic());
+        $e = deg2rad($earth->getObliquityOfEcliptic());
 
         // Meeus 12
         $gmst = $t0 + $p * cos($e);

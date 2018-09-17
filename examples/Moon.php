@@ -5,10 +5,11 @@ include __DIR__ . '/../vendor/autoload.php';
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 // Berlin
-$lat = 52.518611;
-$lon = 13.408333;
+$lat = AngleUtil::angle2dec('52°31\'27.73"');
+$lon = AngleUtil::angle2dec('13°24\'37.91"');
 $location = new Location($lat, $lon);
 
 // Time of interest
@@ -18,17 +19,18 @@ $toi = new TimeOfInterest($dateTime);
 // Create moon
 $moon = new Moon($toi);
 
-$equatorialCoordinates = $moon->getEquatorialCoordinates();
-
-var_dump($equatorialCoordinates->getRightAscension(), $equatorialCoordinates->getDeclination());
-
-// Get moon's altitude
+// Get moon's position in sky
 $localHorizontalCoordinates = $moon->getLocalHorizontalCoordinates($location);
+$azimuth = $localHorizontalCoordinates->getAzimuth();
+$azimuth = AngleUtil::dec2angle($azimuth);
+$altitude = $localHorizontalCoordinates->getAltitude();
+$altitude = AngleUtil::dec2angle($altitude);
 
 echo <<<END
 Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
-Azimuth: {$localHorizontalCoordinates->getAzimuth()}
-Altitude: {$localHorizontalCoordinates->getAltitude()}
+Azimuth: {$azimuth}
+Altitude: {$altitude}
 Is waxing moon: {$moon->isWaxingMoon()}
 Illuminated fraction: {$moon->getIlluminatedFraction()}
+
 END;

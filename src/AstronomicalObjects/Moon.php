@@ -364,7 +364,7 @@ class Moon extends AstronomicalObject
     public function getEquatorialCoordinates(): EquatorialCoordinates
     {
         $earth = new Earth($this->toi);
-        $obliquityOfEcliptic = $earth->getTrueObliquityOfEcliptic();
+        $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
 
         return $this
             ->getEclipticalCoordinates()

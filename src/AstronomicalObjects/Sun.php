@@ -4,7 +4,6 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
 use Andrmoel\AstronomyBundle\Coordinates\EclipticalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\RectangularGeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Location;
@@ -20,18 +19,18 @@ class Sun extends AstronomicalObject
 
     public function getMeanLongitude(): float
     {
-        $T = $this->T / 10; // TODO Waru durch 10? // Meeus 28
+        $t = $this->toi->getJulianMillenniaFromJ2000();
 
         // TODO Woher ...
 //        $L0 = 280.46646 + 36000.76983 * $T + 0.0003032 * pow($T, 2);
 
         // Meeus 28.2
         $L0 = 280.4664567
-            + 360007.6982779 * $T
-            + 0.03042028 * pow($T, 2)
-            + pow($T, 3) / 49931
-            - pow($T, 4) / 15300
-            + pow($T, 5) / 2000000;
+            + 360007.6982779 * $t
+            + 0.03042028 * pow($t, 2)
+            + pow($t, 3) / 49931
+            - pow($t, 4) / 15300
+            + pow($t, 5) / 2000000;
         $L0 = AngleUtil::normalizeAngle($L0);
 
         return $L0;
@@ -94,7 +93,7 @@ class Sun extends AstronomicalObject
     public function getEclipticalCoordinates(): EclipticalCoordinates
     {
         $earth = new Earth($this->toi);
-        $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
+        $obliquityOfEcliptic = $earth->getMeanObliquityOfEcliptic();
 
         return $this
             ->getEquatorialCoordinates()
@@ -127,15 +126,17 @@ class Sun extends AstronomicalObject
         $lon = $o - 0.00569 - 0.00478 * sin($ORad);
         $lonRad = deg2rad($lon);
 
-        // Corrections
-        $eps = $earth->getTrueObliquityOfEcliptic();
-        $eps += 0.00256 * cos($ORad);
-        $epsRad = deg2rad($eps);
+        // Meeus 25.8 - Corrections
+        $e = $earth->getMeanObliquityOfEcliptic();
+        $e = $e + 0.00256 * cos($ORad);
+        $eRad = deg2rad($e);
 
-        $rightAscension = atan2(cos($epsRad) * sin($lonRad), cos($lonRad));
+        // Meeus 25.6
+        $rightAscension = atan2(cos($eRad) * sin($lonRad), cos($lonRad));
         $rightAscension = AngleUtil::normalizeAngle(rad2deg($rightAscension));
 
-        $declination = asin(sin($epsRad) * sin($oRad));
+        // Meeus 25.7
+        $declination = asin(sin($eRad) * sin($oRad));
         $declination = rad2deg($declination);
 
         return new EquatorialCoordinates($rightAscension, $declination);
@@ -149,7 +150,7 @@ class Sun extends AstronomicalObject
 
         $T = $this->T;
 
-        $eps = $earth->getTrueObliquityOfEcliptic();
+        $eps = $earth->getObliquityOfEcliptic();
         $epsRad = deg2rad($eps);
         $L0 = $this->getMeanLongitude();
         $M = $this->getMeanAnomaly();
@@ -166,11 +167,11 @@ class Sun extends AstronomicalObject
         // TODO Woher kommt bRad ??? ...
         $bRad = AngleUtil::angle2dec(0, 0, 0.62);
 
-        $x = $R * cos($bRad) * cos($oRad);
-        $y = $R * (cos($bRad) * sin($oRad) * cos($epsRad) - sin($bRad) * sin($epsRad));
-        $z = $R * (cos($bRad) * sin($oRad) * sin($epsRad) + sin($bRad) * cos($epsRad));
+        $X = $R * cos($bRad) * cos($oRad);
+        $Y = $R * (cos($bRad) * sin($oRad) * cos($epsRad) - sin($bRad) * sin($epsRad));
+        $Z = $R * (cos($bRad) * sin($oRad) * sin($epsRad) + sin($bRad) * cos($epsRad));
 
-        return new GeocentricCoordinates($x, $y, $z);
+        return new GeocentricCoordinates($X, $Y, $Z);
     }
 
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates

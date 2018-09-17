@@ -104,8 +104,7 @@ class MoonTest extends TestCase
         $this->assertEquals(133.167264, round($longitude, 6));
     }
 
-
-    public function XtestGetLocalHorizontalCoordinates()
+    public function testGetLocalHorizontalCoordinates()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
@@ -119,14 +118,9 @@ class MoonTest extends TestCase
         $azimuth = $localHorizontalCoordinates->getAzimuth();
         $altitude = $localHorizontalCoordinates->getAltitude();
 
-//        var_dump($azimuth, $altitude);die();
-
-        // TODO Should be ... 212 / 47...
-
-//        $this->assertEquals(-3.229126, round($latitude, 6));
-//        $this->assertEquals(133.162655, round($longitude, 6));
+        $this->assertEquals(269.99719, round($azimuth, 5));
+        $this->assertEquals(17.45461, round($altitude, 5));
     }
-
 
     /**
      * Meeus 47.a
@@ -144,7 +138,6 @@ class MoonTest extends TestCase
         $this->assertEquals(134.68847, round($rightAscension, 5));
         $this->assertEquals(13.76837, round($declination, 5));
     }
-
 
     /**
      * Meeus 48.a

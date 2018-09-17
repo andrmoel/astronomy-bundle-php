@@ -43,7 +43,7 @@ class EquatorialCoordinatesTest extends TestCase
         $toi->setTime(1987, 4, 10, 19, 21, 0);
 
         $rightAscension = AngleUtil::time2dec(23, 9, 16.641);
-        $declination = AngleUtil::angle2dec(-6, 43, 11.61);
+        $declination = AngleUtil::angle2dec('-6°43\'11.61"');
 
         $equatorialCoordinates = new EquatorialCoordinates($rightAscension, $declination);
         $localHorizontalCoordinates = $equatorialCoordinates->getLocalHorizontalCoordinates($location, $toi);
@@ -51,8 +51,7 @@ class EquatorialCoordinatesTest extends TestCase
         $azimuth = $localHorizontalCoordinates->getAzimuth();
         $altitude = $localHorizontalCoordinates->getAltitude();
 
-        // TODO Rundungsfehler
-        $this->assertEquals(249.1223, round($azimuth, 4));
-        $this->assertEquals(16.1117, round($altitude, 4));
+        $this->assertEquals(248.0336, round($azimuth, 4));
+        $this->assertEquals(15.125, round($altitude, 4));
     }
 }
