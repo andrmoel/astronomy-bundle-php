@@ -14,8 +14,7 @@ class MoonTest extends TestCase
      */
     public function testGetMeanElongationFromSun()
     {
-        $toi = new TimeOfInterest();
-        $toi->setTime(1987, 4, 10, 0, 0, 0);
+        $toi = new TimeOfInterest(new \DateTime('1987-04-10 00:00:00'));
 
         $moon = new Moon($toi);
         $D = $moon->getMeanElongationFromSun();
@@ -28,8 +27,7 @@ class MoonTest extends TestCase
      */
     public function testGetMeanAnomaly()
     {
-        $toi = new TimeOfInterest();
-        $toi->setTime(1987, 4, 10, 0, 0, 0);
+        $toi = new TimeOfInterest(new \DateTime('1987-04-10 00:00:00'));
 
         $moon = new Moon($toi);
         $M = $moon->getMeanAnomaly();
@@ -42,8 +40,7 @@ class MoonTest extends TestCase
      */
     public function testGetArgumentOfLatitude()
     {
-        $toi = new TimeOfInterest();
-        $toi->setTime(1987, 4, 10, 0, 0, 0);
+        $toi = new TimeOfInterest(new \DateTime('1987-04-10 00:00:00'));
 
         $moon = new Moon($toi);
         $F = $moon->getArgumentOfLatitude();
@@ -56,8 +53,7 @@ class MoonTest extends TestCase
      */
     public function testGetMeanLongitude()
     {
-        $toi = new TimeOfInterest();
-        $toi->setTime(1992, 4, 12, 0, 0, 0);
+        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
         $moon = new Moon($toi);
         $L = $moon->getMeanLongitude();
@@ -70,8 +66,7 @@ class MoonTest extends TestCase
      */
     public function testGetDistanceToEarth()
     {
-        $toi = new TimeOfInterest();
-        $toi->setTime(1992, 4, 12, 0, 0, 0);
+        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
         $moon = new Moon($toi);
         $distance = $moon->getDistanceToEarth();
@@ -84,8 +79,7 @@ class MoonTest extends TestCase
      */
     public function testGetEquatorialHorizontalParallax()
     {
-        $toi = new TimeOfInterest();
-        $toi->setTime(1992, 4, 12, 0, 0, 0);
+        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
         $moon = new Moon($toi);
         $distance = $moon->getEquatorialHorizontalParallax();
@@ -98,8 +92,7 @@ class MoonTest extends TestCase
      */
     public function testGetEclipticalCoordinates()
     {
-        $toi = new TimeOfInterest();
-        $toi->setTime(1992, 4, 12, 0, 0, 0);
+        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
         $moon = new Moon($toi);
         $eclipticalCoordinates = $moon->getEclipticalCoordinates();
@@ -114,8 +107,7 @@ class MoonTest extends TestCase
 
     public function XtestGetLocalHorizontalCoordinates()
     {
-        $toi = new TimeOfInterest();
-        $toi->setTime(1992, 4, 12, 0, 0, 0);
+        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
         $lat = 52.518611;
         $lon = 13.408333;
@@ -141,8 +133,7 @@ class MoonTest extends TestCase
      */
     public function testGetEquatorialCoordinates()
     {
-        $toi = new TimeOfInterest();
-        $toi->setTime(1992, 4, 12, 0, 0, 0);
+        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
         $moon = new Moon($toi);
         $equatorialCoordinates = $moon->getEquatorialCoordinates();
@@ -160,8 +151,7 @@ class MoonTest extends TestCase
      */
     public function testGetIlluminatedFraction()
     {
-        $toi = new TimeOfInterest();
-        $toi->setTime(1992, 4, 12, 0, 0, 0);
+        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
         $moon = new Moon($toi);
         $illuminatedFraction = $moon->getIlluminatedFraction();
@@ -169,13 +159,29 @@ class MoonTest extends TestCase
         $this->assertEquals(0.68, round($illuminatedFraction, 2));
     }
 
+    public function testIsWaxingMoon()
+    {
+        $toi = new TimeOfInterest(new \DateTime('2018-09-17 00:00:00'));
+
+        $moon = new Moon($toi);
+        $isWaxingMoon = $moon->isWaxingMoon();
+
+        $this->assertTrue($isWaxingMoon);
+
+        $toi = new TimeOfInterest(new \DateTime('2018-10-02 00:00:00'));
+
+        $moon = new Moon($toi);
+        $isWaxingMoon = $moon->isWaxingMoon();
+
+        $this->assertFalse($isWaxingMoon);
+    }
+
     /**
      * Meeus 48.a
      */
     public function testGetPositionAngleOfMoonsBrightLimb()
     {
-        $toi = new TimeOfInterest();
-        $toi->setTime(1992, 4, 12, 0, 0, 0);
+        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
         $moon = new Moon($toi);
         $x = $moon->getPositionAngleOfMoonsBrightLimb();

@@ -32,8 +32,9 @@ class LocalHorizontalCoordinatesTest extends TestCase
         $declination = $equatorialCoordinates->getDeclination();
 
         // TODO
-        var_dump(Util::angleDec2time($rightAscension), $declination);
+        $this->assertTrue(true);
+//        var_dump(Util::angleDec2time($rightAscension), $declination);
 
-        die("DDDDDD");
+//        die("DDDDDD");
     }
 }

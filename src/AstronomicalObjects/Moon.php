@@ -412,16 +412,17 @@ class Moon extends AstronomicalObject
 
     public function isWaxingMoon(): bool
     {
-        $moonPhase1 = $this->getIlluminatedFraction();
+        $dateTimeFuture = clone $this->toi->getDateTime();
+        $dateTimeFuture->add(new \DateInterval('PT3600S'));
 
-        $toi = $this->getTimeOfInterest();
-        $second = $toi->getSecond() + 1;
-        $toi->setTime($toi->getYear(), $toi->getMonth(), $toi->getDay(), $toi->getHour(), $toi->getMinute(), $second);
+        $illuminatedFraction1 = $this->getIlluminatedFraction();
 
-        $moon = new self($toi);
-        $moonPhase2 = $moon->getIlluminatedFraction();
+        $toi = new TimeOfInterest($dateTimeFuture);
+        $moon = new Moon($toi);
+        $illuminatedFraction2 = $moon->getIlluminatedFraction();
 
-        return $moonPhase2 > $moonPhase1;
+
+        return $illuminatedFraction2 > $illuminatedFraction1;
     }
 
     public function getPositionAngleOfMoonsBrightLimb(): float
