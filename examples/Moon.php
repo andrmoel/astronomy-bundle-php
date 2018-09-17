@@ -25,12 +25,19 @@ $azimuth = $localHorizontalCoordinates->getAzimuth();
 $azimuth = AngleUtil::dec2angle($azimuth);
 $altitude = $localHorizontalCoordinates->getAltitude();
 $altitude = AngleUtil::dec2angle($altitude);
+$isWaxingMoon = $moon->isWaxingMoon() ? 'yes' : 'no';
+$illuminatedFraction = $moon->getIlluminatedFraction();
+$positionAngleOfBrightLimb = $moon->getPositionAngleOfMoonsBrightLimb();
 
 echo <<<END
++------------------------------------
+| Moon
++------------------------------------
 Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
 Azimuth: {$azimuth}
 Altitude: {$altitude}
-Is waxing moon: {$moon->isWaxingMoon()}
-Illuminated fraction: {$moon->getIlluminatedFraction()}
+Is waxing moon: {$isWaxingMoon}
+Illuminated fraction: {$illuminatedFraction}
+Position angle of bright limb: {$positionAngleOfBrightLimb}
 
 END;
