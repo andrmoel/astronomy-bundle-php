@@ -36,6 +36,13 @@ The TOI objects provides all methods which are needed for astronomical calculati
 
 The location object represents the location of the observer on the earth's surface.
 
+### Coordinate Systems
+
+The bundle provides .... The classes are providing methods to transform one coordinate system into another one.
+
+* Ecliptical Coordinates (latitude, longitude)
+* 
+
 ### Astronomical Objects
 
 An astronomical object **must** be initialized with the TOI. If you don't pass the TOI in the constructor, the
