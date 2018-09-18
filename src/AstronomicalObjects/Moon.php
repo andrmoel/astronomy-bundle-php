@@ -74,7 +74,6 @@ class Moon extends AstronomicalObject
         [2, 0, -1, -2, 0, 8752],
     );
 
-
     private $argumentsB = array(
         [0, 0, 0, 1, 5128122],
         [0, 0, 1, 1, 280602],
