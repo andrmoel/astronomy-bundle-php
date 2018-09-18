@@ -34,18 +34,21 @@ class AngleUtil
         return $angle;
     }
 
-    public static function time2dec(int $hour, int $min, float $sec): float
+    public static function time2dec(string $timeAngle): float
     {
-        // TODO ...
-        if ($hour < 0) {
-            $min = -1 * abs($min);
-            $sec = -1 * abs($sec);
+        if (preg_match('/(-?)([0-9]+)h.*?([0-9]+)m.*?([0-9.]+)s/', $timeAngle, $matches)) {
+            $sign = trim($matches[1]) === '-' ? -1 : 1;
+            $deg = (int)$matches[2];
+            $min = (int)$matches[3];
+            $sec = (float)$matches[4];
+
+            $angle = $sign * ($deg + $min / 60 + $sec / 3600);
+            $angle *= 15;
+        } else {
+            throw new \Exception('AngleUtil::time2dec() false format');
         }
 
-        $time = $hour + $min / 60 + $sec / 3600;
-        $time *= 15;
-
-        return $time;
+        return $angle;
     }
 
     public static function dec2time(float $angle): string

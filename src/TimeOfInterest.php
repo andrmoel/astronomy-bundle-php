@@ -300,7 +300,7 @@ class TimeOfInterest
         return $T;
     }
 
-    public function getJulianMillenniaFromJ2000()
+    public function getJulianMillenniaFromJ2000(): float
     {
         $T = $this->getJulianCenturiesFromJ2000();
         $t = $T / 10;

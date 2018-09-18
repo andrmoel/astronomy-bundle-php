@@ -42,7 +42,7 @@ class EquatorialCoordinatesTest extends TestCase
         $toi = new TimeOfInterest();
         $toi->setTime(1987, 4, 10, 19, 21, 0);
 
-        $rightAscension = AngleUtil::time2dec(23, 9, 16.641);
+        $rightAscension = AngleUtil::time2dec('23h9m16.641s');
         $declination = AngleUtil::angle2dec('-6°43\'11.61"');
 
         $equatorialCoordinates = new EquatorialCoordinates($rightAscension, $declination);

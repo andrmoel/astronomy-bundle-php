@@ -21,8 +21,10 @@ class Sun extends AstronomicalObject
     {
         $t = $this->toi->getJulianMillenniaFromJ2000();
 
-        // TODO Woher ...
-//        $L0 = 280.46646 + 36000.76983 * $T + 0.0003032 * pow($T, 2);
+        // TODO Where did I found the formular?
+//        $L0 = 280.46646
+//            + 36000.76983 * $T
+//            + 0.0003032 * pow($T, 2);
 
         // Meeus 28.2
         $L0 = 280.4664567
@@ -60,17 +62,6 @@ class Sun extends AstronomicalObject
         return $M;
     }
 
-    public function getEquationOfTime(): float
-    {
-        $T = $this->T / 10; // TODO Warum durch 10?
-        $L0 = $this->getMeanLongitude();
-
-        // Meeus 28.1
-        $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($eps);
-
-        return $E;
-    }
-
     public function getRadiusVector(): float
     {
         $earth = new Earth($this->toi);
@@ -99,7 +90,7 @@ class Sun extends AstronomicalObject
     public function getEclipticalCoordinates(): EclipticalCoordinates
     {
         $earth = new Earth($this->toi);
-        $obliquityOfEcliptic = $earth->getMeanObliquityOfEcliptic();
+        $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
 
         return $this
             ->getEquatorialCoordinates()
@@ -171,7 +162,7 @@ class Sun extends AstronomicalObject
         $oRad = deg2rad($o);
 
         // TODO Woher kommt bRad ??? ...
-        $bRad = AngleUtil::angle2dec(0, 0, 0.62);
+        $bRad = AngleUtil::angle2dec('0°0\'0.62"');
 
         $X = $R * cos($bRad) * cos($oRad);
         $Y = $R * (cos($bRad) * sin($oRad) * cos($epsRad) - sin($bRad) * sin($epsRad));
@@ -191,13 +182,30 @@ class Sun extends AstronomicalObject
      * Get distance to earth [km]
      * @return float
      */
-    public function getDistanceToEarth()
+    public function getDistanceToEarth(): float
     {
         $R = $this->getRadiusVector();
 
+        // https://www.iau.org/static/resolutions/IAU2012_English.pdf
         $r = $R * 149597870.7;
 
         return $r;
+    }
+
+    public function getEquationOfTime(): float
+    {
+        $earth = new Earth($this->toi);
+
+        $L0 = $this->getMeanLongitude();
+        $equatorialCoordinates = $this->getEquatorialCoordinates();
+        $rightAscension = $equatorialCoordinates->getRightAscension();
+        $dPhi = $earth->getNutation();
+        $e = $earth->getObliquityOfEcliptic();
+
+        // Meeus 28.1
+        $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($e);
+
+        return $E;
     }
 
     public function getTwilight(Location $location): int

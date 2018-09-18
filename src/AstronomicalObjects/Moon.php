@@ -438,7 +438,7 @@ class Moon extends AstronomicalObject
     public function isWaxingMoon(): bool
     {
         $dateTimeFuture = clone $this->toi->getDateTime();
-        $dateTimeFuture->add(new \DateInterval('PT3600S'));
+        $dateTimeFuture->add(new \DateInterval('PT1S'));
 
         $illuminatedFraction1 = $this->getIlluminatedFraction();
 
