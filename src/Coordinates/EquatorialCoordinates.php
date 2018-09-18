@@ -6,15 +6,13 @@ use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class EquatorialCoordinates extends Coordinates
+class EquatorialCoordinates
 {
     private $rightAscension = 0;
     private $declination = 0;
 
     public function __construct(float $rightAscension, float $declination)
     {
-        parent::__construct();
-
         $this->rightAscension = $rightAscension;
         $this->declination = $declination;
     }

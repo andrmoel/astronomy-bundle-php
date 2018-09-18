@@ -4,7 +4,7 @@ namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\Location;
 
-class LocalHorizontalCoordinates extends Coordinates
+class LocalHorizontalCoordinates
 {
     private $azimuth = 0;
     private $altitude = 0;
@@ -12,8 +12,6 @@ class LocalHorizontalCoordinates extends Coordinates
 
     public function __construct(float $azimuth, float $altitude)
     {
-        parent::__construct();
-
         $this->azimuth = $azimuth;
         $this->altitude = $altitude;
     }

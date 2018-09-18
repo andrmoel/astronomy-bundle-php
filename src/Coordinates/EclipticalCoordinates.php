@@ -2,15 +2,13 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-class EclipticalCoordinates extends Coordinates
+class EclipticalCoordinates
 {
     private $longitude = 0.0;
     private $latitude = 0.0;
 
     public function __construct(float $latitude, float $longitude)
     {
-        parent::__construct();
-
         $this->latitude = $latitude;
         $this->longitude = $longitude;
     }

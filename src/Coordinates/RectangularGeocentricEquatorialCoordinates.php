@@ -2,9 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-use Andrmoel\AstronomyBundle\TimeOfInterest;
-
-class RectangularGeocentricEquatorialCoordinates extends Coordinates
+class RectangularGeocentricEquatorialCoordinates
 {
     private $x = 0;
     private $y = 0;
@@ -13,8 +11,6 @@ class RectangularGeocentricEquatorialCoordinates extends Coordinates
 
     public function __construct(float $x, float $y, float $z)
     {
-        parent::__construct();
-
         $this->x = $x;
         $this->y = $y;
         $this->z = $z;
