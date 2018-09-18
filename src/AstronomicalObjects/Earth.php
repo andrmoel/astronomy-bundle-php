@@ -13,9 +13,6 @@ class Earth extends AstronomicalObject
     const FLATTENING = 0.00335281317789691440603238146967; // (1 / 298.257) Earth's flattening
     const EARTH_AXIS_RATIO = 0.996647189335;
 
-    // Location of observer
-    private $location;
-
     private $argumentsNutation = array(
         [0, 0, 0, 0, 1, -171996, -174.2, 92025, 8.9],
         [-2, 0, 0, 2, 2, -13187, -1.6, 5736, -3.1],
@@ -141,16 +138,6 @@ class Earth extends AstronomicalObject
 
         $this->sumPhi = $sumPhi;
         $this->sumEps = $sumEps;
-    }
-
-    public function setLocation(Location $location): void
-    {
-        $this->location = $location;
-    }
-
-    public function getLocation(): Location
-    {
-        return $this->location;
     }
 
     /**
