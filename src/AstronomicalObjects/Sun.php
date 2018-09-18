@@ -103,6 +103,7 @@ class Sun extends AstronomicalObject
      */
     public function getEquatorialCoordinates(): EquatorialCoordinates
     {
+        // TODO Use method with higher accuracy (Meeus p.166)
         $earth = new Earth($this->toi);
 
         $T = $this->T;
@@ -139,7 +140,6 @@ class Sun extends AstronomicalObject
         return new EquatorialCoordinates($rightAscension, $declination);
     }
 
-    // TODO ...
     public function getRectangularGeocentricEquatorialCoordinates(): RectangularGeocentricEquatorialCoordinates
     {
         $R = $this->getRadiusVector();
@@ -161,7 +161,7 @@ class Sun extends AstronomicalObject
         $o = $L0 + $C;
         $oRad = deg2rad($o);
 
-        // TODO Woher kommt bRad ??? ...
+        // TODO How do is calculate it?
         $bRad = AngleUtil::angle2dec('0°0\'0.62"');
 
         $X = $R * cos($bRad) * cos($oRad);

@@ -1,6 +1,6 @@
-# Fofo
+# Introduction
 
-The astronomy-bundle ..
+The astronomy-bundle provides methods for.
 
 Install the package with:
 ```console

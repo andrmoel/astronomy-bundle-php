@@ -1,37 +1,39 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
+namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
-use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-abstract class AstronomicalObject
+abstract class Planet extends AstronomicalObject
 {
-    /** @var TimeOfInterest */
-    protected $toi;
-
-    /** @var float julian day since J2000.0 */
-    protected $T = 0;
-
     // Meeus Appendix III for planets
     protected $argumentsL = null;
     protected $argumentsB = null;
     protected $argumentsR = null;
 
-    public function __construct(TimeOfInterest $toi = null)
+    public function getEclipticalLongitude()
     {
-        $this->toi = $toi ? $toi : new TimeOfInterest();
-        $this->T = $this->toi->getJulianCenturiesFromJ2000();
+        $L = $this->resolveTerms($this->argumentsL);
+        $L = rad2deg($L);
+        $L = AngleUtil::normalizeAngle($L);
+
+        return $L;
     }
 
-    public function setTimeOfInterest(TimeOfInterest $toi): void
+    public function getEclipticalLatitude()
     {
-        $this->toi = $toi;
-        $this->T = $this->toi->getJulianCenturiesFromJ2000();
+        $B = $this->resolveTerms($this->argumentsB);
+        $B = rad2deg($B);
+
+        return $B;
     }
 
-    public function getTimeOfInterest(): TimeOfInterest
+    public function getRadiusVector()
     {
-        return $this->toi;
+        $R = $this->resolveTerms($this->argumentsR);
+
+        return $R;
     }
 
     protected function resolveTerms(array $terms): float
