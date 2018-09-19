@@ -30,6 +30,19 @@ class GeocentricEclipticalSphericalCoordinates
         return $this->radiusVector;
     }
 
+    // TODO Test ...
+    public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
+    {
+        $lonRad = deg2rad($this->longitude);
+        $latRad = deg2rad($this->latitude);
+
+        $X = $this->radiusVector * cos($latRad) * cos($lonRad);
+        $Y = $this->radiusVector * cos($latRad) * sin($lonRad);
+        $Z = $this->radiusVector * sin($latRad);
+
+        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+    }
+
     public function getGeocentricEquatorialCoordinates(float $obliquityOfEcliptic): GeocentricEquatorialCoordinates
     {
         $eps = deg2rad($obliquityOfEcliptic);

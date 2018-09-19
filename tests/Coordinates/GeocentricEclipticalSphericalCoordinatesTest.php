@@ -7,6 +7,19 @@ use PHPUnit\Framework\TestCase;
 
 class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
 {
+    public function testFoo()
+    {
+        $lat = 6.684170;
+        $lon = 113.215630;
+        $radiusVector = 0.987654;
+        $eps = 23.4392911;
+
+        $geoEclSphCoordinates = new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
+        $geoEclRecCoordinates = $geoEclSphCoordinates->getGeocentricEclipticalRectangularCoordinates();
+
+        // TODO ...
+    }
+
     /**
      * Meeus 13.a
      */
