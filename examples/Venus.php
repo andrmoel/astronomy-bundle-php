@@ -44,7 +44,7 @@ $declination = AngleUtil::dec2angle($declination);
 
 // Get local horizontal coordinates
 $localHorizontalCoordinates = $equatorialCorodinates->getLocalHorizontalCoordinates($location, $toi);
-$azimuth = $localHorizontalCoordinates->getAzimuth(); // TODO FALSCHER WERT. Laut Stellarium 294.45...
+$azimuth = $localHorizontalCoordinates->getAzimuth() + 180; // TODO FALSCHER WERT. Laut Stellarium 294.45...
 $azimuth = AngleUtil::dec2angle($azimuth);
 $altitude = $localHorizontalCoordinates->getAltitude();
 $altitude = AngleUtil::dec2angle($altitude);
