@@ -16,7 +16,7 @@ class EarthTest extends TestCase
         $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
 
         $earth = new Earth($toi);
-        $heliocentricCoordinates = $earth->getHeliocentricCoordinates();
+        $heliocentricCoordinates = $earth->getHeliocentricEclipticalCoordinates();
 
         $L = $heliocentricCoordinates->getEclipticalLongitude();
         $B = $heliocentricCoordinates->getEclipticalLatitude();

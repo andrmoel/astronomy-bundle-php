@@ -16,7 +16,7 @@ class VenusTest extends TestCase
         $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
         $venus = new Venus($toi);
 
-        $heliocentricCoordinates = $venus->getHeliocentricCoordinates();
+        $heliocentricCoordinates = $venus->getHeliocentricEclipticalCoordinates();
 
         $L = $heliocentricCoordinates->getEclipticalLongitude();
         $B = $heliocentricCoordinates->getEclipticalLatitude();

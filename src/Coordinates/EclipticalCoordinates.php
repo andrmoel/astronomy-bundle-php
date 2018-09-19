@@ -6,11 +6,13 @@ class EclipticalCoordinates
 {
     private $longitude = 0.0;
     private $latitude = 0.0;
+    private $distance = 0.0;
 
-    public function __construct(float $latitude, float $longitude)
+    public function __construct(float $latitude, float $longitude, float $distance = 0.0)
     {
         $this->latitude = $latitude;
         $this->longitude = $longitude;
+        $this->distance = $distance;
     }
 
     public function getLatitude(): float
@@ -21,6 +23,11 @@ class EclipticalCoordinates
     public function getLongitude(): float
     {
         return $this->longitude;
+    }
+
+    public function getDistance(): float
+    {
+        return $this->distance;
     }
 
     public function getEquatorialCoordinates(float $obliquityOfEcliptic): EquatorialCoordinates

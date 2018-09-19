@@ -3,7 +3,7 @@
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
-use Andrmoel\AstronomyBundle\Coordinates\HeliocentricCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalCoordinates;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 abstract class Planet extends AstronomicalObject
@@ -13,7 +13,7 @@ abstract class Planet extends AstronomicalObject
     protected $argumentsB = null;
     protected $argumentsR = null;
 
-    public function getHeliocentricCoordinates()
+    public function getHeliocentricEclipticalCoordinates()
     {
         $L = $this->resolveTerms($this->argumentsL);
         $L = rad2deg($L);
@@ -24,7 +24,7 @@ abstract class Planet extends AstronomicalObject
 
         $R = $this->resolveTerms($this->argumentsR);
 
-        return new HeliocentricCoordinates($L, $B, $R);
+        return new HeliocentricEclipticalCoordinates($L, $B, $R);
     }
 
     protected function resolveTerms(array $terms): float
