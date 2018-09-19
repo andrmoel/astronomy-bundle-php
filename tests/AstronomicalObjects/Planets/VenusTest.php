@@ -11,15 +11,15 @@ class VenusTest extends TestCase
     /**
      * Meeus 33.a
      */
-    public function testGetHeliocentricCoordinates()
+    public function testGetHeliocentricEclipticalSphericalCoordinates()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
         $venus = new Venus($toi);
 
-        $heliocentricCoordinates = $venus->getHeliocentricEclipticalCoordinates();
+        $heliocentricCoordinates = $venus->getHeliocentricEclipticalSphericalCoordinates();
 
-        $L = $heliocentricCoordinates->getEclipticalLongitude();
-        $B = $heliocentricCoordinates->getEclipticalLatitude();
+        $L = $heliocentricCoordinates->getLongitude();
+        $B = $heliocentricCoordinates->getLatitude();
         $R = $heliocentricCoordinates->getRadiusVector();
 
         $this->assertEquals(26.11428, round($L, 5));

@@ -25,13 +25,9 @@ class LocalHorizontalCoordinates
         return $this->altitude;
     }
 
-    /**
-     * TODO NOr working MEEUS 94
-     * @param Location $location
-     * @return EquatorialCoordinates
-     */
-    public function getEquatorialCoordinates(Location $location): EquatorialCoordinates
+    public function getEquatorialCoordinates(Location $location): GeocentricEquatorialCoordinates
     {
+        // TODO TODO NOr working MEEUS 94 - Test schreiben ...
         $latRad = $location->getLatitudeRad();
 
         // Calculate right ascension and declination
@@ -44,6 +40,6 @@ class LocalHorizontalCoordinates
         $declination = asin(sin($latRad) * sin($h) - cos($latRad) * cos($h) * cos($A));
         $declination = rad2deg($declination);
 
-        return new EquatorialCoordinates($rightAscension, $declination);
+        return new GeocentricEquatorialCoordinates($rightAscension, $declination);
     }
 }

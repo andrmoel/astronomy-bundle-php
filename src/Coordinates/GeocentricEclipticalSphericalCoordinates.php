@@ -2,17 +2,17 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-class EclipticalCoordinates
+class GeocentricEclipticalSphericalCoordinates
 {
     private $longitude = 0.0;
     private $latitude = 0.0;
-    private $distance = 0.0;
+    private $radiusVector = 0.0;
 
-    public function __construct(float $latitude, float $longitude, float $distance = 0.0)
+    public function __construct(float $longitude, float $latitude, float $radiusVector = 0.0)
     {
-        $this->latitude = $latitude;
         $this->longitude = $longitude;
-        $this->distance = $distance;
+        $this->latitude = $latitude;
+        $this->radiusVector = $radiusVector;
     }
 
     public function getLatitude(): float
@@ -25,16 +25,16 @@ class EclipticalCoordinates
         return $this->longitude;
     }
 
-    public function getDistance(): float
+    public function getRadiusVector(): float
     {
-        return $this->distance;
+        return $this->radiusVector;
     }
 
-    public function getEquatorialCoordinates(float $obliquityOfEcliptic): EquatorialCoordinates
+    public function getGeocentricEquatorialCoordinates(float $obliquityOfEcliptic): GeocentricEquatorialCoordinates
     {
         $eps = deg2rad($obliquityOfEcliptic);
-        $lat = deg2rad($this->latitude);
         $lon = deg2rad($this->longitude);
+        $lat = deg2rad($this->latitude);
 
         // Meeus 13.3
         $rightAscension = atan2(sin($lon) * cos($eps) - (sin($lat) / cos($lat)) * sin($eps), cos($lon));
@@ -44,6 +44,6 @@ class EclipticalCoordinates
         $declination = asin(sin($lat) * cos($eps) + cos($lat) * sin($eps) * sin($lon));
         $declination = rad2deg($declination);
 
-        return new EquatorialCoordinates($rightAscension, $declination);
+        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $this->radiusVector);
     }
 }

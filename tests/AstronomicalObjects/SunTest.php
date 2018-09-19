@@ -50,10 +50,10 @@ class SunTest extends TestCase
         $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
 
         $sun = new Sun($toi);
-        $eclipticalCoordinates = $sun->getEclipticalCoordinates();
+        $geoEclSphCoordinates = $sun->getGeoCentricEclipticalSphericalCoordinates();
 
-        $latitude = $eclipticalCoordinates->getLatitude();
-        $longitude = $eclipticalCoordinates->getLongitude();
+        $latitude = $geoEclSphCoordinates->getLatitude();
+        $longitude = $geoEclSphCoordinates->getLongitude();
 
         // TODO Rundungsfehler?
         $this->assertEquals(-0.00027, round($latitude, 5));
@@ -68,10 +68,10 @@ class SunTest extends TestCase
         $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
 
         $sun = new Sun($toi);
-        $equatorialCoordinates = $sun->getEquatorialCoordinates();
+        $geoEquCoordinates = $sun->getGeocentricEquatorialCoordinates();
 
-        $rightAscension = $equatorialCoordinates->getRightAscension();
-        $declination = $equatorialCoordinates->getDeclination();
+        $rightAscension = $geoEquCoordinates->getRightAscension();
+        $declination = $geoEquCoordinates->getDeclination();
 
         $this->assertEquals(198.38082, round($rightAscension, 5));
         $this->assertEquals(-7.78542, round($declination, 5)); // TODO Should be -7.78507

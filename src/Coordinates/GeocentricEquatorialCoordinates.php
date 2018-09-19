@@ -6,15 +6,17 @@ use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class EquatorialCoordinates
+class GeocentricEquatorialCoordinates
 {
     private $rightAscension = 0;
     private $declination = 0;
+    private $radiusVector = 0;
 
-    public function __construct(float $rightAscension, float $declination)
+    public function __construct(float $rightAscension, float $declination, float $radiusVector = 0.0)
     {
         $this->rightAscension = $rightAscension;
         $this->declination = $declination;
+        $this->radiusVector = $radiusVector;
     }
 
     public function getRightAscension(): float
@@ -27,7 +29,14 @@ class EquatorialCoordinates
         return $this->declination;
     }
 
-    public function getEclipticalCoordinates(float $obliquityOfEcliptic): EclipticalCoordinates
+    public function getRadiusVector(): float
+    {
+        return $this->radiusVector;
+    }
+
+    public function getGeocentricEclipticalSphericalCoordinates(
+        float $obliquityOfEcliptic
+    ): GeocentricEclipticalSphericalCoordinates
     {
         $a = deg2rad($this->rightAscension);
         $d = deg2rad($this->declination);
@@ -41,7 +50,7 @@ class EquatorialCoordinates
         $lat = asin(sin($d) * cos($eps) - cos($d) * sin($eps) * sin($a));
         $lat = rad2deg($lat);
 
-        return new EclipticalCoordinates($lat, $lon);
+        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $this->radiusVector);
     }
 
     public function getLocalHorizontalCoordinates(Location $location, TimeOfInterest $toi): LocalHorizontalCoordinates

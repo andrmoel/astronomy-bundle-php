@@ -2,13 +2,13 @@
 
 namespace Andrmoel\AstronomyBundle\Tests\Coordinates;
 
-use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
-class EquatorialCoordinatesTest extends TestCase
+class GeocentricEquatorialCoordinatesTest extends TestCase
 {
     /**
      * Meeus 13.a
@@ -17,18 +17,20 @@ class EquatorialCoordinatesTest extends TestCase
     {
         $rightAscension = 116.328942;
         $declination = 28.026183;
+        $radiusVector = 0.987654;
         $eps = 23.4392911;
 
-        $equatorialCoordinates = new EquatorialCoordinates($rightAscension, $declination);
-        $eclipticalCoordinates = $equatorialCoordinates->getEclipticalCoordinates($eps);
+        $geoEquCoordinates = new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
+        $geoEclSphCoordinates = $geoEquCoordinates->getGeocentricEclipticalSphericalCoordinates($eps);
 
-        $lat = $eclipticalCoordinates->getLatitude();
-        $lon = $eclipticalCoordinates->getLongitude();
+        $lat = $geoEclSphCoordinates->getLatitude();
+        $lon = $geoEclSphCoordinates->getLongitude();
+        $radiusVector = $geoEclSphCoordinates->getRadiusVector();
 
         $this->assertEquals(6.684170, round($lat, 6));
         $this->assertEquals(113.215630, round($lon, 6));
+        $this->assertEquals(0.987654, round($radiusVector, 6));
     }
-
 
     /**
      * Meeus 13.b
@@ -45,8 +47,8 @@ class EquatorialCoordinatesTest extends TestCase
         $rightAscension = AngleUtil::time2dec('23h9m16.641s');
         $declination = AngleUtil::angle2dec('-6°43\'11.61"');
 
-        $equatorialCoordinates = new EquatorialCoordinates($rightAscension, $declination);
-        $localHorizontalCoordinates = $equatorialCoordinates->getLocalHorizontalCoordinates($location, $toi);
+        $geoEquCoordinates = new GeocentricEquatorialCoordinates($rightAscension, $declination);
+        $localHorizontalCoordinates = $geoEquCoordinates->getLocalHorizontalCoordinates($location, $toi);
 
         $azimuth = $localHorizontalCoordinates->getAzimuth();
         $altitude = $localHorizontalCoordinates->getAltitude();

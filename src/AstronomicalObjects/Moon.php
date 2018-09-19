@@ -2,8 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
-use Andrmoel\AstronomyBundle\Coordinates\EclipticalCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
@@ -377,43 +377,44 @@ class Moon extends AstronomicalObject
         return $l;
     }
 
-    public function getEclipticalCoordinates(): EclipticalCoordinates
+    public function getGeocentricEclipticalSpericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
-        $lat = $this->getLatitude();
         $lon = $this->getApparentLongitude();
+        $lat = $this->getLatitude();
+        $radiusVector = $this->getDistanceToEarth(); // TODO must be in AU ???
 
-        return new EclipticalCoordinates($lat, $lon);
+        return new GeocentricEclipticalSphericalCoordinates($lon, $lat);
     }
 
-    public function getEquatorialCoordinates(): EquatorialCoordinates
+    public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
     {
         $earth = new Earth($this->toi);
         $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
 
         return $this
-            ->getEclipticalCoordinates()
-            ->getEquatorialCoordinates($obliquityOfEcliptic);
+            ->getGeocentricEclipticalSpericalCoordinates()
+            ->getGeocentricEquatorialCoordinates($obliquityOfEcliptic);
     }
 
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
         return $this
-            ->getEquatorialCoordinates()
+            ->getGeocentricEquatorialCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->toi);
     }
 
     public function getIlluminatedFraction(): float
     {
-        $equatorialCoordinates = $this->getEquatorialCoordinates();
+        $geoEquCoordinatesMoon = $this->getGeocentricEquatorialCoordinates();
 
-        $aMoon = $equatorialCoordinates->getRightAscension();
-        $dMoon = $equatorialCoordinates->getDeclination();
+        $aMoon = $geoEquCoordinatesMoon->getRightAscension();
+        $dMoon = $geoEquCoordinatesMoon->getDeclination();
         $distMoon = $this->getDistanceToEarth();
 
         $sun = new Sun($this->toi);
-        $equatorialCoordinates = $sun->getEquatorialCoordinates();
-        $aSun = $equatorialCoordinates->getRightAscension();
-        $dSun = $equatorialCoordinates->getDeclination();
+        $geoEquCoordinatesSun = $sun->getGeocentricEquatorialCoordinates();
+        $aSun = $geoEquCoordinatesSun->getRightAscension();
+        $dSun = $geoEquCoordinatesSun->getDeclination();
         $distSun = $sun->getDistanceToEarth();
 
         $aMoon = deg2rad($aMoon);
@@ -453,16 +454,16 @@ class Moon extends AstronomicalObject
     {
         $sun = new Sun($this->toi);
 
-        $equatorialCoordinatesMoon = $this->getEquatorialCoordinates();
-        $equatorialCoordinatesSun = $sun->getEquatorialCoordinates();
+        $geoEquCoordinatesMoon = $this->getGeocentricEquatorialCoordinates();
+        $geoEquCoordinatesSun = $sun->getGeocentricEquatorialCoordinates();
 
-        $aMoon = $equatorialCoordinatesMoon->getRightAscension();
-        $dMoon = $equatorialCoordinatesMoon->getDeclination();
+        $aMoon = $geoEquCoordinatesMoon->getRightAscension();
+        $dMoon = $geoEquCoordinatesMoon->getDeclination();
         $aMoonRad = deg2rad($aMoon);
         $dMoonRad = deg2rad($dMoon);
 
-        $aSun = $equatorialCoordinatesSun->getRightAscension();
-        $dSun = $equatorialCoordinatesSun->getDeclination();
+        $aSun = $geoEquCoordinatesSun->getRightAscension();
+        $dSun = $geoEquCoordinatesSun->getDeclination();
         $aSunRad = deg2rad($aSun);
         $dSunRad = deg2rad($dSun);
 

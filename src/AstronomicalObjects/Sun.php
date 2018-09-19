@@ -2,10 +2,10 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
-use Andrmoel\AstronomyBundle\Coordinates\EclipticalCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\EquatorialCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\RectangularGeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
@@ -87,21 +87,17 @@ class Sun extends AstronomicalObject
         return $R;
     }
 
-    public function getEclipticalCoordinates(): EclipticalCoordinates
+    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
         $earth = new Earth($this->toi);
         $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
 
         return $this
-            ->getEquatorialCoordinates()
-            ->getEclipticalCoordinates($obliquityOfEcliptic);
+            ->getGeocentricEquatorialCoordinates()
+            ->getGeocentricEclipticalSphericalCoordinates($obliquityOfEcliptic);
     }
 
-    /**
-     * Meeus
-     * @return EquatorialCoordinates
-     */
-    public function getEquatorialCoordinates(): EquatorialCoordinates
+    public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
     {
         // TODO Use method with higher accuracy (Meeus p.166)
         $earth = new Earth($this->toi);
@@ -137,10 +133,10 @@ class Sun extends AstronomicalObject
         $declination = asin(sin($eRad) * sin($oRad));
         $declination = rad2deg($declination);
 
-        return new EquatorialCoordinates($rightAscension, $declination);
+        return new GeocentricEquatorialCoordinates($rightAscension, $declination);
     }
 
-    public function getRectangularGeocentricEquatorialCoordinates(): RectangularGeocentricEquatorialCoordinates
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
     {
         $R = $this->getRadiusVector();
         $earth = new Earth($this->toi);
@@ -168,13 +164,13 @@ class Sun extends AstronomicalObject
         $Y = $R * (cos($bRad) * sin($oRad) * cos($epsRad) - sin($bRad) * sin($epsRad));
         $Z = $R * (cos($bRad) * sin($oRad) * sin($epsRad) + sin($bRad) * cos($epsRad));
 
-        return new GeocentricCoordinates($X, $Y, $Z);
+        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
     }
 
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
         return $this
-            ->getEquatorialCoordinates()
+            ->getGeocentricEquatorialCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->toi);
     }
 
@@ -197,8 +193,8 @@ class Sun extends AstronomicalObject
         $earth = new Earth($this->toi);
 
         $L0 = $this->getMeanLongitude();
-        $equatorialCoordinates = $this->getEquatorialCoordinates();
-        $rightAscension = $equatorialCoordinates->getRightAscension();
+        $geoEquCoordinates = $this->getGeocentricEquatorialCoordinates();
+        $rightAscension = $geoEquCoordinates->getRightAscension();
         $dPhi = $earth->getNutation();
         $e = $earth->getObliquityOfEcliptic();
 

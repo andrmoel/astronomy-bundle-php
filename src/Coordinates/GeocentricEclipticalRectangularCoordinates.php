@@ -4,13 +4,12 @@ namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class EquatorialRectangularCoordinates
+class GeocentricEclipticalRectangularCoordinates
 {
-    private $X = 0.0;
-    private $Y = 0.0;
-    private $Z = 0.0;
+    private $X = 0;
+    private $Y = 0;
+    private $Z = 0;
 
-    // TODO Sind es nicht eher Ecliptical rectangular coordinates???
     public function __construct(float $X, float $Y, float $Z)
     {
         $this->X = $X;
@@ -33,18 +32,19 @@ class EquatorialRectangularCoordinates
         return $this->Z;
     }
 
-    // TODO Write tests...
-    public function getEclipticalCoordinates(): EclipticalCoordinates
+    // TODO Test schreiben
+    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
         // Meeus 33.2
         $longitude = atan($this->Y / $this->X);
         $longitude = rad2deg($longitude);
         $longitude = AngleUtil::normalizeAngle($longitude);
+
         $latitude = atan($this->Z / sqrt(pow($this->X, 2) + pow($this->Y, 2)));
         $latitude = rad2deg($latitude);
 
-        // TODO Corrections of light time and aberration...
+        $radiusVector = sqrt(pow($this->X, 2) + pow($this->Y, 2) + pow($this->Z, 2));
 
-        return new EclipticalCoordinates($latitude, $longitude);
+        return new GeocentricEclipticalSphericalCoordinates($longitude, $latitude, $radiusVector);
     }
 }

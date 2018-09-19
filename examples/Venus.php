@@ -23,23 +23,23 @@ $e = $earth->getObliquityOfEcliptic();
 // Create venus
 $venus = new Venus($toi);
 
-// Get ecliptical coordinates
-$eclipticalCoordinates = $venus
-    ->getHeliocentricEclipticalCoordinates()
-    ->getEclipticalCoordinates($toi);
+// Get geocentric ecliptical coordinates
+$geoEclSphCoordinates = $venus
+    ->getHeliocentricEclipticalSphericalCoordinates()
+    ->getGeocentricEclipticalSphericalCoordinates($toi);
 
-$eclLatitude = $eclipticalCoordinates->getLatitude();
+$eclLatitude = $geoEclSphCoordinates->getLatitude();
 $eclLatitude = AngleUtil::dec2angle($eclLatitude);
-$eclLongitude = $eclipticalCoordinates->getLongitude();
+$eclLongitude = $geoEclSphCoordinates->getLongitude();
 $eclLongitude = AngleUtil::dec2angle($eclLongitude);
 
-// Get equatorial coordinates
-$equatorialCorodinates = $eclipticalCoordinates
-    ->getEquatorialCoordinates($e);
+// Get geocentric equatorial coordinates
+$geoEquCorodinates = $geoEclSphCoordinates
+    ->getGeocentricEquatorialCoordinates($e);
 
-$rightAscension = $equatorialCorodinates->getRightAscension();
+$rightAscension = $geoEquCorodinates->getRightAscension();
 $rightAscension = AngleUtil::dec2time($rightAscension);
-$declination = $equatorialCorodinates->getDeclination();
+$declination = $geoEquCorodinates->getDeclination();
 $declination = AngleUtil::dec2angle($declination);
 
 // Get local horizontal coordinates

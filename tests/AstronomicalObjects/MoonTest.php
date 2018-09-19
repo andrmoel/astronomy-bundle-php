@@ -90,15 +90,15 @@ class MoonTest extends TestCase
     /**
      * Meeus 47.a
      */
-    public function testGetEclipticalCoordinates()
+    public function testGetGeocentricEclipticalSpericalCoordinates()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
         $moon = new Moon($toi);
-        $eclipticalCoordinates = $moon->getEclipticalCoordinates();
+        $geoEclSphCoordinates = $moon->getGeocentricEclipticalSpericalCoordinates();
 
-        $latitude = $eclipticalCoordinates->getLatitude();
-        $longitude = $eclipticalCoordinates->getLongitude();
+        $latitude = $geoEclSphCoordinates->getLatitude();
+        $longitude = $geoEclSphCoordinates->getLongitude();
 
         $this->assertEquals(-3.229126, round($latitude, 6));
         $this->assertEquals(133.167264, round($longitude, 6));
@@ -125,15 +125,15 @@ class MoonTest extends TestCase
     /**
      * Meeus 47.a
      */
-    public function testGetEquatorialCoordinates()
+    public function testGetGeocentricEquatorialCoordinates()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
         $moon = new Moon($toi);
-        $equatorialCoordinates = $moon->getEquatorialCoordinates();
+        $geoEquCoordinates = $moon->getGeocentricEquatorialCoordinates();
 
-        $rightAscension = $equatorialCoordinates->getRightAscension();
-        $declination = $equatorialCoordinates->getDeclination();
+        $rightAscension = $geoEquCoordinates->getRightAscension();
+        $declination = $geoEquCoordinates->getDeclination();
 
         $this->assertEquals(134.68847, round($rightAscension, 5));
         $this->assertEquals(13.76837, round($declination, 5));
