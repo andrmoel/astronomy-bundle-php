@@ -51,7 +51,7 @@ $altitude = AngleUtil::dec2angle($altitude);
 
 echo <<<END
 +------------------------------------
-| Moon
+| Venus
 +------------------------------------
 Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
 Ecliptical latitude: {$eclLatitude}
