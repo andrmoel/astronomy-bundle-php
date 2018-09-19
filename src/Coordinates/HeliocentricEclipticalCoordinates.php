@@ -4,7 +4,6 @@ namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class HeliocentricEclipticalCoordinates
 {
@@ -59,21 +58,8 @@ class HeliocentricEclipticalCoordinates
 
     public function getEclipticalCoordinates(TimeOfInterest $toi): EclipticalCoordinates
     {
-        $equatorialRectangularCoordinates = $this->getEquatorialRectangularCoordinates($toi);
-
-        $X = $equatorialRectangularCoordinates->getX();
-        $Y = $equatorialRectangularCoordinates->getY();
-        $Z = $equatorialRectangularCoordinates->getZ();
-
-        // Meeus 33.2
-        $longitude = atan($Y / $X);
-        $longitude = rad2deg($longitude);
-        $longitude = AngleUtil::normalizeAngle($longitude);
-        $latitude = atan($Z / sqrt(pow($X, 2) + pow($Y, 2)));
-        $latitude = rad2deg($latitude);
-
-        // TODO Corrections of light time and aberration...
-
-        return new EclipticalCoordinates($latitude, $longitude);
+        return $this
+            ->getEquatorialRectangularCoordinates($toi)
+            ->getEclipticalCoordinates();
     }
 }

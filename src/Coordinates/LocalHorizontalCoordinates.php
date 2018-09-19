@@ -9,19 +9,16 @@ class LocalHorizontalCoordinates
     private $azimuth = 0;
     private $altitude = 0;
 
-
     public function __construct(float $azimuth, float $altitude)
     {
         $this->azimuth = $azimuth;
         $this->altitude = $altitude;
     }
 
-
     public function getAzimuth(): float
     {
         return $this->azimuth;
     }
-
 
     public function getAltitude(): float
     {
