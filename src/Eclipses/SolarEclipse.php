@@ -91,10 +91,8 @@ class SolarEclipse
         // JD for noon (TDT) the day before the day that contains T0
         $jd = floor($tMax - $t0 / 24.0);
 
-        $westTimeZone = 0; // TODO ...
-
         // Local time (ie the offset in hours since midnight TDT on the day containing T0) to the nearest 0.1 sec
-        $t = $t + $t0 - $westTimeZone - (($deltaT - 0.05) / 3600.0);
+        $t = $t + $t0 - (($deltaT - 0.05) / 3600.0);
 
         if ($t < 0.0) {
             $jd--;

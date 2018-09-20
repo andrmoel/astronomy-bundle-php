@@ -7,17 +7,22 @@ use PHPUnit\Framework\TestCase;
 
 class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
 {
-    public function testFoo()
+    public function testGetGeocentricEclipticalRectangularCoordinates()
     {
-        $lat = 6.684170;
-        $lon = 113.215630;
-        $radiusVector = 0.987654;
-        $eps = 23.4392911;
+        $lon = 313.08102;
+        $lat = -2.08474;
+        $radiusVector = 0.910947;
 
         $geoEclSphCoordinates = new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
         $geoEclRecCoordinates = $geoEclSphCoordinates->getGeocentricEclipticalRectangularCoordinates();
 
-        // TODO ...
+        $X = $geoEclRecCoordinates->getX();
+        $Y = $geoEclRecCoordinates->getY();
+        $Z = $geoEclRecCoordinates->getZ();
+
+        $this->assertEquals(0.621794, round($X, 6));
+        $this->assertEquals(-0.664905, round($Y, 6));
+        $this->assertEquals(-0.033138, round($Z, 6));
     }
 
     /**

@@ -197,6 +197,25 @@ class TimeOfInterest
         $this->second = (int)$second;
     }
 
+    /**
+     * @param float $distance Distance in AU
+     * @return TimeOfInterest
+     * @throws \Exception
+     */
+    public function getTimeOfInterestLightTimeCorrected(float $distance): TimeOfInterest
+    {
+        // TODO Write test...
+        // Meeus 33.3 - Planetray abberation
+        $t = 0.0057755183 * $distance;
+        $JD = $this->getJulianDay();
+
+        $toi = new TimeOfInterest();
+        $toi->setJulianDay($JD - $t);
+
+        return $toi;
+
+    }
+
     public function isLeapYear(int $year): bool
     {
         if ($year / 4 != (int)($year / 4)) {

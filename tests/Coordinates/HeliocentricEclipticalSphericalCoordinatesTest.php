@@ -66,7 +66,7 @@ class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
         $latitude = $geoEclSphCoordinates->getLatitude();
         $longitude = $geoEclSphCoordinates->getLongitude();
 
-        $this->assertEquals(-2.08473, round($latitude, 5));
         $this->assertEquals(313.08289, round($longitude, 5));
+        $this->assertEquals(-2.08473, round($latitude, 5));
     }
 }
