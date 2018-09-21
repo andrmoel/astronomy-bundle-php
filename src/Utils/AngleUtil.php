@@ -24,11 +24,11 @@ class AngleUtil
     public static function dec2angle(float $dec): string
     {
         $sign = $dec < 0 ? '-' : '';
+        $dec = abs($dec);
 
-        $deg = (int)abs($dec);
-        $x = ($dec - $deg) * 60;
-        $min = (int)$x;
-        $sec = round(($x - $min) * 60, 3);
+        $deg = (int)$dec;
+        $min = (int)(($dec - $deg) * 60);
+        $sec = round(($dec - $deg - $min / 60) * 3600, 3);
 
         $angle = $sign . abs($deg) . '°' . abs($min) . '\'' . abs($sec) . '"';
 

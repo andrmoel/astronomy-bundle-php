@@ -5,7 +5,6 @@ namespace Andrmoel\AstronomyBundle;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
-use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class Corrections
 {
@@ -20,6 +19,16 @@ class Corrections
 
         $this->earth = new Earth($this->toi);
         $this->sun = new Sun($this->toi);
+    }
+
+    public function correctCoordinates(
+        GeocentricEquatorialCoordinates $geoEquCoordinates
+    ): GeocentricEquatorialCoordinates
+    {
+        $geoEquCoordinates = $this->correctEffectOfNutation($geoEquCoordinates);
+        $geoEquCoordinates = $this->correctEffectOfAberration($geoEquCoordinates);
+
+        return $geoEquCoordinates;
     }
 
     public function correctEffectOfNutation(
@@ -48,8 +57,14 @@ class Corrections
         return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
     }
 
-    public function correctEffectOfAberration(float $rightAscension, float $declination)
+    public function correctEffectOfAberration(
+        GeocentricEquatorialCoordinates $geoEquCoordinates
+    ): GeocentricEquatorialCoordinates
     {
+        $rightAscension = $geoEquCoordinates->getRightAscension();
+        $declination = $geoEquCoordinates->getDeclination();
+        $radiusVector = $geoEquCoordinates->getRadiusVector();
+
         $k = Constants::CONSTANT_OF_ABERRATION;
         $e = $this->earth->getEccentricity();
         $eps = $this->earth->getObliquityOfEcliptic();
@@ -76,8 +91,9 @@ class Corrections
                 + cos($raRad) * sin($dRad) * sin($piRad)
             );
 
-        // TODO ...
-        var_dump(AngleUtil::dec2angle($dRa2), AngleUtil::dec2angle($dD2));
-        die();
+        $rightAscension += $dRa2;
+        $declination += $dD2;
+
+        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
     }
 }
