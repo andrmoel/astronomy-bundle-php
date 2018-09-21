@@ -22,9 +22,9 @@ class EarthTest extends TestCase
         $Y = $helEclSphCoordinates->getY();
         $Z = $helEclSphCoordinates->getZ();
 
-        $this->assertEquals(0.028207, round($X, 6));
+        $this->assertEquals(0.028208, round($X, 6));
         $this->assertEquals(0.983420, round($Y, 6));
-        $this->assertEquals(2.0E-6, round($Z, 6));
+        $this->assertEquals(3.0E-6, round($Z, 6));
     }
 
     /**
@@ -41,8 +41,8 @@ class EarthTest extends TestCase
         $B = $helEclSphCoordinates->getLatitude();
         $R = $helEclSphCoordinates->getRadiusVector();
 
-        $this->assertEquals(88.35704, round($L, 5));
-        $this->assertEquals(0.00014, round($B, 5));
+        $this->assertEquals(88.35700, round($L, 5));
+        $this->assertEquals(0.00017, round($B, 5));
         $this->assertEquals(0.983824, round($R, 6));
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Earth;
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class TimeOfInterest

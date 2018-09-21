@@ -22,9 +22,9 @@ class VenusTest extends TestCase
         $B = $helEclSphCoordinates->getLatitude();
         $R = $helEclSphCoordinates->getRadiusVector();
 
-        $this->assertEquals(26.11428, round($L, 5));
-        $this->assertEquals(-2.62070, round($B, 5));
-        $this->assertEquals(0.724603, round($R, 6));
+        $this->assertEquals(26.11412, round($L, 5));
+        $this->assertEquals(-2.62060, round($B, 5));
+        $this->assertEquals(0.724602, round($R, 6));
     }
 
     /**
@@ -41,8 +41,8 @@ class VenusTest extends TestCase
         $B = $helEclSphCoordinates->getLatitude();
         $R = $helEclSphCoordinates->getRadiusVector();
 
-        $this->assertEquals(26.10587, round($L, 5));
-        $this->assertEquals(-2.62102, round($B, 5));
-        $this->assertEquals(0.724604, round($R, 6));
+        $this->assertEquals(26.10571, round($L, 5));
+        $this->assertEquals(-2.62092, round($B, 5));
+        $this->assertEquals(0.724602, round($R, 6));
     }
 }

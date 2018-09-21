@@ -41,8 +41,8 @@ class HeliocentricEclipticalRectangularCoordinatesTest extends TestCase
         $Y = $geoEclRecCoordinates->getY();
         $Z = $geoEclRecCoordinates->getZ();
 
-        $this->assertEquals(0.621747, round($X, 6));
+        $this->assertEquals(0.621746, round($X, 6));
         $this->assertEquals(-0.66481, round($Y, 6));
-        $this->assertEquals(-0.033134, round($Z, 6));
+        $this->assertEquals(-0.033135, round($Z, 6));
     }
 }

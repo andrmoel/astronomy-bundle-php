@@ -5,27 +5,33 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 abstract class Planet extends AstronomicalObject
 {
-    // Meeus Appendix III for planets
-    protected $argumentsL = null;
-    protected $argumentsB = null;
-    protected $argumentsR = null;
+    protected $vsop87 = [];
+
+    abstract function getVSOP87Data(): array;
+
+    public function __construct(TimeOfInterest $toi = null)
+    {
+        parent::__construct($toi);
+        $this->vsop87 = $this->getVSOP87Data();
+    }
 
     public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
     {
         $t = $this->toi->getJulianMillenniaFromJ2000();
 
-        $L = $this->resolveTerms($this->argumentsL, $t);
+        $L = $this->resolveTerms($this->vsop87['L'], $t);
         $L = rad2deg($L);
         $L = AngleUtil::normalizeAngle($L);
 
-        $B = $this->resolveTerms($this->argumentsB, $t);
+        $B = $this->resolveTerms($this->vsop87['B'], $t);
         $B = rad2deg($B);
 
-        $R = $this->resolveTerms($this->argumentsR, $t);
+        $R = $this->resolveTerms($this->vsop87['R'], $t);
 
         return new HeliocentricEclipticalSphericalCoordinates($L, $B, $R);
     }
@@ -40,14 +46,14 @@ abstract class Planet extends AstronomicalObject
 
         $t = $toiCorrected->getJulianMillenniaFromJ2000();
 
-        $L = $this->resolveTerms($this->argumentsL, $t);
+        $L = $this->resolveTerms($this->vsop87['L'], $t);
         $L = rad2deg($L);
         $L = AngleUtil::normalizeAngle($L);
 
-        $B = $this->resolveTerms($this->argumentsB, $t);
+        $B = $this->resolveTerms($this->vsop87['B'], $t);
         $B = rad2deg($B);
 
-        $R = $this->resolveTerms($this->argumentsR, $t);
+        $R = $this->resolveTerms($this->vsop87['R'], $t);
 
         return new HeliocentricEclipticalSphericalCoordinates($L, $B, $R);
     }
@@ -67,8 +73,6 @@ abstract class Planet extends AstronomicalObject
 
             $sum += $value * pow($t, $key);
         }
-
-        $sum /= pow(10, 8);
 
         return $sum;
     }

@@ -20,6 +20,7 @@ class AngleUtil
         return $angle;
     }
 
+    // TODO FEHLER!!!! -24.929312194388)
     public static function dec2angle(float $dec): string
     {
         $sign = $dec < 0 ? '-' : '';

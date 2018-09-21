@@ -2,11 +2,11 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
-class Mercury extends Planet
+class Neptune extends Planet
 {
     public function getVSOP87Data(): array
     {
-        $data = file_get_contents(__DIR__ . '/../../Resources/vsop87/mercury.json');
+        $data = file_get_contents(__DIR__ . '/../../Resources/vsop87/neptune.json');
 
         return json_decode($data, 1);
     }

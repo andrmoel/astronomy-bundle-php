@@ -2,7 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObjects;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Earth;
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
