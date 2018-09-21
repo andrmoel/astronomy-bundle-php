@@ -2,34 +2,14 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-class GeocentricEclipticalSphericalCoordinates
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
+use Andrmoel\AstronomyBundle\Constants;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+
+class GeocentricEclipticalSphericalCoordinates extends EclipticalSphericalCoordinates
 {
-    private $longitude = 0.0;
-    private $latitude = 0.0;
-    private $radiusVector = 0.0;
-
-    public function __construct(float $longitude, float $latitude, float $radiusVector = 0.0)
-    {
-        $this->longitude = $longitude;
-        $this->latitude = $latitude;
-        $this->radiusVector = $radiusVector;
-    }
-
-    public function getLatitude(): float
-    {
-        return $this->latitude;
-    }
-
-    public function getLongitude(): float
-    {
-        return $this->longitude;
-    }
-
-    public function getRadiusVector(): float
-    {
-        return $this->radiusVector;
-    }
-
     // TODO Test ...
     public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
     {
@@ -58,5 +38,34 @@ class GeocentricEclipticalSphericalCoordinates
         $declination = rad2deg($declination);
 
         return new GeocentricEquatorialCoordinates($rightAscension, $declination, $this->radiusVector);
+    }
+
+
+    // TODO Name und so...
+    // TODO Test schreiben
+    public function apparent(TimeOfInterest $toi)
+    {
+        $lonRad = deg2rad($this->longitude);
+        $latRad = deg2rad($this->latitude);
+
+        $earth = new Earth($toi);
+        $sun = new Sun($toi);
+
+        $k = Constants::CONSTANT_OF_ABERRATION;
+        $e = $earth->getEccentricity();
+        $pi = $earth->getLongitudeOfPerihelionOfOrbit();
+        $piRad = deg2rad($pi);
+        $o = $sun->getTrueLongitude();
+        $oRad = deg2rad($o);
+
+        // Meeus 23.2
+        $dLon = (-$k * cos($oRad - $lonRad) + $e * $k * cos($piRad - $lonRad)) / cos($latRad);
+        $dLat = -$k * sin($latRad) * (sin($oRad - $lonRad) - $e * sin($piRad - $lonRad));
+
+        var_dump($dLon, $dLat);
+
+        var_dump($this->longitude + $dLon, $this->latitude + $dLat);die();
+
+        die();
     }
 }

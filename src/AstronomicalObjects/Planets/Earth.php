@@ -91,7 +91,7 @@ class Earth extends Planet
         $this->initializeSumParameter();
     }
 
-    public function getVSOP87Data(): array
+    public function loadVSOP87Data(): array
     {
         $data = file_get_contents(__DIR__ . '/../../Resources/vsop87/earth.json');
 
@@ -197,6 +197,16 @@ class Earth extends Planet
             - 0.0000001267 * pow($T, 2);
 
         return $e;
+    }
+
+    public function getLongitudeOfPerihelionOfOrbit(): float
+    {
+        $T = $this->T;
+
+        // Meeus 23
+        $pi = 102.93735 + 1.71946 * $T + 0.00046 * pow($T, 2);
+
+        return $pi;
     }
 
     public function getNutation(): float

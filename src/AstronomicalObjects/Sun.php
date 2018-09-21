@@ -63,13 +63,10 @@ class Sun extends AstronomicalObject
         return $M;
     }
 
-    public function getRadiusVector(): float
+    public function getEquationOfCenter(): float
     {
-        $earth = new Earth($this->toi);
-
         $T = $this->T;
 
-        $e = $earth->getEccentricity();
         $M = $this->getMeanAnomaly();
 
         // Meeus 25.4
@@ -77,8 +74,37 @@ class Sun extends AstronomicalObject
         $C += (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M));
         $C += 0.000289 * sin(3 * deg2rad($M));
 
-        // True anomaly
+        return $C;
+    }
+
+    public function getTrueLongitude(): float
+    {
+        // Meeus 25.4
+        $L0 = $this->getMeanLongitude();
+        $C = $this->getEquationOfCenter();
+
+        $o = $L0 + $C;
+
+        return $o;
+    }
+
+    public function getTrueAnomaly(): float
+    {
+        // Meeus 25.4
+        $M = $this->getMeanAnomaly();
+        $C = $this->getEquationOfCenter();
+
         $v = $M + $C;
+
+        return $v;
+    }
+
+    public function getRadiusVector(): float
+    {
+        $earth = new Earth($this->toi);
+
+        $e = $earth->getEccentricity();
+        $v = $this->getTrueAnomaly();
         $vRad = deg2rad($v);
 
         // Meeus 25.5
@@ -147,12 +173,9 @@ class Sun extends AstronomicalObject
         $eps = $earth->getObliquityOfEcliptic();
         $epsRad = deg2rad($eps);
         $L0 = $this->getMeanLongitude();
+        $C = $this->getEquationOfCenter();
         $M = $this->getMeanAnomaly();
         $e = $earth->getEccentricity();
-
-        $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M));
-        $C += (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M));
-        $C += 0.000289 * sin(3 * deg2rad($M));
 
         // True longitude
         $o = $L0 + $C;

@@ -2,6 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class GeocentricEclipticalRectangularCoordinates
@@ -44,6 +46,7 @@ class GeocentricEclipticalRectangularCoordinates
         $latitude = rad2deg($latitude);
 
         $radiusVector = sqrt(pow($this->X, 2) + pow($this->Y, 2) + pow($this->Z, 2));
+
 
         return new GeocentricEclipticalSphericalCoordinates($longitude, $latitude, $radiusVector);
     }

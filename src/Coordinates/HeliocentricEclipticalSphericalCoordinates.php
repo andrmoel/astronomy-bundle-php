@@ -5,42 +5,16 @@ namespace Andrmoel\AstronomyBundle\Coordinates;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 
-class HeliocentricEclipticalSphericalCoordinates
+class HeliocentricEclipticalSphericalCoordinates extends EclipticalSphericalCoordinates
 {
-    private $L = 0;
-    private $B = 0;
-    private $R = 0;
-
-    public function __construct(float $longitude, float $latitude, float $radialVector)
-    {
-        $this->L = $longitude;
-        $this->B = $latitude;
-        $this->R = $radialVector;
-    }
-
-    public function getLongitude(): float
-    {
-        return $this->L;
-    }
-
-    public function getLatitude(): float
-    {
-        return $this->B;
-    }
-
-    public function getRadiusVector(): float
-    {
-        return $this->R;
-    }
-
     public function getHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
     {
-        $LRad = deg2rad($this->L);
-        $BRad = deg2rad($this->B);
+        $LRad = deg2rad($this->longitude);
+        $BRad = deg2rad($this->latitude);
 
-        $X = $this->R * cos($BRad) * cos($LRad);
-        $Y = $this->R * cos($BRad) * sin($LRad);
-        $Z = $this->R * sin($BRad);
+        $X = $this->radiusVector * cos($BRad) * cos($LRad);
+        $Y = $this->radiusVector * cos($BRad) * sin($LRad);
+        $Z = $this->radiusVector * sin($BRad);
 
         return new HeliocentricEclipticalRectangularCoordinates($X, $Y, $Z);
     }
@@ -49,9 +23,9 @@ class HeliocentricEclipticalSphericalCoordinates
         TimeOfInterest $toi
     ): GeocentricEclipticalRectangularCoordinates
     {
-        $LRad = deg2rad($this->L);
-        $BRad = deg2rad($this->B);
-        $R = $this->R;
+        $LRad = deg2rad($this->longitude);
+        $BRad = deg2rad($this->latitude);
+        $R = $this->radiusVector;
 
         // Heliocentric coordinates of earth
         $earth = new Earth($toi);
