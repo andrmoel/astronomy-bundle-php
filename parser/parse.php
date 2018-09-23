@@ -21,6 +21,8 @@ while (!feof($fileHandle)) {
             case '3':
                 $parameter = 'R';
                 break;
+            default:
+                die("ERRRRRRRRRRRROR");
         }
 
         $number = (int)$matches[2][0];
@@ -39,6 +41,6 @@ while (!feof($fileHandle)) {
 
 fclose($fileHandle);
 
-file_put_contents('jupiter.json', json_encode($data));
+file_put_contents(__DIR__ . '/../src/Resources/vsop87/json/jupiter.json', json_encode($data));
 
 var_dump($data['R']);

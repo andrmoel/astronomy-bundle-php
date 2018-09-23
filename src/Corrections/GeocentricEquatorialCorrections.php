@@ -1,14 +1,15 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle;
+namespace Andrmoel\AstronomyBundle\Corrections;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
+use Andrmoel\AstronomyBundle\Constants;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class Corrections
+class GeocentricEquatorialCorrections
 {
     private $toi;
 
@@ -30,36 +31,8 @@ class Corrections
 //        $geoEquCoordinates = $this->correctEffectOfPrecession($geoEquCoordinates);
         $geoEquCoordinates = $this->correctEffectOfNutation($geoEquCoordinates);
         $geoEquCoordinates = $this->correctEffectOfAberration($geoEquCoordinates);
-//        $geoEquCoordinates = $this->correctWithRonVondrakExpression($geoEquCoordinates);
-//        $geoEquCoordinates = new GeocentricEquatorialCoordinates(41.0623836, 49.2296238);
 
         return $geoEquCoordinates;
-    }
-
-    public function correctEffectOfPrecessionOld(
-        GeocentricEquatorialCoordinates $geoEquCoordinates
-    ): GeocentricEquatorialCoordinates
-    {
-        $T = $this->toi->getJulianCenturiesFromJ2000();
-
-        $rightAscension = $geoEquCoordinates->getRightAscension();
-        $declination = $geoEquCoordinates->getDeclination();
-        $radiusVector = $geoEquCoordinates->getRadiusVector();
-
-        $raRad = deg2rad($rightAscension);
-        $dRad = deg2rad($declination);
-
-        // Meeus 21.1
-        $m = AngleUtil::time2dec('0h0m3.07496s') + AngleUtil::time2dec('0h0m0.00186s') * $T;
-        $n = AngleUtil::time2dec('0h0m1.33621s') - AngleUtil::time2dec('0h0m0.00057s') * $T;
-
-        $dRa = $m + $n * sin($raRad) * tan($dRad);
-        $dD = $n * cos($raRad);
-
-        $rightAscension += $dRa;
-        $declination += $dD;
-
-        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
     }
 
     public function correctEffectOfPrecession(
@@ -125,7 +98,8 @@ class Corrections
         return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
     }
 
-    public function correctEffectOfAberrationGeo(
+    // TODO Löschen???
+    public function correctEffectOfAberrationOldMethod(
         GeocentricEquatorialCoordinates $geoEquCoordinates
     ): GeocentricEquatorialCoordinates
     {

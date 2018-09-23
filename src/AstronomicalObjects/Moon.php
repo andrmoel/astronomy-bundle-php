@@ -371,7 +371,7 @@ class Moon extends AstronomicalObject
 
         $earth = new Earth();
         $earth->setTimeOfInterest($this->toi);
-        $phi = $earth->getNutation();
+        $phi = $earth->getNutationInLongitude();
 
         $l = $l + $phi;
 
@@ -389,12 +389,9 @@ class Moon extends AstronomicalObject
 
     public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
     {
-        $earth = new Earth($this->toi);
-        $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
-
         return $this
             ->getGeocentricEclipticalSpericalCoordinates()
-            ->getGeocentricEquatorialCoordinates($obliquityOfEcliptic);
+            ->getGeocentricEquatorialCoordinates($this->toi);
     }
 
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates

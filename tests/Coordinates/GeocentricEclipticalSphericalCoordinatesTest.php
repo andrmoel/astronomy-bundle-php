@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\Tests\Coordinates;
 
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 use PHPUnit\Framework\TestCase;
 
 class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
@@ -30,13 +31,14 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
      */
     public function testGetGeocentricEquatorialCoordinates()
     {
+        $toi = new TimeOfInterest(new \DateTime()); // TODO ...
         $lat = 6.684170;
         $lon = 113.215630;
         $radiusVector = 0.987654;
         $eps = 23.4392911;
 
         $geoEclSphCoordinates = new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
-        $geoEquCoordinates = $geoEclSphCoordinates->getGeocentricEquatorialCoordinates($eps);
+        $geoEquCoordinates = $geoEclSphCoordinates->getGeocentricEquatorialCoordinates($toi);
 
         $rightAscension = $geoEquCoordinates->getRightAscension();
         $declination = $geoEquCoordinates->getDeclination();

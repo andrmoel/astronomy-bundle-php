@@ -41,13 +41,13 @@ class EarthTest extends TestCase
     /**
      * Meeus 22.a
      */
-    public function testGetNutation()
+    public function testGetNutationInLongitude()
     {
         $toi = new TimeOfInterest();
         $toi->setTime(1987, 4, 10, 0, 0, 0);
 
         $earth = new Earth($toi);
-        $phi = $earth->getNutation();
+        $phi = $earth->getNutationInLongitude();
 
         $this->assertStringStartsWith('-0°0\'3.788', AngleUtil::dec2angle($phi));
     }
@@ -69,7 +69,7 @@ class EarthTest extends TestCase
     /**
      * Meeus 22.a
      */
-    public function testgetMeanObliquityOfEcliptic()
+    public function testGetMeanObliquityOfEcliptic()
     {
         $toi = new TimeOfInterest();
         $toi->setTime(1987, 4, 10, 0, 0, 0);
@@ -83,7 +83,7 @@ class EarthTest extends TestCase
     /**
      * Meeus 22.a
      */
-    public function testGetTrueObliquityOfEcliptic()
+    public function testGetObliquityOfEcliptic()
     {
         $toi = new TimeOfInterest();
         $toi->setTime(1987, 4, 10, 0, 0, 0);

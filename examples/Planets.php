@@ -11,6 +11,7 @@ use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Jupiter;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Saturn;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Uranus;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Neptune;
+use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
@@ -30,7 +31,6 @@ $e = $earth->getObliquityOfEcliptic();
 $planets = array(
     new Mercury($toi),
     new Venus($toi),
-    new Mercury($toi),
     new Mars($toi),
     new Jupiter($toi),
     new Saturn($toi),
@@ -58,7 +58,10 @@ foreach ($planets as $planet) {
 
     // Get geocentric equatorial coordinates
     $geoEquCorodinates = $geoEclSphCoordinates
-        ->getGeocentricEquatorialCoordinates($e);
+        ->getGeocentricEquatorialCoordinates($toi);
+
+    $corrections = new GeocentricEquatorialCorrections($toi);
+    $geoEquCorodinates = $corrections->correctCoordinates($geoEquCorodinates);
 
     $rightAscension = $geoEquCorodinates->getRightAscension();
     $rightAscension = AngleUtil::dec2time($rightAscension);
@@ -68,7 +71,7 @@ foreach ($planets as $planet) {
     // Get local horizontal coordinates
     $localHorizontalCoordinates = $geoEquCorodinates->getLocalHorizontalCoordinates($location, $toi);
     $azimuth = $localHorizontalCoordinates->getAzimuth() + 180; // TODO FALSCHER WERT. Laut Stellarium 294.45... Und was wenn > 360°???
-    $azimuth = AngleUtil::dec2angle($azimuth);
+    $azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
     $altitude = $localHorizontalCoordinates->getAltitude();
     $altitude = AngleUtil::dec2angle($altitude);
 
@@ -77,8 +80,8 @@ foreach ($planets as $planet) {
 | {$planetName}
 +------------------------------------
 Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
-Ecliptical latitude: {$eclLatitude}
 Ecliptical longitude: {$eclLongitude}
+Ecliptical latitude: {$eclLatitude}
 Right ascending: {$rightAscension}
 Declination: {$declination}
 

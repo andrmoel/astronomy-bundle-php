@@ -4,11 +4,11 @@ namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObjects\Planets;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Venus;
-use Andrmoel\AstronomyBundle\Corrections;
+use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
+use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
-use SebastianBergmann\CodeCoverage\Util;
 
 class VenusTest extends TestCase
 {
@@ -58,23 +58,43 @@ class VenusTest extends TestCase
         $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
         $venus = new Venus($toi);
 
-        $earth = new Earth($toi);
+//        // TODO Test...
+//        $geoEclSphCoordinates = $venus->getApparentHeliocentricEclipticalSphericalCoordinates()
+//            ->getGeocentricEclipticalSphericalCoordinates($toi);
+//
+//        $corrections = new GeocentricEclipticalSphericalCorrections($toi);
+//        $geoEclSphCoordinates = $corrections->correctCoordinates($geoEclSphCoordinates);
+//
+//        $geoEqaCoordinates = $geoEclSphCoordinates->getGeocentricEquatorialCoordinates($toi);
+//
+//        $ra = $geoEqaCoordinates->getRightAscension();
+//        $d = $geoEqaCoordinates->getDeclination();
+//
+//        var_dump(AngleUtil::dec2time($ra), AngleUtil::dec2angle($d));die();
 
-        // TODO Test...
-        $geoEquSphCoordinates = $venus->getHeliocentricEclipticalSphericalCoordinates()
+        // TODO ... 2
+        $geoEqaCoordinates = $venus->getApparentHeliocentricEclipticalSphericalCoordinates()
             ->getGeocentricEclipticalSphericalCoordinates($toi)
-            ->getGeocentricEquatorialCoordinates($earth->getObliquityOfEcliptic());
+            ->getGeocentricEquatorialCoordinates($toi);
 
-        $corrections = new Corrections($toi);
-        $geoEquSphCoordinates = $corrections->correctCoordinates($geoEquSphCoordinates);
+        $corrections = new GeocentricEquatorialCorrections($toi);
+        $geoEqaCoordinates = $corrections->correctCoordinates($geoEqaCoordinates);
+
+        $ra = $geoEqaCoordinates->getRightAscension();
+        $d = $geoEqaCoordinates->getDeclination();
+
+        var_dump(AngleUtil::dec2time($ra), AngleUtil::dec2angle($d));die();
+
+
+        $geoEclSphCoordinates = $corrections->correctCoordinates($geoEclSphCoordinates);
 
 //        $lon = $geoEclSphCoordinates->getLongitude();
 //        $lat = $geoEclSphCoordinates->getLatitude();
-        $ra = $geoEquSphCoordinates->getRightAscension();
-        $de = $geoEquSphCoordinates->getDeclination();
-        $radiusVector = $geoEquSphCoordinates->getRadiusVector();
+        $ra = $geoEclSphCoordinates->getRightAscension();
+        $de = $geoEclSphCoordinates->getDeclination();
+        $radiusVector = $geoEclSphCoordinates->getRadiusVector();
 
-        var_dump($ra, AngleUtil::dec2angle($de), $radiusVector);die();
+        var_dump(AngleUtil::dec2time($ra), AngleUtil::dec2angle($de), $radiusVector);die();
 
         $this->assertEquals(26.11412, round($lon, 5));
         $this->assertEquals(-2.62060, round($lat, 5));

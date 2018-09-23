@@ -2,9 +2,13 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+
 class GeocentricEclipticalSphericalCoordinates extends EclipticalSphericalCoordinates
 {
-    // TODO Test ...
+// TODO Test
     public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
     {
         $lonRad = deg2rad($this->longitude);
@@ -17,18 +21,22 @@ class GeocentricEclipticalSphericalCoordinates extends EclipticalSphericalCoordi
         return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
     }
 
-    public function getGeocentricEquatorialCoordinates(float $obliquityOfEcliptic): GeocentricEquatorialCoordinates
+    public function getGeocentricEquatorialCoordinates(TimeOfInterest $toi): GeocentricEquatorialCoordinates
     {
-        $eps = deg2rad($obliquityOfEcliptic);
-        $lon = deg2rad($this->longitude);
-        $lat = deg2rad($this->latitude);
+        $earth = new Earth($toi);
+        $eps = $earth->getMeanObliquityOfEcliptic();
+
+        $epsRad = deg2rad($eps);
+        $lonRad = deg2rad($this->longitude);
+        $latRad = deg2rad($this->latitude);
 
         // Meeus 13.3
-        $rightAscension = atan2(sin($lon) * cos($eps) - (sin($lat) / cos($lat)) * sin($eps), cos($lon));
+        $rightAscension = atan2(sin($lonRad) * cos($epsRad) - (sin($latRad) / cos($latRad)) * sin($epsRad), cos($lonRad));
         $rightAscension = rad2deg($rightAscension);
+        $rightAscension = AngleUtil::normalizeAngle($rightAscension);
 
         // Meeus 13.4
-        $declination = asin(sin($lat) * cos($eps) + cos($lat) * sin($eps) * sin($lon));
+        $declination = asin(sin($latRad) * cos($epsRad) + cos($latRad) * sin($epsRad) * sin($lonRad));
         $declination = rad2deg($declination);
 
         return new GeocentricEquatorialCoordinates($rightAscension, $declination, $this->radiusVector);

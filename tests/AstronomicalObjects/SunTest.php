@@ -1,6 +1,6 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObjects;
+namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObgetGeocentricEclipticalSphericalCoordinatesjects;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
 use Andrmoel\AstronomyBundle\Location;
@@ -45,19 +45,35 @@ class SunTest extends TestCase
         $this->assertEquals(0.99766, round($R, 5));
     }
 
-    public function testGetEclipticalCoordinates()
+    /**
+     * Meeus 25.b
+     */
+    public function testGetGeoCentricEclipticalSphericalCoordinates()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
 
         $sun = new Sun($toi);
         $geoEclSphCoordinates = $sun->getGeoCentricEclipticalSphericalCoordinates();
 
-        $latitude = $geoEclSphCoordinates->getLatitude();
         $longitude = $geoEclSphCoordinates->getLongitude();
+        $latitude = $geoEclSphCoordinates->getLatitude();
+
+        var_dump($longitude, $latitude, "TOT");die();
 
         // TODO Rundungsfehler?
-        $this->assertEquals(-0.00027, round($latitude, 5));
         $this->assertEquals(199.90907, round($longitude, 5));
+        $this->assertEquals(-0.00027, round($latitude, 5));
+
+        /*
+         * Correct coordinates
+         * Theta = 199°54'26".18
+         * lon = 199°54'21".56
+         * lat = 0°0°0".72
+         * R = 0.99760853
+         *
+         * appRa = 13h13m30s.749
+         * appD = -7°47'01".74
+         */
     }
 
     /**

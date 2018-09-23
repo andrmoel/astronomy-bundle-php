@@ -20,7 +20,6 @@ class AngleUtil
         return $angle;
     }
 
-    // TODO FEHLER!!!! -24.929312194388)
     public static function dec2angle(float $dec): string
     {
         $sign = $dec < 0 ? '-' : '';
@@ -30,7 +29,7 @@ class AngleUtil
         $min = (int)(($dec - $deg) * 60);
         $sec = round(($dec - $deg - $min / 60) * 3600, 3);
 
-        $angle = $sign . abs($deg) . '°' . abs($min) . '\'' . abs($sec) . '"';
+        $angle = $sign . $deg . '°' . $min . '\'' . $sec . '"';
 
         return $angle;
     }
@@ -54,14 +53,14 @@ class AngleUtil
 
     public static function dec2time(float $angle): string
     {
-        $time = $angle / 15;
+        $sign = $angle < 0 ? '-' : '';
+        $time = abs($angle / 15);
 
         $hour = (int)$time;
-        $x = ($time - $hour) * 60;
-        $min = (int)$x;
-        $sec = round(($x - $min) * 60, 3);
+        $min = (int)(($time - $hour) * 60);
+        $sec = round(($time - $hour - $min / 60) * 3600, 3);
 
-        $time = $hour . 'h' . abs($min) . 'm' . abs($sec) . 's';
+        $time = $sign . $hour . 'h' . $min . 'm' . $sec . 's';
 
         return $time;
     }

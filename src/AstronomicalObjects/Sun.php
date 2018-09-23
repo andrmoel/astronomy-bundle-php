@@ -117,11 +117,13 @@ class Sun extends AstronomicalObject
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
         $earth = new Earth($this->toi);
-        $obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
+        $helEclSphCoordinates = $earth->getHeliocentricEclipticalSphericalCoordinates();
 
-        return $this
-            ->getGeocentricEquatorialCoordinates()
-            ->getGeocentricEclipticalSphericalCoordinates($obliquityOfEcliptic);
+        // Meeus 25 higher accuracy
+        $lon = $helEclSphCoordinates->getLongitude() + 180;
+        $lat = $helEclSphCoordinates->getLatitude() * -1;
+
+        return new GeocentricEclipticalSphericalCoordinates($lon, $lat);
     }
 
     public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
@@ -219,7 +221,7 @@ class Sun extends AstronomicalObject
         $L0 = $this->getMeanLongitude();
         $geoEquCoordinates = $this->getGeocentricEquatorialCoordinates();
         $rightAscension = $geoEquCoordinates->getRightAscension();
-        $dPhi = $earth->getNutation();
+        $dPhi = $earth->getNutationInLongitude();
         $e = $earth->getObliquityOfEcliptic();
 
         // Meeus 28.1

@@ -369,7 +369,7 @@ class TimeOfInterest
         $earth = new Earth($this);
 
         $t0 = $this->getGreenwichMeanSiderealTime();
-        $p = $earth->getNutation();
+        $p = $earth->getNutationInLongitude();
         $e = deg2rad($earth->getObliquityOfEcliptic());
 
         // Meeus 12

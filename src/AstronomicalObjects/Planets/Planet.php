@@ -10,6 +10,8 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 abstract class Planet extends AstronomicalObject
 {
+    protected const VSOP87_FILE_PATH = __DIR__ . '/../../Resources/vsop87/json/';
+
     protected $vsop87 = [];
 
     abstract function loadVSOP87Data(): array;

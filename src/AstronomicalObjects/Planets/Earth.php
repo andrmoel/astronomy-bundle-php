@@ -93,7 +93,7 @@ class Earth extends Planet
 
     public function loadVSOP87Data(): array
     {
-        $data = file_get_contents(__DIR__ . '/../../Resources/vsop87/earth.json');
+        $data = file_get_contents(self::VSOP87_FILE_PATH . 'earth.json');
 
         return json_decode($data, 1);
     }
@@ -209,22 +209,13 @@ class Earth extends Planet
         return $pi;
     }
 
-    public function getNutation(): float
-    {
-        return $this->sumPhi;
-    }
-
-    public function getNutationInObliquity(): float
-    {
-        return $this->sumEps;
-    }
-
     public function getMeanObliquityOfEcliptic(): float
     {
         $T = $this->T;
         $U = $T / 100;
 
         // Meeus 22.3
+        // 23.43929
         $e0 = 84381.448
             - 4680.93 * $U
             - 1.55 * pow($U, 2)
@@ -239,6 +230,16 @@ class Earth extends Planet
         $e0 = $e0 / 3600;
 
         return $e0;
+    }
+
+    public function getNutationInLongitude(): float
+    {
+        return $this->sumPhi;
+    }
+
+    public function getNutationInObliquity(): float
+    {
+        return $this->sumEps;
     }
 
     public function getObliquityOfEcliptic(): float
