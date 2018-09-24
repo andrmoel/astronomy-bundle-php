@@ -15,7 +15,6 @@ class Location
     private $rhoSinOs;
     private $rhoCosOs;
 
-
     public function __construct(float $latitude = 0.0, float $longitude = 0.0, float $elevation = 0.0)
     {
         $this->latitude = $latitude;
@@ -27,7 +26,6 @@ class Location
         $this->calculateGeocentricPosition();
     }
 
-
     public function setLatitude(float $latitude): void
     {
         $this->latitude = $latitude;
@@ -36,18 +34,15 @@ class Location
         $this->calculateGeocentricPosition();
     }
 
-
     public function getLatitude(): float
     {
         return $this->latitude;
     }
 
-
     public function getLatitudeRad(): float
     {
         return $this->latitudeRad;
     }
-
 
     public function setLongitude(float $longitude): void
     {
@@ -57,30 +52,25 @@ class Location
         $this->calculateGeocentricPosition();
     }
 
-
     public function getLongitude(): float
     {
         return $this->longitude;
     }
-
 
     public function getLongitudePositiveWest(): float
     {
         return -1 * $this->longitude;
     }
 
-
     public function getLongitudeRad(): float
     {
         return $this->longitudeRad;
     }
 
-
     public function getLongitudePositiveWestRad(): float
     {
         return -1 * $this->longitudeRad;
     }
-
 
     public function setElevation(float $elevation): void
     {
@@ -89,24 +79,20 @@ class Location
         $this->calculateGeocentricPosition();
     }
 
-
     public function getElevation(): float
     {
         return $this->elevation;
     }
-
 
     public function getRhoSinOs(): float
     {
         return $this->rhoSinOs;
     }
 
-
     public function getRhoCosOs(): float
     {
         return $this->rhoCosOs;
     }
-
 
     // TODO Gleiche Formel wird auch in SoFi / MoFi Berechung benutzt
     private function calculateGeocentricPosition(): void

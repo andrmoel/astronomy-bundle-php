@@ -57,7 +57,7 @@ class GeocentricEquatorialCoordinates
     {
         $latRad = $location->getLatitudeRad();
         $lon = $location->getLongitudePositiveWest();
-        $agmst = $toi->getApparentGreenwichMeanSiderealTime();
+        $agmst = $toi->getApparentGreenwichMeanSiderealTime(); // TODO Apparent oder doch lieber mean?
         $d = deg2rad($this->declination);
 
         // Calculate hour angle

@@ -8,7 +8,7 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class GeocentricEclipticalSphericalCoordinates extends EclipticalSphericalCoordinates
 {
-// TODO Test
+    // TODO Test
     public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
     {
         $lonRad = deg2rad($this->longitude);
@@ -31,7 +31,9 @@ class GeocentricEclipticalSphericalCoordinates extends EclipticalSphericalCoordi
         $latRad = deg2rad($this->latitude);
 
         // Meeus 13.3
-        $rightAscension = atan2(sin($lonRad) * cos($epsRad) - (sin($latRad) / cos($latRad)) * sin($epsRad), cos($lonRad));
+        $rightAscension = atan2(
+            sin($lonRad) * cos($epsRad) - (sin($latRad) / cos($latRad)) * sin($epsRad), cos($lonRad)
+        );
         $rightAscension = rad2deg($rightAscension);
         $rightAscension = AngleUtil::normalizeAngle($rightAscension);
 

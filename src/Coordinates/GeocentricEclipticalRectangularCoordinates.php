@@ -45,7 +45,6 @@ class GeocentricEclipticalRectangularCoordinates
 
         $radiusVector = sqrt(pow($this->X, 2) + pow($this->Y, 2) + pow($this->Z, 2));
 
-
         return new GeocentricEclipticalSphericalCoordinates($longitude, $latitude, $radiusVector);
     }
 }
