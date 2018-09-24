@@ -109,7 +109,7 @@ class Sun extends AstronomicalObject
 
         // Meeus 25.5
         $R = (1000001018 * (1 - pow($e, 2))) / (1 + $e * cos($vRad));
-        $R /= 1000000000; // TODO Warum durch das? ...
+        $R /= 1000000000;
 
         return $R;
     }
@@ -123,7 +123,9 @@ class Sun extends AstronomicalObject
         $lon = $helEclSphCoordinates->getLongitude() + 180;
         $lat = $helEclSphCoordinates->getLatitude() * -1;
 
-        return new GeocentricEclipticalSphericalCoordinates($lon, $lat);
+        $radiusVector = $this->getDistanceToEarth();
+
+        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
     }
 
     public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
@@ -162,7 +164,9 @@ class Sun extends AstronomicalObject
         $declination = asin(sin($eRad) * sin($oRad));
         $declination = rad2deg($declination);
 
-        return new GeocentricEquatorialCoordinates($rightAscension, $declination);
+        $radiusVector = $this->getDistanceToEarth();
+
+        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
     }
 
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates

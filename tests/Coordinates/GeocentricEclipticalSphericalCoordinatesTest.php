@@ -46,10 +46,5 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
         $this->assertEquals(116.328879, round($rightAscension, 6));
         $this->assertEquals(28.02594, round($declination, 6));
         $this->assertEquals(0.987654, round($radiusVector, 6));
-
-        // TODO
-//        $this->assertEquals(116.328943, round($rightAscension, 6));
-//        $this->assertEquals(28.026183, round($declination, 6));
-//        $this->assertEquals(0.987654, round($radiusVector, 6));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-$file = __DIR__ . '/../src/Resources/vsop87/plain/VSOP87D.jup';
+$file = __DIR__ . '/../src/Resources/vsop87/plain/VSOP87D.ven';
 
 $fileHandle = fopen($file, 'r');
 
@@ -41,6 +41,4 @@ while (!feof($fileHandle)) {
 
 fclose($fileHandle);
 
-file_put_contents(__DIR__ . '/../src/Resources/vsop87/json/jupiter.json', json_encode($data));
-
-var_dump($data['R']);
+file_put_contents(__DIR__ . '/../src/Resources/vsop87/json/venus.json', json_encode($data));

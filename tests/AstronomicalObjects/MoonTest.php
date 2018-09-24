@@ -118,8 +118,8 @@ class MoonTest extends TestCase
         $azimuth = $localHorizontalCoordinates->getAzimuth();
         $altitude = $localHorizontalCoordinates->getAltitude();
 
-        $this->assertEquals(269.99719, round($azimuth, 5));
-        $this->assertEquals(17.45461, round($altitude, 5));
+        $this->assertEquals(269.99708, round($azimuth, 5));
+        $this->assertEquals(17.45438, round($altitude, 5));
     }
 
     /**
@@ -135,8 +135,8 @@ class MoonTest extends TestCase
         $rightAscension = $geoEquCoordinates->getRightAscension();
         $declination = $geoEquCoordinates->getDeclination();
 
-        $this->assertEquals(134.68847, round($rightAscension, 5));
-        $this->assertEquals(13.76837, round($declination, 5));
+        $this->assertEquals(134.68841, round($rightAscension, 5));
+        $this->assertEquals(13.76813, round($declination, 5));
     }
 
     /**

@@ -3,8 +3,10 @@
 namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObgetGeocentricEclipticalSphericalCoordinatesjects;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
+use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class SunTest extends TestCase
@@ -55,16 +57,15 @@ class SunTest extends TestCase
         $sun = new Sun($toi);
         $geoEclSphCoordinates = $sun->getGeoCentricEclipticalSphericalCoordinates();
 
-        $longitude = $geoEclSphCoordinates->getLongitude();
-        $latitude = $geoEclSphCoordinates->getLatitude();
+        $lon = $geoEclSphCoordinates->getLongitude();
+        $lat = $geoEclSphCoordinates->getLatitude();
 
-        var_dump($longitude, $latitude, "TOT");die();
-
-        // TODO Rundungsfehler?
-        $this->assertEquals(199.90907, round($longitude, 5));
-        $this->assertEquals(-0.00027, round($latitude, 5));
+        $this->assertEquals(199.9073, round($lon, 5));
+        $this->assertEquals(0.00021, round($lat, 5));
 
         /*
+         * TODO ...
+         *
          * Correct coordinates
          * Theta = 199°54'26".18
          * lon = 199°54'21".56

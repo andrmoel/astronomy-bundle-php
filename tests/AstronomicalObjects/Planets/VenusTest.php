@@ -15,7 +15,7 @@ class VenusTest extends TestCase
     /**
      * Meeus 33.a
      */
-    public function XtestGetHeliocentricEclipticalSphericalCoordinates()
+    public function testGetHeliocentricEclipticalSphericalCoordinates()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
         $venus = new Venus($toi);
@@ -34,7 +34,7 @@ class VenusTest extends TestCase
     /**
      * Meeus 33.a
      */
-    public function XtestGetApparentHeliocentricEclipticalSphericalCoordinates()
+    public function testGetApparentHeliocentricEclipticalSphericalCoordinates()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
         $venus = new Venus($toi);
@@ -50,61 +50,7 @@ class VenusTest extends TestCase
         $this->assertEquals(0.724602, round($R, 6));
     }
 
-    /**
-     * Meeus 33.a
-     */
-    public function test()
-    {
-        $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
-        $venus = new Venus($toi);
-
-//        // TODO Test...
-//        $geoEclSphCoordinates = $venus->getApparentHeliocentricEclipticalSphericalCoordinates()
-//            ->getGeocentricEclipticalSphericalCoordinates($toi);
-//
-//        $corrections = new GeocentricEclipticalSphericalCorrections($toi);
-//        $geoEclSphCoordinates = $corrections->correctCoordinates($geoEclSphCoordinates);
-//
-//        $geoEqaCoordinates = $geoEclSphCoordinates->getGeocentricEquatorialCoordinates($toi);
-//
-//        $ra = $geoEqaCoordinates->getRightAscension();
-//        $d = $geoEqaCoordinates->getDeclination();
-//
-//        var_dump(AngleUtil::dec2time($ra), AngleUtil::dec2angle($d));die();
-
-        // TODO ... 2
-        $geoEqaCoordinates = $venus->getApparentHeliocentricEclipticalSphericalCoordinates()
-            ->getGeocentricEclipticalSphericalCoordinates($toi)
-            ->getGeocentricEquatorialCoordinates($toi);
-
-        $corrections = new GeocentricEquatorialCorrections($toi);
-        $geoEqaCoordinates = $corrections->correctCoordinates($geoEqaCoordinates);
-
-        $ra = $geoEqaCoordinates->getRightAscension();
-        $d = $geoEqaCoordinates->getDeclination();
-
-        var_dump(AngleUtil::dec2time($ra), AngleUtil::dec2angle($d));die();
-
-
-        $geoEclSphCoordinates = $corrections->correctCoordinates($geoEclSphCoordinates);
-
-//        $lon = $geoEclSphCoordinates->getLongitude();
-//        $lat = $geoEclSphCoordinates->getLatitude();
-        $ra = $geoEclSphCoordinates->getRightAscension();
-        $de = $geoEclSphCoordinates->getDeclination();
-        $radiusVector = $geoEclSphCoordinates->getRadiusVector();
-
-        var_dump(AngleUtil::dec2time($ra), AngleUtil::dec2angle($de), $radiusVector);die();
-
-        $this->assertEquals(26.11412, round($lon, 5));
-        $this->assertEquals(-2.62060, round($lat, 5));
-        $this->assertEquals(0.724602, round($radiusVector, 6));
-
-        // TODO Very true final coordinates
-        // ra 21h04m41.454s d=-18°53'16".84 distance = 0.91084596
-    }
-
-    public function XtestGetHeliocentricEclipticalRectangularCoordinates()
+    public function testGetHeliocentricEclipticalRectangularCoordinates()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
         $venus = new Venus($toi);
@@ -115,9 +61,9 @@ class VenusTest extends TestCase
         $Y = $helEclRecCoordinates->getY();
         $Z = $helEclRecCoordinates->getZ();
 
-        // TODO ...
-//        $this->assertEquals(26.11412, round($X, 6));
-//        $this->assertEquals(-2.62060, round($Y, 6));
-//        $this->assertEquals(0.724602, round($Z, 6));
+        // TODO ... evaluate
+        $this->assertEquals(0.649953, round($X, 6));
+        $this->assertEquals(0.318607, round($Y, 6));
+        $this->assertEquals(-0.03313, round($Z, 6));
     }
 }
