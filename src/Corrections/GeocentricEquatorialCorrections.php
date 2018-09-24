@@ -139,7 +139,14 @@ class GeocentricEquatorialCorrections
         return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
     }
 
-    // TOOD Meeus 23.4
+    /**
+     * Expansion of annual aberration into trigonometric series
+     * Ron, C. & Vondrak, J.
+     * http://adsbit.harvard.edu//full/1986BAICz..37...96R/0000099.000.html
+     *
+     * @param GeocentricEquatorialCoordinates $geoEquCoordinates
+     * @return GeocentricEquatorialCoordinates
+     */
     public function correctEffectOfAberration(
         GeocentricEquatorialCoordinates $geoEquCoordinates
     ): GeocentricEquatorialCoordinates
@@ -167,7 +174,11 @@ class GeocentricEquatorialCorrections
         $ls = 6.2400601 + 628.3019553 * $T;
         $F = 1.6279052 + 8433.4661601 * $T;
 
-        // Terms for velocity components of the EMB's heliocentric motion
+        $X = 0.0;
+        $Y = 0.0;
+        $Z = 0.0;
+
+        //Velocity components of the Earth-Moon barycenter heliocentric motion
         $components = array(
             [0, 0, 1, 0, 0, 0, -1719919 - 2 * $T, -25, 25 - 13 * $T - 1 * pow($T, 2), 1578094 + 156 * $T, 10 + 32 * $T + pow($T, 2), 684187 - 358 * $T],
             [0, 0, 2, 0, 0, 0, 6434 + 141 * $T, 28007 - 107 * $T * -1 * pow($T, 2), 25697 - 95 * $T - 1 * pow($T, 2), -5904 - 130 * $T, 11141 - 48 * $T, -2559 - 55 * $T],
@@ -251,7 +262,25 @@ class GeocentricEquatorialCorrections
             [0, 7, -8, 0, 0, 0, 0, 0, 0, -1, 0, 0]
         );
 
-        // Terms for velocity components of the sun
+        foreach ($components as $component) {
+            if (count($component) != 12) {
+                var_dump($component);
+                die();
+            }
+            $A = $l1 * $component[0]
+                + $l2 * $component[1]
+                + $l3 * $component[2]
+                + $l4 * $component[3]
+                + $l5 * $component[4]
+                + $l6 * $component[5];
+            $ARad = $A;
+
+            $X += $component[6] * sin($ARad) + $component[7] * cos($ARad);
+            $Y += $component[8] * sin($ARad) + $component[9] * cos($ARad);
+            $Z += $component[10] * sin($ARad) + $component[11] * cos($ARad);
+        }
+
+        // Velocity components of the sun
         $componentsVelSun = array(
             [0, 0, 1, 0, 0, 0, 719, 0, 6, -660, -15, -283],
             [0, 0, 0, 1, 0, 0, 159, 0, 2, -147, -6, -61],
@@ -272,7 +301,21 @@ class GeocentricEquatorialCorrections
             [0, 0, 1, 0, 0, -2, 1, 0, 0, 0, 0, 0]
         );
 
-        // Terms for velocity components of the earth
+        foreach ($componentsVelSun as $component) {
+            $A = $l2 * $component[0]
+                + $l3 * $component[1]
+                + $l5 * $component[2]
+                + $l6 * $component[3]
+                + $l7 * $component[4]
+                + $l8 * $component[5];
+            $ARad = $A;
+
+            $X += $component[6] * sin($ARad) + $component[7] * cos($ARad);
+            $Y += $component[8] * sin($ARad) + $component[9] * cos($ARad);
+            $Z += $component[10] * sin($ARad) + $component[11] * cos($ARad);
+        }
+
+        // Velocity components of the earth
         $componentsVelEarth = array(
             [1, 0, 0, 0, 0, 715, -656, -285],
             [0, 0, 0, 0, 1, 0, 26, -59],
@@ -292,43 +335,6 @@ class GeocentricEquatorialCorrections
             [1, 2, 0, 1, 0, 1, 0, 0],
             [0, 2, 0, -1, 1, 0, 0, -1]
         );
-
-        // Meeus 23
-        $X = 0.0;
-        $Y = 0.0;
-        $Z = 0.0;
-        foreach ($components as $component) {
-            if (count($component) != 12) {
-                var_dump($component);
-                die();
-            }
-            $A = $l1 * $component[0]
-                + $l2 * $component[1]
-                + $l3 * $component[2]
-                + $l4 * $component[3]
-                + $l5 * $component[4]
-                + $l6 * $component[5];
-            $ARad = $A;
-
-            $X += $component[6] * sin($ARad) + $component[7] * cos($ARad);
-            $Y += $component[8] * sin($ARad) + $component[9] * cos($ARad);
-            $Z += $component[10] * sin($ARad) + $component[11] * cos($ARad);
-        }
-
-        // TODO ...
-        foreach ($componentsVelSun as $component) {
-            $A = $l2 * $component[0]
-                + $l3 * $component[1]
-                + $l5 * $component[2]
-                + $l6 * $component[3]
-                + $l7 * $component[4]
-                + $l8 * $component[5];
-            $ARad = $A;
-
-            $X += $component[6] * sin($ARad) + $component[7] * cos($ARad);
-            $Y += $component[8] * sin($ARad) + $component[9] * cos($ARad);
-            $Z += $component[10] * sin($ARad) + $component[11] * cos($ARad);
-        }
 
         foreach ($componentsVelEarth as $component) {
             $A = $w * $component[0]
