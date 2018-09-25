@@ -32,10 +32,10 @@ Duration complete: {$solarEclipse->getEclipseDuration()} seconds
 Duration umbra: {$solarEclipse->getEclipseUmbraDuration()} seconds
 Coverage: {$solarEclipse->getCoverage()}
 
-C1: {$solarEclipse->getTimeOfInterest($c1)->getTimeString()}
-C2: {$solarEclipse->getTimeOfInterest($c2)->getTimeString()}
-MAX: {$solarEclipse->getTimeOfInterest($max)->getTimeString()}
-C3: {$solarEclipse->getTimeOfInterest($c3)->getTimeString()}
-C4: {$solarEclipse->getTimeOfInterest($c4)->getTimeString()}
+C1: {$solarEclipse->getTimeOfInterest($c1)->getDateTime()->format('Y-m-d H:i:s')}
+C2: {$solarEclipse->getTimeOfInterest($c2)->getDateTime()->format('Y-m-d H:i:s')}
+MAX: {$solarEclipse->getTimeOfInterest($max)->getDateTime()->format('Y-m-d H:i:s')}
+C3: {$solarEclipse->getTimeOfInterest($c3)->getDateTime()->format('Y-m-d H:i:s')}
+C4: {$solarEclipse->getTimeOfInterest($c4)->getDateTime()->format('Y-m-d H:i:s')}
 
 END;

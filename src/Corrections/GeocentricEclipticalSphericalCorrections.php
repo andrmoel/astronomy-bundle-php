@@ -42,12 +42,8 @@ class GeocentricEclipticalSphericalCorrections
         $radiusVector = $geoEclSphCoordinates->getRadiusVector();
 
         $dPhi = $this->earth->getNutationInLongitude();
-        $dEps = $this->earth->getNutationInObliquity();
-
-//        var_dump($dEps);die();
 
         $lon += $dPhi;
-//        $lat -= $dEps; // TODO Korrekt???
 
         return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
     }

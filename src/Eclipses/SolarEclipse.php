@@ -27,29 +27,21 @@ class SolarEclipse
     const gRefractionHeight = -0.00524; // Take Sun radius into account
 
     private $besselianElements = array();
-    private $cache = array();
-
-    /** @var \DateTimeZone */
-    private $timeZone;
 
     private $dT = 0.0;
 
     // Observer
     /** @var Location */
     private $location;
-    private $lat = 0.0;
-    private $lon = 0.0;
 
 
     public function __construct(BesselianElements $besselianElements)
     {
         $this->besselianElements = $besselianElements;
-        $this->timeZone = new \DateTimeZone('UTC');
         $this->dT = $besselianElements->getDeltaT();
 
         $this->location = new Location();
     }
-
 
     public function setLocation(Location $location): void
     {
@@ -59,22 +51,6 @@ class SolarEclipse
         $this->lon = $location->getLongitude();
     }
 
-
-    /**
-     * Set time zone
-     * @param \DateTimeZone $timeZone
-     */
-    public function setTimeZone(\DateTimeZone $timeZone)
-    {
-        $this->timeZone = $timeZone;
-    }
-
-
-    /**
-     * Get date time
-     * @param SolarEclipseCircumstances $circumstances
-     * @return \DateTime
-     */
     public function getTimeOfInterest(SolarEclipseCircumstances $circumstances = null): TimeOfInterest
     {
         if (!isset($circumstances)) {
@@ -100,58 +76,15 @@ class SolarEclipse
             $jd++;
         }
 
-        if ($jd >= 2299160.5) {
-            $a = floor(($jd - 1867216.25) / 36524.25);
-            $a += $jd + 1.0 - floor($a / 4.0);
-        } else {
-            $a = $jd;
-        }
+        $jd += ($t + 12) / 24;
 
-        $b = $a + 1525.0;
-        $c = floor(($b - 122.1) / 365.25);
-        $d = floor(365.25 * $c);
-
-        // Date
-        $month = floor(($b - $d) / 30.6001);
-        $day = $b - $d - floor(30.6001 * $month);
-
-        if ($month < 13.5) {
-            $month -= 1;
-        } else {
-            $month -= 13;
-        }
-
-        if ($month > 2.5) {
-            $year = $c - 4716;
-        } else {
-            $year = $c - 4715;
-        }
-
-        // Time
-        $hour = floor($t);
-        $min = ($t - floor($t)) * 60;
-        $sec = ($min - floor($min)) * 60;
-
-        // TODO ...
         $toi = new TimeOfInterest();
         $toi->setJulianDay($jd);
-
-        var_dump($year, $month, $day, $hour, $min, $sec);
-        var_dump($toi->getDateTime(), $t);die();
-
-        $toi = new TimeOfInterest();
-        $toi->setTime($year, $month, $day, $hour, $min, $sec);
 
         return $toi;
     }
 
-
-    /**
-     * Get eclipse type
-     * @param SolarEclipseCircumstances $circumstances
-     * @return string
-     */
-    public function getEclipseType(SolarEclipseCircumstances $circumstances = null)
+    public function getEclipseType(SolarEclipseCircumstances $circumstances = null): string
     {
         if (!isset($circumstances)) {
             $circumstances = $this->getCircumstancesMax();
@@ -181,11 +114,10 @@ class SolarEclipse
         }
     }
 
-
     /**
      * Get eclipse duration in seconds
      */
-    public function getEclipseDuration()
+    public function getEclipseDuration(): float
     {
         $c1 = $this->getCircumstancesC1();
         $c4 = $this->getCircumstancesC4();
@@ -203,11 +135,10 @@ class SolarEclipse
         return $duration;
     }
 
-
     /**
      * Get eclipse duration in umbra in seconds
      */
-    public function getEclipseUmbraDuration()
+    public function getEclipseUmbraDuration(): float
     {
         $c2 = $this->getCircumstancesC2();
         $c3 = $this->getCircumstancesC3();
@@ -225,13 +156,7 @@ class SolarEclipse
         return $duration;
     }
 
-
-    /**
-     * Get coverage
-     * @param SolarEclipseCircumstances $circumstances
-     * @return float
-     */
-    public function getCoverage(SolarEclipseCircumstances $circumstances = null)
+    public function getCoverage(SolarEclipseCircumstances $circumstances = null): float
     {
         if (!isset($circumstances)) {
             $circumstances = $this->getCircumstancesMax();
@@ -263,23 +188,10 @@ class SolarEclipse
         return $coverage;
     }
 
+    // ---- Calculate eclipse circumstances ----------------------------------------------------------------------------
 
-    // ---- Circumstances ----------------------------------------------------------------------------------------
-
-
-    /**
-     * Get circumstances maximum eclipse
-     * @return SolarEclipseCircumstances
-     */
-    public function getCircumstancesMax()
+    public function getCircumstancesMax(): SolarEclipseCircumstances
     {
-        $cacheKey = 'max_' . $this->lat . '_' . $this->lon;
-
-        // Check cache
-        if (isset($this->cache[$cacheKey])) {
-            return $this->cache[$cacheKey];
-        }
-
         $t = 0.0;
         $tmp = 1.0;
 
@@ -316,25 +228,11 @@ class SolarEclipse
 
         $this->getObservationalCircumstances(self::EVENT_MAX, $circumstances);
 
-//        $this->cache[$cacheKey] = $circumstances;
-
         return $circumstances;
     }
 
-
-    /**
-     * Get c1 circumstances
-     * @return SolarEclipseCircumstances
-     */
-    public function getCircumstancesC1()
+    public function getCircumstancesC1(): SolarEclipseCircumstances
     {
-        $cacheKey = 'c1_' . $this->lat . '_' . $this->lon;
-
-        // Check cache
-        if (isset($this->cache[$cacheKey])) {
-            return $this->cache[$cacheKey];
-        }
-
         $circumstancesMaxEclipse = $this->getCircumstancesMax();
 
         $t = $circumstancesMaxEclipse->getT();
@@ -389,25 +287,11 @@ class SolarEclipse
 
         $this->getObservationalCircumstances(self::EVENT_C1, $circumstances);
 
-        $this->cache[$cacheKey] = $circumstances;
-
         return $circumstances;
     }
 
-
-    /**
-     * Get circumstances c2
-     * @return SolarEclipseCircumstances
-     */
-    public function getCircumstancesC2()
+    public function getCircumstancesC2(): SolarEclipseCircumstances
     {
-        $cacheKey = 'c2_' . $this->lat . '_' . $this->lon;
-
-        // Check cache
-        if (isset($this->cache[$cacheKey])) {
-            return $this->cache[$cacheKey];
-        }
-
         $circumstancesMaxEclipse = $this->getCircumstancesMax();
 
         $t = $circumstancesMaxEclipse->getT();
@@ -467,25 +351,11 @@ class SolarEclipse
 
         $this->getObservationalCircumstances(self::EVENT_C2, $circumstances);
 
-        $this->cache[$cacheKey] = $circumstances;
-
         return $circumstances;
     }
 
-
-    /**
-     * Get circumstances c3
-     * @return SolarEclipseCircumstances
-     */
-    public function getCircumstancesC3()
+    public function getCircumstancesC3(): SolarEclipseCircumstances
     {
-        $cacheKey = 'c3_' . $this->lat . '_' . $this->lon;
-
-        // Check cache
-        if (isset($this->cache[$cacheKey])) {
-            return $this->cache[$cacheKey];
-        }
-
         $circumstancesMaxEclipse = $this->getCircumstancesMax();
 
         $t = $circumstancesMaxEclipse->getT();
@@ -545,25 +415,11 @@ class SolarEclipse
 
         $this->getObservationalCircumstances(self::EVENT_C3, $circumstances);
 
-        $this->cache[$cacheKey] = $circumstances;
-
         return $circumstances;
     }
 
-
-    /**
-     * Get c4 circumstances
-     * @return SolarEclipseCircumstances
-     */
-    public function getCircumstancesC4()
+    public function getCircumstancesC4(): SolarEclipseCircumstances
     {
-        $cacheKey = 'c4_' . $this->lat . '_' . $this->lon;
-
-        // Check cache
-        if (isset($this->cache[$cacheKey])) {
-            return $this->cache[$cacheKey];
-        }
-
         $circumstancesMaxEclipse = $this->getCircumstancesMax();
 
         $t = $circumstancesMaxEclipse->getT();
@@ -618,19 +474,10 @@ class SolarEclipse
 
         $this->getObservationalCircumstances(self::EVENT_C4, $circumstances);
 
-        $this->cache[$cacheKey] = $circumstances;
-
         return $circumstances;
     }
 
-
-    /**
-     * Get time dependent circumstances
-     * @param $eventType
-     * @param $t
-     * @return SolarEclipseCircumstances
-     */
-    private function getTimeDependentCircumstances($eventType, $t)
+    private function getTimeDependentCircumstances(string $eventType, float $t): SolarEclipseCircumstances
     {
         $x = $this->besselianElements->getX($t);
         $dX = $this->besselianElements->getDX($t);
@@ -713,13 +560,16 @@ class SolarEclipse
         return $circumstances;
     }
 
-
     /**
+     * TODO Code...
      * Get observational circumstances
      * @param int $eventType
      * @param SolarEclipseCircumstances $circumstances
      */
-    public function getObservationalCircumstances($eventType, SolarEclipseCircumstances &$circumstances)
+    public function getObservationalCircumstances(
+        $eventType,
+        SolarEclipseCircumstances &$circumstances
+    ): SolarEclipseCircumstances
     {
         $sinD = $circumstances->getSinD();
         $cosD = $circumstances->getCosD();
@@ -776,11 +626,5 @@ class SolarEclipse
 
 
 //        var_dump(rad2deg($alt), rad2deg($azi));die();
-    }
-
-
-    public function clearCache()
-    {
-        $this->cache = array();
     }
 }

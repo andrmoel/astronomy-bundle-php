@@ -43,8 +43,10 @@ foreach ($planets as $planet) {
     // Create planet
     $planet = new $planet($toi);
 
-    // TODO ...
+    // Get planet name from class
     $planetName = get_class($planet);
+    $tmp = explode('/', $planetName);
+    $planetName = $tmp[count($tmp) -1];
 
     // Get geocentric ecliptical coordinates
     $geoEclSphCoordinates = $planet

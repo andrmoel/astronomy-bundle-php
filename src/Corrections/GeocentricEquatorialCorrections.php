@@ -28,6 +28,7 @@ class GeocentricEquatorialCorrections
         GeocentricEquatorialCoordinates $geoEquCoordinates
     ): GeocentricEquatorialCoordinates
     {
+        // TODO When correcting precession, we get false values compared to stellarium
 //        $geoEquCoordinates = $this->correctEffectOfPrecession($geoEquCoordinates);
         $geoEquCoordinates = $this->correctEffectOfNutation($geoEquCoordinates);
         $geoEquCoordinates = $this->correctEffectOfAberration($geoEquCoordinates);
@@ -94,47 +95,6 @@ class GeocentricEquatorialCorrections
 
         $rightAscension += $dRa1;
         $declination += $dD1;
-
-        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
-    }
-
-    // TODO Löschen???
-    public function correctEffectOfAberrationOldMethod(
-        GeocentricEquatorialCoordinates $geoEquCoordinates
-    ): GeocentricEquatorialCoordinates
-    {
-        $rightAscension = $geoEquCoordinates->getRightAscension();
-        $declination = $geoEquCoordinates->getDeclination();
-        $radiusVector = $geoEquCoordinates->getRadiusVector();
-
-        $k = Constants::CONSTANT_OF_ABERRATION;
-        $e = $this->earth->getEccentricity();
-        $eps = $this->earth->getObliquityOfEcliptic();
-        $pi = $this->earth->getLongitudeOfPerihelionOfOrbit();
-        $o = $this->sun->getTrueLongitude();
-
-
-        $raRad = deg2rad($rightAscension);
-        $dRad = deg2rad($declination);
-        $epsRad = deg2rad($eps);
-        $piRad = deg2rad($pi);
-        $oRad = deg2rad($o);
-
-        // Meeus 23.3
-        $dRa2 = -$k * ((cos($raRad) * cos($oRad) * cos($epsRad) + sin($raRad) * sin($oRad)) / cos($dRad))
-            + $e * $k * ((cos($raRad) * cos($piRad) * cos($epsRad) + sin($raRad) * sin($piRad)) / cos($dRad));
-
-        $dD2 = -$k * (
-                cos($oRad) * cos($epsRad) * (tan($epsRad) * cos($dRad) - sin($raRad) * sin($dRad))
-                + cos($raRad) * sin($dRad) * sin($oRad)
-            )
-            + $e * $k * (
-                cos($piRad) * cos($epsRad) * (tan($epsRad) * cos($dRad) - sin($raRad) * sin($dRad))
-                + cos($raRad) * sin($dRad) * sin($piRad)
-            );
-
-        $rightAscension += $dRa2;
-        $declination += $dD2;
 
         return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
     }
