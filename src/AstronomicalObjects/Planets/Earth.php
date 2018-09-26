@@ -258,8 +258,7 @@ class Earth extends Planet
         $T = $this->T;
         $U = $T / 100;
 
-        // Meeus 22.3 TODO Laut wiki ist das NICHT die mean
-        // 23.43929
+        // Meeus 22.3
         $e0 = 84381.448
             - 4680.93 * $U
             - 1.55 * pow($U, 2)

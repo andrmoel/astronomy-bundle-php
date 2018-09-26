@@ -12,6 +12,7 @@ use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Saturn;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Uranus;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Neptune;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
+use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
@@ -72,6 +73,10 @@ foreach ($planets as $planet) {
 
     // Get local horizontal coordinates
     $localHorizontalCoordinates = $geoEquCorodinates->getLocalHorizontalCoordinates($location, $toi);
+
+    $corrections = new LocalHorizontalCorrections();
+    $localHorizontalCoordinates = $corrections->correctAtmosphericRefraction($localHorizontalCoordinates);
+
     $azimuth = $localHorizontalCoordinates->getAzimuth() + 180; // TODO FALSCHER WERT. Laut Stellarium 294.45... Und was wenn > 360°???
     $azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
     $altitude = $localHorizontalCoordinates->getAltitude();
@@ -82,14 +87,15 @@ foreach ($planets as $planet) {
 | {$planetName}
 +------------------------------------
 Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
+Observer's location: {$lat}°, {$lon}°
+
 Ecliptical longitude: {$eclLongitude}
 Ecliptical latitude: {$eclLatitude}
 Right ascending: {$rightAscension}
 Declination: {$declination}
+Azimuth: {$azimuth} (apparent)
+Altitude: {$altitude} (apparent)
 
-Position: {$lat}°, {$lon}°
-Azimuth: {$azimuth}
-Altitude: {$altitude}
 
 END;
 }

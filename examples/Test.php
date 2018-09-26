@@ -25,60 +25,47 @@ $location = new Location($lat, $lon);
 // Time of interest
 $toi = new TimeOfInterest(new DateTime('1992-12-20 00:00:00'));
 
-$earth = new Earth($toi);
 $venus = new Venus($toi);
-
-var_dump($venus
-    ->getHeliocentricEclipticalSphericalCoordinates());die();
 
 // Get geocentric ecliptical coordinates
 $geoEclSphCoordinates = $venus
     ->getApparentHeliocentricEclipticalSphericalCoordinates()
     ->getGeocentricEclipticalSphericalCoordinates($toi);
 
+// Corrections
 $corrections = new GeocentricEclipticalSphericalCorrections($toi);
+$geoEclSphCoordinates = $corrections->correctCoordinates($geoEclSphCoordinates);
 
-$geoEclSphCoordinates = $corrections->correctEffectOfAberration($geoEclSphCoordinates);
-$geoEclSphCoordinates = $corrections->correctEffectOfNutation($geoEclSphCoordinates);
+$geoEquCorodinates = $geoEclSphCoordinates->getGeocentricEquatorialCoordinates($toi);
 
-var_dump($geoEclSphCoordinates);die();
-
-$eclLatitude = $geoEclSphCoordinates->getLatitude();
-$eclLatitude = AngleUtil::dec2angle($eclLatitude);
-$eclLongitude = $geoEclSphCoordinates->getLongitude();
-$eclLongitude = AngleUtil::dec2angle($eclLongitude);
+$rightAscension = $geoEquCorodinates->getRightAscension();
+$declination = $geoEquCorodinates->getDeclination();
+var_dump(AngleUtil::dec2time($rightAscension), AngleUtil::dec2angle($declination));
 
 // Get geocentric equatorial coordinates
 $geoEquCorodinates = $geoEclSphCoordinates
     ->getGeocentricEquatorialCoordinates($toi);
 
+// Corrections
 $corrections = new GeocentricEquatorialCorrections($toi);
 $geoEquCorodinates = $corrections->correctCoordinates($geoEquCorodinates);
 
 $rightAscension = $geoEquCorodinates->getRightAscension();
-$rightAscension = AngleUtil::dec2time($rightAscension);
 $declination = $geoEquCorodinates->getDeclination();
-$declination = AngleUtil::dec2angle($declination);
+var_dump(AngleUtil::dec2time($rightAscension), AngleUtil::dec2angle($declination));
 
-// Get local horizontal coordinates
-$localHorizontalCoordinates = $geoEquCorodinates->getLocalHorizontalCoordinates($location, $toi);
-$azimuth = $localHorizontalCoordinates->getAzimuth() + 180; // TODO FALSCHER WERT. Laut Stellarium 294.45... Und was wenn > 360°???
-$azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
-$altitude = $localHorizontalCoordinates->getAltitude();
-$altitude = AngleUtil::dec2angle($altitude);
-
-echo <<<END
-+------------------------------------
-| {$planetName}
-+------------------------------------
-Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
-Ecliptical longitude: {$eclLongitude}
-Ecliptical latitude: {$eclLatitude}
-Right ascending: {$rightAscension}
-Declination: {$declination}
-
-Position: {$lat}°, {$lon}°
-Azimuth: {$azimuth}
-Altitude: {$altitude}
-
-END;
+//echo <<<END
+//+------------------------------------
+//| {$planetName}
+//+------------------------------------
+//Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
+//Ecliptical longitude: {$eclLongitude}
+//Ecliptical latitude: {$eclLatitude}
+//Right ascending: {$rightAscension}
+//Declination: {$declination}
+//
+//Position: {$lat}°, {$lon}°
+//Azimuth: {$azimuth}
+//Altitude: {$altitude}
+//
+//END;

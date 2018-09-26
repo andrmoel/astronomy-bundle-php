@@ -28,7 +28,7 @@ class GeocentricEquatorialCorrections
         GeocentricEquatorialCoordinates $geoEquCoordinates
     ): GeocentricEquatorialCoordinates
     {
-        // TODO When correcting precession, we get false values compared to stellarium
+        // TODO When correcting precession, we get false values
 //        $geoEquCoordinates = $this->correctEffectOfPrecession($geoEquCoordinates);
         $geoEquCoordinates = $this->correctEffectOfNutation($geoEquCoordinates);
         $geoEquCoordinates = $this->correctEffectOfAberration($geoEquCoordinates);
