@@ -7,6 +7,7 @@ use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
+use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 // Berlin
@@ -15,51 +16,63 @@ $lon = AngleUtil::angle2dec('13°24\'37.91"');
 $location = new Location($lat, $lon);
 
 // Time of interest
-$dateTime = new \DateTime('1992-10-13 00:00:00');
+$dateTime = new \DateTime();
 $toi = new TimeOfInterest($dateTime);
 
 // Create sun
 $sun = new Sun($toi);
 
-// Get sun's position in sky
+// Ecliptical spherical coordinates
 $geoEclSphCoordinates = $sun->getGeocentricEclipticalSphericalCoordinates();
-$geoEqaCoordinates = $sun->getGeocentricEquatorialCoordinates();
-$localHorizontalCoordinates = $sun->getLocalHorizontalCoordinates($location);
 
-// Correct coordinates
 $correctionsEcl = new GeocentricEclipticalSphericalCorrections($toi);
 $geoEclSphCoordinates = $correctionsEcl->correctCoordinates($geoEclSphCoordinates);
 
-$correctionsEqu = new GeocentricEquatorialCorrections($toi);
-$geoEqaCoordinates = $correctionsEqu->correctCoordinates($geoEqaCoordinates);
-
-$lon = $geoEclSphCoordinates->getLongitude();
-$lon = AngleUtil::dec2angle($lon);
-$lat = $geoEclSphCoordinates->getLatitude();
-$lat = AngleUtil::dec2angle($lat);
+$eclLon = $geoEclSphCoordinates->getLongitude();
+$eclLon = AngleUtil::dec2angle($eclLon);
+$eclLat = $geoEclSphCoordinates->getLatitude();
+$eclLat = AngleUtil::dec2angle($eclLat);
 $radiusVector = $geoEclSphCoordinates->getRadiusVector();
+
+// Equatorial coordinates
+$geoEqaCoordinates = $sun->getGeocentricEquatorialCoordinates();
+
+$corrections = new GeocentricEquatorialCorrections($toi);
+$geoEqaCoordinates = $corrections->correctCoordinates($geoEqaCoordinates);
 
 $rightAscension = $geoEqaCoordinates->getRightAscension();
 $rightAscension = AngleUtil::dec2time($rightAscension);
 $declination = $geoEqaCoordinates->getDeclination();
 $declination = AngleUtil::dec2angle($declination);
 
-$azimuth = $localHorizontalCoordinates->getAzimuth();
-$azimuth = AngleUtil::dec2angle($azimuth);
+// Local horizontal coordinates
+$localHorizontalCoordinates = $sun->getLocalHorizontalCoordinates($location);
+
+$corrections = new LocalHorizontalCorrections();
+$localHorizontalCoordinates = $corrections->correctAtmosphericRefraction($localHorizontalCoordinates);
+
+$azimuth = $localHorizontalCoordinates->getAzimuth() + 180; // TODO FALSCHER WERT. Laut Stellarium 294.45... Und was wenn > 360°???
+$azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
 $altitude = $localHorizontalCoordinates->getAltitude();
 $altitude = AngleUtil::dec2angle($altitude);
 $distanceAu = $sun->getRadiusVector();
 $distance = $sun->getDistanceToEarth();
 
 echo <<<END
++------------------------------------
+| Moon
++------------------------------------
 Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
-Ecliptical longitude: {$lon}
-Ecliptical latitude: {$lat}
+Observer's location: {$lat}°, {$lon}°
+
+Ecliptical longitude: {$eclLon}
+Ecliptical latitude: {$eclLat}
 Right ascension: {$rightAscension}
 Declination: {$declination}
 Distance to earth: {$distanceAu} AU ({$distance} km)
 
-Azimuth: {$azimuth}
-Altitude: {$altitude}
+Azimuth: {$azimuth} (apparent)
+Altitude: {$altitude} (apparent)
+
 
 END;

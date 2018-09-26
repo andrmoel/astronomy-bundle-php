@@ -8,7 +8,6 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class GeocentricEclipticalSphericalCoordinates extends EclipticalSphericalCoordinates
 {
-    // TODO Test
     public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
     {
         $lonRad = deg2rad($this->longitude);

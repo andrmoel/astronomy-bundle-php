@@ -236,7 +236,7 @@ class Moon extends AstronomicalObject
                     break;
                 case 2:
                 case -2:
-                    $tmpSumB = $tmpSumB * $argSumB * $E * $E;
+                    $tmpSumB = $tmpSumB * $argSumB * pow($E, 2);
                     break;
                 default:
                     $tmpSumB = $tmpSumB * $argSumB;
@@ -378,9 +378,9 @@ class Moon extends AstronomicalObject
         return $l;
     }
 
-    public function getGeocentricEclipticalSpericalCoordinates(): GeocentricEclipticalSphericalCoordinates
+    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
-        $lon = $this->getApparentLongitude();
+        $lon = $this->getLongitude();
         $lat = $this->getLatitude();
         $radiusVector = $this->getDistanceToEarth(); // TODO must be in AU ???
 
@@ -390,7 +390,7 @@ class Moon extends AstronomicalObject
     public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
     {
         return $this
-            ->getGeocentricEclipticalSpericalCoordinates()
+            ->getGeocentricEclipticalSphericalCoordinates()
             ->getGeocentricEquatorialCoordinates($this->toi);
     }
 

@@ -95,7 +95,7 @@ class MoonTest extends TestCase
         $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
 
         $moon = new Moon($toi);
-        $geoEclSphCoordinates = $moon->getGeocentricEclipticalSpericalCoordinates();
+        $geoEclSphCoordinates = $moon->getGeocentricEclipticalSphericalCoordinates();
 
         $latitude = $geoEclSphCoordinates->getLatitude();
         $longitude = $geoEclSphCoordinates->getLongitude();

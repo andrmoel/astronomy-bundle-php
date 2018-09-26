@@ -5,6 +5,9 @@ include __DIR__ . '/../vendor/autoload.php';
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
+use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
+use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 // Berlin
@@ -19,12 +22,41 @@ $toi = new TimeOfInterest($dateTime);
 // Create moon
 $moon = new Moon($toi);
 
-// Get moon's position in sky
+// Ecliptical spherical coordinates
+$geoEclSphCoordinates = $moon->getGeocentricEclipticalSphericalCoordinates();
+
+$correctionsEcl = new GeocentricEclipticalSphericalCorrections($toi);
+$geoEclSphCoordinates = $correctionsEcl->correctCoordinates($geoEclSphCoordinates);
+
+$eclLon = $geoEclSphCoordinates->getLongitude();
+$eclLon = AngleUtil::dec2angle($eclLon);
+$eclLat = $geoEclSphCoordinates->getLatitude();
+$eclLat = AngleUtil::dec2angle($eclLat);
+$radiusVector = $geoEclSphCoordinates->getRadiusVector();
+
+// Equatorial coordinates
+$geoEqaCoordinates = $moon->getGeocentricEquatorialCoordinates();
+
+$corrections = new GeocentricEquatorialCorrections($toi);
+$geoEqaCoordinates = $corrections->correctCoordinates($geoEqaCoordinates);
+
+$rightAscension = $geoEqaCoordinates->getRightAscension();
+$rightAscension = AngleUtil::dec2time($rightAscension);
+$declination = $geoEqaCoordinates->getDeclination();
+$declination = AngleUtil::dec2angle($declination);
+
+// Local horizontal coordinates
 $localHorizontalCoordinates = $moon->getLocalHorizontalCoordinates($location);
-$azimuth = $localHorizontalCoordinates->getAzimuth();
-$azimuth = AngleUtil::dec2angle($azimuth);
+
+$corrections = new LocalHorizontalCorrections();
+$localHorizontalCoordinates = $corrections->correctAtmosphericRefraction($localHorizontalCoordinates);
+
+$azimuth = $localHorizontalCoordinates->getAzimuth(); // TODO Hier ist es der richtige Winkel...
+$azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
 $altitude = $localHorizontalCoordinates->getAltitude();
 $altitude = AngleUtil::dec2angle($altitude);
+
+$distance = $moon->getDistanceToEarth();
 $isWaxingMoon = $moon->isWaxingMoon() ? 'yes' : 'no';
 $illuminatedFraction = $moon->getIlluminatedFraction();
 $positionAngleOfBrightLimb = $moon->getPositionAngleOfMoonsBrightLimb();
@@ -34,10 +66,20 @@ echo <<<END
 | Moon
 +------------------------------------
 Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
-Azimuth: {$azimuth}
-Altitude: {$altitude}
+Observer's location: {$lat}°, {$lon}°
+
+Ecliptical longitude: {$eclLon}
+Ecliptical latitude: {$eclLat}
+Right ascension: {$rightAscension}
+Declination: {$declination}
+Distance to earth: {$distance} km
+
+Azimuth: {$azimuth} (apparent)
+Altitude: {$altitude} (apparent)
+
 Is waxing moon: {$isWaxingMoon}
 Illuminated fraction: {$illuminatedFraction}
 Position angle of bright limb: {$positionAngleOfBrightLimb}
+
 
 END;
