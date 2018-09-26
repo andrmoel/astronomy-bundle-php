@@ -101,7 +101,7 @@ class MoonTest extends TestCase
         $longitude = $geoEclSphCoordinates->getLongitude();
 
         $this->assertEquals(-3.229126, round($latitude, 6));
-        $this->assertEquals(133.167264, round($longitude, 6));
+        $this->assertEquals(133.167265, round($longitude, 6));
     }
 
     public function testGetLocalHorizontalCoordinates()

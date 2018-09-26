@@ -28,7 +28,7 @@ class GeocentricEquatorialCorrectionsTest extends TestCase
         $declination = $geoEclSphCoordinates->getDeclination();
         $radiusVector = $geoEclSphCoordinates->getRadiusVector();
 
-        $this->assertEquals(41.0667665, round($rightAscension, 7));
+        $this->assertEquals(41.0667666, round($rightAscension, 7));
         $this->assertEquals(49.2313559, round($declination, 7));
         $this->assertEquals(1.23456, round($radiusVector, 5));
 
@@ -81,7 +81,7 @@ class GeocentricEquatorialCorrectionsTest extends TestCase
         $declination = $geoEclSphCoordinates->getDeclination();
         $radiusVector = $geoEclSphCoordinates->getRadiusVector();
 
-        $this->assertEquals(41.5599646, round($rightAscension, 7));
+        $this->assertEquals(41.5599647, round($rightAscension, 7));
         $this->assertEquals(49.3520685, round($declination, 7));
         $this->assertEquals(1.23456, round($radiusVector, 5));
     }

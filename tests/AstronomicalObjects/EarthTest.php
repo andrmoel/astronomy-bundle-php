@@ -63,7 +63,7 @@ class EarthTest extends TestCase
         $earth = new Earth($toi);
         $eps = $earth->getNutationInObliquity();
 
-        $this->assertStringStartsWith('0°0\'9.443', AngleUtil::dec2angle($eps));
+        $this->assertStringStartsWith('0°0\'9.442', AngleUtil::dec2angle($eps));
     }
 
     /**
