@@ -22,11 +22,6 @@ class Sun extends AstronomicalObject
     {
         $t = $this->toi->getJulianMillenniaFromJ2000();
 
-        // TODO Where did I found the formular?
-//        $L0 = 280.46646
-//            + 36000.76983 * $T
-//            + 0.0003032 * pow($T, 2);
-
         // Meeus 28.2
         $L0 = 280.4664567
             + 360007.6982779 * $t
