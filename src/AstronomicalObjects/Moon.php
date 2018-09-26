@@ -169,11 +169,11 @@ class Moon extends AstronomicalObject
         $F = $this->getArgumentOfLatitude();
 
         // Action of venus
-        $A1 = AngleUtil::normalizeAngle(119.75 + 131.849 * $T);
+        $A1 = 119.75 + 131.849 * $T;
         // Action of jupiter
-        $A2 = AngleUtil::normalizeAngle(53.09 + 479264.290 * $T);
-        $A3 = AngleUtil::normalizeAngle(313.45 + 481266.484 * $T);
-        $E = AngleUtil::normalizeAngle(1 - 0.002516 * $T - 0.0000074 * pow($T, 2));
+        $A2 = 53.09 + 479264.290 * $T;
+        $A3 = 313.45 + 481266.484 * $T;
+        $E = 1 - 0.002516 * $T - 0.0000074 * pow($T, 2);
 
         $sumL = 3958 * sin(deg2rad($A1))
             + 1962 * sin(deg2rad($L - $F))
@@ -251,6 +251,7 @@ class Moon extends AstronomicalObject
         $this->sumB = $sumB;
     }
 
+    // TODO Belongs to sun?
     public function getMeanElongationFromSun(): float
     {
         $T = $this->T;
