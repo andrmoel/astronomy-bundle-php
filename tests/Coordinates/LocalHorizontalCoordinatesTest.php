@@ -5,7 +5,6 @@ namespace Andrmoel\AstronomyBundle\Tests\Coordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class LocalHorizontalCoordinatesTest extends TestCase

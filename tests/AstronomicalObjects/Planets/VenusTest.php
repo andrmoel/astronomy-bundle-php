@@ -2,12 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObjects\Planets;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Venus;
-use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
-use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class VenusTest extends TestCase

@@ -3,7 +3,6 @@
 namespace Andrmoel\AstronomyBundle\Tests;
 
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class TimeOfInterestTest extends TestCase
