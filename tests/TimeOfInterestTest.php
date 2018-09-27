@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\Tests;
 
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class TimeOfInterestTest extends TestCase
@@ -143,11 +144,22 @@ class TimeOfInterestTest extends TestCase
     /**
      * Meeus 12.a
      */
-    public function XtestGetGreenwichMeanSiderealTime()
+    public function testGetGreenwichMeanSiderealTime()
     {
         $toi = new TimeOfInterest(new \DateTime('1987-04-10 00:00:00'));
         $t0 = $toi->getGreenwichMeanSiderealTime();
 
-        // TODO ... Meeus 12.3...
+        $this->assertEquals(197.6932, round($t0, 5));
+    }
+
+    /**
+     * Meeus 12.a
+     */
+    public function testGetApparentGreenwichMeanSiderealTime()
+    {
+        $toi = new TimeOfInterest(new \DateTime('1987-04-10 00:00:00'));
+        $t = $toi->getApparentGreenwichMeanSiderealTime();
+
+        $this->assertEquals(197.69223, round($t, 5));
     }
 }

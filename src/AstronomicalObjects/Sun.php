@@ -9,6 +9,7 @@ use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
 class Sun extends AstronomicalObject
 {
@@ -206,9 +207,7 @@ class Sun extends AstronomicalObject
     public function getDistanceToEarth(): float
     {
         $R = $this->getRadiusVector();
-
-        // https://www.iau.org/static/resolutions/IAU2012_English.pdf
-        $r = $R * 149597870.7;
+        $r = DistanceUtil::au2km($R);
 
         return $r;
     }

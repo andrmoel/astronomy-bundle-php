@@ -355,15 +355,6 @@ class TimeOfInterest
         return $t0;
     }
 
-    // TODO Benötigt?
-    public function getGreenwichMeanSiderealTimeInHours(): float
-    {
-        $gmst = $this->getGreenwichMeanSiderealTime();
-        $t0 = $gmst / 15;
-
-        return $t0;
-    }
-
     public function getApparentGreenwichMeanSiderealTime(): float
     {
         $earth = new Earth($this);
@@ -391,15 +382,6 @@ class TimeOfInterest
         $lmst = $gmst + $lonEast;
 
         $lmst = AngleUtil::normalizeAngle($lmst);
-
-        return $lmst;
-    }
-
-    // TODO Benötigt???
-    public function getLocalMeanSiderealTimeInHours(float $lon): float
-    {
-        $lmst = $this->getLocalMeanSiderealTime($lon);
-        $lmst = $lmst / 15;
 
         return $lmst;
     }

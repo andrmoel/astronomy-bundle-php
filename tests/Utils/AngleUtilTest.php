@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class AngleUtilTest extends TestCase
 {
-    public function XtestAngle2dec()
+    public function testAngle2dec()
     {
         $this->assertEquals(0.0, AngleUtil::angle2dec('0°0\'0"'));
         $this->assertEquals(45.2625, AngleUtil::angle2dec('45°15\'45"'));
@@ -25,7 +25,7 @@ class AngleUtilTest extends TestCase
         $this->assertEquals('-24°55\'45.524"', AngleUtil::dec2angle(-24.929312194388));
     }
 
-    public function XtestDec2time()
+    public function testDec2time()
     {
         $this->assertEquals('0h0m0s', AngleUtil::dec2time(0.0));
         $this->assertEquals('3h1m36s', AngleUtil::dec2time(45.4));
@@ -33,7 +33,7 @@ class AngleUtilTest extends TestCase
          $this->assertEquals('-3h1m36s', AngleUtil::dec2time(-45.4));
     }
 
-    public function XtestTime2dec()
+    public function testTime2dec()
     {
         $this->assertEquals(0.0, AngleUtil::time2dec('0h0m0s'));
         $this->assertEquals(45.4, AngleUtil::time2dec('3h1m36s'));
@@ -42,7 +42,7 @@ class AngleUtilTest extends TestCase
         $this->assertEquals(191.3146, round(AngleUtil::time2dec('12h45m15.512s'), 4));
     }
 
-    public function XtestNormalizeAngle()
+    public function testNormalizeAngle()
     {
         $this->assertEquals(0.0, AngleUtil::normalizeAngle(0.0));
         $this->assertEquals(12.5, AngleUtil::normalizeAngle(12.5));

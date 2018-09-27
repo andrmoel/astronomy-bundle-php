@@ -9,6 +9,7 @@ use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
 class Moon extends AstronomicalObject
 {
@@ -383,9 +384,9 @@ class Moon extends AstronomicalObject
     {
         $lon = $this->getLongitude();
         $lat = $this->getLatitude();
-        $radiusVector = $this->getDistanceToEarth(); // TODO must be in AU ???
+        $radiusVector = DistanceUtil::km2au($this->getDistanceToEarth());
 
-        return new GeocentricEclipticalSphericalCoordinates($lon, $lat);
+        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
     }
 
     public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
