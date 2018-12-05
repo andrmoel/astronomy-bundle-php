@@ -10,7 +10,6 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class Earth extends Planet
 {
-    // Constants
     const RADIUS = 6378137.0; // Earth radius in km
     const FLATTENING = 0.00335281317789691440603238146967; // (1 / 298.257) Earth's flattening
     const EARTH_AXIS_RATIO = 0.996647189335;
@@ -125,7 +124,6 @@ class Earth extends Planet
         [0, 1, 0, 1, 0, 1, 0.0, 0, 0.0],
     ];
 
-    // Sum parameters
     private $sumPhi = 0;
     private $sumEps = 0;
 
