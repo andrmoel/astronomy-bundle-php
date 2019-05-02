@@ -160,12 +160,13 @@ class Sun extends AstronomicalObject
         var_dump("lon $lon");
 
         $Tnoon = TimeCalc::getJulianCenturiesFromJ2000($jd);
-        $equationOfTime = $this->getEquationOfTime();
+        $equationOfTime = EarthCalc::getEquationOfTime($Tnoon);
 
         $solNoonOffset = 720 - ($lon * 4) - $equationOfTime; // in minutes
         $Tnew = TimeCalc::getJulianCenturiesFromJ2000($jd + $solNoonOffset / 1440);
 
-        //0.1933049337348909 2.91962895685508
+        // 0.1933049337348909 2.91962895685508
+        // 23.435853164609707 39.59289772282227 0.016700503306127355 7316.32313508418
         //FOOOO:  11:03:19
         var_dump($equationOfTime);
 

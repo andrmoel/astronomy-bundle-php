@@ -221,6 +221,8 @@ function calcEquationOfTime(t)
   var e = calcEccentricityEarthOrbit(t);
   var m = calcGeomMeanAnomalySun(t);
 
+console.log("calcEquationOfTime()", epsilon, l0, e, m);
+
   var y = Math.tan(degToRad(epsilon)/2.0);
   y *= y;
 
