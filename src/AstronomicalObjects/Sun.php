@@ -153,24 +153,25 @@ class Sun extends AstronomicalObject
 
     public function getSolarNoon(Location $location): TimeOfInterest
     {
+        $jd0 = $this->toi->getJulianDay0();
         $lon = $location->getLongitude();
-        $jd = $this->toi->getJulianDay(true) - $lon / 360;
 
-        var_dump("JD ", $this->toi->getJulianDay(true));
-        var_dump("lon $lon");
+        $jd = $jd0 - $lon / 360;
 
         $Tnoon = TimeCalc::getJulianCenturiesFromJ2000($jd);
         $equationOfTime = EarthCalc::getEquationOfTime($Tnoon);
 
         $solNoonOffset = 720 - ($lon * 4) - $equationOfTime; // in minutes
         $Tnew = TimeCalc::getJulianCenturiesFromJ2000($jd + $solNoonOffset / 1440);
+        $equationOfTime = EarthCalc::getEquationOfTime($Tnew);
 
-        // 0.1933049337348909 2.91962895685508
-        // 23.435853164609707 39.59289772282227 0.016700503306127355 7316.32313508418
-        //FOOOO:  11:03:19
-        var_dump($equationOfTime);
+        $solNoonLocal = 720 - ($lon * 4) - $equationOfTime;
 
-        die();
-        // TODO ...
+        $jd = $jd0 + $solNoonLocal / 1440;
+
+        $toi = new TimeOfInterest();
+        $toi->setJulianDay($jd);
+
+        return $toi;
     }
 }

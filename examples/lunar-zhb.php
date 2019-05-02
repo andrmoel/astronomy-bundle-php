@@ -15,4 +15,6 @@ $location = new \Andrmoel\AstronomyBundle\Location(52.51345, 13.42632);
 var_dump($toi->getJulianDay(0));
 
 $sun = new \Andrmoel\AstronomyBundle\AstronomicalObjects\Sun($toi);
-$sun->getSolarNoon($location);
+$toi = $sun->getSolarNoon($location);
+
+var_dump($toi->getDateTime());

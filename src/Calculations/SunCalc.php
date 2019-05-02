@@ -40,7 +40,7 @@ class SunCalc
             + 35999.0502909 * $T
             - 0.0001536 * pow($T, 2)
             + pow($T, 3) / 2449000;
-        $M = AngleUtil::normalizeAngle($M);
+//        $M = AngleUtil::normalizeAngle($M);
 
         return $M;
     }

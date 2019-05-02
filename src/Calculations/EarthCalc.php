@@ -157,11 +157,12 @@ class EarthCalc implements EarthCalcInterface
         $L0rad = deg2rad($L0);
         $Mrad = deg2rad($M);
 
-        $y = tan($epsRad) / 2;
+        $y = tan($epsRad / 2);
         $y = pow($y, 2);
 
         $eqTime = $y * sin(2 * $L0rad)
-            - 2 * $e * $y * sin($Mrad) * cos(2 * $L0rad)
+            - 2 * $e * sin($Mrad)
+            + 4 * $e * $y * sin($Mrad) * cos(2 * $L0rad)
             - 0.5 * pow($y, 2) * sin(4 * $L0rad)
             - 1.25 * pow($e, 2) * sin(2 * $Mrad);
 
