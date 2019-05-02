@@ -12,9 +12,7 @@ $toi = new \Andrmoel\AstronomyBundle\TimeOfInterest();
 $toi->setTime(2019, 5, 2, 0, 0, 0);
 $location = new \Andrmoel\AstronomyBundle\Location(52.51345, 13.42632);
 
-var_dump($toi->getJulianDay(0));
+$cha = new \Andrmoel\AstronomyBundle\Halos\CircumHorizontalArc();
+$days = $cha->getDaysOfVisiblity(2019, $location);
 
-$sun = new \Andrmoel\AstronomyBundle\AstronomicalObjects\Sun($toi);
-$toi = $sun->getSolarNoon($location);
-
-var_dump($toi->getDateTime());
+var_dump($days);

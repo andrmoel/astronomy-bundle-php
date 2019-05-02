@@ -2,7 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class TimeOfInterest
@@ -357,14 +357,15 @@ class TimeOfInterest
 
     public function getApparentGreenwichMeanSiderealTime(): float
     {
-        $earth = new Earth($this);
+        $T = $this->getJulianCenturiesFromJ2000();
 
         $t0 = $this->getGreenwichMeanSiderealTime();
-        $p = $earth->getNutationInLongitude();
-        $e = deg2rad($earth->getObliquityOfEcliptic());
+        $p = EarthCalc::getNutationInLongitude($T);
+        $e = EarthCalc::getObliquityOfEcliptic($T);
+        $eRad = deg2rad($e);
 
         // Meeus 12
-        $gmst = $t0 + $p * cos($e);
+        $gmst = $t0 + $p * cos($eRad);
 
         return $gmst;
     }

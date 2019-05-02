@@ -17,4 +17,17 @@ class TimeCalc
 
         return $jd;
     }
+
+    public static function isLeapYear(int $year): bool
+    {
+        if ($year / 4 != (int)($year / 4)) {
+            return false;
+        } elseif ($year / 100 != (int)($year / 100)) {
+            return true;
+        } elseif ($year / 400 != (int)($year / 400)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
