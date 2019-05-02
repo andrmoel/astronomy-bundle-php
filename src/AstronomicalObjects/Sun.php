@@ -2,14 +2,17 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
+use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
-use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
 class Sun extends AstronomicalObject
 {
@@ -19,99 +22,10 @@ class Sun extends AstronomicalObject
     const TWILIGHT_ASTRONOMICAL = 3;
     const TWILIGHT_NIGHT = 4;
 
-    public function getMeanLongitude(): float
-    {
-        $t = $this->toi->getJulianMillenniaFromJ2000();
-
-        // Meeus 28.2
-        $L0 = 280.4664567
-            + 360007.6982779 * $t
-            + 0.03042028 * pow($t, 2)
-            + pow($t, 3) / 49931
-            - pow($t, 4) / 15300
-            + pow($t, 5) / 2000000;
-        $L0 = AngleUtil::normalizeAngle($L0);
-
-        return $L0;
-    }
-
-    /**
-     * Same as earth's
-     * @return float
-     */
-    public function getMeanAnomaly(): float
-    {
-        $T = $this->T;
-
-        // Meeus chapter 22
-//        $M = 357.52772
-//            + 35999.050340 * $T
-//            - 0.0001603 * pow($T, 2)
-//            - pow($T, 3) / 300000;
-
-        // Meeus 47.4
-        $M = 357.5291092
-            + 35999.0502909 * $T
-            - 0.0001536 * pow($T, 2)
-            + pow($T, 3) / 2449000;
-        $M = AngleUtil::normalizeAngle($M);
-
-        return $M;
-    }
-
-    public function getEquationOfCenter(): float
-    {
-        $T = $this->T;
-
-        $M = $this->getMeanAnomaly();
-
-        // Meeus 25.4
-        $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M));
-        $C += (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M));
-        $C += 0.000289 * sin(3 * deg2rad($M));
-
-        return $C;
-    }
-
-    public function getTrueLongitude(): float
-    {
-        // Meeus 25.4
-        $L0 = $this->getMeanLongitude();
-        $C = $this->getEquationOfCenter();
-
-        $o = $L0 + $C;
-
-        return $o;
-    }
-
-    public function getTrueAnomaly(): float
-    {
-        // Meeus 25.4
-        $M = $this->getMeanAnomaly();
-        $C = $this->getEquationOfCenter();
-
-        $v = $M + $C;
-
-        return $v;
-    }
-
-    public function getRadiusVector(): float
-    {
-        $earth = new Earth($this->toi);
-
-        $e = $earth->getEccentricity();
-        $v = $this->getTrueAnomaly();
-        $vRad = deg2rad($v);
-
-        // Meeus 25.5
-        $R = (1000001018 * (1 - pow($e, 2))) / (1 + $e * cos($vRad));
-        $R /= 1000000000;
-
-        return $R;
-    }
-
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
+        $T = $this->T;
+
         $earth = new Earth($this->toi);
         $helEclSphCoordinates = $earth->getHeliocentricEclipticalSphericalCoordinates();
 
@@ -119,7 +33,7 @@ class Sun extends AstronomicalObject
         $lon = $helEclSphCoordinates->getLongitude() + 180;
         $lat = $helEclSphCoordinates->getLatitude() * -1;
 
-        $radiusVector = $this->getDistanceToEarth();
+        $radiusVector = SunCalc::getDistanceToEarth($T);
 
         return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
     }
@@ -127,12 +41,11 @@ class Sun extends AstronomicalObject
     public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
     {
         // TODO Use method with higher accuracy (Meeus p.166)
-        $earth = new Earth($this->toi);
 
         $T = $this->T;
 
-        $L0 = $this->getMeanLongitude();
-        $M = $this->getMeanAnomaly();
+        $L0 = SunCalc::getMeanLongitude($T);
+        $M = SunCalc::getMeanAnomaly($T);
 
         $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M))
             + (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M))
@@ -148,7 +61,7 @@ class Sun extends AstronomicalObject
         $lonRad = deg2rad($lon);
 
         // Meeus 25.8 - Corrections
-        $e = $earth->getMeanObliquityOfEcliptic();
+        $e = EarthCalc::getMeanObliquityOfEcliptic($T);
         $e = $e + 0.00256 * cos($ORad);
         $eRad = deg2rad($e);
 
@@ -160,24 +73,22 @@ class Sun extends AstronomicalObject
         $declination = asin(sin($eRad) * sin($oRad));
         $declination = rad2deg($declination);
 
-        $radiusVector = $this->getDistanceToEarth();
+        $radiusVector = SunCalc::getDistanceToEarth($T);
 
         return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
     }
 
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
     {
-        $R = $this->getRadiusVector();
-        $earth = new Earth($this->toi);
-
         $T = $this->T;
 
-        $eps = $earth->getObliquityOfEcliptic();
+        $R = SunCalc::getRadiusVector($T);
+        $eps = EarthCalc::getObliquityOfEcliptic($T);
         $epsRad = deg2rad($eps);
-        $L0 = $this->getMeanLongitude();
-        $C = $this->getEquationOfCenter();
-        $M = $this->getMeanAnomaly();
-        $e = $earth->getEccentricity();
+        $L0 = SunCalc::getMeanLongitude($T);
+        $C = SunCalc::getEquationOfCenter($T);
+        $M = SunCalc::getMeanAnomaly($T);
+        $e = EarthCalc::getEccentricity($T);
 
         // True longitude
         $o = $L0 + $C;
@@ -200,27 +111,15 @@ class Sun extends AstronomicalObject
             ->getLocalHorizontalCoordinates($location, $this->toi);
     }
 
-    /**
-     * Get distance to earth [km]
-     * @return float
-     */
-    public function getDistanceToEarth(): float
-    {
-        $R = $this->getRadiusVector();
-        $r = DistanceUtil::au2km($R);
-
-        return $r;
-    }
-
     public function getEquationOfTime(): float
     {
-        $earth = new Earth($this->toi);
+        $T = $this->T;
 
-        $L0 = $this->getMeanLongitude();
+        $L0 = SunCalc::getMeanLongitude($T);
         $geoEquCoordinates = $this->getGeocentricEquatorialCoordinates();
         $rightAscension = $geoEquCoordinates->getRightAscension();
-        $dPhi = $earth->getNutationInLongitude();
-        $e = $earth->getObliquityOfEcliptic();
+        $dPhi = EarthCalc::getNutationInLongitude($T);
+        $e = EarthCalc::getObliquityOfEcliptic($T);
 
         // Meeus 28.1
         $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($e);
@@ -250,5 +149,22 @@ class Sun extends AstronomicalObject
         }
 
         return self::TWILIGHT_NIGHT;
+    }
+
+    public function getSolarNoon(Location $location): TimeOfInterest
+    {
+        $lon = $location->getLongitude();
+        $jd = $this->toi->getJulianDay(true) + $lon / 360;
+
+        $Tnoon = TimeCalc::getJulianCenturiesFromJ2000($jd);
+        $equationOfTime = $this->getEquationOfTime();
+
+        $solNoonOffset = 720 - ($lon * 4) - $equationOfTime; // in minutes
+        $Tnew = TimeCalc::getJulianCenturiesFromJ2000($jd + $solNoonOffset / 1440);
+
+        var_dump($Tnoon, $Tnew);
+
+        die();
+        // TODO ...
     }
 }

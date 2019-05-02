@@ -1,10 +1,11 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Calculations;
+namespace Andrmoel\AstronomyBundle\Calculations;
 
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
-class SunCalculations
+class SunCalc
 {
     public static function getMeanLongitude(float $T): float
     {
@@ -76,5 +77,30 @@ class SunCalculations
         $v = $M + $C;
 
         return $v;
+    }
+
+    public static function getRadiusVector(float $T): float
+    {
+        $e = EarthCalc::getEccentricity($T);
+        $v = self::getTrueAnomaly($T);
+        $vRad = deg2rad($v);
+
+        // Meeus 25.5
+        $R = (1000001018 * (1 - pow($e, 2))) / (1 + $e * cos($vRad));
+        $R /= 1000000000;
+
+        return $R;
+    }
+
+    /**
+     * Get distance to earth [km]
+     * @return float
+     */
+    public static function getDistanceToEarth(float $T): float
+    {
+        $R = self::getRadiusVector($T);
+        $r = DistanceUtil::au2km($R);
+
+        return $r;
     }
 }
