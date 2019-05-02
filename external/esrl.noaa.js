@@ -1,3 +1,6 @@
+// TODO Test ...
+var foo = calcSolNoon(2458605.5, 13.42632, 0, 0);
+console.log("FOOOO: ", foo);
 
 
 /*************************************************************/
@@ -444,14 +447,12 @@ function calcAzEl(output, T, localtime, latitude, longitude, zone)
   return (azimuth)
 }
 
-// TODO Test ...
-var foo = calcSolNoon(2458605.5, 13.42632, 0, 0);
-console.log(foo);
-
 function calcSolNoon(jd, longitude, timezone, dst)
 {
   var tnoon = calcTimeJulianCent(jd - longitude/360.0)
   var eqTime = calcEquationOfTime(tnoon)
+
+console.log(tnoon, eqTime);
   var solNoonOffset = 720.0 - (longitude * 4) - eqTime // in minutes
   var newt = calcTimeJulianCent(jd + solNoonOffset/1440.0)
   eqTime = calcEquationOfTime(newt)
@@ -463,7 +464,7 @@ function calcSolNoon(jd, longitude, timezone, dst)
   while (solNoonLocal >= 1440.0) {
     solNoonLocal -= 1440.0;
   }
-  document.getElementById("noonbox").value = timeString(solNoonLocal, 3)
+  return timeString(solNoonLocal, 3)
 }
 
 function dayString(jd, next, flag)

@@ -10,4 +10,11 @@ class TimeCalc
 
         return $T;
     }
+
+    public function getJulianDay(float $T): float
+    {
+        $jd = $T * 36525.0 + 451545.0;
+
+        return $jd;
+    }
 }

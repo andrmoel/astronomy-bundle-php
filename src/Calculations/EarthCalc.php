@@ -145,4 +145,28 @@ class EarthCalc implements EarthCalcInterface
 
         return $e;
     }
+
+    public static function getEquationOfTime(float $T): float
+    {
+        $eps = self::getObliquityOfEcliptic($T);
+        $L0 = SunCalc::getMeanLongitude($T);
+        $e = self::getEccentricity($T);
+        $M = SunCalc::getMeanAnomaly($T);
+
+        $epsRad = deg2rad($eps);
+        $L0rad = deg2rad($L0);
+        $Mrad = deg2rad($M);
+
+        $y = tan($epsRad) / 2;
+        $y = pow($y, 2);
+
+        $eqTime = $y * sin(2 * $L0rad)
+            - 2 * $e * $y * sin($Mrad) * cos(2 * $L0rad)
+            - 0.5 * pow($y, 2) * sin(4 * $L0rad)
+            - 1.25 * pow($e, 2) * sin(2 * $Mrad);
+
+        $eqTime = rad2deg($eqTime) * 4;
+
+        return $eqTime;
+    }
 }
