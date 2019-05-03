@@ -4,6 +4,8 @@ namespace Andrmoel\AstronomyBundle\Corrections;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\Constants;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
@@ -12,15 +14,9 @@ class GeocentricEclipticalSphericalCorrections
 {
     private $toi;
 
-    private $earth;
-    private $sun;
-
     public function __construct(TimeOfInterest $toi)
     {
         $this->toi = $toi;
-
-        $this->earth = new Earth($this->toi);
-        $this->sun = new Sun($this->toi);
     }
 
     public function correctCoordinates(
@@ -37,11 +33,13 @@ class GeocentricEclipticalSphericalCorrections
         GeocentricEclipticalSphericalCoordinates $geoEclSphCoordinates
     ): GeocentricEclipticalSphericalCoordinates
     {
+        $T = $this->toi->getJulianCenturiesFromJ2000();
+
         $lon = $geoEclSphCoordinates->getLongitude();
         $lat = $geoEclSphCoordinates->getLatitude();
         $radiusVector = $geoEclSphCoordinates->getRadiusVector();
 
-        $dPhi = $this->earth->getNutationInLongitude();
+        $dPhi = EarthCalc::getNutationInLongitude($T);
 
         $lon += $dPhi;
 
@@ -52,14 +50,16 @@ class GeocentricEclipticalSphericalCorrections
         GeocentricEclipticalSphericalCoordinates $geoEclSphCoordinates
     ): GeocentricEclipticalSphericalCoordinates
     {
+        $T = $this->toi->getJulianCenturiesFromJ2000();
+
         $lon = $geoEclSphCoordinates->getLongitude();
         $lat = $geoEclSphCoordinates->getLatitude();
         $radiusVector = $geoEclSphCoordinates->getRadiusVector();
 
         $k = Constants::CONSTANT_OF_ABERRATION;
-        $e = $this->earth->getEccentricity();
-        $pi = $this->earth->getLongitudeOfPerihelionOfOrbit();
-        $o = $this->sun->getTrueLongitude();
+        $e = EarthCalc::getEccentricity($T);
+        $pi = EarthCalc::getLongitudeOfPerihelionOfOrbit($T);
+        $o = SunCalc::getTrueLongitude($T);
 
 
         $lonRad = deg2rad($lon);

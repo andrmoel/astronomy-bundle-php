@@ -5,6 +5,7 @@ include __DIR__ . '/../vendor/autoload.php';
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
+use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
@@ -55,8 +56,8 @@ $azimuth = $localHorizontalCoordinates->getAzimuth() + 180; // TODO FALSCHER WER
 $azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
 $altitude = $localHorizontalCoordinates->getAltitude();
 $altitude = AngleUtil::dec2angle($altitude);
-$distanceAu = $sun->getRadiusVector();
-$distance = $sun->getDistanceToEarth();
+$distanceAu = SunCalc::getRadiusVector($toi->getJulianCenturiesFromJ2000());
+$distance = SunCalc::getDistanceToEarth($toi->getJulianCenturiesFromJ2000());
 
 echo <<<END
 +------------------------------------

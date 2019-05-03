@@ -4,6 +4,7 @@ namespace Andrmoel\AstronomyBundle\Corrections;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Constants;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
@@ -13,15 +14,9 @@ class GeocentricEquatorialCorrections
 {
     private $toi;
 
-    private $earth;
-    private $sun;
-
     public function __construct(TimeOfInterest $toi)
     {
         $this->toi = $toi;
-
-        $this->earth = new Earth($this->toi);
-        $this->sun = new Sun($this->toi);
     }
 
     public function correctCoordinates(
@@ -77,13 +72,15 @@ class GeocentricEquatorialCorrections
         GeocentricEquatorialCoordinates $geoEquCoordinates
     ): GeocentricEquatorialCoordinates
     {
+        $T = $this->toi->getJulianCenturiesFromJ2000();
+
         $rightAscension = $geoEquCoordinates->getRightAscension();
         $declination = $geoEquCoordinates->getDeclination();
         $radiusVector = $geoEquCoordinates->getRadiusVector();
 
-        $dEps = $this->earth->getNutationInObliquity();
-        $eps = $this->earth->getObliquityOfEcliptic();
-        $dPhi = $this->earth->getNutationInLongitude();
+        $dEps = EarthCalc::getNutationInObliquity($T);
+        $eps = EarthCalc::getObliquityOfEcliptic($T);
+        $dPhi = EarthCalc::getNutationInLongitude($T);
 
         $raRad = deg2rad($rightAscension);
         $dRad = deg2rad($declination);
