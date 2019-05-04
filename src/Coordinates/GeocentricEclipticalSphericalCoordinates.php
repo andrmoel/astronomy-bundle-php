@@ -2,7 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
@@ -22,8 +22,9 @@ class GeocentricEclipticalSphericalCoordinates extends EclipticalSphericalCoordi
 
     public function getGeocentricEquatorialCoordinates(TimeOfInterest $toi): GeocentricEquatorialCoordinates
     {
-        $earth = new Earth($toi);
-        $eps = $earth->getMeanObliquityOfEcliptic();
+        $T = $toi->getJulianCenturiesFromJ2000();
+
+        $eps = EarthCalc::getMeanObliquityOfEcliptic($T);
 
         $epsRad = deg2rad($eps);
         $lonRad = deg2rad($this->longitude);
