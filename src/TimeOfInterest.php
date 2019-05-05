@@ -379,7 +379,7 @@ class TimeOfInterest
     {
         $lonEast = $lon >= 0 ? $lon : 360 + $lon;
 
-        $gmst = $this->getGreenwichMeanSiderealTime(false);
+        $gmst = $this->getGreenwichMeanSiderealTime();
         $lmst = $gmst + $lonEast;
 
         $lmst = AngleUtil::normalizeAngle($lmst);

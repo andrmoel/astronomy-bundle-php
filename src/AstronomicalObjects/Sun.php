@@ -41,7 +41,6 @@ class Sun extends AstronomicalObject
     public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
     {
         // TODO Use method with higher accuracy (Meeus p.166)
-
         $T = $this->T;
 
         $L0 = SunCalc::getMeanLongitude($T);
@@ -151,7 +150,7 @@ class Sun extends AstronomicalObject
         return self::TWILIGHT_NIGHT;
     }
 
-    public function getSolarNoon(Location $location): TimeOfInterest
+    public function getUpperCulmination(Location $location): TimeOfInterest
     {
         $jd0 = $this->toi->getJulianDay0();
         $lon = $location->getLongitude();
@@ -173,5 +172,17 @@ class Sun extends AstronomicalObject
         $toi->setJulianDay($jd);
 
         return $toi;
+    }
+
+    public function getSunrise(Location $location): TimeOfInterest
+    {
+        // TODO Implement
+        return new TimeOfInterest();
+    }
+
+    public function getSunset(Location $location): TimeOfInterest
+    {
+        // TODO Implement
+        return new TimeOfInterest();
     }
 }
