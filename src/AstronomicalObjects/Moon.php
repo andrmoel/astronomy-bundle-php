@@ -35,7 +35,7 @@ class Moon extends AstronomicalObject
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
         return $this
-            ->getGeocentricEquatorialCoordinates()
+            ->getGeocentricEqutorialCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->toi);
     }
 
@@ -113,5 +113,23 @@ class Moon extends AstronomicalObject
         $x = AngleUtil::normalizeAngle($x);
 
         return $x;
+    }
+
+    public function getUpperCulmination(Location $location): TimeOfInterest
+    {
+        // TODO Implement
+        return new TimeOfInterest();
+    }
+
+    public function getSunrise(Location $location): TimeOfInterest
+    {
+        // TODO Implement
+        return new TimeOfInterest();
+    }
+
+    public function getSunset(Location $location): TimeOfInterest
+    {
+        // TODO Implement
+        return new TimeOfInterest();
     }
 }

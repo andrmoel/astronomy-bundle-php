@@ -77,6 +77,11 @@ class Sun extends AstronomicalObject
         return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
     }
 
+    /**
+     * @return GeocentricEclipticalRectangularCoordinates
+     * @throws \Exception
+     * @deprecated Not yet working, perfectly
+     */
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
     {
         $T = $this->T;
@@ -93,7 +98,7 @@ class Sun extends AstronomicalObject
         $o = $L0 + $C;
         $oRad = deg2rad($o);
 
-        // TODO How do is calculate it?
+        // TODO How do we calculate this one?
         $bRad = AngleUtil::angle2dec('0°0\'0.62"');
 
         $X = $R * cos($bRad) * cos($oRad);
