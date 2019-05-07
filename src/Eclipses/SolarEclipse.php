@@ -12,11 +12,11 @@ class SolarEclipse
     const TYPE_ANNULAR = 'annular';
     const TYPE_TOTAL = 'total';
 
-    const EVENT_C1 = -2;
-    const EVENT_C2 = -1;
-    const EVENT_MAX = 0;
-    const EVENT_C3 = 1;
-    const EVENT_C4 = 2;
+    const EVENT_C1 = 'c1';
+    const EVENT_C2 = 'c2';
+    const EVENT_MAX = 'max';
+    const EVENT_C3 = 'c3';
+    const EVENT_C4 = 'c4';
 
     const EVENT_VISIBILITY_ABOVE_HORIZON = 0;
     const EVENT_VISIBILITY_BELOW_HORIZON = 1;
@@ -624,7 +624,6 @@ class SolarEclipse
         $circumstances->setSunAltitude($alt);
         $circumstances->setSunAzimuth($azi);
 
-
-//        var_dump(rad2deg($alt), rad2deg($azi));die();
+        return $circumstances;
     }
 }
