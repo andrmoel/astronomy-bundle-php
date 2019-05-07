@@ -31,6 +31,7 @@ Coverage: {$solarEclipse->getCoverage()}
 Magnitude: {$max->getMagnitude()}
 Moon-sun-ratio: {$max->getMoonSunRatio()}
 
+Contact times
 C1: {$solarEclipse->getTimeOfInterest($c1)->getDateTime()->format('Y-m-d H:i:s')} UTC
 C2: {$solarEclipse->getTimeOfInterest($c2)->getDateTime()->format('Y-m-d H:i:s')} UTC
 Max: {$solarEclipse->getTimeOfInterest($max)->getDateTime()->format('Y-m-d H:i:s')} UTC
