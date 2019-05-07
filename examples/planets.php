@@ -5,12 +5,12 @@ include __DIR__ . '/../vendor/autoload.php';
 use \Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Planet;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Mercury;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Venus;
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Mars;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Jupiter;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Saturn;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Uranus;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Neptune;
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Location;
@@ -18,16 +18,14 @@ use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 // Berlin
-$lat = AngleUtil::angle2dec('52°31\'27.73"');
-$lon = AngleUtil::angle2dec('13°24\'37.91"');
-$location = new Location($lat, $lon);
+$location = new Location(52.524, 13.411);
 
 // Time of interest
 $dateTime = new DateTime('2018-05-13 20:00:00');
 $toi = new TimeOfInterest($dateTime);
 
-$earth = new Earth($toi);
-$e = $earth->getObliquityOfEcliptic();
+$T = $toi->getJulianCenturiesFromJ2000();
+$e = EarthCalc::getObliquityOfEcliptic($T);
 
 $planets = array(
     new Mercury($toi),
