@@ -25,7 +25,7 @@ $dateTime = new DateTime('2018-05-13 20:00:00');
 $toi = new TimeOfInterest($dateTime);
 
 $T = $toi->getJulianCenturiesFromJ2000();
-$e = EarthCalc::getObliquityOfEcliptic($T);
+$e = EarthCalc::getTrueObliquityOfEcliptic($T);
 
 $planets = array(
     new Mercury($toi),

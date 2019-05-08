@@ -121,13 +121,13 @@ class EarthTest extends TestCase
     /**
      * Meeus 22.a
      */
-    public function testGetObliquityOfEcliptic()
+    public function testgetTrueObliquityOfEcliptic()
     {
         $toi = new TimeOfInterest();
         $toi->setTime(1987, 4, 10, 0, 0, 0);
 
         $earth = new Earth($toi);
-        $e = $earth->getObliquityOfEcliptic();
+        $e = $earth->getTrueObliquityOfEcliptic();
 
         $this->assertEquals(23.44357, round($e, 5));
     }

@@ -41,7 +41,9 @@ class EarthCalc implements EarthCalcInterface
     public static function getLongitudeOfPerihelionOfOrbit(float $T): float
     {
         // Meeus 23
-        $pi = 102.93735 + 1.71946 * $T + 0.00046 * pow($T, 2);
+        $pi = 102.93735
+            + 1.71946 * $T
+            + 0.00046 * pow($T, 2);
 
         return $pi;
     }
@@ -65,6 +67,19 @@ class EarthCalc implements EarthCalcInterface
         $e0 = $e0 / 3600;
 
         return $e0;
+    }
+
+    public static function getTrueObliquityOfEcliptic(float $T): float
+    {
+        $e0 = self::getMeanObliquityOfEcliptic($T);
+
+var_dump("FOOOOOOOOOOO", $e0);
+        $sumEps = self::getNutationInLongitude($T);
+
+        // Meeus chapter 22
+        $e = $e0 + $sumEps;
+
+        return $e;
     }
 
     public static function getNutationInLongitude(float $T): float
@@ -135,20 +150,9 @@ class EarthCalc implements EarthCalcInterface
         return $sumEps;
     }
 
-    public static function getObliquityOfEcliptic(float $T): float
-    {
-        $e0 = self::getMeanObliquityOfEcliptic($T);
-        $sumEps = self::getNutationInLongitude($T);
-
-        // Meeus chapter 22
-        $e = $e0 + $sumEps;
-
-        return $e;
-    }
-
     public static function getEquationOfTime(float $T): float
     {
-        $eps = self::getObliquityOfEcliptic($T);
+        $eps = self::getTrueObliquityOfEcliptic($T);
         $L0 = SunCalc::getMeanLongitude($T);
         $e = self::getEccentricity($T);
         $M = SunCalc::getMeanAnomaly($T);

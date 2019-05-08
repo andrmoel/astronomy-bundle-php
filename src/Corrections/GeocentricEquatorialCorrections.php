@@ -79,7 +79,7 @@ class GeocentricEquatorialCorrections
         $radiusVector = $geoEquCoordinates->getRadiusVector();
 
         $dEps = EarthCalc::getNutationInObliquity($T);
-        $eps = EarthCalc::getObliquityOfEcliptic($T);
+        $eps = EarthCalc::getTrueObliquityOfEcliptic($T);
         $dPhi = EarthCalc::getNutationInLongitude($T);
 
         $raRad = deg2rad($rightAscension);

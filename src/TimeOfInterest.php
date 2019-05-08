@@ -361,7 +361,7 @@ class TimeOfInterest
 
         $t0 = $this->getGreenwichMeanSiderealTime();
         $p = EarthCalc::getNutationInLongitude($T);
-        $e = EarthCalc::getObliquityOfEcliptic($T);
+        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
         $eRad = deg2rad($e);
 
         // Meeus 12

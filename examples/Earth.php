@@ -22,7 +22,7 @@ $earth = new Earth($toi);
 // Get moon's position in sky
 $meanObliquityOfEcliptic = $earth->getMeanObliquityOfEcliptic();
 $meanObliquityOfEcliptic = AngleUtil::dec2angle($meanObliquityOfEcliptic);
-$obliquityOfEcliptic = $earth->getObliquityOfEcliptic();
+$obliquityOfEcliptic = $earth->getTrueObliquityOfEcliptic();
 $obliquityOfEcliptic = AngleUtil::dec2angle($obliquityOfEcliptic);
 $nutation = $earth->getNutationInObliquity();
 $nutation = AngleUtil::dec2angle($nutation);

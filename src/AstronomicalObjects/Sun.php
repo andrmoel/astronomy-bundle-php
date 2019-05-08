@@ -87,7 +87,7 @@ class Sun extends AstronomicalObject
         $T = $this->T;
 
         $R = SunCalc::getRadiusVector($T);
-        $eps = EarthCalc::getObliquityOfEcliptic($T);
+        $eps = EarthCalc::getTrueObliquityOfEcliptic($T);
         $epsRad = deg2rad($eps);
         $L0 = SunCalc::getMeanLongitude($T);
         $C = SunCalc::getEquationOfCenter($T);
@@ -123,7 +123,7 @@ class Sun extends AstronomicalObject
         $geoEquCoordinates = $this->getGeocentricEquatorialCoordinates();
         $rightAscension = $geoEquCoordinates->getRightAscension();
         $dPhi = EarthCalc::getNutationInLongitude($T);
-        $e = EarthCalc::getObliquityOfEcliptic($T);
+        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
 
         // Meeus 28.1
         $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($e);
