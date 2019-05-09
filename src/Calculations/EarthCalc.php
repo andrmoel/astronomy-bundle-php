@@ -72,9 +72,7 @@ class EarthCalc implements EarthCalcInterface
     public static function getTrueObliquityOfEcliptic(float $T): float
     {
         $e0 = self::getMeanObliquityOfEcliptic($T);
-
-var_dump("FOOOOOOOOOOO", $e0);
-        $sumEps = self::getNutationInLongitude($T);
+        $sumEps = self::getNutationInObliquity($T);
 
         // Meeus chapter 22
         $e = $e0 + $sumEps;

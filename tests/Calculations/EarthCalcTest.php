@@ -2,8 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class EarthCalcTest extends TestCase
@@ -66,14 +66,36 @@ class EarthCalcTest extends TestCase
      */
     public function getTrueMeanObliquityOfEclipticTest()
     {
-        // TODO Mocking
-//        $mock = $this->getMockClass(EarthCalc::class, array('getMeanObliquityOfEcliptic'));
-//        $mock::staticExpects($this->one())
-//            ->method('getMeanObliquityOfEcliptic')
-//            ->will($this->returnValue(1234));
-//
-//        $T = -0.127296372458;
-//
-//        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
+        $T = -0.127296372458;
+
+        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
+
+        $this->assertEquals(23.4435692, round($e, 8));
+    }
+
+    /**
+     * @test
+     * Meeus 22.a
+     */
+    public function getNutationInLongitudeTest()
+    {
+        $T = -0.127296372458;
+
+        $sumPhi = EarthCalc::getNutationInLongitude($T);
+
+        $this->assertStringStartsWith('-0°0\'3.788', AngleUtil::dec2angle($sumPhi));
+    }
+
+    /**
+     * @test
+     * Meeus 22.a
+     */
+    public function getNutationInObliquityTest()
+    {
+        $T = -0.127296372458;
+
+        $sumEps = EarthCalc::getNutationInObliquity($T);
+
+        $this->assertStringStartsWith('0°0\'9.442', AngleUtil::dec2angle($sumEps));
     }
 }
