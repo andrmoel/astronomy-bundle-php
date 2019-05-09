@@ -115,22 +115,6 @@ class Sun extends AstronomicalObject
             ->getLocalHorizontalCoordinates($location, $this->toi);
     }
 
-    public function getEquationOfTime(): float
-    {
-        $T = $this->T;
-
-        $L0 = SunCalc::getMeanLongitude($T);
-        $geoEquCoordinates = $this->getGeocentricEquatorialCoordinates();
-        $rightAscension = $geoEquCoordinates->getRightAscension();
-        $dPhi = EarthCalc::getNutationInLongitude($T);
-        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
-
-        // Meeus 28.1
-        $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($e);
-
-        return $E;
-    }
-
     public function getTwilight(Location $location): int
     {
         $localHorizontalCoordinates = $this->getLocalHorizontalCoordinates($location);

@@ -104,6 +104,11 @@ class EarthCalcTest extends TestCase
      */
     public function getEquationOfTimeTest()
     {
+        $T = -0.072183436;
+
+        $E = EarthCalc::getEquationOfTime($T);
+
+        var_dump($E);
         // TODO
     }
 }

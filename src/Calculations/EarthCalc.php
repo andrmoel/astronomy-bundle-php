@@ -2,6 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
+use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class EarthCalc implements EarthCalcInterface
@@ -152,7 +153,7 @@ class EarthCalc implements EarthCalcInterface
      * @param float $T
      * @return float
      */
-    public static function getEquationOfTime(float $T): float
+    public static function getEquationOfTimeLessAccuracy(float $T): float
     {
         $eps = self::getTrueObliquityOfEcliptic($T);
         $L0 = SunCalc::getMeanLongitude($T);
@@ -175,5 +176,29 @@ class EarthCalc implements EarthCalcInterface
         $eqTime = rad2deg($eqTime) * 4;
 
         return $eqTime;
+    }
+
+    /**
+     * Get equation of time [minutes]
+     * @param float $T
+     * @return float
+     */
+    public function getEquationOfTime(float $T): float
+    {
+        $L0 = SunCalc::getMeanLongitude($T);
+        $geoEquCoordinates = SunCalc::getGeocentricEquatorialCoordinates($T);
+        $corr = new GeocentricEquatorialCorrections($toi);
+        $geoEquCoordinates =
+        $rightAscension = $geoEquCoordinates->getRightAscension();
+
+        var_dump($rightAscension);
+
+        $dPhi = EarthCalc::getNutationInLongitude($T);
+        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
+
+        // Meeus 28.1
+        $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($e);
+
+        return $E;
     }
 }

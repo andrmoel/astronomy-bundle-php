@@ -2,6 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
@@ -102,5 +103,41 @@ class SunCalc
         $r = DistanceUtil::au2km($R);
 
         return $r;
+    }
+
+    public static function getGeocentricEquatorialCoordinates(float $T): GeocentricEquatorialCoordinates
+    {
+        $L0 = SunCalc::getMeanLongitude($T);
+        $M = SunCalc::getMeanAnomaly($T);
+
+        $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M))
+            + (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M))
+            + 0.000289 * sin(3 * deg2rad($M));
+
+        // True longitude (o) and true anomaly (v)
+        $o = $L0 + $C;
+        $oRad = deg2rad($o);
+
+        $O = 125.04 - 1934.136 * $T;
+        $ORad = deg2rad($O);
+        $lon = $o - 0.00569 - 0.00478 * sin($ORad);
+        $lonRad = deg2rad($lon);
+
+        // Meeus 25.8 - Corrections
+        $e = EarthCalc::getMeanObliquityOfEcliptic($T);
+        $e = $e + 0.00256 * cos($ORad);
+        $eRad = deg2rad($e);
+
+        // Meeus 25.6
+        $rightAscension = atan2(cos($eRad) * sin($lonRad), cos($lonRad));
+        $rightAscension = AngleUtil::normalizeAngle(rad2deg($rightAscension));
+
+        // Meeus 25.7
+        $declination = asin(sin($eRad) * sin($oRad));
+        $declination = rad2deg($declination);
+
+        $radiusVector = SunCalc::getDistanceToEarth($T);
+
+        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
     }
 }
