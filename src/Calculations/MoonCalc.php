@@ -8,9 +8,9 @@ class MoonCalc implements MoonCalcInterface
 {
     public static function getSumL(float $T): float
     {
-        // Meeus 47.B
+        // Meeus 47.b
         $L = MoonCalc::getMeanLongitude($T);
-        $D = MoonCalc::getMeanElongationFromSun($T);
+        $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
         $Mmoon = MoonCalc::getMeanAnomaly($T);
         $F = MoonCalc::getArgumentOfLatitude($T);
@@ -56,8 +56,8 @@ class MoonCalc implements MoonCalcInterface
 
     public static function getSumR(float $T): float
     {
-        // Meeus 47.B
-        $D = MoonCalc::getMeanElongationFromSun($T);
+        // Meeus 47.b
+        $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
         $Mmoon = MoonCalc::getMeanAnomaly($T);
         $F = MoonCalc::getArgumentOfLatitude($T);
@@ -100,7 +100,7 @@ class MoonCalc implements MoonCalcInterface
     {
         // Meeus 47.B
         $L = MoonCalc::getMeanLongitude($T);
-        $D = MoonCalc::getMeanElongationFromSun($T);
+        $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
         $Mmoon = MoonCalc::getMeanAnomaly($T);
         $F = MoonCalc::getArgumentOfLatitude($T);
@@ -147,8 +147,7 @@ class MoonCalc implements MoonCalcInterface
         return $sumB;
     }
 
-    // TODO Belongs to sun?
-    public static function getMeanElongationFromSun(float $T): float
+    public static function getMeanElongation(float $T): float
     {
         // Meeus chapter 22
 //        $D = 297.85036

@@ -101,14 +101,27 @@ class EarthCalcTest extends TestCase
 
     /**
      * @test
+     * Meeus 28.a
      */
-    public function getEquationOfTimeTest()
+    public function getEquationOfTimeInDegreesTest()
     {
         $T = -0.072183436;
 
-        $E = EarthCalc::getEquationOfTime($T);
+        $E = EarthCalc::getEquationOfTimeInDegrees($T);
 
-        var_dump($E);
-        // TODO
+        $this->assertEquals(3.427351, round($E, 6));
+    }
+
+    /**
+     * @test
+     * Meeus 28.a
+     */
+    public function getEquationOfTimeInMinutesTest()
+    {
+        $T = -0.072183436;
+
+        $E = EarthCalc::getEquationOfTimeInMinutes($T);
+
+        $this->assertEquals(13.70941, round($E, 5));
     }
 }

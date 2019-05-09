@@ -2,7 +2,6 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
-use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class EarthCalc implements EarthCalcInterface
@@ -84,7 +83,7 @@ class EarthCalc implements EarthCalcInterface
     public static function getNutationInLongitude(float $T): float
     {
         // Meeus chapter 22
-        $D = MoonCalc::getMeanElongationFromSun($T);
+        $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
         $Mmoon = MoonCalc::getMeanAnomaly($T);
         $F = MoonCalc::getArgumentOfLatitude($T);
@@ -117,7 +116,7 @@ class EarthCalc implements EarthCalcInterface
     public static function getNutationInObliquity(float $T): float
     {
         // Meeus chapter 22
-        $D = MoonCalc::getMeanElongationFromSun($T);
+        $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
         $Mmoon = MoonCalc::getMeanAnomaly($T);
         $F = MoonCalc::getArgumentOfLatitude($T);
@@ -148,34 +147,26 @@ class EarthCalc implements EarthCalcInterface
     }
 
     /**
-     * TODO Meeus 28.a
-     * Get equation of time [minutes]
+     * Get equation of time [degrees]
      * @param float $T
      * @return float
      */
-    public static function getEquationOfTimeLessAccuracy(float $T): float
+    public static function getEquationOfTimeInDegrees(float $T): float
     {
-        $eps = self::getTrueObliquityOfEcliptic($T);
         $L0 = SunCalc::getMeanLongitude($T);
-        $e = self::getEccentricity($T);
-        $M = SunCalc::getMeanAnomaly($T);
+        $geoEquCoordinates = SunCalc::getApparentGeocentricEquatorialCoordinates($T);
+        $rightAscension = $geoEquCoordinates->getRightAscension();
 
-        $epsRad = deg2rad($eps);
-        $L0rad = deg2rad($L0);
-        $Mrad = deg2rad($M);
+//        $rightAscension = 198.378178; // TODO ... higher accurency
 
-        $y = tan($epsRad / 2);
-        $y = pow($y, 2);
+        $dPhi = EarthCalc::getNutationInLongitude($T);
+        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
+        $eRad = deg2rad($e);
 
-        $eqTime = $y * sin(2 * $L0rad)
-            - 2 * $e * sin($Mrad)
-            + 4 * $e * $y * sin($Mrad) * cos(2 * $L0rad)
-            - 0.5 * pow($y, 2) * sin(4 * $L0rad)
-            - 1.25 * pow($e, 2) * sin(2 * $Mrad);
+        // Meeus 28.1
+        $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($eRad);
 
-        $eqTime = rad2deg($eqTime) * 4;
-
-        return $eqTime;
+        return $E;
     }
 
     /**
@@ -183,22 +174,12 @@ class EarthCalc implements EarthCalcInterface
      * @param float $T
      * @return float
      */
-    public function getEquationOfTime(float $T): float
+    public static function getEquationOfTimeInMinutes(float $T): float
     {
-        $L0 = SunCalc::getMeanLongitude($T);
-        $geoEquCoordinates = SunCalc::getGeocentricEquatorialCoordinates($T);
-        $corr = new GeocentricEquatorialCorrections($toi);
-        $geoEquCoordinates =
-        $rightAscension = $geoEquCoordinates->getRightAscension();
+        $E = self::getEquationOfTimeInDegrees($T);
 
-        var_dump($rightAscension);
+        $Emin = $E / 360 * 1440;
 
-        $dPhi = EarthCalc::getNutationInLongitude($T);
-        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
-
-        // Meeus 28.1
-        $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($e);
-
-        return $E;
+        return $Emin;
     }
 }

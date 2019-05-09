@@ -105,18 +105,10 @@ class SunCalc
         return $r;
     }
 
-    public static function getGeocentricEquatorialCoordinates(float $T): GeocentricEquatorialCoordinates
+    public static function getApparentGeocentricEquatorialCoordinates(float $T): GeocentricEquatorialCoordinates
     {
-        $L0 = SunCalc::getMeanLongitude($T);
-        $M = SunCalc::getMeanAnomaly($T);
-
-        $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M))
-            + (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M))
-            + 0.000289 * sin(3 * deg2rad($M));
-
-        // True longitude (o) and true anomaly (v)
-        $o = $L0 + $C;
-        $oRad = deg2rad($o);
+        // TODO Use method with higher accuracy (Meeus p.166)
+        $o = self::getTrueLongitude($T);
 
         $O = 125.04 - 1934.136 * $T;
         $ORad = deg2rad($O);
@@ -133,11 +125,21 @@ class SunCalc
         $rightAscension = AngleUtil::normalizeAngle(rad2deg($rightAscension));
 
         // Meeus 25.7
-        $declination = asin(sin($eRad) * sin($oRad));
+        $declination = asin(sin($eRad) * sin($lonRad));
         $declination = rad2deg($declination);
 
-        $radiusVector = SunCalc::getDistanceToEarth($T);
+        $radiusVector = self::getRadiusVector($T);
 
         return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
+    }
+
+    public static function getRightAscension(float $T): float
+    {
+
+    }
+
+    public static function getApparentRightAscension(float $T): float
+    {
+
     }
 }
