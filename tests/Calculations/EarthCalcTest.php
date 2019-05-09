@@ -98,4 +98,12 @@ class EarthCalcTest extends TestCase
 
         $this->assertStringStartsWith('0°0\'9.442', AngleUtil::dec2angle($sumEps));
     }
+
+    /**
+     * @test
+     */
+    public function getEquationOfTimeTest()
+    {
+        // TODO
+    }
 }

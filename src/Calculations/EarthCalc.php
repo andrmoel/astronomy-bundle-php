@@ -92,7 +92,6 @@ class EarthCalc implements EarthCalcInterface
             - 1934.136261 * $T
             + 0.0020708 * pow($T, 2)
             + pow($T, 3) / 450000;
-        $O = AngleUtil::normalizeAngle($O);
 
         $sumPhi = 0;
         foreach (self::ARGUMENTS_NUTATION as $args) {
@@ -126,7 +125,6 @@ class EarthCalc implements EarthCalcInterface
             - 1934.136261 * $T
             + 0.0020708 * pow($T, 2)
             + pow($T, 3) / 450000;
-        $O = AngleUtil::normalizeAngle($O);
 
         $sumEps = 0;
         foreach (self::ARGUMENTS_NUTATION as $args) {
@@ -148,6 +146,12 @@ class EarthCalc implements EarthCalcInterface
         return $sumEps;
     }
 
+    /**
+     * TODO Meeus 28.a
+     * Get equation of time [minutes]
+     * @param float $T
+     * @return float
+     */
     public static function getEquationOfTime(float $T): float
     {
         $eps = self::getTrueObliquityOfEcliptic($T);
