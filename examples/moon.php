@@ -5,14 +5,15 @@ include __DIR__ . '/../vendor/autoload.php';
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Calculations\MoonCalc;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 // Berlin
-$lat = AngleUtil::angle2dec('52°31\'27.73"');
-$lon = AngleUtil::angle2dec('13°24\'37.91"');
+$lat = 52.524;
+$lon = 13.411;
 $location = new Location($lat, $lon);
 
 // Time of interest
@@ -56,7 +57,7 @@ $azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
 $altitude = $localHorizontalCoordinates->getAltitude();
 $altitude = AngleUtil::dec2angle($altitude);
 
-$distance = $moon->getDistanceToEarth();
+$distance = MoonCalc::getDistanceToEarth($toi->getJulianCenturiesFromJ2000());
 $isWaxingMoon = $moon->isWaxingMoon() ? 'yes' : 'no';
 $illuminatedFraction = $moon->getIlluminatedFraction();
 $positionAngleOfBrightLimb = $moon->getPositionAngleOfMoonsBrightLimb();
