@@ -23,7 +23,11 @@ $c3 = $solarEclipse->getCircumstancesC3();
 $c4 = $solarEclipse->getCircumstancesC4();
 
 echo <<<END
++------------------------------------
+| Solar eclipse
++------------------------------------
 Location: {$location->getLatitude()}°, {$location->getLongitude()}°
+
 Eclipse type: {$solarEclipse->getEclipseType()}
 Duration complete: {$solarEclipse->getEclipseDuration()} seconds
 Duration umbra: {$solarEclipse->getEclipseUmbraDuration()} seconds

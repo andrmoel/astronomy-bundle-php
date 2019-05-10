@@ -12,9 +12,7 @@ use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 // Berlin
-$lat = 52.524;
-$lon = 13.411;
-$location = new Location($lat, $lon);
+$location = new Location(52.524, 13.411);
 
 // Time of interest
 $dateTime = new DateTime('2018-01-10 05:00:00');
@@ -66,8 +64,7 @@ echo <<<END
 +------------------------------------
 | Moon
 +------------------------------------
-Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
-Observer's location: {$lat}°, {$lon}°
+Date: {$toi->getDateTime()->format('Y-m-d H:i:s')} UTC
 
 Ecliptical longitude: {$eclLon}
 Ecliptical latitude: {$eclLat}
@@ -75,12 +72,13 @@ Right ascension: {$rightAscension}
 Declination: {$declination}
 Distance to earth: {$distance} km
 
-Azimuth: {$azimuth} (apparent)
-Altitude: {$altitude} (apparent)
-
 Is waxing moon: {$isWaxingMoon}
 Illuminated fraction: {$illuminatedFraction}
 Position angle of bright limb: {$positionAngleOfBrightLimb}
 
+The moon seen from observer's location
+Location: {$location->getLatitude()}°, {$location->getLongitude()}°
+Azimuth: {$azimuth} (apparent)
+Altitude: {$altitude} (apparent)
 
 END;
