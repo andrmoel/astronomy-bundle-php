@@ -12,7 +12,7 @@ use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
-class Moon extends AstronomicalObject
+class Moon extends AstronomicalObject implements AstronomicalObjectInterface
 {
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {

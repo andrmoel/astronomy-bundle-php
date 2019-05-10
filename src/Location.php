@@ -59,6 +59,7 @@ class Location
 
     public function getLongitudePositiveWest(): float
     {
+        // TODO is east negative or also positive? Find out!
         return -1 * $this->longitude;
     }
 

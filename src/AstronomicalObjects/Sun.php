@@ -2,9 +2,9 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Calculations\SunCalc;
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
@@ -14,13 +14,23 @@ use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class Sun extends AstronomicalObject
+class Sun extends AstronomicalObject implements AstronomicalObjectInterface
 {
     const TWILIGHT_DAY = 0;
     const TWILIGHT_CIVIL = 1;
     const TWILIGHT_NAUTICAL = 2;
     const TWILIGHT_ASTRONOMICAL = 3;
     const TWILIGHT_NIGHT = 4;
+
+//    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
+//    {
+//        $T = $this->T;
+//
+//        $lat = SunCalc::getApparentLongitude($T);
+//        $lon = SunCalc::getApparentLongitude($T);
+//
+//        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
+//    }
 
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
@@ -40,39 +50,11 @@ class Sun extends AstronomicalObject
 
     public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
     {
-        // TODO Use method with higher accuracy (Meeus p.166)
         $T = $this->T;
 
-        $L0 = SunCalc::getMeanLongitude($T);
-        $M = SunCalc::getMeanAnomaly($T);
-
-        $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M))
-            + (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M))
-            + 0.000289 * sin(3 * deg2rad($M));
-
-        // True longitude (o) and true anomaly (v)
-        $o = $L0 + $C;
-        $oRad = deg2rad($o);
-
-        $O = 125.04 - 1934.136 * $T;
-        $ORad = deg2rad($O);
-        $lon = $o - 0.00569 - 0.00478 * sin($ORad);
-        $lonRad = deg2rad($lon);
-
-        // Meeus 25.8 - Corrections
-        $e = EarthCalc::getMeanObliquityOfEcliptic($T);
-        $e = $e + 0.00256 * cos($ORad);
-        $eRad = deg2rad($e);
-
-        // Meeus 25.6
-        $rightAscension = atan2(cos($eRad) * sin($lonRad), cos($lonRad));
-        $rightAscension = AngleUtil::normalizeAngle(rad2deg($rightAscension));
-
-        // Meeus 25.7
-        $declination = asin(sin($eRad) * sin($oRad));
-        $declination = rad2deg($declination);
-
-        $radiusVector = SunCalc::getDistanceToEarth($T);
+        $rightAscension = SunCalc::getApparentRightAscension($T);
+        $declination = SunCalc::getApparentDeclination($T);
+        $radiusVector = SunCalc::getRadiusVector($T);
 
         return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
     }
@@ -139,6 +121,7 @@ class Sun extends AstronomicalObject
         return self::TWILIGHT_NIGHT;
     }
 
+
     public function getUpperCulmination(Location $location): TimeOfInterest
     {
         $jd0 = $this->toi->getJulianDay0();
@@ -163,8 +146,38 @@ class Sun extends AstronomicalObject
         return $toi;
     }
 
+    // TODO Auslagern
+    public function getHourAngle(float $latitude, float $declination): float
+    {
+        $latRad = deg2rad($latitude);
+        $dRad = deg2rad($declination);
+
+        $HA = cos(deg2rad(90.833)) / (cos($latRad) * cos($dRad)) - tan($latRad) * tan($dRad);
+        $HA = rad2deg(acos($HA));
+
+        return $HA;
+    }
+
     public function getSunrise(Location $location): TimeOfInterest
     {
+        $lat = $location->getLatitude();
+        $lon = $location->getLongitude();
+
+        // $equationOfTime = EarthCalc::getEquationOfTimeInMinutes($Tnoon);
+        $jd0 = $this->toi->getJulianDay0();
+        $Tnoon = TimeCalc::getJulianCenturiesFromJ2000($jd0);
+
+        $equationOfTime = EarthCalc::getEquationOfTimeInMinutes($Tnoon);
+        $declination = SunCalc::getApparentDeclination($Tnoon);
+        $hourAngle = $this->getHourAngle($lat, $declination);
+
+        $delta = $lon + $hourAngle;
+
+        $time = 720 - (4 * $delta) - $equationOfTime;
+
+        var_dump($time);
+        die("sdfdf");
+
         // TODO Implement
         return new TimeOfInterest();
     }
