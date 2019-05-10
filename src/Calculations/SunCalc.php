@@ -2,7 +2,6 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
@@ -156,20 +155,5 @@ class SunCalc
         $declination = rad2deg($declination);
 
         return $declination;
-    }
-
-    // TODO ...
-    public static function getGeocentricRectangularCoordinates(float $T): GeocentricEclipticalRectangularCoordinates
-    {
-        $R = self::getRadiusVector($T);
-        $e0 = EarthCalc::getMeanObliquityOfEcliptic($T);
-        $e0Rad = deg2rad($e0);
-
-        // Meeus 26.1
-        $X = $R * cos($bRad) * cos($oRad);
-        $Y = $R * (cos($bRad) * sin($oRad) * cos($e0Rad) - sin($bRad) * sin($e0Rad));
-        $Z = $R * (cos($bRad) * sin($oRad) * sin($e0Rad) + sin($bRad) * cos($e0Rad));
-
-        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
     }
 }
