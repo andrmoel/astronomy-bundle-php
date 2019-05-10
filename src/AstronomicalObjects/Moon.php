@@ -35,7 +35,7 @@ class Moon extends AstronomicalObject
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
         return $this
-            ->getGeocentricEqutorialCoordinates()
+            ->getGeocentricEquatorialCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->toi);
     }
 
