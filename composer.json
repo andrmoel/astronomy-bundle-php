@@ -2,7 +2,7 @@
     "name": "andrmoel/astronomy-bundle",
     "description": "Bundle for astronomical calculations",
     "license": "MIT",
-    "version": "0.0.2",
+    "version": "0.0.4",
     "authors": [
         {
             "name": "Andreas Moeller",
