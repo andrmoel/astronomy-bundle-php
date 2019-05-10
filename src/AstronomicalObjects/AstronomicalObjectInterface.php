@@ -8,6 +8,7 @@ use Andrmoel\AstronomyBundle\TimeOfInterest;
 interface AstronomicalObjectInterface
 {
     public function setTimeOfInterest(TimeOfInterest $toi): void;
+    public function getTimeOfInterest(): TimeOfInterest;
 
     public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates;
 }

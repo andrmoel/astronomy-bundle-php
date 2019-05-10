@@ -2,7 +2,9 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
-class Venus extends Planet
+use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObjectInterface;
+
+class Venus extends Planet implements AstronomicalObjectInterface
 {
     public function loadVSOP87Data(): array
     {

@@ -4,8 +4,8 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Calculations\RiseAndSetCalc;
 use Andrmoel\AstronomyBundle\Calculations\SunCalc;
-use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
@@ -97,6 +97,24 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
             ->getLocalHorizontalCoordinates($location, $this->toi);
     }
 
+    public function getSunrise(Location $location): TimeOfInterest
+    {
+        $ras = new RiseAndSetCalc(Sun::class, $location, $this->toi);
+        return $ras->getRise();
+    }
+
+    public function getUpperCulmination(Location $location): TimeOfInterest
+    {
+        $ras = new RiseAndSetCalc(Sun::class, $location, $this->toi);
+        return $ras->getTransit();
+    }
+
+    public function getSunset(Location $location): TimeOfInterest
+    {
+        $ras = new RiseAndSetCalc(Sun::class, $location, $this->toi);
+        return $ras->getSet();
+    }
+
     public function getTwilight(Location $location): int
     {
         $localHorizontalCoordinates = $this->getLocalHorizontalCoordinates($location);
@@ -119,72 +137,5 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
         }
 
         return self::TWILIGHT_NIGHT;
-    }
-
-
-    public function getUpperCulmination(Location $location): TimeOfInterest
-    {
-        $jd0 = $this->toi->getJulianDay0();
-        $lon = $location->getLongitude();
-
-        $jd = $jd0 - $lon / 360;
-
-        $Tnoon = TimeCalc::getJulianCenturiesFromJ2000($jd);
-        $equationOfTime = EarthCalc::getEquationOfTimeInMinutes($Tnoon);
-
-        $solNoonOffset = 720 - ($lon * 4) - $equationOfTime; // in minutes
-        $Tnew = TimeCalc::getJulianCenturiesFromJ2000($jd + $solNoonOffset / 1440);
-        $equationOfTime = EarthCalc::getEquationOfTimeInMinutes($Tnew);
-
-        $solNoonLocal = 720 - ($lon * 4) - $equationOfTime;
-
-        $jd = $jd0 + $solNoonLocal / 1440;
-
-        $toi = new TimeOfInterest();
-        $toi->setJulianDay($jd);
-
-        return $toi;
-    }
-
-    // TODO Auslagern
-    public function getHourAngle(float $latitude, float $declination): float
-    {
-        $latRad = deg2rad($latitude);
-        $dRad = deg2rad($declination);
-
-        $HA = cos(deg2rad(90.833)) / (cos($latRad) * cos($dRad)) - tan($latRad) * tan($dRad);
-        $HA = rad2deg(acos($HA));
-
-        return $HA;
-    }
-
-    public function getSunrise(Location $location): TimeOfInterest
-    {
-        $lat = $location->getLatitude();
-        $lon = $location->getLongitude();
-
-        // $equationOfTime = EarthCalc::getEquationOfTimeInMinutes($Tnoon);
-        $jd0 = $this->toi->getJulianDay0();
-        $Tnoon = TimeCalc::getJulianCenturiesFromJ2000($jd0);
-
-        $equationOfTime = EarthCalc::getEquationOfTimeInMinutes($Tnoon);
-        $declination = SunCalc::getApparentDeclination($Tnoon);
-        $hourAngle = $this->getHourAngle($lat, $declination);
-
-        $delta = $lon + $hourAngle;
-
-        $time = 720 - (4 * $delta) - $equationOfTime;
-
-        var_dump($time);
-        die("sdfdf");
-
-        // TODO Implement
-        return new TimeOfInterest();
-    }
-
-    public function getSunset(Location $location): TimeOfInterest
-    {
-        // TODO Implement
-        return new TimeOfInterest();
     }
 }

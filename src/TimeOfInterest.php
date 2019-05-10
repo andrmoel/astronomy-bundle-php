@@ -52,6 +52,14 @@ class TimeOfInterest
         $this->second = (float)$dateTime->format('s');
     }
 
+    public static function createFromJulianDay(float $jd): TimeOfInterest
+    {
+        $toi = new TimeOfInterest();
+        $toi->setJulianDay($jd);
+
+        return $toi;
+    }
+
     public function setDateTime(\DateTime $dateTime): void
     {
         $this->year = (int)$dateTime->format('Y');

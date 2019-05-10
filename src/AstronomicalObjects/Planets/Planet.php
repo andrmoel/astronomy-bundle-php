@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
@@ -60,6 +61,15 @@ abstract class Planet extends AstronomicalObject
         $R = $this->resolveTerms($this->vsop87['R'], $t);
 
         return new HeliocentricEclipticalSphericalCoordinates($L, $B, $R);
+    }
+
+    public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
+    {
+        // TODO Richtig so????
+        return $this->getHeliocentricEclipticalSphericalCoordinates()
+            ->getGeocentricEclipticalRectangularCoordinates($this->toi)
+            ->getGeocentricEquatorialCoordinates($this->toi);
+        // TODO: Implement getGeocentricEquatorialCoordinates() method.
     }
 
     public function getHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates

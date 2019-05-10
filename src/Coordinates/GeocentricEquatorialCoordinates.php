@@ -66,6 +66,7 @@ class GeocentricEquatorialCoordinates
         $H = deg2rad($H);
 
         // Meeus 13.5
+        // TODO DRad...
         $azimuth = atan(sin($H) / (cos($H) * sin($latRad) - tan($d) * cos($latRad)));
         $azimuth = rad2deg($azimuth) + 180; // Add 180° to get azimuth from north (else it is from south)
         $azimuth = AngleUtil::normalizeAngle($azimuth);

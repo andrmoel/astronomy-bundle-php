@@ -2,12 +2,12 @@
 
 namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Venus;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
-use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Calculations\RiseAndSetCalc;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class RiseAndSetCalcTest extends TestCase
@@ -23,11 +23,15 @@ class RiseAndSetCalcTest extends TestCase
         $toi = new TimeOfInterest(new \DateTime('1988-03-20 00:00:00'));
 
         // Berlin
-//        $location = new Location(52.524, 13.411);
-//        $toi = new TimeOfInterest(new \DateTime());
+        $location = new Location(52.524, 13.411);
+        $location = new Location(70.3, -26.482);
+        $toi = new TimeOfInterest(new \DateTime('2019-01-01'));
 
-        $transit = RiseAndSetCalc::getTransit(Sun::class, $location, $toi);
+        $ras = new RiseAndSetCalc(Sun::class, $location, $toi);
 
-        $this->assertEquals(94.9806, round($transit, 4));
+        var_dump("----");
+        var_dump($ras->getRise()->getDateTime()->format('Y-m-d H:i:s'));
+        var_dump($ras->getTransit()->getDateTime()->format('Y-m-d H:i:s'));
+        var_dump($ras->getSet()->getDateTime()->format('Y-m-d H:i:s'));
     }
 }
