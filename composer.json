@@ -1,8 +1,7 @@
 {
     "name": "andrmoel/astronomy-bundle",
-    "description": "Bundle for astronomical calculations",
+    "description": "Bundle for astronomical calculations such as position of moon, sun or solar eclipses",
     "license": "MIT",
-    "version": "0.0.4",
     "authors": [
         {
             "name": "Andreas Moeller",
