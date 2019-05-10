@@ -12,9 +12,7 @@ use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 // Berlin
-$lat = 52.524;
-$lon = 13.411;
-$location = new Location($lat, $lon);
+$location = new Location(52.524, 13.411);
 
 // Create sun
 $toi = new TimeOfInterest();
@@ -71,10 +69,11 @@ Right ascension: {$rightAscension}
 Declination: {$declination}
 Distance to earth: {$distanceAu} AU ({$distance} km)
 
-- Seen from earth -
-Observer's location: {$lat}°, {$lon}°
+The sun seen from observer's location
+Location: {$location->getLatitude()}°, {$location->getLongitude()}°
 Azimuth: {$azimuth} (apparent)
 Altitude: {$altitude} (apparent)
+Sunrise: {$sun->getSunrise($location)->getDateTime()->format('Y-m-d H:i:s')} UTC
 Culmination: {$culmination->getDateTime()->format('Y-m-d H:i:s')} UTC
 
 END;
