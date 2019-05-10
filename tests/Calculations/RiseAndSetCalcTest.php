@@ -14,16 +14,17 @@ class RiseAndSetCalcTest extends TestCase
 {
     /**
      * @test
-     * Meeus 22.a
+     * Meeus 15.a
      */
     public function test()
     {
-        //        $location = new Location(42.3333, -71.0833); // Boston
-//        $toi = new TimeOfInterest(new \DateTime('1988-03-20 00:00:00'));
+        // Boston
+        $location = new Location(42.3333, -71.0833);
+        $toi = new TimeOfInterest(new \DateTime('1988-03-20 00:00:00'));
 
         // Berlin
-        $location = new Location(52.524, 13.411);
-        $toi = new TimeOfInterest(new \DateTime());
+//        $location = new Location(52.524, 13.411);
+//        $toi = new TimeOfInterest(new \DateTime());
 
         $transit = RiseAndSetCalc::getTransit(Sun::class, $location, $toi);
 

@@ -19,7 +19,9 @@ class RiseAndSetCalc
                 $h0 = -0.8333;
                 break;
             case Moon::class:
-                // TODO $h0 for the moon (Meeus 15.1)
+                $T = 0; // TODO $h0 for the moon (Meeus 15.1)
+                $pi = MoonCalc::getEquatorialHorizontalParallax($T);
+                $h0 = 0.7275 * $pi * 0.5667;
                 break;
             default:
                 $h0 = -0.5667;
@@ -33,8 +35,7 @@ class RiseAndSetCalc
         string $objectClass,
         Location $location,
         TimeOfInterest $toi
-    ): float
-    {
+    ): TimeOfInterest {
         /** @var AstronomicalObjectInterface $object */
         $object = new $objectClass();
 
@@ -59,13 +60,13 @@ class RiseAndSetCalc
         $rightAscension3 = SunCalc::getApparentRightAscension($T3);
         $declination3 = SunCalc::getApparentDeclination($T3);
 
-        // TODO
+        // TODO this is from venus example from meeus
         $ra2 = 41.73129;
         $d2 = 18.44092;
 
         $coordinates = $object->getGeocentricEquatorialCoordinates();
-        $ra2 = $coordinates->getRightAscension();
-        $d2 = $coordinates->getDeclination();
+//        $ra2 = $coordinates->getRightAscension();
+//        $d2 = $coordinates->getDeclination();
 
         $h0Rad = deg2rad($h0);
         $d2Rad = deg2rad($d2);
@@ -80,11 +81,17 @@ class RiseAndSetCalc
         $m1 = $m0 - $H0 / 360; // Rise
         $m2 = $m0 + $H0 / 360; // Set
 
-        $jd = $jd0 + $m0;
+
+//var_dump(self::normalize($m0));
+
+        $jd = $jd0 + $m2;
         $toi = new TimeOfInterest();
         $toi->setJulianDay($jd);
 
-        var_dump($location, $toi->getDateTime()->format('Y-m-d H:i:s'));
+        // TODO
+var_dump($toi->getDateTime()->format('Y-m-d H:i:s'));
+
+        return $toi;
     }
 
     public static function normalize(float $number): float
