@@ -12,15 +12,12 @@ use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 // Berlin
-$lat = AngleUtil::angle2dec('52°31\'27.73"');
-$lon = AngleUtil::angle2dec('13°24\'37.91"');
+$lat = 52.524;
+$lon = 13.411;
 $location = new Location($lat, $lon);
 
-// Time of interest
-$dateTime = new \DateTime();
-$toi = new TimeOfInterest($dateTime);
-
 // Create sun
+$toi = new TimeOfInterest();
 $sun = new Sun($toi);
 
 // Ecliptical spherical coordinates
@@ -59,12 +56,14 @@ $altitude = AngleUtil::dec2angle($altitude);
 $distanceAu = SunCalc::getRadiusVector($toi->getJulianCenturiesFromJ2000());
 $distance = SunCalc::getDistanceToEarth($toi->getJulianCenturiesFromJ2000());
 
+$culmination = $sun->getUpperCulmination($location);
+var_dump($culmination);
+
 echo <<<END
 +------------------------------------
-| Moon
+| Sun
 +------------------------------------
-Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
-Observer's location: {$lat}°, {$lon}°
+Date: {$toi->getDateTime()->format('Y-m-d H:i:s')} UTC
 
 Ecliptical longitude: {$eclLon}
 Ecliptical latitude: {$eclLat}
@@ -72,8 +71,10 @@ Right ascension: {$rightAscension}
 Declination: {$declination}
 Distance to earth: {$distanceAu} AU ({$distance} km)
 
+- Seen from earth -
+Observer's location: {$lat}°, {$lon}°
 Azimuth: {$azimuth} (apparent)
 Altitude: {$altitude} (apparent)
-
+Culmination: {$culmination->getDateTime()->format('Y-m-d H:i:s')} UTC
 
 END;
