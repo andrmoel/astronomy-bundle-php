@@ -10,42 +10,6 @@ use PHPUnit\Framework\TestCase;
 class SunTest extends TestCase
 {
     /**
-     * Meeus 28.a
-     */
-    public function testGetMeanLongitude()
-    {
-        $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
-
-        $sun = new Sun($toi);
-        $L = $sun->getMeanLongitude();
-
-        $this->assertEquals(201.80719, round($L, 5));
-    }
-
-    /**
-     * Meeus 25.a
-     */
-    public function testGetMeanAnomaly()
-    {
-        $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
-
-        $sun = new Sun($toi);
-        $M = $sun->getMeanAnomaly();
-
-        $this->assertEquals(278.99397, round($M, 5));
-    }
-
-    public function testGetRadiusVector()
-    {
-        $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
-
-        $sun = new Sun($toi);
-        $R = $sun->getRadiusVector();
-
-        $this->assertEquals(0.99766, round($R, 5));
-    }
-
-    /**
      * Meeus 25.b
      */
     public function testGetGeoCentricEclipticalSphericalCoordinates()
@@ -76,9 +40,10 @@ class SunTest extends TestCase
     }
 
     /**
+     * @test
      * Meeus 25.a
      */
-    public function testGetEquatorialCoordinates()
+    public function getGeocentricEquatorialCoordinatesTest()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
 
@@ -87,9 +52,11 @@ class SunTest extends TestCase
 
         $rightAscension = $geoEquCoordinates->getRightAscension();
         $declination = $geoEquCoordinates->getDeclination();
+        $radiusVector = $geoEquCoordinates->getRadiusVector();
 
         $this->assertEquals(198.38082, round($rightAscension, 5));
-        $this->assertEquals(-7.78542, round($declination, 5)); // TODO Should be -7.78507
+        $this->assertEquals(-7.78507, round($declination, 5));
+        $this->assertEquals(0.99766, round($radiusVector, 5));
     }
 
     // TODO ...
@@ -102,19 +69,10 @@ class SunTest extends TestCase
     }
 
     /**
-     * Meeus 28.a
+     * @test
+     * @throws \Exception
      */
-    public function testGetEquationOfTime()
-    {
-        $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
-
-        $sun = new Sun($toi);
-        $equationOfTime = $sun->getEquationOfTime();
-
-        $this->assertEquals(3.42012, round($equationOfTime, 5)); // TODO Should be 3.427351
-    }
-
-    public function testGetTwilight()
+    public function getTwilightTest()
     {
         $data = array(
             ['2018-09-18 12:00:00', Sun::TWILIGHT_DAY],

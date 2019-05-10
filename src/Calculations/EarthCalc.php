@@ -154,10 +154,10 @@ class EarthCalc implements EarthCalcInterface
     public static function getEquationOfTimeInDegrees(float $T): float
     {
         $L0 = SunCalc::getMeanLongitude($T);
-        $geoEquCoordinates = SunCalc::getApparentGeocentricEquatorialCoordinates($T);
-        $rightAscension = $geoEquCoordinates->getRightAscension();
+        $rightAscension = SunCalc::getApparentRightAscension($T);
 
-//        $rightAscension = 198.378178; // TODO ... higher accurency
+        // TODO Use method with higher accuracy (Meeus p.166) 25.9
+//        $rightAscension = 198.378178;
 
         $dPhi = EarthCalc::getNutationInLongitude($T);
         $e = EarthCalc::getTrueObliquityOfEcliptic($T);

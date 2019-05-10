@@ -52,11 +52,24 @@ class SunCalcTest extends TestCase
      */
     public function getTrueLongitudeTest()
     {
-        $T = -0.072183436002738;
+        $T = -0.072183436;
 
         $o = SunCalc::getTrueLongitude($T);
 
         $this->assertEquals(199.90987, round($o, 5));
+    }
+
+    /**
+     * @test
+     * Meeus 25.a
+     */
+    public function getApparentLongitudeTest()
+    {
+        $T = -0.072183436;
+
+        $o = SunCalc::getApparentLongitude($T);
+
+        $this->assertEquals(199.90894, round($o, 5));
     }
 
     /**
@@ -95,5 +108,31 @@ class SunCalcTest extends TestCase
         $r = SunCalc::getDistanceToEarth($T);
 
         $this->assertEquals(149248103.44, round($r, 2));
+    }
+
+    /**
+     * @test
+     * Meeus 25.a
+     */
+    public function getApparentRightAscensionTest()
+    {
+        $T = -0.072183436002738;
+
+        $rightAscension = SunCalc::getApparentRightAscension($T);
+
+        $this->assertEquals(198.38082, round($rightAscension, 5));
+    }
+
+    /**
+     * @test
+     * Meeus 25.a
+     */
+    public function getApparentDeclinationTest()
+    {
+        $T = -0.072183436002738;
+
+        $declination = SunCalc::getApparentDeclination($T);
+
+        $this->assertEquals(-7.78507, round($declination, 5));
     }
 }

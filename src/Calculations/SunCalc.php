@@ -2,7 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
@@ -68,6 +68,19 @@ class SunCalc
         return $o;
     }
 
+    public static function getApparentLongitude(float $T): float
+    {
+        // Meeus 25.5
+        $o = self::getTrueLongitude($T);
+
+        $omega = 125.04 - 1934.136 * $T;
+        $omegaRad = deg2rad($omega);
+
+        $lon = $o - 0.00569 - 0.00478 * sin($omegaRad);
+
+        return $lon;
+    }
+
     public static function getEquationOfCenter(float $T): float
     {
         $M = self::getMeanAnomaly($T);
@@ -105,18 +118,16 @@ class SunCalc
         return $r;
     }
 
-    public static function getApparentGeocentricEquatorialCoordinates(float $T): GeocentricEquatorialCoordinates
+    public static function getApparentRightAscension(float $T): float
     {
-        // TODO Use method with higher accuracy (Meeus p.166)
-        $o = self::getTrueLongitude($T);
-
-        $O = 125.04 - 1934.136 * $T;
-        $ORad = deg2rad($O);
-        $lon = $o - 0.00569 - 0.00478 * sin($ORad);
+        // TODO Use method with higher accuracy (Meeus p.166) 25.9
+        $lon = self::getApparentLongitude($T);
         $lonRad = deg2rad($lon);
 
         // Meeus 25.8 - Corrections
         $e = EarthCalc::getMeanObliquityOfEcliptic($T);
+        $O = 125.04 - 1934.136 * $T;
+        $ORad = deg2rad($O);
         $e = $e + 0.00256 * cos($ORad);
         $eRad = deg2rad($e);
 
@@ -124,22 +135,41 @@ class SunCalc
         $rightAscension = atan2(cos($eRad) * sin($lonRad), cos($lonRad));
         $rightAscension = AngleUtil::normalizeAngle(rad2deg($rightAscension));
 
+        return $rightAscension;
+    }
+
+    public static function getApparentDeclination(float $T): float
+    {
+        // TODO Use method with higher accuracy (Meeus p.166) 25.9
+        $lon = self::getApparentLongitude($T);
+        $lonRad = deg2rad($lon);
+
+        // Meeus 25.8 - Corrections
+        $e = EarthCalc::getMeanObliquityOfEcliptic($T);
+        $O = 125.04 - 1934.136 * $T;
+        $ORad = deg2rad($O);
+        $e = $e + 0.00256 * cos($ORad);
+        $eRad = deg2rad($e);
+
         // Meeus 25.7
         $declination = asin(sin($eRad) * sin($lonRad));
         $declination = rad2deg($declination);
 
-        $radiusVector = self::getRadiusVector($T);
-
-        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
+        return $declination;
     }
 
-    public static function getRightAscension(float $T): float
+    // TODO ...
+    public static function getGeocentricRectangularCoordinates(float $T): GeocentricEclipticalRectangularCoordinates
     {
+        $R = self::getRadiusVector($T);
+        $e0 = EarthCalc::getMeanObliquityOfEcliptic($T);
+        $e0Rad = deg2rad($e0);
 
-    }
+        // Meeus 26.1
+        $X = $R * cos($bRad) * cos($oRad);
+        $Y = $R * (cos($bRad) * sin($oRad) * cos($e0Rad) - sin($bRad) * sin($e0Rad));
+        $Z = $R * (cos($bRad) * sin($oRad) * sin($e0Rad) + sin($bRad) * cos($e0Rad));
 
-    public static function getApparentRightAscension(float $T): float
-    {
-
+        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
     }
 }
