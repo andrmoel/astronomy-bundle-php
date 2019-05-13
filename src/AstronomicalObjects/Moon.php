@@ -36,14 +36,14 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
     {
         return $this
             ->getGeocentricEclipticalSphericalCoordinates()
-            ->getGeocentricEquatorialCoordinates($this->toi);
+            ->getGeocentricEquatorialSphericalCoordinates($this->T);
     }
 
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
         return $this
             ->getGeocentricEquatorialSphericalCoordinates()
-            ->getLocalHorizontalCoordinates($location, $this->toi);
+            ->getLocalHorizontalCoordinates($location, $this->T);
     }
 
     public function getIlluminatedFraction(): float

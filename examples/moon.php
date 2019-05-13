@@ -34,7 +34,7 @@ $eclLat = AngleUtil::dec2angle($eclLat);
 $radiusVector = $geoEclSphCoordinates->getRadiusVector();
 
 // Equatorial coordinates
-$geoEqaCoordinates = $moon->getGeocentricEquatorialCoordinates();
+$geoEqaCoordinates = $moon->getGeocentricEquatorialSphericalCoordinates();
 
 $corrections = new GeocentricEquatorialCorrections($toi);
 $geoEqaCoordinates = $corrections->correctCoordinates($geoEqaCoordinates);

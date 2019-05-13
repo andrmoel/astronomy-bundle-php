@@ -2,14 +2,15 @@
 
 include __DIR__ . '/../vendor/autoload.php';
 
-use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
 use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
-use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
+use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+
+date_default_timezone_set('UTC');
 
 // Berlin
 $location = new Location(52.524, 13.411);

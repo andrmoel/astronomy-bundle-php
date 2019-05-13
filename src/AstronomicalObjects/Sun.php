@@ -10,6 +10,7 @@ use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinate
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
@@ -105,14 +106,18 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
 
         $radiusVector = SunCalc::getDistanceToEarth($T);
 
-        return new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $radiusVector);
+        $coord = new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $radiusVector);
+        $c = new GeocentricEquatorialCorrections($this->toi);
+
+        $coord = $c->correctCoordinates($coord);
+        return $coord;
     }
 
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
         return $this
             ->getGeocentricEquatorialSphericalCoordinates()
-            ->getLocalHorizontalCoordinates($location, $this->toi);
+            ->getLocalHorizontalCoordinates($location, $this->T);
     }
 
     public function getTwilight(Location $location): int
