@@ -29,6 +29,8 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
         $earth = new Earth($this->toi);
         $helEclSphCoordinates = $earth->getHeliocentricEclipticalSphericalCoordinates();
 
+        // TODO Lighttime corrections / See getApparentHelopcentricEclipticalSphericalCoordinates
+
         // Meeus 25 higher accuracy
         $lon = $helEclSphCoordinates->getLongitude() + 180;
         $lat = $helEclSphCoordinates->getLatitude() * -1;

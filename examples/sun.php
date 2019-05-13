@@ -31,10 +31,11 @@ $eclLat = AngleUtil::dec2angle($eclLat);
 $radiusVector = $geoEclSphCoordinates->getRadiusVector();
 
 // Equatorial coordinates
-$geoEqaCoordinates = $sun->getGeocentricEquatorialCoordinates();
+$geoEqaCoordinates = $sun->getGeocentricEquatorialSphericalCoordinates();
 
-$corrections = new GeocentricEquatorialCorrections($toi);
-$geoEqaCoordinates = $corrections->correctCoordinates($geoEqaCoordinates);
+// TODO Corrections must be applied in sun class
+//$corrections = new GeocentricEquatorialCorrections($toi);
+//$geoEqaCoordinates = $corrections->correctCoordinates($geoEqaCoordinates);
 
 $rightAscension = $geoEqaCoordinates->getRightAscension();
 $rightAscension = AngleUtil::dec2time($rightAscension);

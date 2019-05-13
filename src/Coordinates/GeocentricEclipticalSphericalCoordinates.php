@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
@@ -35,8 +36,9 @@ class GeocentricEclipticalSphericalCoordinates
         return $this->radiusVector;
     }
 
-    public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
+        // TODO First transform tu equatorial
         $lonRad = deg2rad($this->longitude);
         $latRad = deg2rad($this->latitude);
 
@@ -44,10 +46,12 @@ class GeocentricEclipticalSphericalCoordinates
         $Y = $this->radiusVector * cos($latRad) * sin($lonRad);
         $Z = $this->radiusVector * sin($latRad);
 
-        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+        return new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
     }
 
-    public function getGeocentricEquatorialCoordinates(TimeOfInterest $toi): GeocentricEquatorialCoordinates
+    public function getGeocentricEquatorialSphericalCoordinates(
+        TimeOfInterest $toi
+    ): GeocentricEquatorialSphericalCoordinates
     {
         $T = $toi->getJulianCenturiesFromJ2000();
 
@@ -68,6 +72,12 @@ class GeocentricEclipticalSphericalCoordinates
         $declination = asin(sin($latRad) * cos($epsRad) + cos($latRad) * sin($epsRad) * sin($lonRad));
         $declination = rad2deg($declination);
 
-        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $this->radiusVector);
+        return new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $this->radiusVector);
+    }
+
+    public function getLocalHorizontalCoordinates(Location $location, TimeOfInterest $toi): LocalHorizontalCoordinates
+    {
+        // TODO Implememt
+        return new LocalHorizontalCoordinates(0, 0);
     }
 }

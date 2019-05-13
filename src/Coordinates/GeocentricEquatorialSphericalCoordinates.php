@@ -53,6 +53,20 @@ class GeocentricEquatorialSphericalCoordinates
         return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $this->radiusVector);
     }
 
+    // TODO Test it (Stolen from wikipedia)
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
+    {
+        $raRad = deg2rad($this->rightAscension);
+        $dRad = deg2rad($this->declination);
+        $R = $this->radiusVector;
+
+        $X = cos($dRad)  * cos($raRad) * $R;
+        $Y = cos($dRad) * sin($raRad) * $R;
+        $Z = sin($dRad) * $R;
+
+        return new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
+    }
+
     public function getLocalHorizontalCoordinates(Location $location, TimeOfInterest $toi): LocalHorizontalCoordinates
     {
         $latRad = $location->getLatitudeRad();

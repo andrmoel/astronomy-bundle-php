@@ -34,6 +34,12 @@ class HeliocentricEquatorialRectangularCoordinates
         return $this->Z;
     }
 
+    public function getHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
+    {
+        // TODO
+        return new HeliocentricEclipticalRectangularCoordinates(0, 0, 0);
+    }
+
     public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
     {
         // Meeus 33.2
@@ -49,9 +55,15 @@ class HeliocentricEquatorialRectangularCoordinates
         return new HeliocentricEclipticalSphericalCoordinates($longitude, $latitude, $radiusVector);
     }
 
-    public function getGeocentricEclipticalRectangularCoordinates(
+    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
+    {
+        // TODO
+        return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
+    }
+
+    public function getGeocentricEquatorialRectangularCoordinates(
         TimeOfInterest $toi
-    ): GeocentricEclipticalRectangularCoordinates
+    ): GeocentricEquatorialRectangularCoordinates
     {
         // Heliocentric coordinates of earth
         $earth = new Earth($toi);
@@ -66,5 +78,11 @@ class HeliocentricEquatorialRectangularCoordinates
         $Z = $this->Z - $Z0;
 
         return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+    }
+
+    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
+    {
+        // TODO
+        return new GeocentricEquatorialSphericalCoordinates(0, 0, 0);
     }
 }

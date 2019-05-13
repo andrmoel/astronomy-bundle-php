@@ -49,9 +49,21 @@ class HeliocentricEclipticalRectangularCoordinates
         return new HeliocentricEclipticalSphericalCoordinates($longitude, $latitude, $radiusVector);
     }
 
-    public function getGeocentricEclipticalRectangularCoordinates(
+    public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates
+    {
+        // TODO
+        return new HeliocentricEquatorialRectangularCoordinates(0, 0, 0);
+    }
+
+    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
+    {
+        // TODO
+        return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
+    }
+
+    public function getGeocentricEquatorialRectangularCoordinates(
         TimeOfInterest $toi
-    ): GeocentricEclipticalRectangularCoordinates
+    ): GeocentricEquatorialRectangularCoordinates
     {
         // Heliocentric coordinates of earth
         $earth = new Earth($toi);
@@ -65,6 +77,12 @@ class HeliocentricEclipticalRectangularCoordinates
         $Y = $this->y - $Y0;
         $Z = $this->z - $Z0;
 
-        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+        return new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
+    }
+
+    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
+    {
+        // TODO
+        return new GeocentricEquatorialSphericalCoordinates(0, 0, 0);
     }
 }

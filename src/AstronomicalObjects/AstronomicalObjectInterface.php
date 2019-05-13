@@ -12,10 +12,14 @@ use Andrmoel\AstronomyBundle\TimeOfInterest;
 interface AstronomicalObjectInterface
 {
     public function setTimeOfInterest(TimeOfInterest $toi): void;
+
     public function getTimeOfInterest(): TimeOfInterest;
 
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates;
+
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates;
+
     public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates;
+
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates;
 }
