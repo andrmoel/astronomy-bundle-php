@@ -77,7 +77,7 @@ class HeliocentricEquatorialRectangularCoordinates
         $Y = $this->Y - $Y0;
         $Z = $this->Z - $Z0;
 
-        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+        return new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
     }
 
     public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
