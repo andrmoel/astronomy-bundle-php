@@ -44,7 +44,7 @@ class RiseAndSetCalc
         $m = $this->getApproximatedM(self::EVENT_TYPE_RISE);
         $dm = $this->getCorrectionForM(self::EVENT_TYPE_RISE);
 
-        if ($m === NAN) {
+        if (is_nan($m)) {
             return null;
         }
 
@@ -70,7 +70,7 @@ class RiseAndSetCalc
         $m = $this->getApproximatedM(self::EVENT_TYPE_SET);
         $dm = $this->getCorrectionForM(self::EVENT_TYPE_SET);
 
-        if ($m === NAN) {
+        if (is_nan($m)) {
             return null;
         }
 
@@ -152,12 +152,6 @@ class RiseAndSetCalc
 
         // Meeus 15.2
         $m0 = ($ra + $L - $T0) / 360; // Transit
-//        if ($m0 < 0) {
-//            $m0 += 1;
-//        }
-//        if ($m0 > 1) {
-//            $m0 -= 1;
-//        }
 
         switch ($eventType) {
             case self::EVENT_TYPE_TRANSIT:
@@ -171,12 +165,7 @@ class RiseAndSetCalc
                 break;
         }
 
-        if ($m < 0) {
-            $m += 1;
-        }
-        if ($m > 1) {
-            $m -= 1;
-        }
+        // TODO $m must be between 0 and 1 ?
 
         return $m;
     }

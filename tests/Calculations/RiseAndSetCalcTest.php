@@ -24,8 +24,7 @@ class RiseAndSetCalcTest extends TestCase
 
         // Berlin
         $location = new Location(52.524, 13.411);
-        $location = new Location(70.3, -26.482);
-        $toi = new TimeOfInterest(new \DateTime('2019-01-01'));
+        $toi = new TimeOfInterest();
 
         $ras = new RiseAndSetCalc(Sun::class, $location, $toi);
 
