@@ -6,7 +6,7 @@ use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class GeocentricEquatorialCoordinates
+class GeocentricEquatorialSphericalCoordinates
 {
     private $rightAscension = 0;
     private $declination = 0;
