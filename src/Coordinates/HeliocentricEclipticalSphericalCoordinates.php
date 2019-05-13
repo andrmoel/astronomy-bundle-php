@@ -69,10 +69,11 @@ class HeliocentricEclipticalSphericalCoordinates
         $earth = new Earth($toi);
         $hcEclSphCoordinatesEarth = $earth->getHeliocentricEclipticalSphericalCoordinates();
         $L0 = $hcEclSphCoordinatesEarth->getLongitude();
-        $L0Rad = deg2rad($L0);
         $B0 = $hcEclSphCoordinatesEarth->getLatitude();
-        $B0Rad = deg2rad($B0);
         $R0 = $hcEclSphCoordinatesEarth->getRadiusVector();
+
+        $B0Rad = deg2rad($B0);
+        $L0Rad = deg2rad($L0);
 
         // Meeus 33.1
         $X = $R * cos($BRad) * cos($LRad) - $R0 * cos($B0Rad) * cos($L0Rad);

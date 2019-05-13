@@ -2,8 +2,9 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
 use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class GeocentricEquatorialSphericalCoordinates
@@ -34,23 +35,23 @@ class GeocentricEquatorialSphericalCoordinates
         return $this->radiusVector;
     }
 
-    public function getGeocentricEclipticalSphericalCoordinates(
-        float $obliquityOfEcliptic
-    ): GeocentricEclipticalSphericalCoordinates
+    public function getGeocentricEclipticalSphericalCoordinates(float $T): GeocentricEclipticalSphericalCoordinates
     {
-        $a = deg2rad($this->rightAscension);
-        $d = deg2rad($this->declination);
-        $eps = deg2rad($obliquityOfEcliptic);
+        $eps = EarthCalc::getTrueObliquityOfEcliptic($T);
+        $raRad = deg2rad($this->rightAscension);
+        $dRad = deg2rad($this->declination);
+        $epsRad = deg2rad($eps);
 
         // Meeus 13.1
-        $lon = atan((sin($a) * cos($eps) + tan($d) * sin($eps)) / cos($a));
+        $lon = atan((sin($raRad) * cos($epsRad) + tan($dRad) * sin($epsRad)) / cos($raRad));
         $lon = rad2deg($lon) + 180; // TODO warum + 180? Laut buch nicht nötig...
+        $lon = AngleUtil::normalizeAngle($lon);
 
         // Meeus 13.2
-        $lat = asin(sin($d) * cos($eps) - cos($d) * sin($eps) * sin($a));
+        $lat = asin(sin($dRad) * cos($epsRad) - cos($dRad) * sin($epsRad) * sin($raRad));
         $lat = rad2deg($lat);
 
-        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $this->radiusVector);
+        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $this->radiusVector);
     }
 
     // TODO Test it (Stolen from wikipedia)
@@ -67,25 +68,27 @@ class GeocentricEquatorialSphericalCoordinates
         return new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
     }
 
-    public function getLocalHorizontalCoordinates(Location $location, TimeOfInterest $toi): LocalHorizontalCoordinates
+    public function getLocalHorizontalCoordinates(Location $location, float $T): LocalHorizontalCoordinates
     {
-        $latRad = $location->getLatitudeRad();
-        $lon = $location->getLongitudePositiveWest();
-        $agmst = $toi->getApparentGreenwichMeanSiderealTime(); // TODO Apparent oder doch lieber mean?
-        $d = deg2rad($this->declination);
+        $lat = $location->getLatitude();
+        $L = $location->getLongitudePositiveWest();
+        $GAST = TimeCalc::getGreenwichApparentSiderealTime($T);
 
-        // Calculate hour angle
-        $H = $agmst - $lon - $this->rightAscension;
+        $dRad = deg2rad($this->declination);
+        $latRad = deg2rad($lat);
+
+        // Calculate hour angle // TODO extra function for hour angle
+        $H = $GAST - $L - $this->rightAscension;
         $H = AngleUtil::normalizeAngle($H);
-        $H = deg2rad($H);
+        $HRad = deg2rad($H);
 
         // Meeus 13.5
-        $azimuth = atan(sin($H) / (cos($H) * sin($latRad) - tan($d) * cos($latRad)));
-        $azimuth = rad2deg($azimuth) + 180; // Add 180° to get azimuth from north (else it is from south)
+        $azimuth = atan(sin($HRad) / (cos($HRad) * sin($latRad) - tan($dRad) * cos($latRad)));
+        $azimuth = rad2deg($azimuth);
         $azimuth = AngleUtil::normalizeAngle($azimuth);
 
         // Meeus 13.6
-        $altitude = asin(sin($latRad) * sin($d) + cos($latRad) * cos($d) * cos($H));
+        $altitude = asin(sin($latRad) * sin($dRad) + cos($latRad) * cos($dRad) * cos($HRad));
         $altitude = rad2deg($altitude);
 
         return new LocalHorizontalCoordinates($azimuth, $altitude);
