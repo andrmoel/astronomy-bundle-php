@@ -6,15 +6,15 @@ use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class Sun extends AstronomicalObject
+class Sun extends AstronomicalObject implements AstronomicalObjectInterface
 {
     const TWILIGHT_DAY = 0;
     const TWILIGHT_CIVIL = 1;
@@ -38,7 +38,36 @@ class Sun extends AstronomicalObject
         return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
     }
 
-    public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
+    /**
+     * @deprecated TODO ... Not yet working, perfectly
+     */
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
+    {
+        $T = $this->T;
+
+        $R = SunCalc::getRadiusVector($T);
+        $eps = EarthCalc::getTrueObliquityOfEcliptic($T);
+        $epsRad = deg2rad($eps);
+        $L0 = SunCalc::getMeanLongitude($T);
+        $C = SunCalc::getEquationOfCenter($T);
+        $M = SunCalc::getMeanAnomaly($T);
+        $e = EarthCalc::getEccentricity($T);
+
+        // True longitude
+        $o = $L0 + $C;
+        $oRad = deg2rad($o);
+
+        // TODO How do we calculate this one?
+        $bRad = AngleUtil::angle2dec('0°0\'0.62"');
+
+        $X = $R * cos($bRad) * cos($oRad);
+        $Y = $R * (cos($bRad) * sin($oRad) * cos($epsRad) - sin($bRad) * sin($epsRad));
+        $Z = $R * (cos($bRad) * sin($oRad) * sin($epsRad) + sin($bRad) * cos($epsRad));
+
+        return new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
+    }
+
+    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
     {
         // TODO Use method with higher accuracy (Meeus p.166)
         $T = $this->T;
@@ -74,44 +103,13 @@ class Sun extends AstronomicalObject
 
         $radiusVector = SunCalc::getDistanceToEarth($T);
 
-        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
-    }
-
-    /**
-     * @return GeocentricEclipticalRectangularCoordinates
-     * @throws \Exception
-     * @deprecated Not yet working, perfectly
-     */
-    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
-    {
-        $T = $this->T;
-
-        $R = SunCalc::getRadiusVector($T);
-        $eps = EarthCalc::getTrueObliquityOfEcliptic($T);
-        $epsRad = deg2rad($eps);
-        $L0 = SunCalc::getMeanLongitude($T);
-        $C = SunCalc::getEquationOfCenter($T);
-        $M = SunCalc::getMeanAnomaly($T);
-        $e = EarthCalc::getEccentricity($T);
-
-        // True longitude
-        $o = $L0 + $C;
-        $oRad = deg2rad($o);
-
-        // TODO How do we calculate this one?
-        $bRad = AngleUtil::angle2dec('0°0\'0.62"');
-
-        $X = $R * cos($bRad) * cos($oRad);
-        $Y = $R * (cos($bRad) * sin($oRad) * cos($epsRad) - sin($bRad) * sin($epsRad));
-        $Z = $R * (cos($bRad) * sin($oRad) * sin($epsRad) + sin($bRad) * cos($epsRad));
-
-        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+        return new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $radiusVector);
     }
 
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
         return $this
-            ->getGeocentricEquatorialCoordinates()
+            ->getGeocentricEquatorialSphericalCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->toi);
     }
 

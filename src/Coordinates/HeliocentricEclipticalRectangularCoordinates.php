@@ -8,43 +8,43 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class HeliocentricEclipticalRectangularCoordinates
 {
-    private $X = 0;
-    private $Y = 0;
-    private $Z = 0;
+    private $x = 0;
+    private $y = 0;
+    private $z = 0;
 
-    public function __construct(float $X, float $Y, float $Z)
+    public function __construct(float $x, float $y, float $z)
     {
-        $this->X = $X;
-        $this->Y = $Y;
-        $this->Z = $Z;
+        $this->x = $x;
+        $this->y = $y;
+        $this->z = $z;
     }
 
     public function getX(): float
     {
-        return $this->X;
+        return $this->x;
     }
 
     public function getY(): float
     {
-        return $this->Y;
+        return $this->y;
     }
 
     public function getZ(): float
     {
-        return $this->Z;
+        return $this->z;
     }
 
     public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
     {
         // Meeus 33.2
-        $longitude = atan($this->Y / $this->X);
+        $longitude = atan($this->y / $this->x);
         $longitude = rad2deg($longitude);
         $longitude = AngleUtil::normalizeAngle($longitude);
 
-        $latitude = atan($this->Z / sqrt(pow($this->X, 2) + pow($this->Y, 2)));
+        $latitude = atan($this->z / sqrt(pow($this->x, 2) + pow($this->y, 2)));
         $latitude = rad2deg($latitude);
 
-        $radiusVector = sqrt(pow($this->X, 2) + pow($this->Y, 2) + pow($this->Z, 2));
+        $radiusVector = sqrt(pow($this->x, 2) + pow($this->y, 2) + pow($this->z, 2));
 
         return new HeliocentricEclipticalSphericalCoordinates($longitude, $latitude, $radiusVector);
     }
@@ -61,9 +61,9 @@ class HeliocentricEclipticalRectangularCoordinates
         $Y0 = $hcEclRecCoordinatesEarth->getY();
         $Z0 = $hcEclRecCoordinatesEarth->getZ();
 
-        $X = $this->X - $X0;
-        $Y = $this->Y - $Y0;
-        $Z = $this->Z - $Z0;
+        $X = $this->x - $X0;
+        $Y = $this->y - $Y0;
+        $Z = $this->z - $Z0;
 
         return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
     }
