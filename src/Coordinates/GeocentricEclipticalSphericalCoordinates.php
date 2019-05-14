@@ -9,7 +9,6 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class GeocentricEclipticalSphericalCoordinates
 {
-
     protected $latitude = 0.0;
     protected $longitude = 0.0;
     protected $radiusVector = 0.0;
