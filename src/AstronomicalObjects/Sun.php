@@ -33,7 +33,7 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
         // TODO Lighttime corrections / See getApparentHelopcentricEclipticalSphericalCoordinates
 
         // Meeus 25 higher accuracy
-        $lon = $helEclSphCoordinates->getLongitude() + 180;
+        $lon = $helEclSphCoordinates->getLongitude() + 180; // TODO kann > 360° sein
         $lat = $helEclSphCoordinates->getLatitude() * -1;
 
         $radiusVector = SunCalc::getDistanceToEarth($T);

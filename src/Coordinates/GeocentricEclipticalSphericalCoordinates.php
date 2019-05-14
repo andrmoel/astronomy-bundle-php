@@ -36,18 +36,10 @@ class GeocentricEclipticalSphericalCoordinates
         return $this->radiusVector;
     }
 
-    // TODO Check
+    // TODO
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
-        // TODO First transform to equatorial
-        $latRad = deg2rad($this->latitude);
-        $lonRad = deg2rad($this->longitude);
-
-        $X = $this->radiusVector * cos($latRad) * cos($lonRad);
-        $Y = $this->radiusVector * cos($latRad) * sin($lonRad);
-        $Z = $this->radiusVector * sin($latRad);
-
-        return new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
+        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
     }
 
     public function getGeocentricEquatorialSphericalCoordinates(float $T): GeocentricEquatorialSphericalCoordinates
