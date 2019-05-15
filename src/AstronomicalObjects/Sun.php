@@ -53,6 +53,7 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
 
         // Meeus 25.10
         $lon = $lon + $dPhi - 0.005691611111 / $R;
+        $lon = AngleUtil::normalizeAngle($lon);
 
         return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $R);
     }
