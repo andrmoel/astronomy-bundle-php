@@ -5,67 +5,68 @@ namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObgetGeocentricEclipticalSp
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class SunTest extends TestCase
 {
     /**
+     * @test
      * Meeus 25.b
      */
-    public function testGetGeoCentricEclipticalSphericalCoordinates()
+    public function getGeocentricEclipticalSphericalCoordinatesTest()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
 
         $sun = new Sun($toi);
-        $geoEclSphCoordinates = $sun->getGeoCentricEclipticalSphericalCoordinates();
+        $geoEclSphCoord = $sun->getGeocentricEclipticalSphericalCoordinates();
 
-        $lon = $geoEclSphCoordinates->getLongitude();
-        $lat = $geoEclSphCoordinates->getLatitude();
+        $lat = $geoEclSphCoord->getLatitude();
+        $lon = $geoEclSphCoord->getLongitude();
 
-        $this->assertEquals(199.9073, round($lon, 5));
-        $this->assertEquals(0.00021, round($lat, 5));
+        $this->assertEquals(0.0002, round($lat, 5));
+        $this->assertEquals(199.90599, round($lon, 5));
+    }
 
-        /*
-         * TODO ...
-         *
-         * Correct coordinates
-         * Theta = 199°54'26".18
-         * lon = 199°54'21".56
-         * lat = 0°0°0".72
-         * R = 0.99760853
-         *
-         * appRa = 13h13m30s.749
-         * appD = -7°47'01".74
-         */
+    /**
+     * @test
+     * Meeus 26.a
+     */
+    public function getGeocentricEquatorialRectangularCoordinatesTest()
+    {
+        $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
+
+        $sun = new Sun($toi);
+        $geoEquRecCoordinates = $sun->getGeocentricEquatorialRectangularCoordinates();
+
+        $X = $geoEquRecCoordinates->getX();
+        $Y = $geoEquRecCoordinates->getY();
+        $Z = $geoEquRecCoordinates->getZ();
+
+        // TODO ...
+//        $this->assertEquals(-0.9379952, round($X, 7));
+//        $this->assertEquals(-0.3116544, round($Y, 7));
+//        $this->assertEquals(-0.1351215, round($Z, 7));
     }
 
     /**
      * @test
      * Meeus 25.a
      */
-    public function getGeocentricEquatorialCoordinatesTest()
+    public function getGeocentricEquatorialSphericalCoordinatesTest()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
 
         $sun = new Sun($toi);
-        $geoEquCoordinates = $sun->getGeocentricEquatorialCoordinates();
+        $geoEquCoordinates = $sun->getGeocentricEquatorialSphericalCoordinates();
 
         $rightAscension = $geoEquCoordinates->getRightAscension();
         $declination = $geoEquCoordinates->getDeclination();
         $radiusVector = $geoEquCoordinates->getRadiusVector();
 
-        $this->assertEquals(198.38082, round($rightAscension, 5));
-        $this->assertEquals(-7.78507, round($declination, 5));
-        $this->assertEquals(0.99766, round($radiusVector, 5));
-    }
-
-    // TODO ...
-    public function XtestGetRectangularGeocentricEquatorialCoordinates()
-    {
-        $toi = new TimeOfInterest(new \DateTime('1992-10-13 00:00:00'));
-
-        $sun = new Sun($toi);
-        $equatorialCoordinates = $sun->getRectangularGeocentricEquatorialCoordinates();
+        $this->assertEquals(198.37812, round($rightAscension, 5));
+        $this->assertEquals(-7.78382, round($declination, 5));
+        $this->assertEquals(0.99761, round($radiusVector, 5));
     }
 
     /**

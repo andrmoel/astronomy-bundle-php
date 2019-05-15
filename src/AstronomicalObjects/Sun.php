@@ -28,89 +28,75 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
         $T = $this->T;
 
         $earth = new Earth($this->toi);
-        $helEclSphCoordinates = $earth->getHeliocentricEclipticalSphericalCoordinates();
+        $helEclSphCoord = $earth->getHeliocentricEclipticalSphericalCoordinates();
 
-        // TODO Lighttime corrections / See getApparentHelopcentricEclipticalSphericalCoordinates
+        $B = $helEclSphCoord->getLatitude();
+        $L = $helEclSphCoord->getLongitude();
+        $R = $helEclSphCoord->getRadiusVector();
 
-        // Meeus 25 higher accuracy
-        $lon = $helEclSphCoordinates->getLongitude() + 180; // TODO kann > 360° sein
-        $lat = $helEclSphCoordinates->getLatitude() * -1;
+        $beta = -1 * $B;
+        $Theta = $L + 180;
 
-        $radiusVector = SunCalc::getDistanceToEarth($T);
+        // Convert to FK5lon
+        $lonC = $Theta - 1.397 * $T - 0.00031 * pow($T, 2);
+        $lonCRad = deg2rad($lonC);
 
-        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
+        // Meeus 25.9
+        $dTheta = -1 * AngleUtil::angle2dec('0°0\'0.09033"');
+        $dBeta = AngleUtil::angle2dec('0°0\'0.03916"') * (cos($lonCRad) - sin($lonCRad));
+
+        $lat = $beta + $dBeta;
+        $lon = $Theta + $dTheta;
+
+        // Corrections
+        $dPhi = EarthCalc::getNutationInLongitude($T);
+
+        // Meeus 25.10
+        $lon = $lon + $dPhi - 0.005691611111 / $R;
+
+        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $R);
     }
 
-    /**
-     * @deprecated TODO ... Not yet working, perfectly
-     */
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
         $T = $this->T;
 
+        // TODO ::::::
+        $earth = new Earth($this->toi);
+        $helEclSphCoord = $earth->getHeliocentricEclipticalSphericalCoordinates();
+        $geoEquSphCoord = $helEclSphCoord->getGeocentricEquatorialRectangularCoordinates($this->toi);
+
+// TODO ..........
+        $geoEclSphCoord = $this->getGeocentricEclipticalSphericalCoordinates();
+
         $R = SunCalc::getRadiusVector($T);
-        $eps = EarthCalc::getTrueObliquityOfEcliptic($T);
-        $epsRad = deg2rad($eps);
-        $L0 = SunCalc::getMeanLongitude($T);
-        $C = SunCalc::getEquationOfCenter($T);
-        $M = SunCalc::getMeanAnomaly($T);
-        $e = EarthCalc::getEccentricity($T);
+        $eps0 = EarthCalc::getMeanObliquityOfEcliptic($T);
 
         // True longitude
-        $o = $L0 + $C;
-        $oRad = deg2rad($o);
+        $lat = $geoEclSphCoord->getLatitude();
+        $lon = $geoEclSphCoord->getLongitude();
 
-        // TODO How do we calculate this one?
-        $bRad = AngleUtil::angle2dec('0°0\'0.62"');
+        // TODO Calculate
+        $R = 0.99760775;
+        $lat = AngleUtil::angle2dec('0°0\'0.62"');
+        $lon = 199.907347;
 
-        $X = $R * cos($bRad) * cos($oRad);
-        $Y = $R * (cos($bRad) * sin($oRad) * cos($epsRad) - sin($bRad) * sin($epsRad));
-        $Z = $R * (cos($bRad) * sin($oRad) * sin($epsRad) + sin($bRad) * cos($epsRad));
+        $epsRad = deg2rad($eps0);
+        $latRad = deg2rad($lat);
+        $lonRad = deg2rad($lon);
+
+        $X = $R * cos($latRad) * cos($lonRad);
+        $Y = $R * (cos($latRad) * sin($lonRad) * cos($epsRad) - sin($latRad) * sin($epsRad));
+        $Z = $R * (cos($latRad) * sin($lonRad) * sin($epsRad) + sin($latRad) * cos($epsRad));
 
         return new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
     }
 
     public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
     {
-        // TODO Use method with higher accuracy (Meeus p.166)
-        $T = $this->T;
-
-        $L0 = SunCalc::getMeanLongitude($T);
-        $M = SunCalc::getMeanAnomaly($T);
-
-        $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M))
-            + (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M))
-            + 0.000289 * sin(3 * deg2rad($M));
-
-        // True longitude (o) and true anomaly (v)
-        $o = $L0 + $C;
-        $oRad = deg2rad($o);
-
-        $O = 125.04 - 1934.136 * $T;
-        $ORad = deg2rad($O);
-        $lon = $o - 0.00569 - 0.00478 * sin($ORad);
-        $lonRad = deg2rad($lon);
-
-        // Meeus 25.8 - Corrections
-        $e = EarthCalc::getMeanObliquityOfEcliptic($T);
-        $e = $e + 0.00256 * cos($ORad);
-        $eRad = deg2rad($e);
-
-        // Meeus 25.6
-        $rightAscension = atan2(cos($eRad) * sin($lonRad), cos($lonRad));
-        $rightAscension = AngleUtil::normalizeAngle(rad2deg($rightAscension));
-
-        // Meeus 25.7
-        $declination = asin(sin($eRad) * sin($oRad));
-        $declination = rad2deg($declination);
-
-        $radiusVector = SunCalc::getDistanceToEarth($T);
-
-        $coord = new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $radiusVector);
-        $c = new GeocentricEquatorialCorrections($this->toi);
-
-        $coord = $c->correctCoordinates($coord);
-        return $coord;
+        return $this
+            ->getGeocentricEclipticalSphericalCoordinates()
+            ->getGeocentricEquatorialSphericalCoordinates($this->T);
     }
 
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
