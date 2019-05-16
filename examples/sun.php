@@ -44,8 +44,9 @@ $altitude = AngleUtil::dec2angle($altitude);
 $distanceAu = SunCalc::getRadiusVector($toi->getJulianCenturiesFromJ2000());
 $distance = SunCalc::getDistanceToEarth($toi->getJulianCenturiesFromJ2000());
 
+$rise = $sun->getSunrise($location);
 $culmination = $sun->getUpperCulmination($location);
-var_dump($culmination);
+$rise = $sun->getSunset($location);
 
 echo <<<END
 +------------------------------------
@@ -65,5 +66,6 @@ Azimuth: {$azimuth} (apparent)
 Altitude: {$altitude} (apparent)
 Sunrise: {$sun->getSunrise($location)->getDateTime()->format('Y-m-d H:i:s')} UTC
 Culmination: {$culmination->getDateTime()->format('Y-m-d H:i:s')} UTC
+Sunset: {$sun->getSunset($location)->getDateTime()->format('Y-m-d H:i:s')} UTC
 
 END;
