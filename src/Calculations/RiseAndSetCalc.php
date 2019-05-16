@@ -5,7 +5,7 @@ namespace Andrmoel\AstronomyBundle\Calculations;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObjectInterface;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
@@ -153,6 +153,14 @@ class RiseAndSetCalc
         // Meeus 15.2
         $m0 = ($ra + $L - $T0) / 360; // Transit
 
+        if ($m0 < 0) {
+            $m0 += 1;
+        }
+
+        if ($m0 > 1) {
+            $m0 -= 1;
+        }
+
         switch ($eventType) {
             case self::EVENT_TYPE_TRANSIT:
                 $m = $m0;
@@ -163,6 +171,14 @@ class RiseAndSetCalc
             case self::EVENT_TYPE_SET:
                 $m = $m0 + $H0 / 360;
                 break;
+        }
+
+        if ($m < 0) {
+            $m += 1;
+        }
+
+        if ($m > 1) {
+            $m -= 1;
         }
 
         // TODO $m must be between 0 and 1 ?
@@ -193,14 +209,13 @@ class RiseAndSetCalc
 
     private function getGeocentricEquatorialCoordinatesOfAstronomicalObject(
         int $diff = 0
-    ): GeocentricEquatorialCoordinates
-    {
+    ): GeocentricEquatorialSphericalCoordinates {
         $jd0 = $this->toi->getJulianDay0();
         $toi = TimeOfInterest::createFromJulianDay($jd0 + $diff);
 
         $astronomicalObject = clone $this->astronomicalObject;
         $astronomicalObject->setTimeOfInterest($toi);
 
-        return $astronomicalObject->getGeocentricEquatorialCoordinates();
+        return $astronomicalObject->getGeocentricEquatorialSphericalCoordinates();
     }
 }

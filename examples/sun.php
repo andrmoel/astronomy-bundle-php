@@ -4,8 +4,6 @@ include __DIR__ . '/../vendor/autoload.php';
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
 use Andrmoel\AstronomyBundle\Calculations\SunCalc;
-use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
-use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
@@ -16,14 +14,11 @@ date_default_timezone_set('UTC');
 $location = new Location(52.524, 13.411);
 
 // Create sun
-$toi = new TimeOfInterest(new DateTime('2019-05-15 21:07:00'));
+$toi = new TimeOfInterest();
 $sun = new Sun($toi);
 
 // Ecliptical spherical coordinates
 $geoEclSphCoordinates = $sun->getGeocentricEclipticalSphericalCoordinates();
-
-$correctionsEcl = new GeocentricEclipticalSphericalCorrections($toi);
-$geoEclSphCoordinates = $correctionsEcl->correctCoordinates($geoEclSphCoordinates);
 
 $eclLon = $geoEclSphCoordinates->getLongitude();
 $eclLon = AngleUtil::dec2angle($eclLon);
@@ -41,9 +36,6 @@ $declination = AngleUtil::dec2angle($declination);
 
 // Local horizontal coordinates
 $localHorizontalCoordinates = $sun->getLocalHorizontalCoordinates($location);
-
-//$corrections = new LocalHorizontalCorrections();
-//$localHorizontalCoordinates = $corrections->correctAtmosphericRefraction($localHorizontalCoordinates);
 
 $azimuth = $localHorizontalCoordinates->getAzimuth();
 $azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
