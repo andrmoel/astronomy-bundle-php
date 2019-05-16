@@ -33,6 +33,7 @@ class LocalHorizontalCoordinates
         return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
     }
 
+    // TODO
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
         return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
