@@ -2,6 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Calculations\MoonCalc;
 use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
@@ -19,16 +20,20 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
     {
         $T = $this->T;
 
-        $lon = MoonCalc::getLongitude($T);
         $lat = MoonCalc::getLatitude($T);
+        $lon = MoonCalc::getLongitude($T);
         $radiusVector = DistanceUtil::km2au(MoonCalc::getDistanceToEarth($T));
 
-        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
+        // Corrections
+        $dPhi = EarthCalc::getNutationInLongitude($T);
+        $lon = $lon + $dPhi;
+
+        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
     }
 
+    // TODO
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
-        // TODO Implement
         return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
     }
 
@@ -41,9 +46,16 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
 
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
-        return $this
+        $coordinates = $this
             ->getGeocentricEquatorialSphericalCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->T);
+
+        // Convert south to north
+        $azimuth = $coordinates->getAzimuth() + 180;
+        $azimuth = AngleUtil::normalizeAngle($azimuth);
+        $altitude = $coordinates->getAltitude();
+
+        return new LocalHorizontalCoordinates($azimuth, $altitude);
     }
 
     public function getIlluminatedFraction(): float

@@ -3,20 +3,19 @@
 include __DIR__ . '/../vendor/autoload.php';
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
-use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Calculations\MoonCalc;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
-use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
-use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
+use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
+date_default_timezone_set('UTC');
+
 // Berlin
-$location = new Location(52.524, 13.411);
+$location = new Location(52.52, 13.405);
 
 // Time of interest
-$dateTime = new DateTime('2018-01-10 05:00:00');
-$toi = new TimeOfInterest($dateTime);
+$toi = new TimeOfInterest();
 
 // Create moon
 $moon = new Moon($toi);
@@ -36,9 +35,6 @@ $radiusVector = $geoEclSphCoordinates->getRadiusVector();
 // Equatorial coordinates
 $geoEqaCoordinates = $moon->getGeocentricEquatorialSphericalCoordinates();
 
-$corrections = new GeocentricEquatorialCorrections($toi);
-$geoEqaCoordinates = $corrections->correctCoordinates($geoEqaCoordinates);
-
 $rightAscension = $geoEqaCoordinates->getRightAscension();
 $rightAscension = AngleUtil::dec2time($rightAscension);
 $declination = $geoEqaCoordinates->getDeclination();
@@ -47,13 +43,8 @@ $declination = AngleUtil::dec2angle($declination);
 // Local horizontal coordinates
 $localHorizontalCoordinates = $moon->getLocalHorizontalCoordinates($location);
 
-$corrections = new LocalHorizontalCorrections();
-$localHorizontalCoordinates = $corrections->correctAtmosphericRefraction($localHorizontalCoordinates);
-
-$azimuth = $localHorizontalCoordinates->getAzimuth(); // TODO Hier ist es der richtige Winkel...
-$azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
+$azimuth = $localHorizontalCoordinates->getAzimuth();
 $altitude = $localHorizontalCoordinates->getAltitude();
-$altitude = AngleUtil::dec2angle($altitude);
 
 $distance = MoonCalc::getDistanceToEarth($toi->getJulianCenturiesFromJ2000());
 $isWaxingMoon = $moon->isWaxingMoon() ? 'yes' : 'no';
