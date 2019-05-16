@@ -1,39 +1,31 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle\Tests\Coordinates;
+namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use PHPUnit\Framework\TestCase;
 
 class LocalHorizontalCoordinatesTest extends TestCase
 {
     /**
+     * @test
      * Meeus 13.b
      */
-    public function testGetEquatorialCoordinates()
+    public function getGeocentricEquatorialSphericalCoordinatesTest()
     {
-        $lat = 38.92139;
-        $lon = -77.06556;
-        $location = new Location($lat, $lon);
-
-        $toi = new TimeOfInterest();
-        $toi->setTime(1987, 4, 10, 19, 21, 0);
-
+        $location = new Location(38.921389, -77.065556);
+        $T = -0.12727429842574; // 1987-04-10 19:21:00
         $azimuth = 68.0337;
         $altitude = 15.1249;
 
-        $localHorizontalCoordinates = new LocalHorizontalCoordinates($azimuth, $altitude);
-        $equatorialCoordinates = $localHorizontalCoordinates->getEquatorialCoordinates($location);
+        $locHorCoord = new LocalHorizontalCoordinates($azimuth, $altitude);
+        $geoEquCoord = $locHorCoord->getGeocentricEquatorialSphericalCoordinates($location, $T);
 
-        $rightAscension = $equatorialCoordinates->getRightAscension();
-        $declination = $equatorialCoordinates->getDeclination();
+        $ra = $geoEquCoord->getRightAscension();
+        $d = $geoEquCoord->getDeclination();
 
-        // TODO
-        $this->assertTrue(true);
-//        var_dump(Util::angleDec2time($rightAscension), $declination);
-
-//        die("DDDDDD");
+        $this->assertEquals(347.31921, round($ra, 5));
+        $this->assertEquals(-6.71987, round($d, 5));
     }
 }

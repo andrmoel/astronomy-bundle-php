@@ -53,7 +53,7 @@ class EarthCalc implements EarthCalcInterface
         $U = $T / 100;
 
         // Meeus 22.3
-        $e0 = 84381.448
+        $eps0 = 84381.448
             - 4680.93 * $U
             - 1.55 * pow($U, 2)
             + 1999.25 * pow($U, 3)
@@ -64,20 +64,20 @@ class EarthCalc implements EarthCalcInterface
             + 27.87 * pow($U, 8)
             + 5.79 * pow($U, 9)
             + 2.45 * pow($U, 10);
-        $e0 = $e0 / 3600;
+        $eps0 = $eps0 / 3600;
 
-        return $e0;
+        return $eps0;
     }
 
     public static function getTrueObliquityOfEcliptic(float $T): float
     {
-        $e0 = self::getMeanObliquityOfEcliptic($T);
+        $eps0 = self::getMeanObliquityOfEcliptic($T);
         $sumEps = self::getNutationInObliquity($T);
 
         // Meeus chapter 22
-        $e = $e0 + $sumEps;
+        $eps = $eps0 + $sumEps;
 
-        return $e;
+        return $eps;
     }
 
     public static function getNutationInLongitude(float $T): float

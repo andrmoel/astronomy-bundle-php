@@ -2,20 +2,21 @@
 
 include __DIR__ . '/../vendor/autoload.php';
 
-use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
 use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
-use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
+use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+
+date_default_timezone_set('UTC');
 
 // Berlin
 $location = new Location(52.524, 13.411);
 
 // Create sun
-$toi = new TimeOfInterest();
+$toi = new TimeOfInterest(new DateTime('2019-05-15 21:07:00'));
 $sun = new Sun($toi);
 
 // Ecliptical spherical coordinates
@@ -31,10 +32,7 @@ $eclLat = AngleUtil::dec2angle($eclLat);
 $radiusVector = $geoEclSphCoordinates->getRadiusVector();
 
 // Equatorial coordinates
-$geoEqaCoordinates = $sun->getGeocentricEquatorialCoordinates();
-
-$corrections = new GeocentricEquatorialCorrections($toi);
-$geoEqaCoordinates = $corrections->correctCoordinates($geoEqaCoordinates);
+$geoEqaCoordinates = $sun->getGeocentricEquatorialSphericalCoordinates();
 
 $rightAscension = $geoEqaCoordinates->getRightAscension();
 $rightAscension = AngleUtil::dec2time($rightAscension);
@@ -44,10 +42,10 @@ $declination = AngleUtil::dec2angle($declination);
 // Local horizontal coordinates
 $localHorizontalCoordinates = $sun->getLocalHorizontalCoordinates($location);
 
-$corrections = new LocalHorizontalCorrections();
-$localHorizontalCoordinates = $corrections->correctAtmosphericRefraction($localHorizontalCoordinates);
+//$corrections = new LocalHorizontalCorrections();
+//$localHorizontalCoordinates = $corrections->correctAtmosphericRefraction($localHorizontalCoordinates);
 
-$azimuth = $localHorizontalCoordinates->getAzimuth() + 180; // TODO FALSCHER WERT. Laut Stellarium 294.45... Und was wenn > 360°???
+$azimuth = $localHorizontalCoordinates->getAzimuth();
 $azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
 $altitude = $localHorizontalCoordinates->getAltitude();
 $altitude = AngleUtil::dec2angle($altitude);

@@ -3,10 +3,46 @@
 namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 
 use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class TimeCalcTest extends TestCase
 {
+    /**
+     * @test
+     * Meeus 12.a
+     */
+    public function getGreenwichMeanSiderealTimeTest()
+    {
+        $T = -0.127296372348; // 1987-04-10 00:00:00
+
+        $GMST = TimeCalc::getGreenwichMeanSiderealTime($T);
+        $GMST = AngleUtil::dec2time($GMST);
+
+        $this->assertEquals('13h10m46.366s', $GMST);
+
+        $T = -0.12727429842574; // 1987-04-10 19:21:00
+
+        $GMST = TimeCalc::getGreenwichMeanSiderealTime($T);
+        $GMST = AngleUtil::dec2time($GMST);
+
+        $this->assertEquals('8h34m57.09s', $GMST);
+    }
+
+    /**
+     * @test
+     * Meeus 12.a
+     */
+    public function getGreenwichApparentSiderealTimeTest()
+    {
+        $T = -0.127296372348;
+
+        $GAST = TimeCalc::getGreenwichApparentSiderealTime($T);
+        $GAST = AngleUtil::dec2time($GAST);
+
+        $this->assertEquals('13h10m46.134s', $GAST);
+    }
+
     /**
      * @test
      * Meeus Table 10.A
@@ -14,7 +50,7 @@ class TimeCalcTest extends TestCase
     public function getDeltaTTest()
     {
         $array = [
-//            2050 => 93,
+            2050 => 149.2,
             2018 => 70.5,
             1996 => 61.6,
             1990 => 56.9,

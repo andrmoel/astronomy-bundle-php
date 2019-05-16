@@ -2,6 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+
 class TimeCalc
 {
     public static function getJulianCenturiesFromJ2000(float $jd): float
@@ -11,9 +13,9 @@ class TimeCalc
         return $T;
     }
 
-    public function getJulianDay(float $T): float
+    public static function getJulianDay(float $T): float
     {
-        $jd = $T * 36525.0 + 451545.0;
+        $jd = $T * 36525.0 + 2451545.0;
 
         return $jd;
     }
@@ -29,6 +31,34 @@ class TimeCalc
         } else {
             return true;
         }
+    }
+
+    public static function getGreenwichMeanSiderealTime(float $T): float
+    {
+        $JD = self::getJulianDay($T);
+
+        // Meeus 12.4
+        $GMST = 280.46061837
+            + 360.98564736629 * ($JD - 2451545)
+            + 0.000387933 * pow($T, 2)
+            + pow($T, 3) / 38710000;
+        $GMST = AngleUtil::normalizeAngle($GMST);
+
+        return $GMST;
+    }
+
+    public static function getGreenwichApparentSiderealTime(float $T): float
+    {
+        $t0 = self::getGreenwichMeanSiderealTime($T);
+        $p = EarthCalc::getNutationInLongitude($T);
+        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
+
+        $eRad = deg2rad($e);
+
+        // Meeus 12
+        $GAST = $t0 + $p * cos($eRad);
+
+        return $GAST;
     }
 
     public static function getDeltaT(int $year, int $month = 0): float

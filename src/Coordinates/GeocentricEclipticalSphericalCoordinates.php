@@ -3,32 +3,51 @@
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class GeocentricEclipticalSphericalCoordinates extends EclipticalSphericalCoordinates
+class GeocentricEclipticalSphericalCoordinates
 {
-    public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
+    protected $latitude = 0.0;
+    protected $longitude = 0.0;
+    protected $radiusVector = 0.0;
+
+    public function __construct(float $latitude, float $longitude, float $radiusVector = 0.0)
     {
-        $lonRad = deg2rad($this->longitude);
-        $latRad = deg2rad($this->latitude);
-
-        $X = $this->radiusVector * cos($latRad) * cos($lonRad);
-        $Y = $this->radiusVector * cos($latRad) * sin($lonRad);
-        $Z = $this->radiusVector * sin($latRad);
-
-        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+        $this->radiusVector = $radiusVector;
     }
 
-    public function getGeocentricEquatorialCoordinates(TimeOfInterest $toi): GeocentricEquatorialCoordinates
+    public function getLatitude(): float
     {
-        $T = $toi->getJulianCenturiesFromJ2000();
+        return $this->latitude;
+    }
 
-        $eps = EarthCalc::getMeanObliquityOfEcliptic($T);
+    public function getLongitude(): float
+    {
+        return $this->longitude;
+    }
+
+    public function getRadiusVector(): float
+    {
+        return $this->radiusVector;
+    }
+
+    // TODO
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
+    {
+        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
+    }
+
+    public function getGeocentricEquatorialSphericalCoordinates(float $T): GeocentricEquatorialSphericalCoordinates
+    {
+        $eps = EarthCalc::getTrueObliquityOfEcliptic($T);
 
         $epsRad = deg2rad($eps);
-        $lonRad = deg2rad($this->longitude);
         $latRad = deg2rad($this->latitude);
+        $lonRad = deg2rad($this->longitude);
 
         // Meeus 13.3
         $rightAscension = atan2(
@@ -41,6 +60,12 @@ class GeocentricEclipticalSphericalCoordinates extends EclipticalSphericalCoordi
         $declination = asin(sin($latRad) * cos($epsRad) + cos($latRad) * sin($epsRad) * sin($lonRad));
         $declination = rad2deg($declination);
 
-        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $this->radiusVector);
+        return new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $this->radiusVector);
+    }
+
+    // TODO
+    public function getLocalHorizontalCoordinates(Location $location, TimeOfInterest $toi): LocalHorizontalCoordinates
+    {
+        return new LocalHorizontalCoordinates(0, 0);
     }
 }
