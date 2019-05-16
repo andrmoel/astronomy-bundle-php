@@ -2,15 +2,13 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
-use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
-use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
-use Andrmoel\AstronomyBundle\Corrections\GeocentricEquatorialCorrections;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
@@ -62,29 +60,21 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
     {
         $T = $this->T;
 
-        // TODO ::::::
         $earth = new Earth($this->toi);
         $helEclSphCoord = $earth->getHeliocentricEclipticalSphericalCoordinates();
-        $geoEquSphCoord = $helEclSphCoord->getGeocentricEquatorialRectangularCoordinates($this->toi);
 
-// TODO ..........
-        $geoEclSphCoord = $this->getGeocentricEclipticalSphericalCoordinates();
+        $B = $helEclSphCoord->getLatitude();
+        $L = $helEclSphCoord->getLongitude();
+        $R = $helEclSphCoord->getRadiusVector();
 
-        $R = SunCalc::getRadiusVector($T);
+        $beta = -1 * $B;
+        $Theta = $L + 180;
+        $Theta = AngleUtil::normalizeAngle($Theta);
         $eps0 = EarthCalc::getMeanObliquityOfEcliptic($T);
 
-        // True longitude
-        $lat = $geoEclSphCoord->getLatitude();
-        $lon = $geoEclSphCoord->getLongitude();
-
-        // TODO Calculate
-        $R = 0.99760775;
-        $lat = AngleUtil::angle2dec('0°0\'0.62"');
-        $lon = 199.907347;
-
         $epsRad = deg2rad($eps0);
-        $latRad = deg2rad($lat);
-        $lonRad = deg2rad($lon);
+        $latRad = deg2rad($beta);
+        $lonRad = deg2rad($Theta);
 
         $X = $R * cos($latRad) * cos($lonRad);
         $Y = $R * (cos($latRad) * sin($lonRad) * cos($epsRad) - sin($latRad) * sin($epsRad));

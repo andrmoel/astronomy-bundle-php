@@ -5,7 +5,6 @@ namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObgetGeocentricEclipticalSp
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
-use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class SunTest extends TestCase
@@ -43,10 +42,9 @@ class SunTest extends TestCase
         $Y = $geoEquRecCoordinates->getY();
         $Z = $geoEquRecCoordinates->getZ();
 
-        // TODO ...
-//        $this->assertEquals(-0.9379952, round($X, 7));
-//        $this->assertEquals(-0.3116544, round($Y, 7));
-//        $this->assertEquals(-0.1351215, round($Z, 7));
+        $this->assertEquals(-0.9379962, round($X, 7));
+        $this->assertEquals(-0.3116541, round($Y, 7));
+        $this->assertEquals(-0.1351207, round($Z, 7));
     }
 
     /**
