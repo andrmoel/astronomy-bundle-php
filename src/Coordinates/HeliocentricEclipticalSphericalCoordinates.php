@@ -7,14 +7,14 @@ use Andrmoel\AstronomyBundle\TimeOfInterest;
 
 class HeliocentricEclipticalSphericalCoordinates
 {
-    protected $longitude = 0.0;
     protected $latitude = 0.0;
+    protected $longitude = 0.0;
     protected $radiusVector = 0.0;
 
-    public function __construct(float $longitude, float $latitude, float $radiusVector = 0.0)
+    public function __construct(float $latitude, float $longitude, float $radiusVector = 0.0)
     {
-        $this->longitude = $longitude;
         $this->latitude = $latitude;
+        $this->longitude = $longitude;
         $this->radiusVector = $radiusVector;
     }
 
@@ -35,8 +35,8 @@ class HeliocentricEclipticalSphericalCoordinates
 
     public function getHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
     {
-        $LRad = deg2rad($this->longitude);
         $BRad = deg2rad($this->latitude);
+        $LRad = deg2rad($this->longitude);
 
         $x = $this->radiusVector * cos($BRad) * cos($LRad);
         $y = $this->radiusVector * cos($BRad) * sin($LRad);
@@ -61,8 +61,8 @@ class HeliocentricEclipticalSphericalCoordinates
         TimeOfInterest $toi
     ): GeocentricEquatorialRectangularCoordinates
     {
-        $LRad = deg2rad($this->longitude);
         $BRad = deg2rad($this->latitude);
+        $LRad = deg2rad($this->longitude);
         $R = $this->radiusVector;
 
         // Heliocentric coordinates of earth

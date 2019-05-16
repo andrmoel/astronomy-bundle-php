@@ -9,9 +9,10 @@ use PHPUnit\Framework\TestCase;
 class VenusTest extends TestCase
 {
     /**
+     * @test
      * Meeus 33.a
      */
-    public function testGetHeliocentricEclipticalSphericalCoordinates()
+    public function getHeliocentricEclipticalSphericalCoordinatesTest()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
         $venus = new Venus($toi);
@@ -28,9 +29,10 @@ class VenusTest extends TestCase
     }
 
     /**
+     * @test
      * Meeus 33.a
      */
-    public function testGetApparentHeliocentricEclipticalSphericalCoordinates()
+    public function getApparentHeliocentricEclipticalSphericalCoordinatesTest()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
         $venus = new Venus($toi);
@@ -46,7 +48,7 @@ class VenusTest extends TestCase
         $this->assertEquals(0.724602, round($R, 6));
     }
 
-    public function testGetHeliocentricEclipticalRectangularCoordinates()
+    public function getHeliocentricEclipticalRectangularCoordinatesTest()
     {
         $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
         $venus = new Venus($toi);
