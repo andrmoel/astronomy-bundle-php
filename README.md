@@ -73,7 +73,7 @@ $t = $toi->getJulianMillenniaFromJ2000();
 
 The result of the calculation should be:\
 *Julian Day: 2457937.0673611*\
-*Julian Day 9: 2457936.5*\
+*Julian Day 0: 2457936.5*\
 *Julian Centuries J2000: 0.1750052665602*\
 *Julian Millennia J2000: 0.01750052665602*\
 
