@@ -2,7 +2,9 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\CalculationCache;
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class EarthCalc implements EarthCalcInterface
@@ -236,5 +238,39 @@ class EarthCalc implements EarthCalcInterface
         CalculationCache::set('earthEquationOfTimeInMinutes', $T, $Emin);
 
         return $Emin;
+    }
+
+    /**
+     * Get distance between 2 points on earths surface [km]
+     * @param Location $location1
+     * @param Location $location2
+     * @return float
+     */
+    public static function getDistanceBetweenLocations(Location $location1, Location $location2): float
+    {
+        $lat1 = $location1->getLatitude();
+        $lon1 = $location1->getLongitude();
+        $lat2 = $location2->getLatitude();
+        $lon2 = $location2->getLongitude();
+
+        // Meeus 11.1
+        $F = deg2rad(($lat1 + $lat2) / 2);
+        $G = deg2rad(($lat1 - $lat2) / 2);
+        $l = deg2rad(($lon1 - $lon2) / 2);
+
+        $S = pow(sin($G), 2) * pow(cos($l), 2) + pow(cos($F), 2) * pow(sin($l), 2);
+        $C = pow(cos($G), 2) * pow(cos($l), 2) + pow(sin($F), 2) * pow(sin($l), 2);
+
+        $o = atan(sqrt($S / $C));
+        $R = sqrt($S * $C) / $o;
+
+        $D = 2 * $o * (Earth::RADIUS / 100);
+        $H1 = (3 * $R - 1) / (2 * $C);
+        $H2 = (3 * $R + 1) / (2 * $S);
+
+        $s = $D * (1 + Earth::FLATTENING * $H1 * pow(sin($F), 2) * pow(cos($G), 2)
+                - Earth::FLATTENING * $H2 * pow(cos($F), 2) * pow(sin($G), 2));
+
+        return $s / 10;
     }
 }

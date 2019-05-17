@@ -20,6 +20,9 @@
     4. [Events](#events)
         1. [Solar Eclipse](#solarEclipse)
         2. [Lunar Eclipse](#lunarEclipse)
+    5. [Other calculations](#other)
+        1. [Distance between two locations](#distance)
+        1. [Nutatation of earth](#nutation)
 
 <a name="introduction"></a>
 # Introduction
@@ -347,3 +350,35 @@ TODO: Write some nice documentation :)
 ### Lunar eclipse
 
 TODO: Write some nice documentation :)
+
+<a name="other"></a>
+## Other calculations
+
+<a name="distance"></a>
+### Distance between two locations
+
+```php
+$location1 = new Location(52.524, 13.411); // Berlin
+$location2 = new Location(40.697,-74.539); // New York
+
+$distance = EarthCalc::getDistanceBetweenLocations($location1, $location2);
+```
+
+The result of the calculation should be 6436km.
+
+<a name="nutation"></a>
+### Nutation of earth
+
+```php
+$T = -0.127296372458;
+
+$nutationLon = EarthCalc::getNutationInLongitude($T);
+$nutationLon = AngleUtil::dec2angle($nutationLon);
+
+$nutationObl = EarthCalc::getNutationInObliquity($T);
+$nutationObl = AngleUtil::dec2angle($nutationObl);
+```
+
+The result of the calculation should be:\
+*Nutation in longitude: -0°0'3.788"*\
+*Nutation in obliquity: 0°0'9.442"*
