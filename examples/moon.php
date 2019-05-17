@@ -4,7 +4,6 @@ include __DIR__ . '/../vendor/autoload.php';
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
 use Andrmoel\AstronomyBundle\Calculations\MoonCalc;
-use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
@@ -22,9 +21,6 @@ $moon = new Moon($toi);
 
 // Ecliptical spherical coordinates
 $geoEclSphCoordinates = $moon->getGeocentricEclipticalSphericalCoordinates();
-
-$correctionsEcl = new GeocentricEclipticalSphericalCorrections($toi);
-$geoEclSphCoordinates = $correctionsEcl->correctCoordinates($geoEclSphCoordinates);
 
 $eclLon = $geoEclSphCoordinates->getLongitude();
 $eclLon = AngleUtil::dec2angle($eclLon);
