@@ -260,7 +260,7 @@ The result of the calculation should be:\
 <a name="moonPosition"></a>
 #### Position of the moon
 
-TODO: Write some nice documentation :)
+The position of the moon can be calculated as explained in the following example.
 
 ```php
 $dateTime = new DateTime('1992-04-12 00:00:00');
