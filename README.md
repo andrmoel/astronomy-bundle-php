@@ -82,7 +82,7 @@ The result of the calculation should be:\
 *Julian Centuries J2000: 0.1750052665602*\
 *Julian Millennia J2000: 0.01750052665602*\
 
-**Example 2**: Create TOI for now
+**Example 2**: Create TOI for "now"
 
 ```php
 $toi = new TimeOfInterest();
