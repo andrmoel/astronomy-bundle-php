@@ -26,15 +26,17 @@ class RiseAndSetCalc
 
     public function __construct(string $astronomicalObjectClass, Location $location, TimeOfInterest $toi)
     {
-        $toi->setJulianDay($toi->getJulianDay0());
+        $toiJD0 = new TimeOfInterest();
+        $toiJD0->setJulianDay($toi->getJulianDay0());
+
         /** @var AstronomicalObjectInterface $astronomicalObject */
         $astronomicalObject = new $astronomicalObjectClass();
-        $astronomicalObject->setTimeOfInterest($toi);
+        $astronomicalObject->setTimeOfInterest($toiJD0);
 
         $this->astronomicalObjectClass = $astronomicalObjectClass;
         $this->astronomicalObject = $astronomicalObject;
         $this->location = $location;
-        $this->toi = $toi;
+        $this->toi = $toiJD0;
 
     }
 
