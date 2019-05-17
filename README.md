@@ -54,15 +54,38 @@ The time of interest (TOI) object represents the time for which all of the astro
 E.g. If you want to calculate the position of the sun for July 02nd 2017 at 12:00:00 UTC, you need to initialize
 the TOI as follow.
 
-```php
-$dateTime = new \DateTime('2017-07-02 12:00:00');
-$toi = new TimeOfInterest($dateTime);
-```
-
-The TOI objects provides all methods which are needed for astronomical calculations:
+The TOI objects provides all methods which are needed for astronomical calculations, such as follows:
 * Get Julian Day
 * Get Jualian Centuries from J2000
 * Get Julian Millennia from J2000
+
+**Example 1**: Create TOI for 02 July 2017 at 13:37 UTC
+
+```php
+$dateTime = new \DateTime('2017-07-02 13:37:00'); // DateTime in UTC
+$toi = new TimeOfInterest($dateTime);
+
+$JD = $toi->getJulianDay();
+$JD0 = $toi->getJulianDay0();
+$T = $toi->getJulianCenturiesFromJ2000();
+$t = $toi->getJulianMillenniaFromJ2000();
+```
+
+The result of the calculation should be:\
+*Julian Day: 2457937.0673611*\
+*Julian Day 9: 2457936.5*\
+*Julian Centuries J2000: 0.1750052665602*\
+*Julian Millennia J2000: 0.01750052665602*\
+
+**Example 2**: Create TOI for now
+
+```php
+$toi = new TimeOfInterest();
+
+$dateTime = $toi->getDateTime();
+```
+
+The result is a DateTime object correspondending to the current time.
 
 <a name="location"></a>
 ## Location
