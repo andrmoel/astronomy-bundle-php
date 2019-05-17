@@ -46,7 +46,7 @@ class HeliocentricEclipticalRectangularCoordinates
 
         $radiusVector = sqrt(pow($this->x, 2) + pow($this->y, 2) + pow($this->z, 2));
 
-        return new HeliocentricEclipticalSphericalCoordinates($longitude, $latitude, $radiusVector);
+        return new HeliocentricEclipticalSphericalCoordinates($latitude, $longitude, $radiusVector);
     }
 
     public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates

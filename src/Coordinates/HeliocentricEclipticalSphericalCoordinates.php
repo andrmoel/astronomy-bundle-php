@@ -7,14 +7,14 @@ use Andrmoel\AstronomyBundle\TimeOfInterest;
 
 class HeliocentricEclipticalSphericalCoordinates
 {
-    protected $longitude = 0.0;
     protected $latitude = 0.0;
+    protected $longitude = 0.0;
     protected $radiusVector = 0.0;
 
-    public function __construct(float $longitude, float $latitude, float $radiusVector = 0.0)
+    public function __construct(float $latitude, float $longitude, float $radiusVector = 0.0)
     {
-        $this->longitude = $longitude;
         $this->latitude = $latitude;
+        $this->longitude = $longitude;
         $this->radiusVector = $radiusVector;
     }
 

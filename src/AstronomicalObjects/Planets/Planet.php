@@ -60,7 +60,7 @@ abstract class Planet extends AstronomicalObject
 
         $R = $this->resolveTerms($this->vsop87['R'], $t);
 
-        return new HeliocentricEclipticalSphericalCoordinates($L, $B, $R);
+        return new HeliocentricEclipticalSphericalCoordinates($B, $L, $R);
     }
 
     public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
