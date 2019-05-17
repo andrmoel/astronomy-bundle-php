@@ -2,6 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
+use Andrmoel\AstronomyBundle\CalculationCache;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class EarthCalc implements EarthCalcInterface
@@ -12,6 +13,10 @@ class EarthCalc implements EarthCalcInterface
      */
     public static function getMeanAnomaly(float $T): float
     {
+        if (CalculationCache::has('earthMeanAnomaly', $T)) {
+            return CalculationCache::get('earthMeanAnomaly', $T);
+        }
+
         // Meeus chapter 22
 //        $M = 357.52772
 //            + 35999.050340 * $T
@@ -25,31 +30,49 @@ class EarthCalc implements EarthCalcInterface
             + pow($T, 3) / 2449000;
         $M = AngleUtil::normalizeAngle($M);
 
+        CalculationCache::set('earthMeanAnomaly', $T, $M);
+
         return $M;
     }
 
     public static function getEccentricity(float $T): float
     {
+        if (CalculationCache::has('earthEccentricity', $T)) {
+            return CalculationCache::get('earthEccentricity', $T);
+        }
+
         // Meeus 25.4
         $e = 0.016708634
             - 0.000042037 * $T
             - 0.0000001267 * pow($T, 2);
+
+        CalculationCache::set('earthEccentricity', $T, $e);
 
         return $e;
     }
 
     public static function getLongitudeOfPerihelionOfOrbit(float $T): float
     {
+        if (CalculationCache::has('earthLongitudeOfPerihelionOfOrbit', $T)) {
+            return CalculationCache::get('earthLongitudeOfPerihelionOfOrbit', $T);
+        }
+
         // Meeus 23
         $pi = 102.93735
             + 1.71946 * $T
             + 0.00046 * pow($T, 2);
+
+        CalculationCache::set('earthEccentricity', $T, $pi);
 
         return $pi;
     }
 
     public static function getMeanObliquityOfEcliptic(float $T): float
     {
+        if (CalculationCache::has('earthMeanObliquityOfEcliptic', $T)) {
+            return CalculationCache::get('earthMeanObliquityOfEcliptic', $T);
+        }
+
         $U = $T / 100;
 
         // Meeus 22.3
@@ -66,22 +89,34 @@ class EarthCalc implements EarthCalcInterface
             + 2.45 * pow($U, 10);
         $eps0 = $eps0 / 3600;
 
+        CalculationCache::set('earthMeanObliquityOfEcliptic', $T, $eps0);
+
         return $eps0;
     }
 
     public static function getTrueObliquityOfEcliptic(float $T): float
     {
+        if (CalculationCache::has('earthTrueObliquityOfEcliptic', $T)) {
+            return CalculationCache::get('earthTrueObliquityOfEcliptic', $T);
+        }
+
         $eps0 = self::getMeanObliquityOfEcliptic($T);
         $sumEps = self::getNutationInObliquity($T);
 
         // Meeus chapter 22
         $eps = $eps0 + $sumEps;
 
+        CalculationCache::set('earthTrueObliquityOfEcliptic', $T, $eps);
+
         return $eps;
     }
 
     public static function getNutationInLongitude(float $T): float
     {
+        if (CalculationCache::has('earthNutationInLongitude', $T)) {
+            return CalculationCache::get('earthNutationInLongitude', $T);
+        }
+
         // Meeus chapter 22
         $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
@@ -110,11 +145,17 @@ class EarthCalc implements EarthCalcInterface
 
         $sumPhi *= 0.0001 / 3600;
 
+        CalculationCache::set('earthNutationInLongitude', $T, $sumPhi);
+
         return $sumPhi;
     }
 
     public static function getNutationInObliquity(float $T): float
     {
+        if (CalculationCache::has('earthNutationInObliquity', $T)) {
+            return CalculationCache::get('earthNutationInObliquity', $T);
+        }
+
         // Meeus chapter 22
         $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
@@ -143,6 +184,8 @@ class EarthCalc implements EarthCalcInterface
 
         $sumEps *= 0.0001 / 3600;
 
+        CalculationCache::set('earthNutationInObliquity', $T, $sumEps);
+
         return $sumEps;
     }
 
@@ -153,6 +196,10 @@ class EarthCalc implements EarthCalcInterface
      */
     public static function getEquationOfTimeInDegrees(float $T): float
     {
+        if (CalculationCache::has('earthEquationOfTimeInDegrees', $T)) {
+            return CalculationCache::get('earthEquationOfTimeInDegrees', $T);
+        }
+
         $L0 = SunCalc::getMeanLongitude($T);
         $rightAscension = SunCalc::getApparentRightAscension($T);
 
@@ -166,6 +213,8 @@ class EarthCalc implements EarthCalcInterface
         // Meeus 28.1
         $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($eRad);
 
+        CalculationCache::set('earthEquationOfTimeInDegrees', $T, $E);
+
         return $E;
     }
 
@@ -176,9 +225,15 @@ class EarthCalc implements EarthCalcInterface
      */
     public static function getEquationOfTimeInMinutes(float $T): float
     {
+        if (CalculationCache::has('earthEquationOfTimeInMinutes', $T)) {
+            return CalculationCache::get('earthEquationOfTimeInMinutes', $T);
+        }
+
         $E = self::getEquationOfTimeInDegrees($T);
 
         $Emin = $E / 360 * 1440;
+
+        CalculationCache::set('earthEquationOfTimeInMinutes', $T, $Emin);
 
         return $Emin;
     }
