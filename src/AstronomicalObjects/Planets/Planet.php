@@ -8,14 +8,15 @@ use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinate
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEquatorialRectangularCoordinates;
-use Andrmoel\AstronomyBundle\Tests\Calculations\GeocentricEclipticalSphericalCoordinatesTest;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 abstract class Planet extends AstronomicalObject implements PlanetInterface
 {
+    private const VSOP87_LIMIT = 20; // Use first 20 terms if VSOP87 theory for faster calculations with less accuracy
     protected const VSOP87_FILE_PATH = __DIR__ . '/../../Resources/vsop87/json/';
 
+    private $useFullVSOP87Dataset = false;
     protected $vsop87 = [];
 
     abstract function loadVSOP87Data(): array;
@@ -24,6 +25,11 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
     {
         parent::__construct($toi);
         $this->vsop87 = $this->loadVSOP87Data();
+    }
+
+    public function useFullVSOP97Dataset(bool $useFullVSOP87Dataset): void
+    {
+        $this->useFullVSOP87Dataset = $useFullVSOP87Dataset;
     }
 
     // TODO
@@ -109,9 +115,11 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
         $lon = atan2($y, $z);
         $lon = AngleUtil::normalizeAngle($lon);
 
-        var_dump($lat,$lon);die();
+        var_dump($lat, $lon);
+        die();
 
-        var_dump($x, $y, $z);die();
+        var_dump($x, $y, $z);
+        die();
     }
 
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
@@ -152,7 +160,11 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
     {
         // Meeus 21.1
         $sum = 0.0;
-        foreach ($arguments as $argument) {
+        foreach ($arguments as $key => $argument) {
+            if (!$this->useFullVSOP87Dataset && $key > self::VSOP87_LIMIT) {
+                break;
+            }
+
             $sum += $argument[0] * cos($argument[1] + $argument[2] * $t);
         }
 

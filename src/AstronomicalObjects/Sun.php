@@ -21,16 +21,6 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
     const TWILIGHT_ASTRONOMICAL = 3;
     const TWILIGHT_NIGHT = 4;
 
-//    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
-//    {
-//        $T = $this->T;
-//
-//        $lat = SunCalc::getApparentLongitude($T);
-//        $lon = SunCalc::getApparentLongitude($T);
-//
-//        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
-//    }
-
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
         $T = $this->T;
@@ -50,8 +40,8 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
         $lonCRad = deg2rad($lonC);
 
         // Meeus 25.9
-        $dTheta = -1 * AngleUtil::angle2dec('0°0\'0.09033"');
-        $dBeta = AngleUtil::angle2dec('0°0\'0.03916"') * (cos($lonCRad) - sin($lonCRad));
+        $dTheta = -0.00002509167; // 0.09033"
+        $dBeta = 0.000010878 * (cos($lonCRad) - sin($lonCRad)); // 0.000010878 = 0.03916"
 
         $lat = $beta + $dBeta;
         $lon = $Theta + $dTheta;
