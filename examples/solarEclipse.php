@@ -2,9 +2,10 @@
 
 include __DIR__ . '/../vendor/autoload.php';
 
-use Andrmoel\AstronomyBundle\Events\SolarEclipse\BesselianElements;
 use Andrmoel\AstronomyBundle\Events\SolarEclipse\SolarEclipse;
 use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\Parsers\BesselianElementsParser;
+use Andrmoel\AstronomyBundle\Parsers\ParserFactory;
 
 date_default_timezone_set('UTC');
 
@@ -13,7 +14,9 @@ $location = new Location(44.61040, -121.23848);
 
 // Besselian elements for the given eclipse
 // https://eclipse.gsfc.nasa.gov/SEbeselm/SEbeselm2001/SE2017Aug21Tbeselm.html
-$besselianElements = new BesselianElements(include __DIR__ . '/testData/besselianElements.php');
+$fileName = __DIR__ . '/testData/besselian-elements-2017-08-31.txt';
+$besselianElementsParser = ParserFactory::get(BesselianElementsParser::class, $fileName);
+$besselianElements = $besselianElementsParser->getParsedData();
 
 $solarEclipse = new SolarEclipse($besselianElements);
 $solarEclipse->setLocation($location);
