@@ -61,7 +61,7 @@ the TOI as follow.
 
 The TOI objects provides all methods which are needed for astronomical calculations, such as follows:
 * Get Julian Day
-* Get Jualian Centuries from J2000
+* Get Julian Centuries from J2000
 * Get Julian Millennia from J2000
 
 **Example 1**: Create TOI for 02 July 2017 at 13:37 UTC
