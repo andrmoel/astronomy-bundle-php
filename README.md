@@ -38,7 +38,7 @@ composer require andrmoel/astronomy-bundle
 <a name="example"></a>
 # Example data
 
-Some example calculations are provided inside the `/example` folder of the project dir. Usage:
+Some example calculations are provided inside the `/examples` folder of the project dir. Usage:
 
 ```
 php examples/sun.php
