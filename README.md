@@ -1,7 +1,8 @@
 #### Table of Contents  
 1. [Introduction](#introduction)
 2. [Installation](#installation)
-3. [Usage](#usage)
+3. [Example data](#example)
+4. [Usage](#usage)
     1. [Time of Interest](#toi)
     2. [Location](#location)
     3. [Coordinate Systems (and transformations)](#coordinates)
@@ -32,6 +33,15 @@ Use composer to install this package.
 
 ```console
 composer require andrmoel/astronomy-bundle
+```
+
+<a name="example"></a>
+# Example data
+
+Some example calculations are provided inside the `/example` folder of the project dir. Usage:
+
+```
+php examples/sun.php
 ```
 
 <a name="usage"></a>
