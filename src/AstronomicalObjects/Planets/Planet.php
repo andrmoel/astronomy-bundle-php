@@ -3,7 +3,6 @@
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
-use Andrmoel\AstronomyBundle\AstronomicalObjects\PlanetInterface;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
