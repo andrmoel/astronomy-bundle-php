@@ -1,6 +1,6 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle\Eclipses;
+namespace Andrmoel\AstronomyBundle\Events\SolarEclipse;
 
 class BesselianElements
 {

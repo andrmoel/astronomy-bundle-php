@@ -1,18 +1,19 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle\Calculations;
+namespace Andrmoel\AstronomyBundle\Events\RiseSetTransit;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObjectInterface;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
+use Andrmoel\AstronomyBundle\Calculations\MoonCalc;
+use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use Andrmoel\AstronomyBundle\Utils\InterpolationUtil;
 
-// TODO in EventCalc oder so umbenennen
-class RiseAndSetCalc
+class RiseSetTransit
 {
     const EVENT_TYPE_RISE = 'rise';
     const EVENT_TYPE_TRANSIT = 'transit';

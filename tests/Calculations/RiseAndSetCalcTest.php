@@ -5,7 +5,7 @@ namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Venus;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
-use Andrmoel\AstronomyBundle\Calculations\RiseAndSetCalc;
+use Andrmoel\AstronomyBundle\Calculations\RiseSetCulminationCalculation;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +26,7 @@ class RiseAndSetCalcTest extends TestCase
         $location = new Location(52.524, 13.411);
         $toi = new TimeOfInterest();
 
-        $ras = new RiseAndSetCalc(Sun::class, $location, $toi);
+        $ras = new RiseSetCulminationCalculation(Sun::class, $location, $toi);
 
         var_dump("----");
         var_dump($ras->getRise()->getDateTime()->format('Y-m-d H:i:s'));
