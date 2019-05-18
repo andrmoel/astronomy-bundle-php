@@ -33,7 +33,7 @@ Location: {$location->getLatitude()}°, {$location->getLongitude()}° (Madras, O
 Eclipse type: {$solarEclipse->getEclipseType()}
 Eclipse duration: {$solarEclipse->getEclipseDuration()} seconds
 Totality duration: {$solarEclipse->getEclipseUmbraDuration()} seconds
-Coverage: {$solarEclipse->getCoverage()}
+Obscuration: {$solarEclipse->getObscuration()}
 Magnitude: {$solarEclipse->getMagnitude()}
 Moon-sun-ratio: {$solarEclipse->getMoonSunRatio()}
 

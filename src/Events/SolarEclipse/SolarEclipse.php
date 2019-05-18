@@ -187,7 +187,7 @@ class SolarEclipse
         return $duration;
     }
 
-    public function getCoverage(SolarEclipseCircumstances $circumstances = null): float
+    public function getObscuration(SolarEclipseCircumstances $circumstances = null): float
     {
         if (!isset($circumstances)) {
             $circumstances = $this->getCircumstancesMax();
@@ -207,16 +207,16 @@ class SolarEclipse
         }
 
         if ($type == self::TYPE_ANNULAR) {
-            $coverage = pow($moonSunRatio, 2);
+            $obscuration = pow($moonSunRatio, 2);
         } else {
             $c = acos((pow($l1s, 2) + pow($l2s, 2) - 2.0 * pow($m, 2)) / (pow($l1s, 2) - pow($l2s, 2)));
             $b = acos(($l1s * $l2s + pow($m, 2)) / $m / ($l1s + $l2s));
             $a = M_PI - $b - $c;
 
-            $coverage = (pow($moonSunRatio, 2) * $a + $b - $moonSunRatio * sin($c)) / M_PI;
+            $obscuration = (pow($moonSunRatio, 2) * $a + $b - $moonSunRatio * sin($c)) / M_PI;
         }
 
-        return $coverage;
+        return $obscuration;
     }
 
     public function getMagnitude(): float
