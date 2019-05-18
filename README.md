@@ -9,12 +9,20 @@
     3. [Astronomical Objects](#objects)
         1. [Sun](#sun)
             1. [Position](#sunPosition)
-            2. [Sunrise, Sunset & Culmination](#sunrise)
+            2. [Distance to earth](#sunDistance)
+            3. [Sunrise, Sunset & Culmination](#sunrise)
         2. [Moon](#moon)
+            1. [Position](#moonPosition)
+            2. [Distance to earth](#moonDistance)
+            3. [Sunrise, Sunset & Culmination](#moonrise)
+            4. [Phases](#moonPhases)
         3. [Planets](#planets)
     4. [Events](#events)
         1. [Solar Eclipse](#solarEclipse)
         2. [Lunar Eclipse](#lunarEclipse)
+    5. [Other calculations](#other)
+        1. [Distance between two locations](#distance)
+        1. [Nutatation of earth](#nutation)
 
 <a name="introduction"></a>
 # Introduction
@@ -56,7 +64,7 @@ the TOI as follow.
 
 The TOI objects provides all methods which are needed for astronomical calculations, such as follows:
 * Get Julian Day
-* Get Jualian Centuries from J2000
+* Get Julian Centuries from J2000
 * Get Julian Millennia from J2000
 
 **Example 1**: Create TOI for 02 July 2017 at 13:37 UTC
@@ -77,7 +85,7 @@ The result of the calculation should be:\
 *Julian Centuries J2000: 0.1750052665602*\
 *Julian Millennia J2000: 0.01750052665602*\
 
-**Example 2**: Create TOI for now
+**Example 2**: Create TOI for "now"
 
 ```php
 $toi = new TimeOfInterest();
@@ -199,8 +207,35 @@ The result of the calculation should be:\
 *Azimuth: 291.0°*\
 *Altitude: 8.4°*
 
+<a name="sunDistance"></a>
+#### Distance of the sun to earth
+
+**Example 1**: The current distance of the sun in kimometers can be calculated as follow:
+
+```php
+$sun = new Sun();
+
+$distance = $sun->getDistanceToEarth();
+```
+
+The result should be between 147.1 mio and 152.1 mio kilometers.
+
+**Example 2**: Get the distance of the sun on 05 June 2017 at 20:50 UTC
+
+```php
+$dateTime = new DateTime('2017-06-05 20:50');
+$toi = new TimeOfInterest($dateTime);
+
+$sun = new Sun($toi);
+
+$distance = $sun->getDistanceToEarth();
+```
+
+The result should be 151797703km.
+
 <a name="sunrise"></a>
 #### Sunrise, sunset and upper culmination
+
 **Example**: Calculate sunrise, sunset and upper culmination for Berlin, Germany for 17 May 2019
 
 ```php
@@ -225,7 +260,78 @@ The result of the calculation should be:\
 <a name="moon"></a>
 ### Moon
 
-TODO: Write some nice documentation :)
+<a name="moonPosition"></a>
+#### Position of the moon
+
+The position of the moon can be calculated as explained in the following example.
+
+```php
+$dateTime = new DateTime('1992-04-12 00:00:00');
+$toi = new TimeOfInterest($dateTime);
+
+$moon = new Moon($toi);
+
+$geoEquSphCoord = $moon->getGeocentricEquatorialSphericalCoordinates();
+$rightAscension = $geoEquSphCoord->getRightAscension();
+$declination = $geoEquSphCoord->getDeclination();
+```
+
+The result of the calculation should be:\
+*Right ascension: 134.69°*\
+*Declination: 13.77°*
+
+<a name="moonDistance"></a>
+#### Distance of the moon to earth
+
+**Example 1**: The current distance of the moon in kimometers can be calculated as follow:
+
+```php
+$moon = new Moon();
+
+$distance = $moon->getDistanceToEarth();
+```
+
+The result should be between 363300km and 405500km.
+
+**Example 2**: Get the distance of the moon on 05 June 2017 at 20:50 UTC
+
+```php
+$dateTime = new DateTime('2017-06-05 20:50');
+$toi = new TimeOfInterest($dateTime);
+
+$moon = new Moon($toi);
+
+$distance = $moon->getDistanceToEarth();
+```
+
+The result should be 402970km.
+
+<a name="moonrise"></a>
+#### Moonrise, moonset and upper culmination
+
+**ATTENTION**: This functionality is not working yet
+
+<a name="moonPhases"></a>
+#### Phases of the moon
+
+The following code sniped explains how to calculate all important parameters which belong to the moons phase
+for an specific date. In this example it is 13 May 2019 at 21:30 UTC.
+
+```php
+$dateTime = new DateTime('2019-05-13 21:30:00');
+$toi = new TimeOfInterest($dateTime);
+
+$moon = new Moon($toi);
+
+$isWaxing = $moon->isWaxingMoon();
+$illumination = $moon->getIlluminatedFraction();
+$positionAngle = $moon->getPositionAngleOfMoonsBrightLimb();
+```
+
+The result of the calculation should be:\
+*Is waxing moon: yes*\
+*Illumination: 0.709 (70.9%)*\
+*Position angle of bright limb: 293.54°*
 
 <a name="planets"></a>
 ### Planets
@@ -244,3 +350,35 @@ TODO: Write some nice documentation :)
 ### Lunar eclipse
 
 TODO: Write some nice documentation :)
+
+<a name="other"></a>
+## Other calculations
+
+<a name="distance"></a>
+### Distance between two locations
+
+```php
+$location1 = new Location(52.524, 13.411); // Berlin
+$location2 = new Location(40.697,-74.539); // New York
+
+$distance = EarthCalc::getDistanceBetweenLocations($location1, $location2);
+```
+
+The result of the calculation should be 6436km.
+
+<a name="nutation"></a>
+### Nutation of earth
+
+```php
+$T = -0.127296372458;
+
+$nutationLon = EarthCalc::getNutationInLongitude($T);
+$nutationLon = AngleUtil::dec2angle($nutationLon);
+
+$nutationObl = EarthCalc::getNutationInObliquity($T);
+$nutationObl = AngleUtil::dec2angle($nutationObl);
+```
+
+The result of the calculation should be:\
+*Nutation in longitude: -0°0'3.788"*\
+*Nutation in obliquity: 0°0'9.442"*

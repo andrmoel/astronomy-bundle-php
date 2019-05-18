@@ -42,7 +42,7 @@ $localHorizontalCoordinates = $moon->getLocalHorizontalCoordinates($location);
 $azimuth = $localHorizontalCoordinates->getAzimuth();
 $altitude = $localHorizontalCoordinates->getAltitude();
 
-$distance = MoonCalc::getDistanceToEarth($toi->getJulianCenturiesFromJ2000());
+$distance = $moon->getDistanceToEarth();
 $isWaxingMoon = $moon->isWaxingMoon() ? 'yes' : 'no';
 $illuminatedFraction = $moon->getIlluminatedFraction();
 $illuminatedFraction = round($illuminatedFraction * 100, 1);

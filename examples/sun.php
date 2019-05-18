@@ -41,8 +41,8 @@ $azimuth = $localHorizontalCoordinates->getAzimuth();
 $azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
 $altitude = $localHorizontalCoordinates->getAltitude();
 $altitude = AngleUtil::dec2angle($altitude);
+$distance = $sun->getDistanceToEarth();
 $distanceAu = SunCalc::getRadiusVector($toi->getJulianCenturiesFromJ2000());
-$distance = SunCalc::getDistanceToEarth($toi->getJulianCenturiesFromJ2000());
 
 $rise = $sun->getSunrise($location);
 $culmination = $sun->getUpperCulmination($location);
@@ -58,7 +58,7 @@ Ecliptical longitude: {$eclLon}
 Ecliptical latitude: {$eclLat}
 Right ascension: {$rightAscension}
 Declination: {$declination}
-Distance to earth: {$distanceAu} AU ({$distance} km)
+Distance to earth: {$distance} kn ({$distanceAu} AU)
 
 The sun seen from observer's location
 Location: {$location->getLatitude()}°, {$location->getLongitude()}°

@@ -4,6 +4,7 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
@@ -105,6 +106,17 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
         return $this
             ->getGeocentricEquatorialSphericalCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->T);
+    }
+
+    /**
+     * Get distance to earth [km]
+     * @return float
+     */
+    public function getDistanceToEarth(): float
+    {
+        $d = SunCalc::getDistanceToEarth($this->T);
+
+        return $d;
     }
 
     public function getSunrise(Location $location): TimeOfInterest
