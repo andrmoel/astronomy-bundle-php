@@ -16,7 +16,7 @@ $dateTime = new DateTime('2017-08-21');
 $toi = new TimeOfInterest($dateTime);
 
 // Create solar eclipse
-$solarEclipse = SolarEclipse::create($location, $toi);
+$solarEclipse = SolarEclipse::create($toi, $location);
 
 $c1 = $solarEclipse->getCircumstancesC1();
 $c2 = $solarEclipse->getCircumstancesC2();
@@ -34,8 +34,8 @@ Eclipse type: {$solarEclipse->getEclipseType()}
 Eclipse duration: {$solarEclipse->getEclipseDuration()} seconds
 Totality duration: {$solarEclipse->getEclipseUmbraDuration()} seconds
 Coverage: {$solarEclipse->getCoverage()}
-Magnitude: {$max->getMagnitude()}
-Moon-sun-ratio: {$max->getMoonSunRatio()}
+Magnitude: {$solarEclipse->getMagnitude()}
+Moon-sun-ratio: {$solarEclipse->getMoonSunRatio()}
 
 Contact times
 C1: {$solarEclipse->getTimeOfInterest($c1)->getDateTime()->format('Y-m-d H:i:s')} UTC

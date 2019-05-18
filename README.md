@@ -19,6 +19,9 @@
         3. [Planets](#planets)
     4. [Events](#events)
         1. [Solar Eclipse](#solarEclipse)
+            1. [Create a Solar Eclipse](#solarEclipseCreate)
+            1. [Type, Magnitude, Duration](#solarEclipseType)
+            1. [Contacts (C1, C2, MAX, C3, C4)](#solarEclipseContacts)
         2. [Lunar Eclipse](#lunarEclipse)
     5. [Other calculations](#other)
         1. [Distance between two locations](#distance)
@@ -343,6 +346,61 @@ TODO: Write some nice documentation :)
 
 <a name="solarEclipse"></a>
 ### Solar eclipse
+
+<a name="solarEclipseCreate"></a>
+#### Create a Solar Eclipse object
+The most easy way how to create a Solar Eclipse object, is to 
+
+**Example**: Create a solar eclipse for 21 August 2017 for the location Madrads in Oregon (USA)
+
+```php
+$location = new Location(44.61040, -121.23848); // Madras, OR
+
+$dateTime = new DateTime('2017-08-21'); // Date of the eclipse (UTC)
+$toi = new TimeOfInterest($dateTime);
+
+$solarEclipse = SolarEclipse::create($toi, $location);
+```
+
+*Note: If the date of the eclipse is invalid, an exception will be thrown.*
+
+<a name="solarEclipseType></a>
+#### Eclipse type, Magnitude, Duration, etc.
+
+To obtain the eclipse circumstances of the **maximum eclipse** for a given location, see the following examples.
+
+The **type of an eclipse** (for the given location) is expressed in a string. But it is better to use the following constants:
+`SolarEclipse:TYPE_NONE`,
+`SolarEclipse:TYPE_PARTIAL`,
+`SolarEclipse:TYPE_ANNULAR` or
+`SolarEclipse:TYPE_TOTAL`.
+
+**Example 1**: Local circumstances for the eclipse of 21 August 2017 for Madras, OR
+
+```php
+$location = new Location(44.61040, -121.23848); // Madras, OR
+
+$dateTime = new DateTime('2017-08-21'); // Date of the eclipse (UTC)
+$toi = new TimeOfInterest($dateTime);
+
+$solarEclipse = SolarEclipse::create($toi, $location);
+
+$type = $solarEclipse->getEclipseType();
+$duration = $solarEclipse->getEclipseDuration(); // in seconds
+$durationTotality = $solarEclipse->getEclipseUmbraDuration(); // in seconds
+$magnitude = $solarEclipse->getMagnitude();
+$moonSunRatio = $solarEclipse->getMoonSunRatio();
+```
+
+The result of the calculation should be:\
+*Type: total*\
+*Duration of eclipse: 9257s*\
+*Duration of totality: 120s*\
+*Magnitude: 1.01*\
+*Moon-sun-ratio: 1.03*
+
+<a name="solarEclipseContact"></a>
+#### Contacts (C1, C2, MAX, C3, C4)
 
 TODO: Write some nice documentation :)
 

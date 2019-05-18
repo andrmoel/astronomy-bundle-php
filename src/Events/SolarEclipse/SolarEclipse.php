@@ -46,7 +46,7 @@ class SolarEclipse
         $this->location = new Location();
     }
 
-    public static function create(Location $location, TimeOfInterest $toi): self
+    public static function create(TimeOfInterest $toi, Location $location): self
     {
         // Generate filename for besselian elements
         $fileName = GeneralUtil::year2string($toi->getYear())
@@ -217,6 +217,20 @@ class SolarEclipse
         }
 
         return $coverage;
+    }
+
+    public function getMagnitude(): float
+    {
+        $max = $this->getCircumstancesMax();
+
+        return $max->getMagnitude();
+    }
+
+    public function getMoonSunRatio(): float
+    {
+        $max = $this->getCircumstancesMax();
+
+        return $max->getMoonSunRatio();
     }
 
     // ---- Calculate eclipse circumstances ----------------------------------------------------------------------------
