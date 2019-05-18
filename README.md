@@ -19,6 +19,9 @@
         3. [Planets](#planets)
     4. [Events](#events)
         1. [Solar Eclipse](#solarEclipse)
+            1. [Create a Solar Eclipse](#solarEclipseCreate)
+            1. [Type, Obscuration, Magnitude, Duration](#solarEclipseType)
+            1. [Contacts (C1, C2, MAX, C3, C4)](#solarEclipseContacts)
         2. [Lunar Eclipse](#lunarEclipse)
     5. [Other calculations](#other)
         1. [Distance between two locations](#distance)
@@ -83,7 +86,7 @@ The result of the calculation should be:\
 *Julian Day: 2457937.0673611*\
 *Julian Day 0: 2457936.5*\
 *Julian Centuries J2000: 0.1750052665602*\
-*Julian Millennia J2000: 0.01750052665602*\
+*Julian Millennia J2000: 0.01750052665602*
 
 **Example 2**: Create TOI for "now"
 
@@ -343,6 +346,88 @@ TODO: Write some nice documentation :)
 
 <a name="solarEclipse"></a>
 ### Solar eclipse
+
+<a name="solarEclipseCreate"></a>
+#### Create a Solar Eclipse object
+
+**Example**: Create a solar eclipse for 21 August 2017 for the location Madrads in Oregon (USA)
+
+```php
+$location = new Location(44.61040, -121.23848); // Madras, OR
+
+$dateTime = new DateTime('2017-08-21'); // Date of the eclipse (UTC)
+$toi = new TimeOfInterest($dateTime);
+
+$solarEclipse = SolarEclipse::create($toi, $location);
+```
+
+*Note: If the date of the eclipse is invalid, an exception will be thrown.*
+
+<a name="solarEclipseType"></a>
+#### Eclipse type, Obscuration, Magnitude, Duration, etc.
+
+To obtain the eclipse circumstances of the **maximum eclipse** for a given location, see the following examples.
+
+The **type of an eclipse** (for the given location) is expressed in a string. But it is better to use the following constants:
+`SolarEclipse:TYPE_NONE`,
+`SolarEclipse:TYPE_PARTIAL`,
+`SolarEclipse:TYPE_ANNULAR` or
+`SolarEclipse:TYPE_TOTAL`.
+
+**Example 1**: Local circumstances for the total solar eclipse of 21 August 2017 for Madras, OR
+
+```php
+$location = new Location(44.61040, -121.23848); // Madras, OR
+
+$dateTime = new DateTime('2017-08-21'); // Date of the eclipse (UTC)
+$toi = new TimeOfInterest($dateTime);
+
+$solarEclipse = SolarEclipse::create($toi, $location);
+
+$type = $solarEclipse->getEclipseType();
+$duration = $solarEclipse->getEclipseDuration(); // in seconds
+$durationTotality = $solarEclipse->getEclipseUmbraDuration(); // in seconds
+$obscuration = $solarEclipse->getObscuration();
+$magnitude = $solarEclipse->getMagnitude();
+$moonSunRatio = $solarEclipse->getMoonSunRatio();
+```
+
+The result of the calculation should be:\
+*Type: total*\
+*Duration of eclipse: 9257s*\
+*Duration of totality: 120s*\
+*Obscuration: 1 (100%)*\
+*Magnitude: 1.01*\
+*Moon-sun-ratio: 1.03*
+
+**Example 2**: Local circumstances for the partial solar eclipse of 20 March 2015 in Berlin
+
+```php
+$location = new Location(52.52, 13.405); // Berlin
+
+$dateTime = new DateTime('2015-03-20'); // Date of the eclipse (UTC)
+$toi = new TimeOfInterest($dateTime);
+
+$solarEclipse = SolarEclipse::create($toi, $location);
+
+$type = $solarEclipse->getEclipseType();
+$duration = $solarEclipse->getEclipseDuration(); // in seconds
+$durationTotality = $solarEclipse->getEclipseUmbraDuration(); // in seconds
+$obscuration = $solarEclipse->getObscuration();
+$magnitude = $solarEclipse->getMagnitude();
+$moonSunRatio = $solarEclipse->getMoonSunRatio();
+```
+
+The result of the calculation should be:\
+*Type: partial*\
+*Duration of eclipse: 8386s*\
+*Duration of totality: 0s*\
+*Obscuration: 0.74 (74%)*\
+*Magnitude: 0.79*\
+*Moon-sun-ratio: 1.05*
+
+<a name="solarEclipseContact"></a>
+#### Contacts (C1, C2, MAX, C3, C4)
 
 TODO: Write some nice documentation :)
 

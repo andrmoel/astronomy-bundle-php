@@ -41,17 +41,6 @@ class BesselianElements
         $this->tanF2 = $data['tanF2'];
     }
 
-
-    /**
-     * Load besselian elements from string
-     * @param $string
-     */
-    public function loadBesselianElementsFromString($string)
-    {
-        // TODO ...
-    }
-
-
     /**
      * Get time of greatest eclipse
      * @return float

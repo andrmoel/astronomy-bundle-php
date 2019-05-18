@@ -3,7 +3,10 @@
 namespace Andrmoel\AstronomyBundle\Events\SolarEclipse;
 
 use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\Parsers\BesselianElementsParser;
+use Andrmoel\AstronomyBundle\Parsers\ParserFactory;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Utils\GeneralUtil;
 
 class SolarEclipse
 {
@@ -41,6 +44,34 @@ class SolarEclipse
         $this->dT = $besselianElements->getDeltaT();
 
         $this->location = new Location();
+    }
+
+    public static function create(TimeOfInterest $toi, Location $location): self
+    {
+        // Generate filename for besselian elements
+        $fileName = GeneralUtil::year2string($toi->getYear())
+            . str_pad($toi->getMonth(), 2, '0', STR_PAD_LEFT)
+            . str_pad($toi->getDay(), 2, '0', STR_PAD_LEFT)
+            . '.txt';
+
+        // Read besselian elements from file
+        $file = __DIR__ . '/../../Resources/besselianElements/' . $fileName;
+
+        if (!file_exists($file)) {
+            throw new \Exception('Solar eclipse does not exists. Date: ' . $toi->getDateTime()->format('Y-m-d'));
+        }
+
+        $data = file_get_contents($file);
+
+        // Create besselian elements
+        $parser = ParserFactory::get(BesselianElementsParser::class, $data);
+        $besselianElements = $parser->getParsedData();
+
+        // Create eclipse
+        $eclipse = new SolarEclipse($besselianElements);
+        $eclipse->setLocation($location);
+
+        return $eclipse;
     }
 
     public function setLocation(Location $location): void
@@ -156,7 +187,7 @@ class SolarEclipse
         return $duration;
     }
 
-    public function getCoverage(SolarEclipseCircumstances $circumstances = null): float
+    public function getObscuration(SolarEclipseCircumstances $circumstances = null): float
     {
         if (!isset($circumstances)) {
             $circumstances = $this->getCircumstancesMax();
@@ -176,16 +207,30 @@ class SolarEclipse
         }
 
         if ($type == self::TYPE_ANNULAR) {
-            $coverage = pow($moonSunRatio, 2);
+            $obscuration = pow($moonSunRatio, 2);
         } else {
             $c = acos((pow($l1s, 2) + pow($l2s, 2) - 2.0 * pow($m, 2)) / (pow($l1s, 2) - pow($l2s, 2)));
             $b = acos(($l1s * $l2s + pow($m, 2)) / $m / ($l1s + $l2s));
             $a = M_PI - $b - $c;
 
-            $coverage = (pow($moonSunRatio, 2) * $a + $b - $moonSunRatio * sin($c)) / M_PI;
+            $obscuration = (pow($moonSunRatio, 2) * $a + $b - $moonSunRatio * sin($c)) / M_PI;
         }
 
-        return $coverage;
+        return $obscuration;
+    }
+
+    public function getMagnitude(): float
+    {
+        $max = $this->getCircumstancesMax();
+
+        return $max->getMagnitude();
+    }
+
+    public function getMoonSunRatio(): float
+    {
+        $max = $this->getCircumstancesMax();
+
+        return $max->getMoonSunRatio();
     }
 
     // ---- Calculate eclipse circumstances ----------------------------------------------------------------------------
