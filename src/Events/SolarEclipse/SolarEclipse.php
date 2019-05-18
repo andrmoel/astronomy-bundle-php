@@ -3,7 +3,10 @@
 namespace Andrmoel\AstronomyBundle\Events\SolarEclipse;
 
 use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\Parsers\BesselianElementsParser;
+use Andrmoel\AstronomyBundle\Parsers\ParserFactory;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Utils\GeneralUtil;
 
 class SolarEclipse
 {
@@ -41,6 +44,34 @@ class SolarEclipse
         $this->dT = $besselianElements->getDeltaT();
 
         $this->location = new Location();
+    }
+
+    public static function create(Location $location, TimeOfInterest $toi): self
+    {
+        // Generate filename for besselian elements
+        $fileName = GeneralUtil::year2string($toi->getYear())
+            . str_pad($toi->getMonth(), 2, '0', STR_PAD_LEFT)
+            . str_pad($toi->getDay(), 2, '0', STR_PAD_LEFT)
+            . '.txt';
+
+        // Read besselian elements from file
+        $file = __DIR__ . '/../../Resources/besselianElements/' . $fileName;
+
+        if (!file_exists($file)) {
+            throw new \Exception('Solar eclipse does not exists. Date: ' . $toi->getDateTime()->format('Y-m-d'));
+        }
+
+        $data = file_get_contents($file);
+
+        // Create besselian elements
+        $parser = ParserFactory::get(BesselianElementsParser::class, $data);
+        $besselianElements = $parser->getParsedData();
+
+        // Create eclipse
+        $eclipse = new SolarEclipse($besselianElements);
+        $eclipse->setLocation($location);
+
+        return $eclipse;
     }
 
     public function setLocation(Location $location): void

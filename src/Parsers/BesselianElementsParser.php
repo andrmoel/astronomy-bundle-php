@@ -26,7 +26,7 @@ class BesselianElementsParser extends AbstractParser
 
     private function parseTMax(): float
     {
-        $pattern = '/Instant of.*J.D. = ([0-9.]+)/si';
+        $pattern = '/Instant of.*J[.]?D[.]? = ([0-9.]+)/si';
 
         if (preg_match($pattern, $this->data, $matches)) {
             return floatval($matches[1]);
@@ -100,7 +100,7 @@ class BesselianElementsParser extends AbstractParser
 
     private function parseTanF1F2(): array
     {
-        $pattern = '/Tan ƒ1 = ([0-9.]+).*?Tan ƒ2 = ([0-9.]+)/si';
+        $pattern = '/Tan [f|ƒ]1 = ([0-9.]+).*?Tan [f|ƒ]2 = ([0-9.]+)/si';
 
         if (preg_match($pattern, $this->data, $matches)) {
             return [
@@ -109,6 +109,9 @@ class BesselianElementsParser extends AbstractParser
             ];
         }
 
-        return null;
+        return [
+            'tanF1' => 0.0,
+            'tanF2' => 0.0,
+        ];
     }
 }
