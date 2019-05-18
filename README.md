@@ -364,7 +364,7 @@ $solarEclipse = SolarEclipse::create($toi, $location);
 
 *Note: If the date of the eclipse is invalid, an exception will be thrown.*
 
-<a name="solarEclipseType></a>
+<a name="solarEclipseType"></a>
 #### Eclipse type, Magnitude, Duration, etc.
 
 To obtain the eclipse circumstances of the **maximum eclipse** for a given location, see the following examples.
