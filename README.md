@@ -349,7 +349,6 @@ TODO: Write some nice documentation :)
 
 <a name="solarEclipseCreate"></a>
 #### Create a Solar Eclipse object
-The most easy way how to create a Solar Eclipse object, is to 
 
 **Example**: Create a solar eclipse for 21 August 2017 for the location Madrads in Oregon (USA)
 
