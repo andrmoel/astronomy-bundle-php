@@ -1,0 +1,34 @@
+   Instant of          04:06:13 TDT     JD = 2462299.67100 
+Greatest Eclipse:    (=04:4:56 UT)
+
+Gamma = 1.2943             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.4576             Lunation No. = 364 
+     Eclipse Type = P                  Saros Series = 118 
+                                                 ΔT = 77.2 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2029 Jun 12    4.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.0107990  1.2954130 23.1593208  0.5566620  0.0104720 240.035584 
+  1   0.5247606 -0.0176365  0.0025910 -0.0001027 -0.0001022  14.999200 
+  2   0.0000104 -0.0002057 -0.0000050 -0.0000104 -0.0000103   0.000000 
+  3  -0.0000065  0.0000003  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046048        tan f2 = 0.0045819 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   4.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  04:4:56 UT
+
+Latitude:   66.8° N      Sun’s Altitude:     0.0°          Path Width = 0.0 km
+Longitude:  66.2° W      Sun’s Azimuth:    355.5°    Central Duration = 00m00s 

@@ -1,0 +1,34 @@
+   Instant of          04:09:35 TDT     JD = 1810322.67300 
+Greatest Eclipse:    (=1:53:16 UT)
+
+Gamma = -0.0948            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9665             Lunation No. = -21714 
+     Eclipse Type = A                  Saros Series = 80 
+                                                 ΔT = 8178.9 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   244 May 24    4.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.0721730 -0.1028490 20.7238903  0.5602200  0.0140120 241.780777 
+  1   0.5136811  0.0535421  0.0079110  0.0000855  0.0000850  15.000810 
+  2   0.0000041 -0.0001260 -0.0000050 -0.0000101 -0.0000100   0.000000 
+  3  -0.0000061 -0.0000006  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0045977        tan f2 = 0.0045748 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   4.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  1:53:16 UT
+
+Latitude:   15.4° N      Sun’s Altitude:    84.7°          Path Width = 121.4 km
+Longitude: 150.6° E      Sun’s Azimuth:    354.1°    Central Duration = 04m16s 

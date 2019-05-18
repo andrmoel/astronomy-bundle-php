@@ -1,0 +1,34 @@
+   Instant of          07:22:51 TDT     JD = 1164931.80800 
+Greatest Eclipse:    (=21:29:54 UT)
+
+Gamma = -1.2928            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.4563             Lunation No. = -43569 
+     Eclipse Type = P                  Saros Series = 42 
+                                                 ΔT = 35576.9 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   -1523 May 30    7.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.0092570 -1.3113411 18.9963303  0.5329340 -0.0131370 287.973999 
+  1   0.5690337  0.0925824  0.0098670  0.0000795  0.0000791  15.001940 
+  2   0.0000098 -0.0000566 -0.0000040 -0.0000125 -0.0000124   0.000000 
+  3  -0.0000093 -0.0000015  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0045938        tan f2 = 0.0045710 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   7.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  21:29:54 UT
+
+Latitude:   68.9° S      Sun’s Altitude:     0.0°          Path Width = 0.0 km
+Longitude: 118.5° W      Sun’s Azimuth:    335.0°    Central Duration = 00m00s 

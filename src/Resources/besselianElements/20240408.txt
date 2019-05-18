@@ -1,0 +1,34 @@
+   Instant of          18:18:29 TDT     JD = 2460409.26300 
+Greatest Eclipse:    (=18:17:15 UT)
+
+Gamma = 0.3431             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 1.0566             Lunation No. = 300 
+     Eclipse Type = T                  Saros Series = 139 
+                                                 ΔT = 74.0 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2024 Apr 08   18.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.3182440  0.2197640  7.5862002  0.5358140 -0.0102720  89.591217 
+  1   0.5117116  0.2709589  0.0148440  0.0000618  0.0000615  15.004080 
+  2   0.0000326 -0.0000595 -0.0000020 -0.0000128 -0.0000127   0.000000 
+  3  -0.0000084 -0.0000047  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046683        tan f2 = 0.0046450 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  18.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  18:17:15 UT
+
+Latitude:   25.3° N      Sun’s Altitude:    69.8°          Path Width = 197.5 km
+Longitude: 104.1° W      Sun’s Azimuth:    149.4°    Central Duration = 04m28s 

@@ -1,0 +1,34 @@
+   Instant of          13:35:05 TDT     JD = 2453115.06600 
+Greatest Eclipse:    (=13:34:0 UT)
+
+Gamma = -1.1335            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.7367             Lunation No. = 53 
+     Eclipse Type = P                  Saros Series = 119 
+                                                 ΔT = 64.5 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2004 Apr 19   14.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.6931820 -0.9222000 11.4196396  0.5626270  0.0164080  30.247351 
+  1   0.4646490  0.2285195  0.0137730  0.0000781  0.0000777  15.003350 
+  2  -0.0000101 -0.0000259 -0.0000030 -0.0000102 -0.0000102   0.000000 
+  3  -0.0000055 -0.0000029  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046549        tan f2 = 0.0046317 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  14.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  13:34:0 UT
+
+Latitude:   61.6° S      Sun’s Altitude:     0.0°          Path Width = 0.0 km
+Longitude:  44.3° E      Sun’s Azimuth:    294.6°    Central Duration = 00m00s 

@@ -2,19 +2,21 @@
 
 include __DIR__ . '/../vendor/autoload.php';
 
-use Andrmoel\AstronomyBundle\Eclipses\BesselianElements;
-use Andrmoel\AstronomyBundle\Eclipses\SolarEclipse;
+use Andrmoel\AstronomyBundle\Events\SolarEclipse\SolarEclipse;
 use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
+
+date_default_timezone_set('UTC');
 
 // Madras, Oregon
 $location = new Location(44.61040, -121.23848);
 
-// Besselian elements for the given eclipse
-// https://eclipse.gsfc.nasa.gov/SEbeselm/SEbeselm2001/SE2017Aug21Tbeselm.html
-$besselianElements = new BesselianElements(include __DIR__ . '/testData/besselianElements.php');
+// Time of interest (Great American Eclipse)
+$dateTime = new DateTime('2017-08-21');
+$toi = new TimeOfInterest($dateTime);
 
-$solarEclipse = new SolarEclipse($besselianElements);
-$solarEclipse->setLocation($location);
+// Create solar eclipse
+$solarEclipse = SolarEclipse::create($toi, $location);
 
 $c1 = $solarEclipse->getCircumstancesC1();
 $c2 = $solarEclipse->getCircumstancesC2();
@@ -26,14 +28,14 @@ echo <<<END
 +------------------------------------
 | Solar eclipse
 +------------------------------------
-Location: {$location->getLatitude()}°, {$location->getLongitude()}°
+Location: {$location->getLatitude()}°, {$location->getLongitude()}° (Madras, OR - USA)
 
 Eclipse type: {$solarEclipse->getEclipseType()}
-Duration complete: {$solarEclipse->getEclipseDuration()} seconds
-Duration umbra: {$solarEclipse->getEclipseUmbraDuration()} seconds
-Coverage: {$solarEclipse->getCoverage()}
-Magnitude: {$max->getMagnitude()}
-Moon-sun-ratio: {$max->getMoonSunRatio()}
+Eclipse duration: {$solarEclipse->getEclipseDuration()} seconds
+Totality duration: {$solarEclipse->getEclipseUmbraDuration()} seconds
+Obscuration: {$solarEclipse->getObscuration()}
+Magnitude: {$solarEclipse->getMagnitude()}
+Moon-sun-ratio: {$solarEclipse->getMoonSunRatio()}
 
 Contact times
 C1: {$solarEclipse->getTimeOfInterest($c1)->getDateTime()->format('Y-m-d H:i:s')} UTC

@@ -1,0 +1,34 @@
+   Instant of          21:07:31 TDT     JD = 2463185.38000 
+Greatest Eclipse:    (=21:6:12 UT)
+
+Gamma = 0.3078             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 1.0106             Lunation No. = 394 
+     Eclipse Type = H                  Saros Series = 143 
+                                                 ΔT = 78.8 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2031 Nov 14   21.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.0198690  0.3149710 -18.3368092  0.5477740  0.0016280 138.893982 
+  1   0.5509440 -0.0890652 -0.0105340 -0.0001068 -0.0001063  14.999760 
+  2   0.0000366  0.0001046  0.0000040 -0.0000120 -0.0000119   0.000000 
+  3  -0.0000082  0.0000012  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0047260        tan f2 = 0.0047025 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  21.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  21:6:12 UT
+
+Latitude:    0.6° S      Sun’s Altitude:    72.1°          Path Width = 38.3 km
+Longitude: 137.6° W      Sun’s Azimuth:    188.7°    Central Duration = 01m08s 

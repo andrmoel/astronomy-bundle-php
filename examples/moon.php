@@ -3,7 +3,6 @@
 include __DIR__ . '/../vendor/autoload.php';
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
-use Andrmoel\AstronomyBundle\Calculations\MoonCalc;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
@@ -42,9 +41,10 @@ $localHorizontalCoordinates = $moon->getLocalHorizontalCoordinates($location);
 $azimuth = $localHorizontalCoordinates->getAzimuth();
 $altitude = $localHorizontalCoordinates->getAltitude();
 
-$distance = MoonCalc::getDistanceToEarth($toi->getJulianCenturiesFromJ2000());
+$distance = $moon->getDistanceToEarth();
 $isWaxingMoon = $moon->isWaxingMoon() ? 'yes' : 'no';
 $illuminatedFraction = $moon->getIlluminatedFraction();
+$illuminatedFraction = round($illuminatedFraction * 100, 1);
 $positionAngleOfBrightLimb = $moon->getPositionAngleOfMoonsBrightLimb();
 
 echo <<<END
@@ -60,12 +60,12 @@ Declination: {$declination}
 Distance to earth: {$distance} km
 
 Is waxing moon: {$isWaxingMoon}
-Illuminated fraction: {$illuminatedFraction}
-Position angle of bright limb: {$positionAngleOfBrightLimb}
+Illuminated fraction: {$illuminatedFraction}%
+Position angle of bright limb: {$positionAngleOfBrightLimb}°
 
 The moon seen from observer's location
 Location: {$location->getLatitude()}°, {$location->getLongitude()}°
-Azimuth: {$azimuth} (apparent)
-Altitude: {$altitude} (apparent)
+Azimuth: {$azimuth}° (apparent)
+Altitude: {$altitude}° (apparent)
 
 END;

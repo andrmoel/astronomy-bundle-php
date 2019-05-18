@@ -58,6 +58,17 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
         return new LocalHorizontalCoordinates($azimuth, $altitude);
     }
 
+    /**
+     * Distance to earth [km]
+     * @return float
+     */
+    public function getDistanceToEarth(): float
+    {
+        $d = MoonCalc::getDistanceToEarth($this->T);
+
+        return $d;
+    }
+
     public function getIlluminatedFraction(): float
     {
         $T = $this->T;

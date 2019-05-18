@@ -4,11 +4,12 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
-use Andrmoel\AstronomyBundle\Calculations\RiseAndSetCalc;
+use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Events\RiseSetTransit\RiseSetTransit;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
@@ -97,21 +98,32 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
             ->getLocalHorizontalCoordinates($location, $this->T);
     }
 
+    /**
+     * Get distance to earth [km]
+     * @return float
+     */
+    public function getDistanceToEarth(): float
+    {
+        $d = SunCalc::getDistanceToEarth($this->T);
+
+        return $d;
+    }
+
     public function getSunrise(Location $location): TimeOfInterest
     {
-        $ras = new RiseAndSetCalc(Sun::class, $location, $this->toi);
+        $ras = new RiseSetTransit(Sun::class, $location, $this->toi);
         return $ras->getRise();
     }
 
     public function getUpperCulmination(Location $location): TimeOfInterest
     {
-        $ras = new RiseAndSetCalc(Sun::class, $location, $this->toi);
+        $ras = new RiseSetTransit(Sun::class, $location, $this->toi);
         return $ras->getTransit();
     }
 
     public function getSunset(Location $location): TimeOfInterest
     {
-        $ras = new RiseAndSetCalc(Sun::class, $location, $this->toi);
+        $ras = new RiseSetTransit(Sun::class, $location, $this->toi);
         return $ras->getSet();
     }
 
