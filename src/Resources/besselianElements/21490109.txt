@@ -1,0 +1,34 @@
+   Instant of          21:30:38 TDT     JD = 2505975.39600 
+Greatest Eclipse:    (=21:25:13 UT)
+
+Gamma = 1.1802             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.6575             Lunation No. = 1843 
+     Eclipse Type = P                  Saros Series = 124 
+                                                 ΔT = 325.4 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2149 Jan 09   22.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.2068070  1.1913480 -21.9621906  0.5587060  0.0125060 148.234695 
+  1   0.5363107  0.0254440  0.0061000 -0.0001321 -0.0001315  14.997190 
+  2   0.0000030  0.0001011  0.0000060 -0.0000112 -0.0000111   0.000000 
+  3  -0.0000072 -0.0000003  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0047550        tan f2 = 0.0047313 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  22.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  21:25:13 UT
+
+Latitude:   67.9° N      Sun’s Altitude:     0.0°          Path Width = 0.0 km
+Longitude: 146.7° W      Sun’s Azimuth:    173.3°    Central Duration = 00m00s 

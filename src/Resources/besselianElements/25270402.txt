@@ -1,0 +1,34 @@
+   Instant of          08:23:26 TDT     JD = 2644118.85000 
+Greatest Eclipse:    (=7:57:10 UT)
+
+Gamma = 0.4341             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 1.0086             Lunation No. = 6521 
+     Eclipse Type = H                  Saros Series = 157 
+                                                 ΔT = 1576.4 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2527 Apr 02    8.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.3975480  0.2777370  4.8138900  0.5479840  0.0018370 299.122925 
+  1   0.4859690  0.2648227  0.0154350  0.0001229  0.0001223  15.004060 
+  2   0.0000174 -0.0000473 -0.0000010 -0.0000117 -0.0000117   0.000000 
+  3  -0.0000070 -0.0000040  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046900        tan f2 = 0.0046666 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   8.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  7:57:10 UT
+
+Latitude:   27.3° N      Sun’s Altitude:    64.1°          Path Width = 32.5 km
+Longitude:  48.1° E      Sun’s Azimuth:    147.8°    Central Duration = 00m45s 

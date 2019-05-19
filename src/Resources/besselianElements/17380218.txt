@@ -1,0 +1,34 @@
+   Instant of          18:02:31 TDT     JD = 2355900.25200 
+Greatest Eclipse:    (=18:02:20 UT)
+
+Gamma = -0.0211            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9732             Lunation No. = -3239 
+     Eclipse Type = A                  Saros Series = 126 
+                                                 ΔT = 11.3 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   1738 Feb 18   18.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.0162970 -0.0261560 -11.5008202  0.5584180  0.0122190  86.408241 
+  1   0.5169631  0.1373194  0.0144250  0.0001170  0.0001164  15.002280 
+  2  -0.0000342  0.0000647  0.0000020 -0.0000110 -0.0000110   0.000000 
+  3  -0.0000068 -0.0000017  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0047264        tan f2 = 0.0047029 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  18.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  18:02:20 UT
+
+Latitude:   12.8° S      Sun’s Altitude:    88.7°          Path Width = 96.0 km
+Longitude:  86.7° W      Sun’s Azimuth:    346.0°    Central Duration = 03m03s 

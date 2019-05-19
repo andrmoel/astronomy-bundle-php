@@ -1,0 +1,34 @@
+   Instant of          01:18:33 TDT     JD = 2513771.55500 
+Greatest Eclipse:    (=01:12:21 UT)
+
+Gamma = -1.3371            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.3831             Lunation No. = 2107 
+     Eclipse Type = P                  Saros Series = 121 
+                                                 ΔT = 372.2 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2170 May 16    1.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.2917620 -1.3148690 19.0897102  0.5582240  0.0120260 195.858475 
+  1   0.4939366  0.1741566  0.0091980 -0.0000998 -0.0000993  15.000990 
+  2   0.0000414 -0.0000529 -0.0000050 -0.0000104 -0.0000103   0.000000 
+  3  -0.0000061 -0.0000023  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046279        tan f2 = 0.0046049 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   1.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  01:12:21 UT
+
+Latitude:   63.0° S      Sun’s Altitude:     0.0°          Path Width = 0.0 km
+Longitude: 151.9° W      Sun’s Azimuth:    316.2°    Central Duration = 00m00s 

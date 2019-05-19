@@ -1,0 +1,34 @@
+   Instant of          11:09:29 TDT     JD = 2646717.96500 
+Greatest Eclipse:    (=10:42:40 UT)
+
+Gamma = -0.3896            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9402             Lunation No. = 6609 
+     Eclipse Type = A                  Saros Series = 156 
+                                                 ΔT = 1608.7 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2534 May 14   11.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.0209340 -0.3971860 18.6680107  0.5678840  0.0216380 345.752563 
+  1   0.4995395  0.0752261  0.0098040 -0.0000156 -0.0000156  15.001030 
+  2   0.0000198 -0.0000955 -0.0000040 -0.0000097 -0.0000097   0.000000 
+  3  -0.0000056 -0.0000008  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046373        tan f2 = 0.0046142 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  11.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  10:42:40 UT
+
+Latitude:    4.1° S      Sun’s Altitude:    67.0°          Path Width = 240.4 km
+Longitude:  21.9° E      Sun’s Azimuth:    351.9°    Central Duration = 08m23s 

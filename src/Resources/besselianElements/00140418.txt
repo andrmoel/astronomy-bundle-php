@@ -1,0 +1,34 @@
+   Instant of          02:41:51 TDT     JD = 1726278.61200 
+Greatest Eclipse:    (=23:48:40 UT)
+
+Gamma = 1.2571             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.5240             Lunation No. = -24560 
+     Eclipse Type = P                  Saros Series = 87 
+                                                 ΔT = 10390.5 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   14 Apr 18    3.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.4317970  1.1916740  9.8100004  0.5523060  0.0061380 225.510025 
+  1   0.4762812  0.2454006  0.0142110  0.0001078  0.0001073  15.004440 
+  2   0.0000319 -0.0001120 -0.0000020 -0.0000108 -0.0000108   0.000000 
+  3  -0.0000062 -0.0000034  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046183        tan f2 = 0.0045953 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   3.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  23:48:40 UT
+
+Latitude:   61.2° N      Sun’s Altitude:     0.0°          Path Width = 0.0 km
+Longitude:  74.2° E      Sun’s Azimuth:     69.3°    Central Duration = 00m00s 

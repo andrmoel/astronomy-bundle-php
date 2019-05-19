@@ -1,0 +1,34 @@
+   Instant of          23:23:58 TDT     JD = 1748279.47500 
+Greatest Eclipse:    (=20:40:40 UT)
+
+Gamma = -0.1064            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9922             Lunation No. = -23815 
+     Eclipse Type = Am                 Saros Series = 76 
+                                                 ΔT = 9798.1 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   74 Jul 12   23.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.2319500 -0.0547690 22.5261192  0.5529150  0.0067440 164.761475 
+  1   0.5196463 -0.1219835 -0.0049400 -0.0001044 -0.0001039  14.999520 
+  2  -0.0000083 -0.0001438 -0.0000050 -0.0000107 -0.0000107   0.000000 
+  3  -0.0000068  0.0000017  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046125        tan f2 = 0.0045895 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  23.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  20:40:40 UT
+
+Latitude:   16.7° N      Sun’s Altitude:    84.0°          Path Width = 27.4 km
+Longitude: 131.3° W      Sun’s Azimuth:     13.0°    Central Duration = 00m52s 

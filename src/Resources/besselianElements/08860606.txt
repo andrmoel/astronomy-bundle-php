@@ -1,0 +1,34 @@
+   Instant of          03:28:26 TDT     JD = 2044825.64500 
+Greatest Eclipse:    (=2:50:25 UT)
+
+Gamma = 1.3944             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.2647             Lunation No. = -13773 
+     Eclipse Type = P                  Saros Series = 119 
+                                                 ΔT = 2280.9 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   886 Jun 06    3.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.5126450  1.3244000 23.1047401  0.5367690 -0.0093210 225.826126 
+  1   0.5595089  0.1011228  0.0031170 -0.0000852 -0.0000847  14.999510 
+  2   0.0000684 -0.0002289 -0.0000050 -0.0000121 -0.0000120   0.000000 
+  3  -0.0000088 -0.0000017  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0045968        tan f2 = 0.0045739 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   3.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  2:50:25 UT
+
+Latitude:   64.8° N      Sun’s Altitude:     0.0°          Path Width = 0.0 km
+Longitude:  18.7° W      Sun’s Azimuth:     22.6°    Central Duration = 00m00s 

@@ -1,0 +1,34 @@
+   Instant of          03:13:06 TDT     JD = 1727637.63400 
+Greatest Eclipse:    (=0:20:33 UT)
+
+Gamma = -1.4168            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.2553             Lunation No. = -24514 
+     Eclipse Type = P                  Saros Series = 51 
+                                                 ΔT = 10353.4 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   18 Jan 06    3.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.1814760 -1.4094660 -22.9104404  0.5721700  0.0259030 222.630219 
+  1   0.4980552  0.1041378  0.0043100 -0.0000601 -0.0000598  14.996770 
+  2  -0.0000297  0.0002076  0.0000060 -0.0000100 -0.0000100   0.000000 
+  3  -0.0000057 -0.0000013  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0047448        tan f2 = 0.0047212 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   3.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  0:20:33 UT
+
+Latitude:   64.4° S      Sun’s Altitude:     0.0°          Path Width = 0.0 km
+Longitude:  30.9° W      Sun’s Azimuth:    205.9°    Central Duration = 00m00s 

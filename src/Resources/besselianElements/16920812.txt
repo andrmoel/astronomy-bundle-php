@@ -1,0 +1,34 @@
+   Instant of          09:41:06 TDT     JD = 2339274.90400 
+Greatest Eclipse:    (=09:40:58 UT)
+
+Gamma = -0.8649            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 1.0546             Lunation No. = -3802 
+     Eclipse Type = T                  Saros Series = 140 
+                                                 ΔT = 8.3 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   1692 Aug 12   10.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.1866010 -0.8638810 14.7032204  0.5342030 -0.0118750 328.908905 
+  1   0.5265959 -0.2350964 -0.0121660 -0.0000756 -0.0000752  15.003080 
+  2  -0.0000186 -0.0000440 -0.0000030 -0.0000125 -0.0000125   0.000000 
+  3  -0.0000086  0.0000040  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046186        tan f2 = 0.0045956 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  10.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  09:40:58 UT
+
+Latitude:   39.8° S      Sun’s Altitude:    29.8°          Path Width = 353.1 km
+Longitude:   8.6° E      Sun’s Azimuth:     30.7°    Central Duration = 04m10s 
