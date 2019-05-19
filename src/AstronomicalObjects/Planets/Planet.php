@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
+use Andrmoel\AstronomyBundle\CalculationCache;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
@@ -20,7 +21,20 @@ abstract class Planet extends AstronomicalObject
     public function __construct(TimeOfInterest $toi = null)
     {
         parent::__construct($toi);
-        $this->vsop87 = $this->loadVSOP87Data();
+
+        $this->initialize();
+    }
+
+    private function initialize(): void
+    {
+        $className = get_class($this);
+
+        if (CalculationCache::has($className, 0)) {
+            $this->vsop87 = CalculationCache::get($className, 0);
+        } else {
+            $this->vsop87 = $this->loadVSOP87Data();
+            CalculationCache::set($className, 0, $this->vsop87);
+        }
     }
 
     /**
