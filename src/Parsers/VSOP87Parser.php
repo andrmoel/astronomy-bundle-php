@@ -16,9 +16,9 @@ class VSOP87Parser extends AbstractParser
                 $coefficient = $matches[1];
                 $tIndex = $matches[2];
 
-                $A = floatval(substr($row, 80, 97 - 80));
-                $B = floatval(substr($row, 98, 111 - 98));
-                $C = floatval(substr($row, 112, 131 - 112));
+                $A = trim(substr($row, 80, 97 - 80));
+                $B = trim(substr($row, 98, 111 - 98));
+                $C = trim(substr($row, 112, 131 - 112));
 
                 $data[$coefficient][$tIndex][] = [
                     'A' => $A,

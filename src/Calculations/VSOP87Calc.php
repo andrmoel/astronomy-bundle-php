@@ -32,26 +32,26 @@ class VSOP87Calc
 
         $result = 0.0;
         foreach ($data as $tIndex => $coefficientsSets) {
-            $x = 0.0;
-            foreach ($coefficientsSets as $key => $coefficients) {
-                $A = $coefficients['A'];
-                $B = $coefficients['B'];
-                $C = $coefficients['C'];
-
-                $x += self::calculateVSOP87Term($A, $B, $C, $T);
-            }
-
-            /**
-             * TODO
-             * https://www.caglow.com/info/compute/vsop87
-             * -0.604951994318 - THEIRS
-             * -0.60495199447142 - MINE
-             */
-
+            $x = self::sumUpCoefficients($coefficientsSets, $T);
             $result += $x * pow($T, $tIndex);
         }
 
         return $result;
+    }
+
+    private static function sumUpCoefficients(array $coefficientsSet, float $T): float
+    {
+        $x = 0.0;
+
+        foreach ($coefficientsSet as $key => $coefficients) {
+            $A = $coefficients['A'];
+            $B = $coefficients['B'];
+            $C = $coefficients['C'];
+
+            $x += self::calculateVSOP87Term($A, $B, $C, $T);
+        }
+
+        return $x;
     }
 
     private static function calculateVSOP87Term($A, $B, $C, $T): float
@@ -61,6 +61,6 @@ class VSOP87Calc
 
     private static function loadData(string $VSOP87Data): array
     {
-        return require __DIR__ . '/../Resources/VSOP87/serialized/' . $VSOP87Data . '.php';
+        return require __DIR__ . '/../Resources/VSOP87/' . $VSOP87Data . '.php';
     }
 }

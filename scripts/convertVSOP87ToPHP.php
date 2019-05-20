@@ -5,7 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use Andrmoel\AstronomyBundle\Parsers\ParserFactory;
 use Andrmoel\AstronomyBundle\Parsers\VSOP87Parser;
 
-$dir = __DIR__ . '/../src/Resources/VSOP87/';
+$dir = __DIR__ . '/../src/Resources/VSOP87/plain/';
 
 $handle = opendir($dir);
 while ($fileName = readdir($handle)) {
@@ -21,7 +21,7 @@ while ($fileName = readdir($handle)) {
 
 function dataToPHPFile(array $data, string $fileName): void
 {
-    $file = __DIR__ . '/../src/Resources/VSOP87/serialized/' . $fileName . '.php';
+    $file = __DIR__ . '/../src/Resources/VSOP87/' . $fileName . '.php';
 
     $content = '<?php' . "\n";
     $content .= 'return [' . "\n";
