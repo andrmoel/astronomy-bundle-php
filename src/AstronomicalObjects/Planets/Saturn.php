@@ -2,10 +2,11 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
-use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\SaturnRectangularVSOP87;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\SaturnSphericalVSOP87;
 
 class Saturn extends Planet
 {
-    protected $VSOP87_SPHERICAL = VSOP87Calc::PLANET_SATURN_SPHERICAL;
-    protected $VSOP87_RECTANGULAR = VSOP87Calc::PLANET_SATURN_RECTANGULAR;
+    protected $VSOP87_SPHERICAL = SaturnSphericalVSOP87::class;
+    protected $VSOP87_RECTANGULAR = SaturnRectangularVSOP87::class;
 }

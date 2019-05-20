@@ -2,7 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
-use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\EarthRectangularVSOP87;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\EarthSphericalVSOP87;
 
 class Earth extends Planet
 {
@@ -10,8 +11,8 @@ class Earth extends Planet
     const FLATTENING = 0.00335281317789691440603238146967; // (1 / 298.257) Earth's flattening
     const EARTH_AXIS_RATIO = 0.996647189335;
 
-    protected $VSOP87_SPHERICAL = VSOP87Calc::PLANET_EARTH_SPHERICAL;
-    protected $VSOP87_RECTANGULAR = VSOP87Calc::PLANET_EARTH_RECTANGULAR;
+    protected $VSOP87_SPHERICAL = EarthSphericalVSOP87::class;
+    protected $VSOP87_RECTANGULAR = EarthRectangularVSOP87::class;
 
     /**
      * Get earth radius at equator

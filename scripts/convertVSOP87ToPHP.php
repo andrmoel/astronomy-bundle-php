@@ -5,7 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 use Andrmoel\AstronomyBundle\Parsers\ParserFactory;
 use Andrmoel\AstronomyBundle\Parsers\VSOP87Parser;
 
-$dir = __DIR__ . '/../src/Resources/VSOP87/plain/';
+$dir = __DIR__ . '/../src/Resources/VSOP87/';
 
 $handle = opendir($dir);
 while ($fileName = readdir($handle)) {
@@ -21,34 +21,96 @@ while ($fileName = readdir($handle)) {
 
 function dataToPHPFile(array $data, string $fileName): void
 {
-    $file = __DIR__ . '/../src/Resources/VSOP87/' . $fileName . '.php';
+    $fileName = generateClassName($fileName);
+    $file = __DIR__ . '/../src/Calculations/VSOP87/' . $fileName . '.php';
 
-    $content = '<?php' . "\n";
-    $content .= 'return [' . "\n";
+    $content = '<?php' . "\n\n";
+
+    $content .= 'namespace Andrmoel\\AstronomyBundle\\Calculations\\VSOP87' . ";\n\n";
+    $content .= 'class ' . $fileName . " implements VSOP87Interface\n{";
 
     foreach ($data as $key => $value) {
-        $content .= '  ' . $key . ' => [' . "\n";
+        switch ($key) {
+            default:
+            case 1:
+                $term = 'A';
+                break;
+            case 2:
+                $term = 'B';
+                break;
+            case 3:
+                $term = 'C';
+                break;
+        };
 
         foreach ($value as $key2 => $value2) {
-            $content .= '    ' . $key2 . ' => [' . "\n";
+            $content .= "\n" . '    public static function calculate' . $term . $key2 . "(\$t): float\n    {\n";
+
+            $content .= '        return ';
 
             foreach ($value2 as $key3 => $value3) {
-                $content .= '      ' . $key3 . ' => [' . "\n";
+                $A = $value3['A'];
+                $B = $value3['B'];
+                $C = $value3['C'];
 
-                foreach ($value3 as $key4 => $value4) {
-                    $content .= '        \'' . $key4 . '\' => ' . $value4 . ",\n";
+                if ($key3 > 0) {
+                    $content .= "\n            +";
                 }
 
-                $content .= '      ' . "],\n";
+                $content .= " $A * cos($B + $C * \$t)";
             }
 
-            $content .= '    ' . "],\n";
+            $content .= ";\n    }\n";
         }
-
-        $content .= '  ' . "],\n";
     }
 
-    $content .= '];';
+    $content .= "}\n";
 
     file_put_contents($file, $content);
+}
+
+function generateClassName(string $fileName): string
+{
+    $pattern = '/VSOP87([A-F])\.([a-z]{3})$/';
+
+    if (preg_match($pattern, $fileName, $matches)) {
+        switch ($matches[2]) {
+            case 'ear':
+                $part1 = 'Earth';
+                break;
+            case 'jup':
+                $part1 = 'Jupiter';
+                break;
+            case 'mar':
+                $part1 = 'Mars';
+                break;
+            case 'mer':
+                $part1 = 'Mercury';
+                break;
+            case 'nep':
+                $part1 = 'Neptune';
+                break;
+            case 'sat':
+                $part1 = 'Saturn';
+                break;
+            case 'ura':
+                $part1 = 'Uranus';
+                break;
+            case 'ven':
+                $part1 = 'Venus';
+                break;
+        }
+        switch ($matches[1]) {
+            case 'C':
+                $part2 = 'Rectangular';
+                break;
+            case 'D':
+                $part2 = 'Spherical';
+                break;
+        }
+
+        return $part1 . $part2 . 'VSOP87';
+    }
+
+    return '';
 }

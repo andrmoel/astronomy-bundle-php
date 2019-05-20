@@ -2,82 +2,32 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
-use Andrmoel\AstronomyBundle\CalculationCache;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\VSOP87Interface;
 
 class VSOP87Calc
 {
-    const PLANET_MERCURY_RECTANGULAR = 'VSOP87C.mer';
-    const PLANET_VENUS_RECTANGULAR = 'VSOP87C.ven';
-    const PLANET_EARTH_RECTANGULAR = 'VSOP87C.ear';
-    const PLANET_MARS_RECTANGULAR = 'VSOP87C.mar';
-    const PLANET_JUPITER_RECTANGULAR = 'VSOP87C.jup';
-    const PLANET_SATURN_RECTANGULAR = 'VSOP87C.sat';
-    const PLANET_URANUS_RECTANGULAR = 'VSOP87C.ura';
-    const PLANET_NEPTUNE_RECTANGULAR = 'VSOP87C.nep';
-    const PLANET_MERCURY_SPHERICAL = 'VSOP87D.mer';
-    const PLANET_VENUS_SPHERICAL = 'VSOP87D.ven';
-    const PLANET_EARTH_SPHERICAL = 'VSOP87D.ear';
-    const PLANET_MARS_SPHERICAL = 'VSOP87D.mar';
-    const PLANET_JUPITER_SPHERICAL = 'VSOP87D.jup';
-    const PLANET_SATURN_SPHERICAL = 'VSOP87D.sat';
-    const PLANET_URANUS_SPHERICAL = 'VSOP87D.ura';
-    const PLANET_NEPTUNE_SPHERICAL = 'VSOP87D.nep';
-
-    const COEFFICIENT_A = '1';
-    const COEFFICIENT_B = '2';
-    const COEFFICIENT_C = '3';
-
-    public static function getVSOP87Result(string $VSOP87Data, float $t): array
+    public static function solve(string $VSOP87, float $t): array
     {
-        if (CalculationCache::has($VSOP87Data, $t)) {
-            return CalculationCache::get($VSOP87Data, $t);
-        }
+        /** @var VSOP87Interface $VSOP87 */
 
-        $result = [
-            self::COEFFICIENT_A => 0.0,
-            self::COEFFICIENT_B => 0.0,
-            self::COEFFICIENT_C => 0.0,
-        ];
+        $A = $VSOP87::calculateA0($t)
+            + $VSOP87::calculateA1($t) * $t
+            + $VSOP87::calculateA2($t) * pow($t, 2)
+            + $VSOP87::calculateA3($t) * pow($t, 3)
+            + $VSOP87::calculateA4($t) * pow($t, 4);
 
-        $data = self::loadData($VSOP87Data);
+        $B = $VSOP87::calculateB0($t)
+            + $VSOP87::calculateB1($t) * $t
+            + $VSOP87::calculateB2($t) * pow($t, 2)
+            + $VSOP87::calculateB3($t) * pow($t, 3)
+            + $VSOP87::calculateB4($t) * pow($t, 4);
 
-        foreach ($data as $coefficient => $set) {
-            $coefficientSolved = 0.0;
-            foreach ($set as $tIndex => $coefficientsSets) {
-                $x = self::sumUpCoefficients($coefficientsSets, $t);
-                $coefficientSolved += $x * pow($t, $tIndex);
-            }
+        $R = $VSOP87::calculateC0($t)
+            + $VSOP87::calculateC1($t) * $t
+            + $VSOP87::calculateC2($t) * pow($t, 2)
+            + $VSOP87::calculateC3($t) * pow($t, 3)
+            + $VSOP87::calculateC4($t) * pow($t, 4);
 
-            $result[$coefficient] = $coefficientSolved;
-        }
-
-        CalculationCache::set($VSOP87Data, $t, $result);
-
-        return $result;
-    }
-
-    private static function sumUpCoefficients(array $coefficientsSet, float $t): float
-    {
-        $x = 0.0;
-
-        foreach ($coefficientsSet as $key => $coefficients) {
-            $A = $coefficients['A'];
-            $B = $coefficients['B'];
-            $C = $coefficients['C'];
-
-            $x += self::calculateVSOP87Term($A, $B, $C, $t);
-        }
-
-        return $x;
-    }
-
-    private static function calculateVSOP87Term($A, $B, $C, $t): float
-    {
-        return $A * cos($B + $C * $t);
-    }
-
-    private static function loadData(string $VSOP87Data): array
-    {
-        return require __DIR__ . '/../Resources/VSOP87/' . $VSOP87Data . '.php';
+        return [$A, $B, $R];
     }
 }
