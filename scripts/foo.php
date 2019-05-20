@@ -16,11 +16,12 @@ $x = $X0
     + $X4 * pow($T, 4)
     + $X5 * pow($T, 5);
 
-var_dump($x);
+var_dump($x);die("END");
 
 /*
- * -0.60495207454
- * -0.60495813293282
+ * -0.604958132783 - https://www.caglow.com/info/compute/vsop87
+ * -0.60495207454 - http://neoprogrammics.com/vsop87/source_code_generator_tool/index.php
+ * -0.60495813293282 - mine
  */
 
 /*
