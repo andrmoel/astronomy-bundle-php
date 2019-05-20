@@ -29,7 +29,7 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
     public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
     {
         $t = $this->toi->getJulianMillenniaFromJ2000();
-        $coefficients = VSOP87Calc::solve($this->VSOP87_RECTANGULAR, $t);
+        $coefficients = VSOP87Calc::solve($this->VSOP87_SPHERICAL, $t);
 
         $L = $coefficients[0];
         $B = $coefficients[1];
@@ -44,7 +44,7 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
     public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates
     {
         $t = $this->toi->getJulianMillenniaFromJ2000();
-        $coefficients = VSOP87Calc::solve($this->VSOP87_SPHERICAL, $t);
+        $coefficients = VSOP87Calc::solve($this->VSOP87_RECTANGULAR, $t);
 
         $X = $coefficients[0];
         $Y = $coefficients[1];
