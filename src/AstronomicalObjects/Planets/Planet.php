@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\VenusSphericalVSOP87;
 use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
@@ -25,13 +26,23 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
     {
         $t = $this->toi->getJulianMillenniaFromJ2000();
 
-        $VSOP87Solution = VSOP87Calc::getVSOP87Result($this->VSOP87_SPHERICAL, $t);
+        $L = $this->VSOP87_SPHERICAL::calculateA0($t)
+            + $this->VSOP87_SPHERICAL::calculateA1($t) * $t
+            + $this->VSOP87_SPHERICAL::calculateA2($t) * pow($t, 2)
+            + $this->VSOP87_SPHERICAL::calculateA3($t) * pow($t, 3);
 
-        $L = rad2deg($VSOP87Solution[VSOP87Calc::COEFFICIENT_A]);
-        $B = rad2deg($VSOP87Solution[VSOP87Calc::COEFFICIENT_B]);
-        $R = $VSOP87Solution[VSOP87Calc::COEFFICIENT_C];
+        $B = $this->VSOP87_SPHERICAL::calculateB0($t)
+            + $this->VSOP87_SPHERICAL::calculateB1($t) * $t
+            + $this->VSOP87_SPHERICAL::calculateB2($t) * pow($t, 2)
+            + $this->VSOP87_SPHERICAL::calculateB3($t) * pow($t, 3);
 
-        $L = AngleUtil::normalizeAngle($L);
+        $R = $this->VSOP87_SPHERICAL::calculateC0($t)
+            + $this->VSOP87_SPHERICAL::calculateC1($t) * $t
+            + $this->VSOP87_SPHERICAL::calculateC2($t) * pow($t, 2)
+            + $this->VSOP87_SPHERICAL::calculateC3($t) * pow($t, 3);
+
+        $L = AngleUtil::normalizeAngle(rad2deg($L));
+        $B = rad2deg($B);
 
         return new HeliocentricEclipticalSphericalCoordinates($B, $L, $R);
     }
@@ -40,11 +51,20 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
     {
         $t = $this->toi->getJulianMillenniaFromJ2000();
 
-        $VSOP87Solution = VSOP87Calc::getVSOP87Result($this->VSOP87_RECTANGULAR, $t);
+        $X = $this->VSOP87_RECTANGULAR::calculateA0($t)
+            + $this->VSOP87_RECTANGULAR::calculateA1($t) * $t
+            + $this->VSOP87_RECTANGULAR::calculateA2($t) * pow($t, 2)
+            + $this->VSOP87_RECTANGULAR::calculateA3($t) * pow($t, 3);
 
-        $X = $VSOP87Solution[VSOP87Calc::COEFFICIENT_A];
-        $Y = $VSOP87Solution[VSOP87Calc::COEFFICIENT_B];
-        $Z = $VSOP87Solution[VSOP87Calc::COEFFICIENT_C];
+        $Y = $this->VSOP87_RECTANGULAR::calculateB0($t)
+            + $this->VSOP87_RECTANGULAR::calculateB1($t) * $t
+            + $this->VSOP87_RECTANGULAR::calculateB2($t) * pow($t, 2)
+            + $this->VSOP87_RECTANGULAR::calculateB3($t) * pow($t, 3);
+
+        $Z = $this->VSOP87_RECTANGULAR::calculateC0($t)
+            + $this->VSOP87_RECTANGULAR::calculateC1($t) * $t
+            + $this->VSOP87_RECTANGULAR::calculateC2($t) * pow($t, 2)
+            + $this->VSOP87_RECTANGULAR::calculateC3($t) * pow($t, 3);
 
         return new HeliocentricEquatorialRectangularCoordinates($X, $Y, $Z);
     }

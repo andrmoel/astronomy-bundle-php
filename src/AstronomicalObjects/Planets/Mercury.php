@@ -2,10 +2,11 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
-use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\MercuryRectangularVSOP87;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\MercurySphericalVSOP87;
 
 class Mercury extends Planet
 {
-    protected $VSOP87_SPHERICAL = VSOP87Calc::PLANET_MERCURY_SPHERICAL;
-    protected $VSOP87_RECTANGULAR = VSOP87Calc::PLANET_MERCURY_RECTANGULAR;
+    protected $VSOP87_SPHERICAL = MercurySphericalVSOP87::class;
+    protected $VSOP87_RECTANGULAR = MercuryRectangularVSOP87::class;
 }

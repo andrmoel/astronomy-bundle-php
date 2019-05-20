@@ -2,10 +2,11 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
-use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\NeptuneRectangularVSOP87;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\NeptuneSphericalVSOP87;
 
 class Neptune extends Planet
 {
-    protected $VSOP87_SPHERICAL = VSOP87Calc::PLANET_NEPTUNE_SPHERICAL;
-    protected $VSOP87_RECTANGULAR = VSOP87Calc::PLANET_NEPTUNE_RECTANGULAR;
+    protected $VSOP87_SPHERICAL = NeptuneSphericalVSOP87::class;
+    protected $VSOP87_RECTANGULAR = NeptuneRectangularVSOP87::class;
 }
