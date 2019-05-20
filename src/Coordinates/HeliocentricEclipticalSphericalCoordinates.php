@@ -35,8 +35,8 @@ class HeliocentricEclipticalSphericalCoordinates
 
     public function getHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
     {
-        $LRad = deg2rad($this->longitude);
         $BRad = deg2rad($this->latitude);
+        $LRad = deg2rad($this->longitude);
 
         $x = $this->radiusVector * cos($BRad) * cos($LRad);
         $y = $this->radiusVector * cos($BRad) * sin($LRad);
@@ -61,8 +61,8 @@ class HeliocentricEclipticalSphericalCoordinates
         TimeOfInterest $toi
     ): GeocentricEquatorialRectangularCoordinates
     {
-        $LRad = deg2rad($this->longitude);
         $BRad = deg2rad($this->latitude);
+        $LRad = deg2rad($this->longitude);
         $R = $this->radiusVector;
 
         // Heliocentric coordinates of earth

@@ -1,6 +1,6 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
+namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;

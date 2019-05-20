@@ -2,12 +2,10 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
+use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
+
 class Jupiter extends Planet
 {
-    public function loadVSOP87Data(): array
-    {
-        $data = file_get_contents(self::VSOP87_FILE_PATH . 'jupiter.json');
-
-        return json_decode($data, 1);
-    }
+    protected $VSOP87_SPHERICAL = VSOP87Calc::PLANET_JUPITER_SPHERICAL;
+    protected $VSOP87_RECTANGULAR = VSOP87Calc::PLANET_JUPITER_RECTANGULAR;
 }

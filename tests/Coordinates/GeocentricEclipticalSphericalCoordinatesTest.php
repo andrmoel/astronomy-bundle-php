@@ -5,7 +5,7 @@ namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use PHPUnit\Framework\TestCase;
 
-class GeocentricEquatorialSphericalCoordinatesTest extends TestCase
+class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
 {
     /**
      * @test
