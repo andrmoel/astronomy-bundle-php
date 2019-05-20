@@ -44,7 +44,7 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
     public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates
     {
         $t = $this->toi->getJulianMillenniaFromJ2000();
-        $coefficients = VSOP87Calc::solve($this->VSOP87_RECTANGULAR, $t);
+        $coefficients = VSOP87Calc::solve($this->VSOP87_SPHERICAL, $t);
 
         $X = $coefficients[0];
         $Y = $coefficients[1];
