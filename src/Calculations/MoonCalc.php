@@ -255,7 +255,7 @@ class MoonCalc implements MoonCalcInterface
             - pow($T, 4) / 65194000;
         $L = AngleUtil::normalizeAngle($L);
 
-        CalculationCache::set('moonArgumentOfLatitude', $T, $L);
+        CalculationCache::set('moonMeanLongitude', $T, $L);
 
         return $L;
     }
