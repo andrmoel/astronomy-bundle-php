@@ -2,9 +2,9 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations\VSOP87;
 
-class VenusRectangularVSOP87
+class VenusRectangularVSOP87 implements VSOP87Interface
 {
-    public static function calculateA0($t)
+    public static function calculateA0($t): float
     {
         return  0.72268045621 * cos(3.17614669179 + 10213.52936369450 * $t)
             + 0.00733886107 * cos(5.43699242686 + 0.24381748350 * $t)
@@ -693,7 +693,7 @@ class VenusRectangularVSOP87
             + 0.00000000031 * cos(0.27204438582 + 25960.17883340570 * $t);
     }
 
-    public static function calculateA1($t)
+    public static function calculateA1($t): float
     {
         return  0.00051880979 * cos(2.28175279050 + 0.24381748350 * $t)
             + 0.00017260820 * cos(0.92558492780 + 20426.81490990550 * $t)
@@ -1103,7 +1103,7 @@ class VenusRectangularVSOP87
             + 0.00000000013 * cos(6.14132227253 + 52670.31341078610 * $t);
     }
 
-    public static function calculateA2($t)
+    public static function calculateA2($t): float
     {
         return  0.00039116576 * cos(4.74721085665 + 10213.52936369450 * $t)
             + 0.00001782208 * cos(4.51495547304 + 0.24381748350 * $t)
@@ -1240,7 +1240,7 @@ class VenusRectangularVSOP87
             + 0.00000000007 * cos(1.18159563994 + 529.44714761109 * $t);
     }
 
-    public static function calculateA3($t)
+    public static function calculateA3($t): float
     {
         return  0.00000055518 * cos(5.27636048864 + 10213.04172872750 * $t)
             + 0.00000057047 * cos(5.87936770190 + 0.24381748350 * $t)
@@ -1269,7 +1269,7 @@ class VenusRectangularVSOP87
             + 0.00000000003 * cos(6.23075905972 + 11322.90791578790 * $t);
     }
 
-    public static function calculateA4($t)
+    public static function calculateA4($t): float
     {
         return  0.00000083081 * cos(1.47755047593 + 10213.52936369450 * $t)
             + 0.00000002486 * cos(0.71777141614 + 10213.04172872750 * $t)
@@ -1285,7 +1285,7 @@ class VenusRectangularVSOP87
             + 0.00000000002 * cos(2.29946508014 + 9438.00675237050 * $t);
     }
 
-    public static function calculateA5($t)
+    public static function calculateA5($t): float
     {
         return  0.00000000631 * cos(1.59925460860 + 10213.52936369450 * $t)
             + 0.00000000095 * cos(2.54586723363 + 10213.04172872750 * $t)
@@ -1293,7 +1293,7 @@ class VenusRectangularVSOP87
             + 0.00000000040 * cos(5.81128931245 + 20426.81490990550 * $t);
     }
 
-    public static function calculateB0($t)
+    public static function calculateB0($t): float
     {
         return  0.72268045621 * cos(1.60535036499 + 10213.52936369450 * $t)
             + 0.00733886107 * cos(3.86619610007 + 0.24381748350 * $t)
@@ -1982,7 +1982,7 @@ class VenusRectangularVSOP87
             + 0.00000000031 * cos(1.84284071261 + 25960.17883340570 * $t);
     }
 
-    public static function calculateB1($t)
+    public static function calculateB1($t): float
     {
         return  0.00051880979 * cos(0.71095646371 + 0.24381748350 * $t)
             + 0.00017260820 * cos(5.63797390819 + 20426.81490990550 * $t)
@@ -2392,7 +2392,7 @@ class VenusRectangularVSOP87
             + 0.00000000013 * cos(4.57052594573 + 52670.31341078610 * $t);
     }
 
-    public static function calculateB2($t)
+    public static function calculateB2($t): float
     {
         return  0.00039116576 * cos(3.17641452985 + 10213.52936369450 * $t)
             + 0.00001782208 * cos(2.94415914625 + 0.24381748350 * $t)
@@ -2529,7 +2529,7 @@ class VenusRectangularVSOP87
             + 0.00000000007 * cos(2.75239196673 + 529.44714761109 * $t);
     }
 
-    public static function calculateB3($t)
+    public static function calculateB3($t): float
     {
         return  0.00000055518 * cos(0.56397150825 + 10213.04172872750 * $t)
             + 0.00000057047 * cos(4.30857137510 + 0.24381748350 * $t)
@@ -2558,7 +2558,7 @@ class VenusRectangularVSOP87
             + 0.00000000003 * cos(4.65996273292 + 11322.90791578790 * $t);
     }
 
-    public static function calculateB4($t)
+    public static function calculateB4($t): float
     {
         return  0.00000083081 * cos(6.18993945631 + 10213.52936369450 * $t)
             + 0.00000002486 * cos(2.28856774293 + 10213.04172872750 * $t)
@@ -2574,7 +2574,7 @@ class VenusRectangularVSOP87
             + 0.00000000002 * cos(0.72866875334 + 9438.00675237050 * $t);
     }
 
-    public static function calculateB5($t)
+    public static function calculateB5($t): float
     {
         return  0.00000000631 * cos(0.02845828180 + 10213.52936369450 * $t)
             + 0.00000000095 * cos(4.11666356042 + 10213.04172872750 * $t)
@@ -2582,7 +2582,7 @@ class VenusRectangularVSOP87
             + 0.00000000040 * cos(4.24049298565 + 20426.81490990550 * $t);
     }
 
-    public static function calculateC0($t)
+    public static function calculateC0($t): float
     {
         return  0.04282990302 * cos(0.26703856476 + 10213.28554621100 * $t)
             + 0.00035588343 * cos(3.14159265359 + 0.00000000000 * $t)
@@ -2776,7 +2776,7 @@ class VenusRectangularVSOP87
             + 0.00000000061 * cos(3.77333230443 + 51868.24866217880 * $t);
     }
 
-    public static function calculateC1($t)
+    public static function calculateC1($t): float
     {
         return  0.00371157532 * cos(1.80370484107 + 10213.28554621100 * $t)
             + 0.00001583350 * cos(3.38513432885 + 20426.57109242200 * $t)
@@ -2897,7 +2897,7 @@ class VenusRectangularVSOP87
             + 0.00000000014 * cos(5.04938942644 + 6681.22485339960 * $t);
     }
 
-    public static function calculateC2($t)
+    public static function calculateC2($t): float
     {
         return  0.00016179656 * cos(3.38519723238 + 10213.28554621100 * $t)
             + 0.00000305549 * cos(0.00000000000 + 0.00000000000 * $t)
@@ -2950,7 +2950,7 @@ class VenusRectangularVSOP87
             + 0.00000000007 * cos(4.31777952738 + 3154.68708489560 * $t);
     }
 
-    public static function calculateC3($t)
+    public static function calculateC3($t): float
     {
         return  0.00000467466 * cos(4.99201374907 + 10213.28554621100 * $t)
             + 0.00000021639 * cos(3.14159265359 + 0.00000000000 * $t)
@@ -2966,18 +2966,17 @@ class VenusRectangularVSOP87
             + 0.00000000005 * cos(2.22179616897 + 1577.34354244780 * $t);
     }
 
-    public static function calculateC4($t)
+    public static function calculateC4($t): float
     {
         return  0.00000010192 * cos(0.31526267335 + 10213.28554621100 * $t)
             + 0.00000000233 * cos(3.14159265359 + 0.00000000000 * $t)
             + 0.00000000069 * cos(2.32746005974 + 20426.57109242200 * $t);
     }
 
-    public static function calculateC5($t)
+    public static function calculateC5($t): float
     {
         return  0.00000000173 * cos(2.05270625526 + 10213.28554621100 * $t)
             + 0.00000000042 * cos(0.00000000000 + 0.00000000000 * $t)
             + 0.00000000004 * cos(3.77138066766 + 20426.57109242200 * $t);
     }
-
 }

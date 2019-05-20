@@ -27,7 +27,7 @@ function dataToPHPFile(array $data, string $fileName): void
     $content = '<?php' . "\n\n";
 
     $content .= 'namespace Andrmoel\\AstronomyBundle\\Calculations\\VSOP87' . ";\n\n";
-    $content .= 'class ' . $fileName . "\n{\n";
+    $content .= 'class ' . $fileName . " implements VSOP87Interface\n{";
 
     foreach ($data as $key => $value) {
         switch ($key) {
@@ -44,7 +44,7 @@ function dataToPHPFile(array $data, string $fileName): void
         };
 
         foreach ($value as $key2 => $value2) {
-            $content .= '    public static function calculate' . $term . $key2 . "(\$t)\n    {\n";
+            $content .= "\n" . '    public static function calculate' . $term . $key2 . "(\$t): float\n    {\n";
 
             $content .= '        return ';
 
@@ -60,11 +60,11 @@ function dataToPHPFile(array $data, string $fileName): void
                 $content .= " $A * cos($B + $C * \$t)";
             }
 
-            $content .= ";\n    }\n\n";
+            $content .= ";\n    }\n";
         }
     }
 
-    $content .= '}';
+    $content .= "}\n";
 
     file_put_contents($file, $content);
 }

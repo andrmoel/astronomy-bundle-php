@@ -2,9 +2,9 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations\VSOP87;
 
-class SaturnRectangularVSOP87
+class SaturnRectangularVSOP87 implements VSOP87Interface
 {
-    public static function calculateA0($t)
+    public static function calculateA0($t): float
     {
         return  9.52312533591 * cos(0.87401491487 + 213.54291292150 * $t)
             + 0.79501390398 * cos(4.76580713096 + 0.24381748350 * $t)
@@ -2055,7 +2055,7 @@ class SaturnRectangularVSOP87
             + 0.00000000681 * cos(0.38545629971 + 414.57495994570 * $t);
     }
 
-    public static function calculateA1($t)
+    public static function calculateA1($t): float
     {
         return  0.09285877988 * cos(0.61678993503 + 0.24381748350 * $t)
             + 0.03086501680 * cos(4.27493632359 + 426.84200835950 * $t)
@@ -3082,7 +3082,7 @@ class SaturnRectangularVSOP87
             + 0.00000000785 * cos(2.62141651385 + 3494.29384274070 * $t);
     }
 
-    public static function calculateA2($t)
+    public static function calculateA2($t): float
     {
         return  0.00862721930 * cos(2.44701762869 + 213.54291292150 * $t)
             + 0.00611630287 * cos(2.28479450822 + 0.24381748350 * $t)
@@ -3597,7 +3597,7 @@ class SaturnRectangularVSOP87
             + 0.00000000909 * cos(2.87462833456 + 746.15463932291 * $t);
     }
 
-    public static function calculateA3($t)
+    public static function calculateA3($t): float
     {
         return  0.00076886822 * cos(2.95726755259 + 206.42936592071 * $t)
             + 0.00075865107 * cos(1.87343394188 + 220.65645992230 * $t)
@@ -3851,7 +3851,7 @@ class SaturnRectangularVSOP87
             + 0.00000000801 * cos(4.16672540134 + 1457.28211557850 * $t);
     }
 
-    public static function calculateA4($t)
+    public static function calculateA4($t): float
     {
         return  0.00007957923 * cos(0.10292939767 + 220.65645992230 * $t)
             + 0.00007883034 * cos(4.66633773762 + 206.42936592071 * $t)
@@ -3965,7 +3965,7 @@ class SaturnRectangularVSOP87
             + 0.00000000859 * cos(5.20905469515 + 537.04832957890 * $t);
     }
 
-    public static function calculateA5($t)
+    public static function calculateA5($t): float
     {
         return  0.00000605503 * cos(4.59646585232 + 220.65645992230 * $t)
             + 0.00000576439 * cos(0.06437124594 + 206.42936592071 * $t)
@@ -4009,7 +4009,7 @@ class SaturnRectangularVSOP87
             + 0.00000000910 * cos(2.05287501643 + 96.22304470130 * $t);
     }
 
-    public static function calculateB0($t)
+    public static function calculateB0($t): float
     {
         return  9.52312533591 * cos(5.58640389526 + 213.54291292150 * $t)
             + 0.79501390398 * cos(3.19501080417 + 0.24381748350 * $t)
@@ -6060,7 +6060,7 @@ class SaturnRectangularVSOP87
             + 0.00000000681 * cos(1.95625262651 + 414.57495994570 * $t);
     }
 
-    public static function calculateB1($t)
+    public static function calculateB1($t): float
     {
         return  0.09285877988 * cos(5.32917891541 + 0.24381748350 * $t)
             + 0.03086501680 * cos(2.70413999679 + 426.84200835950 * $t)
@@ -7087,7 +7087,7 @@ class SaturnRectangularVSOP87
             + 0.00000000785 * cos(4.19221284065 + 3494.29384274070 * $t);
     }
 
-    public static function calculateB2($t)
+    public static function calculateB2($t): float
     {
         return  0.00862721930 * cos(0.87622130189 + 213.54291292150 * $t)
             + 0.00611630287 * cos(0.71399818143 + 0.24381748350 * $t)
@@ -7602,7 +7602,7 @@ class SaturnRectangularVSOP87
             + 0.00000000909 * cos(1.30383200776 + 746.15463932291 * $t);
     }
 
-    public static function calculateB3($t)
+    public static function calculateB3($t): float
     {
         return  0.00076886822 * cos(1.38647122579 + 206.42936592071 * $t)
             + 0.00075865107 * cos(0.30263761509 + 220.65645992230 * $t)
@@ -7856,7 +7856,7 @@ class SaturnRectangularVSOP87
             + 0.00000000801 * cos(5.73752172813 + 1457.28211557850 * $t);
     }
 
-    public static function calculateB4($t)
+    public static function calculateB4($t): float
     {
         return  0.00007957923 * cos(4.81531837805 + 220.65645992230 * $t)
             + 0.00007883034 * cos(3.09554141083 + 206.42936592071 * $t)
@@ -7970,7 +7970,7 @@ class SaturnRectangularVSOP87
             + 0.00000000859 * cos(3.63825836835 + 537.04832957890 * $t);
     }
 
-    public static function calculateB5($t)
+    public static function calculateB5($t): float
     {
         return  0.00000605503 * cos(3.02566952553 + 220.65645992230 * $t)
             + 0.00000576439 * cos(4.77676022633 + 206.42936592071 * $t)
@@ -8014,7 +8014,7 @@ class SaturnRectangularVSOP87
             + 0.00000000910 * cos(0.48207868964 + 96.22304470130 * $t);
     }
 
-    public static function calculateC0($t)
+    public static function calculateC0($t): float
     {
         return  0.41356950940 * cos(3.60234142982 + 213.29909543800 * $t)
             + 0.01148283576 * cos(2.85128367469 + 426.59819087600 * $t)
@@ -8438,7 +8438,7 @@ class SaturnRectangularVSOP87
             + 0.00000001404 * cos(4.02343833901 + 300.61086697750 * $t);
     }
 
-    public static function calculateC1($t)
+    public static function calculateC1($t): float
     {
         return  0.03810308320 * cos(5.33520316778 + 213.29909543800 * $t)
             + 0.00707598508 * cos(3.14159265359 + 0.00000000000 * $t)
@@ -8676,7 +8676,7 @@ class SaturnRectangularVSOP87
             + 0.00000000724 * cos(4.57593199965 + 228.27694896500 * $t);
     }
 
-    public static function calculateC2($t)
+    public static function calculateC2($t): float
     {
         return  0.00195192259 * cos(0.50946874402 + 213.29909543800 * $t)
             + 0.00036491216 * cos(3.99604491617 + 206.18554843720 * $t)
@@ -8771,7 +8771,7 @@ class SaturnRectangularVSOP87
             + 0.00000000697 * cos(0.53637719953 + 628.85158605010 * $t);
     }
 
-    public static function calculateC3($t)
+    public static function calculateC3($t): float
     {
         return  0.00006552316 * cos(1.98918006303 + 213.29909543800 * $t)
             + 0.00006205120 * cos(5.69682939522 + 206.18554843720 * $t)
@@ -8820,7 +8820,7 @@ class SaturnRectangularVSOP87
             + 0.00000000804 * cos(4.10158366806 + 224.34479570190 * $t);
     }
 
-    public static function calculateC4($t)
+    public static function calculateC4($t): float
     {
         return  0.00000789033 * cos(1.11928782644 + 206.18554843720 * $t)
             + 0.00000281365 * cos(3.13274851308 + 213.29909543800 * $t)
@@ -8846,7 +8846,7 @@ class SaturnRectangularVSOP87
             + 0.00000001045 * cos(5.61649418233 + 316.39186965660 * $t);
     }
 
-    public static function calculateC5($t)
+    public static function calculateC5($t): float
     {
         return  0.00000077433 * cos(2.81859989913 + 206.18554843720 * $t)
             + 0.00000013826 * cos(3.14159265359 + 0.00000000000 * $t)
@@ -8858,5 +8858,4 @@ class SaturnRectangularVSOP87
             + 0.00000000968 * cos(5.23916441152 + 213.29909543800 * $t)
             + 0.00000000867 * cos(5.81659714144 + 7.11354700080 * $t);
     }
-
 }
