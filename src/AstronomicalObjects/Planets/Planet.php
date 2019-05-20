@@ -3,33 +3,17 @@
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEquatorialRectangularCoordinates;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 abstract class Planet extends AstronomicalObject implements PlanetInterface
 {
-    private const VSOP87_LIMIT = 20; // Use first 20 terms if VSOP87 theory for faster calculations with less accuracy
-    protected const VSOP87_FILE_PATH = __DIR__ . '/../../Resources/vsop87/json/';
-
-    private $useFullVSOP87Dataset = false;
-    protected $vsop87 = [];
-
-    abstract function loadVSOP87Data(): array;
-
-    public function __construct(TimeOfInterest $toi = null)
-    {
-        parent::__construct($toi);
-        $this->vsop87 = $this->loadVSOP87Data();
-    }
-
-    public function useFullVSOP97Dataset(bool $useFullVSOP87Dataset): void
-    {
-        $this->useFullVSOP87Dataset = $useFullVSOP87Dataset;
-    }
+    protected $VSOP87_SPHERICAL = '';
+    protected $VSOP87_RECTANGULAR = '';
 
     // TODO
     public function getHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
@@ -41,34 +25,26 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
     {
         $t = $this->toi->getJulianMillenniaFromJ2000();
 
-        $L = $this->resolveTerms($this->vsop87['L'], $t);
-        $L = rad2deg($L);
+        $VSOP87Solution = VSOP87Calc::getVSOP87Result($this->VSOP87_SPHERICAL, $t);
+
+        $L = rad2deg($VSOP87Solution[VSOP87Calc::COEFFICIENT_A]);
+        $B = rad2deg($VSOP87Solution[VSOP87Calc::COEFFICIENT_B]);
+        $R = $VSOP87Solution[VSOP87Calc::COEFFICIENT_C];
+
         $L = AngleUtil::normalizeAngle($L);
-
-        $B = $this->resolveTerms($this->vsop87['B'], $t);
-        $B = rad2deg($B);
-
-        $R = $this->resolveTerms($this->vsop87['R'], $t);
 
         return new HeliocentricEclipticalSphericalCoordinates($B, $L, $R);
     }
 
-    // TODO equatorial oder ecliptical?
     public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates
     {
-        $helEclSphCoord = $this->getHeliocentricEclipticalSphericalCoordinates();
+        $t = $this->toi->getJulianMillenniaFromJ2000();
 
-        $B = $helEclSphCoord->getLatitude();
-        $L = $helEclSphCoord->getLongitude();
-        $R = $helEclSphCoord->getRadiusVector();
+        $VSOP87Solution = VSOP87Calc::getVSOP87Result($this->VSOP87_RECTANGULAR, $t);
 
-        $BRad = deg2rad($B);
-        $LRad = deg2rad($L);
-
-        // Meeus 33.1
-        $X = $R * cos($BRad) * cos($LRad);
-        $Y = $R * cos($BRad) * sin($LRad);
-        $Z = $R * sin($BRad);
+        $X = $VSOP87Solution[VSOP87Calc::COEFFICIENT_A];
+        $Y = $VSOP87Solution[VSOP87Calc::COEFFICIENT_B];
+        $Z = $VSOP87Solution[VSOP87Calc::COEFFICIENT_C];
 
         return new HeliocentricEquatorialRectangularCoordinates($X, $Y, $Z);
     }
