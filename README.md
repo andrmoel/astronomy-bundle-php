@@ -19,6 +19,7 @@
         3. [Planets](#planets)
             1. [Heliocentric position of a planet](#planetHelio)
             1. [Geocentric position of a planet](#planetGeo)
+            1. [Rise, Set & Culmination](#planetRise)
     4. [Events](#events)
         1. [Solar Eclipse](#solarEclipse)
             1. [Create a Solar Eclipse](#solarEclipseCreate)
@@ -32,12 +33,10 @@
 <a name="introduction"></a>
 # Introduction
 
-!!! ATTENTION !!!!!!!!!!!!!!!!!!! 
-
+* ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**:
 This bundle on Version 0.X.X is still in development. Use on your own risk.
 A stable release will be provided with version 1.X.X.
 
-!!! ATTENTION !!!!!!!!!!!!!!!!!!!
 
 <a name="installation"></a>
 # Installation
@@ -314,7 +313,7 @@ The result should be 402970km.
 <a name="moonrise"></a>
 #### Moonrise, moonset and upper culmination
 
-**ATTENTION**: This functionality is not working yet
+* ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
 
 <a name="moonPhases"></a>
 #### Phases of the moon
@@ -393,6 +392,15 @@ The result of the calculation should be:\
 
 <a name="planetGeo"></a>
 #### Geocentric position of a planet
+
+* ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
+
+TODO: Write some nice documentation :)
+
+<a name="planetRise"></a>
+#### Rise, set and upper culmination
+
+* ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
 
 TODO: Write some nice documentation :)
 
@@ -488,6 +496,8 @@ TODO: Write some nice documentation :)
 
 <a name="lunarEclipse"></a>
 ### Lunar eclipse
+
+* ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
 
 TODO: Write some nice documentation :)
 

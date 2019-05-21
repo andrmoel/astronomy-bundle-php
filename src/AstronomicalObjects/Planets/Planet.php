@@ -6,10 +6,13 @@ use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
 use Andrmoel\AstronomyBundle\Calculations\VSOP87\VSOP87Interface;
 use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEquatorialRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
 abstract class Planet extends AstronomicalObject implements PlanetInterface
 {
@@ -52,63 +55,59 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
         return new HeliocentricEquatorialRectangularCoordinates(0, 0, 0);
     }
 
-    public function test()
-    {
-        $helEclSphCoord = $this->getHeliocentricEclipticalSphericalCoordinates();
-
-        $B = $helEclSphCoord->getLatitude();
-        $L = $helEclSphCoord->getLongitude();
-        $R = $helEclSphCoord->getRadiusVector();
-
-        $BRad = deg2rad($B);
-        $LRad = deg2rad($L);
-
-        // Meeus 33.1
-        $X = $R * cos($BRad) * cos($LRad);
-        $Y = $R * cos($BRad) * sin($LRad);
-        $Z = $R * sin($BRad);
-
-        // Earth
-        $earth = new Earth($this->toi);
-        $helEclSphCoord = $earth->getHeliocentricEclipticalSphericalCoordinates();
-
-        $B0 = $helEclSphCoord->getLatitude();
-        $L0 = $helEclSphCoord->getLongitude();
-        $R0 = $helEclSphCoord->getRadiusVector();
-
-        $B0Rad = deg2rad($B0);
-        $L0Rad = deg2rad($L0);
-
-        $X0 = $R0 * cos($B0Rad) * cos($L0Rad);
-        $Y0 = $R0 * cos($B0Rad) * sin($L0Rad);
-        $Z0 = $R0 * sin($B0Rad);
-
-        $x = $X - $X0;
-        $y = $Y - $Y0;
-        $z = $Z - $Z0;
-
-        // Meeus 33.2
-        $lat = atan($z / (sqrt(pow($x, 2) + pow($y, 2))));
-        $lat = rad2deg($lat);
-        $lon = atan2($y, $z);
-        $lon = AngleUtil::normalizeAngle($lon);
-
-        var_dump($lat, $lon);
-        die();
-
-        var_dump($x, $y, $z);
-        die();
-    }
-
+    // TODO
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
+        return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
+    }
+
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
+    {
         $earth = new Earth($this->toi);
-//        $geo = $earth->get
 
-        // Meeus 33.2
-        $lat = atan2($y, $x);
+        $helEclRecCoordPlanet = $this->getHeliocentricEclipticalRectangularCoordinates();
+        $helEclRecCoordEarth = $earth->getHeliocentricEclipticalRectangularCoordinates();
 
-        new GeocentricEclipticalSphericalCoordinates($lat, $lon, $R);
+        $x = $helEclRecCoordPlanet->getX() - $helEclRecCoordEarth->getX();
+        $y = $helEclRecCoordPlanet->getY() - $helEclRecCoordEarth->getY();
+        $z = $helEclRecCoordPlanet->getZ() - $helEclRecCoordEarth->getZ();
+
+        return new GeocentricEquatorialRectangularCoordinates($x, $y, $z);
+    }
+
+    // TODO
+    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
+    {
+        return new GeocentricEquatorialSphericalCoordinates(0, 0, 0);
+    }
+
+    public function getDistanceToEarthInAu(): float
+    {
+        $geoEclRecCoord = $this->getGeocentricEquatorialRectangularCoordinates();
+
+        $x = $geoEclRecCoord->getX();
+        $y = $geoEclRecCoord->getY();
+        $z = $geoEclRecCoord->getZ();
+
+        $d = sqrt($x * $x + $y * $y + $z * $z);
+
+        return $d;
+    }
+
+    public function getDistanceToEarthInKm(): float
+    {
+        $d = $this->getDistanceToEarthInAu();
+
+        return DistanceUtil::au2km($d);
+    }
+
+    // ------------------
+
+    public function test()
+    {
+        $geoEquRecCoord = $this->getGeocentricEquatorialRectangularCoordinates();
+
+        var_dump($geoEquRecCoord);
     }
 
     /**

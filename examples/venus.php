@@ -11,9 +11,19 @@ date_default_timezone_set('UTC');
 // Berlin
 $location = new Location(52.524, 13.411);
 
-// Create sun
 $toi = new TimeOfInterest(new DateTime('1992-12-20 00:00:00'));
 
 $venus = new Venus($toi);
 
-var_dump($venus->getHeliocentricEclipticalSphericalCoordinates());
+$helEclSphCoord = $venus->getHeliocentricEclipticalSphericalCoordinates();
+$lat = $helEclSphCoord->getLatitude();
+$lon = $helEclSphCoord->getLongitude();
+$r = $helEclSphCoord->getRadiusVector();
+
+$helEclRecCoord = $venus->getHeliocentricEclipticalRectangularCoordinates();
+$x = $helEclRecCoord->getX();
+$y = $helEclRecCoord->getY();
+$z = $helEclRecCoord->getZ();
+
+var_dump($lat, $lon, $r);
+var_dump($x, $y, $z);

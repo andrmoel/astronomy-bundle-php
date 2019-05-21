@@ -18,4 +18,8 @@ interface PlanetInterface
     public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates;
 
     public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates;
+
+    public function getDistanceToEarthInAu(): float;
+
+    public function getDistanceToEarthInKm(): float;
 }
