@@ -1,34 +1,33 @@
-#### Table of Contents  
+## Table of Contents  
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Example data](#example)
-4. [Usage](#usage)
-    1. [Time of Interest](#toi)
-    2. [Location](#location)
-    3. [Coordinate Systems (and transformations)](#coordinates)
-    3. [Astronomical Objects](#objects)
-        1. [Sun](#sun)
-            1. [Position](#sunPosition)
-            2. [Distance to earth](#sunDistance)
-            3. [Sunrise, Sunset & Culmination](#sunrise)
-        2. [Moon](#moon)
-            1. [Position](#moonPosition)
-            2. [Distance to earth](#moonDistance)
-            3. [Sunrise, Sunset & Culmination](#moonrise)
-            4. [Phases](#moonPhases)
-        3. [Planets](#planets)
-            1. [Heliocentric position of a planet](#planetHelio)
-            1. [Geocentric position of a planet](#planetGeo)
-            1. [Rise, Set & Culmination](#planetRise)
-    4. [Events](#events)
-        1. [Solar Eclipse](#solarEclipse)
-            1. [Create a Solar Eclipse](#solarEclipseCreate)
-            1. [Type, Obscuration, Magnitude, Duration](#solarEclipseType)
-            1. [Contacts (C1, C2, MAX, C3, C4)](#solarEclipseContacts)
-        2. [Lunar Eclipse](#lunarEclipse)
-    5. [Other calculations](#other)
-        1. [Distance between two locations](#distance)
-        1. [Nutatation of earth](#nutation)
+4. [Time of Interest](#toi)
+5. [Location](#location)
+6. [Coordinate Systems (and transformations)](#coordinates)
+7. [Astronomical Objects](#objects)
+    1. [Sun](#sun)
+        1. [Position](#sunPosition)
+        2. [Distance to earth](#sunDistance)
+        3. [Sunrise, Sunset & Culmination](#sunrise)
+    2. [Moon](#moon)
+        1. [Position](#moonPosition)
+        2. [Distance to earth](#moonDistance)
+        3. [Sunrise, Sunset & Culmination](#moonrise)
+        4. [Phases](#moonPhases)
+    3. [Planets](#planets)
+        1. [Heliocentric position of a planet](#planetHelio)
+        1. [Geocentric position of a planet](#planetGeo)
+        1. [Rise, Set & Culmination](#planetRise)
+8. [Events](#events)
+    1. [Solar Eclipse](#solarEclipse)
+        1. [Create a Solar Eclipse](#solarEclipseCreate)
+        1. [Type, Obscuration, Magnitude, Duration](#solarEclipseType)
+        1. [Contacts (C1, C2, MAX, C3, C4)](#solarEclipseContacts)
+    2. [Lunar Eclipse](#lunarEclipse)
+9. [Other calculations](#other)
+    1. [Distance between two locations](#distance)
+    1. [Nutatation of earth](#nutation)
 
 <a name="introduction"></a>
 # Introduction
@@ -56,11 +55,8 @@ Some example calculations are provided inside the `/examples` folder of the proj
 php examples/sun.php
 ```
 
-<a name="usage"></a>
-# Usage
-
 <a name="toi"></a>
-## Time of Interest
+# Time of Interest
 
 The time of interest (TOI) object represents the time for which all of the astronomical calculations are done.
 E.g. If you want to calculate the position of the sun for July 02nd 2017 at 12:00:00 UTC, you need to initialize
@@ -100,7 +96,7 @@ $dateTime = $toi->getDateTime();
 The result is a DateTime object correspondending to the current time.
 
 <a name="location"></a>
-## Location
+# Location
 
 The location object represents the location of the observer on the earth's surface.
 
@@ -113,7 +109,7 @@ $location = new Location(27.98787, 86.92483, 8848);
 ```
 
 <a name="coordinates"></a>
-### Coordinate systems and transformations
+# Coordinate systems and transformations
 
 The bundle provides the common astronomical coordinate systems for calculations.
 
@@ -157,7 +153,7 @@ $azimuth = $locHorCoord->getAzimuth();
 ```
 
 <a name="objects"></a>
-## Astronomical Objects
+# Astronomical Objects
 
 An astronomical object **must** be initialized with the TOI. If you don't pass the TOI in the constructor, the
 **current** time is chosen.
@@ -170,10 +166,10 @@ $moon = new Moon($toi);
 ```
 
 <a name="sun"></a>
-### Sun
+## Sun
 
 <a name="sunPosition"></a>
-#### Position of the sun
+### Position of the sun
 
 **Example 1**: Calculate the position of the sun for 17 May 2019 at 17:50 UTC
 
@@ -212,7 +208,7 @@ The result of the calculation should be:\
 *Altitude: 8.4°*
 
 <a name="sunDistance"></a>
-#### Distance of the sun to earth
+### Distance of the sun to earth
 
 **Example 1**: The current distance of the sun in kimometers can be calculated as follow:
 
@@ -238,7 +234,7 @@ $distance = $sun->getDistanceToEarth();
 The result should be 151797703km.
 
 <a name="sunrise"></a>
-#### Sunrise, sunset and upper culmination
+### Sunrise, sunset and upper culmination
 
 **Example**: Calculate sunrise, sunset and upper culmination for Berlin, Germany for 17 May 2019
 
@@ -262,10 +258,10 @@ The result of the calculation should be:\
 *Upper culmination: 13:03 UTC*
 
 <a name="moon"></a>
-### Moon
+## Moon
 
 <a name="moonPosition"></a>
-#### Position of the moon
+### Position of the moon
 
 The position of the moon can be calculated as explained in the following example.
 
@@ -285,7 +281,7 @@ The result of the calculation should be:\
 *Declination: 13.77°*
 
 <a name="moonDistance"></a>
-#### Distance of the moon to earth
+### Distance of the moon to earth
 
 **Example 1**: The current distance of the moon in kimometers can be calculated as follow:
 
@@ -311,12 +307,12 @@ $distance = $moon->getDistanceToEarth();
 The result should be 402970km.
 
 <a name="moonrise"></a>
-#### Moonrise, moonset and upper culmination
+### Moonrise, moonset and upper culmination
 
 * ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
 
 <a name="moonPhases"></a>
-#### Phases of the moon
+### Phases of the moon
 
 The following code sniped explains how to calculate all important parameters which belong to the moons phase
 for an specific date. In this example it is 13 May 2019 at 21:30 UTC.
@@ -338,7 +334,7 @@ The result of the calculation should be:\
 *Position angle of bright limb: 293.54°*
 
 <a name="planets"></a>
-### Planets
+## Planets
 
 Like Sun and Moon-Objects, the Planets can be created by passing the TimeOfInterest.
 If no TimeOfInteressed is passed, the **current date and time** are used for further calculations.
@@ -360,7 +356,7 @@ $neptune = new Neptune($toi);Uranus
 ```
 
 <a name="planetHelio"></a>
-#### Heliocentric position of a planet
+### Heliocentric position of a planet
 
 The calculations use the VSOP87 theory to calculat the heliocentric position of a planet.
 
@@ -391,27 +387,27 @@ The result of the calculation should be:\
 *Z: -0.033130385747949
 
 <a name="planetGeo"></a>
-#### Geocentric position of a planet
+### Geocentric position of a planet
 
 * ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
 
 TODO: Write some nice documentation :)
 
 <a name="planetRise"></a>
-#### Rise, set and upper culmination
+### Rise, set and upper culmination
 
 * ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
 
 TODO: Write some nice documentation :)
 
 <a name="events"></a>
-## Events
+# Events
 
 <a name="solarEclipse"></a>
-### Solar eclipse
+## Solar eclipse
 
 <a name="solarEclipseCreate"></a>
-#### Create a Solar Eclipse object
+### Create a Solar Eclipse object
 
 **Example**: Create a solar eclipse for 21 August 2017 for the location Madrads in Oregon (USA)
 
@@ -427,7 +423,7 @@ $solarEclipse = SolarEclipse::create($toi, $location);
 *Note: If the date of the eclipse is invalid, an exception will be thrown.*
 
 <a name="solarEclipseType"></a>
-#### Eclipse type, Obscuration, Magnitude, Duration, etc.
+### Eclipse type, Obscuration, Magnitude, Duration, etc.
 
 To obtain the eclipse circumstances of the **maximum eclipse** for a given location, see the following examples.
 
@@ -490,22 +486,22 @@ The result of the calculation should be:\
 *Moon-sun-ratio: 1.05*
 
 <a name="solarEclipseContact"></a>
-#### Contacts (C1, C2, MAX, C3, C4)
+### Contacts (C1, C2, MAX, C3, C4)
 
 TODO: Write some nice documentation :)
 
 <a name="lunarEclipse"></a>
-### Lunar eclipse
+# Lunar eclipse
 
 * ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
 
 TODO: Write some nice documentation :)
 
 <a name="other"></a>
-## Other calculations
+# Other calculations
 
 <a name="distance"></a>
-### Distance between two locations
+## Distance between two locations
 
 ```php
 $location1 = new Location(52.524, 13.411); // Berlin
@@ -517,7 +513,7 @@ $distance = EarthCalc::getDistanceBetweenLocations($location1, $location2);
 The result of the calculation should be 6436km.
 
 <a name="nutation"></a>
-### Nutation of earth
+## Nutation of earth
 
 ```php
 $T = -0.127296372458;
