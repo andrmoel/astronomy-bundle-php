@@ -8,7 +8,7 @@ class VSOP87Parser extends AbstractParser
     {
         $data = [];
 
-        $pattern = '/^ [0-5][1-6]([1-3])([0-9]) /si';
+        $pattern = '/^ [0-5][1-8]([1-3])([0-9]) /si';
 
         $rows = explode("\n", $this->data);
         foreach ($rows as $row) {
