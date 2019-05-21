@@ -19,7 +19,6 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
     /** @var VSOP87Interface */
     protected $VSOP87_RECTANGULAR;
 
-    // TODO
     public function getHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
     {
         $t = $this->toi->getJulianMillenniaFromJ2000();
@@ -121,35 +120,6 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
         return $this->getApparentHeliocentricEclipticalSphericalCoordinates()
             ->getHeliocentricEclipticalRectangularCoordinates();
     }
-
-    private function resolveTerms(array $terms, float $t): float
-    {
-        // Meeus 32.2
-        $sum = 0.0;
-        foreach ($terms as $key => $arguments) {
-            $value = $this->sumUpArguments($arguments, $t);
-
-            $sum += $value * pow($t, $key);
-        }
-
-        return $sum;
-    }
-
-    private function sumUpArguments(array $arguments, float $t): float
-    {
-        // Meeus 21.1
-        $sum = 0.0;
-        foreach ($arguments as $key => $argument) {
-            if (!$this->useFullVSOP87Dataset && $key > self::VSOP87_LIMIT) {
-                break;
-            }
-
-            $sum += $argument[0] * cos($argument[1] + $argument[2] * $t);
-        }
-
-        return $sum;
-    }
-
 
 //    /**
 //     * The apparent position is light-time corrected

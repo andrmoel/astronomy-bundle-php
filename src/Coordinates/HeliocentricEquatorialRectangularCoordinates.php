@@ -34,55 +34,33 @@ class HeliocentricEquatorialRectangularCoordinates
         return $this->Z;
     }
 
+    // TODO
     public function getHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
     {
-        // TODO
         return new HeliocentricEclipticalRectangularCoordinates(0, 0, 0);
     }
 
+    // TODO
     public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
     {
-        // Meeus 33.2
-        $longitude = atan($this->Y / $this->X);
-        $longitude = rad2deg($longitude);
-        $longitude = AngleUtil::normalizeAngle($longitude);
-
-        $latitude = atan($this->Z / sqrt(pow($this->X, 2) + pow($this->Y, 2)));
-        $latitude = rad2deg($latitude);
-
-        $radiusVector = sqrt(pow($this->X, 2) + pow($this->Y, 2) + pow($this->Z, 2));
-
-        return new HeliocentricEclipticalSphericalCoordinates($latitude, $longitude, $radiusVector);
+        return new HeliocentricEclipticalSphericalCoordinates(0, 0, 0);
     }
 
+    // TODO
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
-        // TODO
         return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
     }
 
-    public function getGeocentricEquatorialRectangularCoordinates(
-        TimeOfInterest $toi
-    ): GeocentricEquatorialRectangularCoordinates
+    // TODO
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
-        // Heliocentric coordinates of earth
-        $earth = new Earth($toi);
-        $hcEclRecCoordinatesEarth = $earth->getHeliocentricEclipticalRectangularCoordinates();
-
-        $X0 = $hcEclRecCoordinatesEarth->getX();
-        $Y0 = $hcEclRecCoordinatesEarth->getY();
-        $Z0 = $hcEclRecCoordinatesEarth->getZ();
-
-        $X = $this->X - $X0;
-        $Y = $this->Y - $Y0;
-        $Z = $this->Z - $Z0;
-
-        return new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
+        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
     }
 
+    // TODO
     public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
     {
-        // TODO
         return new GeocentricEquatorialSphericalCoordinates(0, 0, 0);
     }
 }
