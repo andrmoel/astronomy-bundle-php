@@ -17,6 +17,8 @@
             3. [Sunrise, Sunset & Culmination](#moonrise)
             4. [Phases](#moonPhases)
         3. [Planets](#planets)
+            1. [Heliocentric position of a planet](#planetHelio)
+            1. [Geocentric position of a planet](#planetGeo)
     4. [Events](#events)
         1. [Solar Eclipse](#solarEclipse)
             1. [Create a Solar Eclipse](#solarEclipseCreate)
@@ -338,6 +340,59 @@ The result of the calculation should be:\
 
 <a name="planets"></a>
 ### Planets
+
+Like Sun and Moon-Objects, the Planets can be created by passing the TimeOfInterest.
+If no TimeOfInteressed is passed, the **current date and time** are used for further calculations.
+
+**Example**: Create some planets
+
+```php
+$dateTime = new DateTime('2018-06-03 19:00:00'); // UTC
+$toi = new TimeOfInterest($dateTime);
+
+$mercury = new Mercury();  // Time = now
+$venus = new Venus($toi); // Time = 2018-06-03 19:00:00
+$earth = new Earth($toi);
+$mars = new Mars($toi);
+$jupiter = new Jupiter($toi);
+$saturn = new Saturn($toi);
+$uranus = new Uranus($toi);
+$neptune = new Neptune($toi);Uranus
+```
+
+<a name="planetHelio"></a>
+#### Heliocentric position of a planet
+
+The calculations use the VSOP87 theory to calculat the heliocentric position of a planet.
+
+**Example**: Calculate the heliocentric position of Venus for 20. December 1992 at 00:00 UTC.
+
+```php
+$dateTime = new DateTime('1992-12-20 00:00:00');
+$toi = new TimeOfInterest($dateTime);
+
+$venus = new Venus($toi);
+
+$helEclSphCoord = $venus->getHeliocentricEclipticalSphericalCoordinates();
+$lat = $helEclSphCoord->getLatitude();
+$lon = $helEclSphCoord->getLongitude();
+$r = $helEclSphCoord->getRadiusVector();
+
+$helEclRecCoord = $venus->getHeliocentricEclipticalRectangularCoordinates();
+$x = $helEclRecCoord->getX();
+$y = $helEclRecCoord->getY();
+$z = $helEclRecCoord->getZ();
+```
+The result of the calculation should be:\
+*Latitude: -2.62063°*\
+*Longitude: 26.11412°*\
+*Radius vector: 0.72460*\
+*X: 0.64995327095595*\
+*Y: 0.31860745636351*\
+*Z: -0.033130385747949
+
+<a name="planetGeo"></a>
+#### Geocentric position of a planet
 
 TODO: Write some nice documentation :)
 
