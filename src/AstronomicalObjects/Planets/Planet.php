@@ -3,8 +3,10 @@
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
+use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
 use Andrmoel\AstronomyBundle\Calculations\VSOP87\VSOP87Interface;
 use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
@@ -55,23 +57,74 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
         return new HeliocentricEquatorialRectangularCoordinates(0, 0, 0);
     }
 
-    // TODO
-    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
+    public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
     {
-        return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
-    }
-
-    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
-    {
-        $earth = new Earth($this->toi);
-
         $helEclRecCoordPlanet = $this->getHeliocentricEclipticalRectangularCoordinates();
+
+        $earth = new Earth($this->toi);
         $helEclRecCoordEarth = $earth->getHeliocentricEclipticalRectangularCoordinates();
 
         $x = $helEclRecCoordPlanet->getX() - $helEclRecCoordEarth->getX();
         $y = $helEclRecCoordPlanet->getY() - $helEclRecCoordEarth->getY();
         $z = $helEclRecCoordPlanet->getZ() - $helEclRecCoordEarth->getZ();
 
+        return new GeocentricEclipticalRectangularCoordinates($x, $y, $z);
+    }
+
+    // TODO
+    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
+    {
+        return $this->getGeocentricEclipticalRectangularCoordinates()
+            ->getGeocentricEclipticalSphericalCoordinates();
+
+        // TODO Calculate apparent
+
+        $geoEclRecCoord = $this->getGeocentricEclipticalRectangularCoordinates();
+
+        $x = $geoEclRecCoord->getX();
+        $y = $geoEclRecCoord->getY();
+        $z = $geoEclRecCoord->getZ();
+        var_dump($x, $y, $z);die();
+
+        $d = sqrt(pow($x, 2) + pow($y, 2) + pow($z, 2));
+
+        // Light time correction
+        $tau = 0.0057755183 * $d;
+
+        // Repeat
+        $JD = $this->toi->getJulianDay() - $tau;
+        $t = TimeCalc::getJulianCenturiesFromJ2000($JD) / 10;
+
+        $coefficients = VSOP87Calc::solve($this->VSOP87_SPHERICAL, $t);
+
+        $lat = rad2deg($coefficients[1]);
+
+        $lon = rad2deg($coefficients[0]);
+        $lon = AngleUtil::normalizeAngle($lon);
+        var_dump($lat, $lon);die();
+
+
+        $latRad = atan($z / sqrt(pow($x, 2) + pow($y, 2)));
+        $lat = rad2deg($latRad);
+
+        $lon = atan2($y, $x);
+        $lon = AngleUtil::normalizeAngle(rad2deg($lon));
+
+        // Correction
+//        $Ls = $lon - 1.397 * $T - 0.00031 * pow($T, 2);
+//        $LsRad = deg2rad($Ls);
+//
+//        $dL = AngleUtil::angle2dec('-0°0\'0.0933"')
+//            + AngleUtil::angle2dec('0°0\'0.03916"') * (cos($LsRad) + sin($LsRad)) * tan($latRad);
+
+
+        var_dump($Ls, $dL);die();
+
+        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $d);
+    }
+
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
+    {
         return new GeocentricEquatorialRectangularCoordinates($x, $y, $z);
     }
 
