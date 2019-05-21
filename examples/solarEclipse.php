@@ -18,6 +18,9 @@ $toi = new TimeOfInterest($dateTime);
 // Create solar eclipse
 $solarEclipse = SolarEclipse::create($toi, $location);
 
+$obscuration = $solarEclipse->getObscuration();
+$obscuration = round($obscuration * 100, 2);
+
 $c1 = $solarEclipse->getCircumstancesC1();
 $c2 = $solarEclipse->getCircumstancesC2();
 $max = $solarEclipse->getCircumstancesMax();
@@ -33,7 +36,7 @@ Location: {$location->getLatitude()}°, {$location->getLongitude()}° (Madras, O
 Eclipse type: {$solarEclipse->getEclipseType()}
 Eclipse duration: {$solarEclipse->getEclipseDuration()} seconds
 Totality duration: {$solarEclipse->getEclipseUmbraDuration()} seconds
-Obscuration: {$solarEclipse->getObscuration()}
+Obscuration: {$obscuration}%
 Magnitude: {$solarEclipse->getMagnitude()}
 Moon-sun-ratio: {$solarEclipse->getMoonSunRatio()}
 
