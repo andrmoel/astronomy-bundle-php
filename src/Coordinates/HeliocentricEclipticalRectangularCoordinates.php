@@ -37,16 +37,15 @@ class HeliocentricEclipticalRectangularCoordinates
     public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
     {
         // Meeus 33.2
-        $longitude = atan($this->y / $this->x);
-        $longitude = rad2deg($longitude);
-        $longitude = AngleUtil::normalizeAngle($longitude);
+        $lonRad = atan2($this->y, $this->x);
+        $lon = AngleUtil::normalizeAngle(rad2deg($lonRad));
 
-        $latitude = atan($this->z / sqrt(pow($this->x, 2) + pow($this->y, 2)));
-        $latitude = rad2deg($latitude);
+        $latRad = atan($this->z / sqrt(pow($this->x, 2) + pow($this->y, 2)));
+        $lat = rad2deg($latRad);
 
-        $radiusVector = sqrt(pow($this->x, 2) + pow($this->y, 2) + pow($this->z, 2));
+        $r = sqrt(pow($this->x, 2) + pow($this->y, 2) + pow($this->z, 2));
 
-        return new HeliocentricEclipticalSphericalCoordinates($latitude, $longitude, $radiusVector);
+        return new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $r);
     }
 
     public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates

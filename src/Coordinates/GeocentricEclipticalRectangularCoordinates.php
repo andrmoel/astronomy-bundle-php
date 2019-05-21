@@ -2,10 +2,12 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class GeocentricEquatorialRectangularCoordinates
+class GeocentricEclipticalRectangularCoordinates
 {
     private $X = 0;
     private $Y = 0;
@@ -33,16 +35,14 @@ class GeocentricEquatorialRectangularCoordinates
         return $this->Z;
     }
 
-    // TODO
-    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
+    public function getGeocentricEquatorialRectangularCoordinates(float $T): GeocentricEquatorialRectangularCoordinates
     {
-        return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
+
     }
 
-    // TODO
-    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
+    public function getGeocentricEquatorialSphericalCoordinates(float $T): GeocentricEquatorialSphericalCoordinates
     {
-        return new GeocentricEquatorialSphericalCoordinates(0, 0, 0);
+
     }
 
     // TODO

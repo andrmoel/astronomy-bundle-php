@@ -43,18 +43,16 @@ class GeocentricEquatorialSphericalCoordinates
         $epsRad = deg2rad($eps);
 
         // Meeus 13.1
-        $lon = atan((sin($raRad) * cos($epsRad) + tan($dRad) * sin($epsRad)) / cos($raRad));
-        $lon = rad2deg($lon) + 180; // TODO warum + 180? Laut buch nicht nötig...
-        $lon = AngleUtil::normalizeAngle($lon);
+        $lonRad = atan2((sin($raRad) * cos($epsRad) + tan($dRad) * sin($epsRad)), cos($raRad));
+        $lon = AngleUtil::normalizeAngle(rad2deg($lonRad)); // TODO +180 ???
 
         // Meeus 13.2
-        $lat = asin(sin($dRad) * cos($epsRad) - cos($dRad) * sin($epsRad) * sin($raRad));
-        $lat = rad2deg($lat);
+        $latRad = asin(sin($dRad) * cos($epsRad) - cos($dRad) * sin($epsRad) * sin($raRad));
+        $lat = rad2deg($latRad);
 
         return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $this->radiusVector);
     }
 
-    // TODO Test it (Stolen from wikipedia)
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
         $raRad = deg2rad($this->rightAscension);
