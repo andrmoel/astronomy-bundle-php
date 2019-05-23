@@ -64,7 +64,7 @@ class EarthCalc implements EarthCalcInterface
             + 1.71946 * $T
             + 0.00046 * pow($T, 2);
 
-        CalculationCache::set('earthEccentricity', $T, $pi);
+        CalculationCache::set('earthLongitudeOfPerihelionOfOrbit', $T, $pi);
 
         return $pi;
     }
