@@ -2,65 +2,41 @@
 
 namespace Andrmoel\AstronomyBundle\Corrections;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\Constants;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 
 class GeocentricEclipticalSphericalCorrections
 {
-    private $toi;
-
-    public function __construct(TimeOfInterest $toi)
-    {
-        $this->toi = $toi;
-    }
-
-    public function correctCoordinates(
-        GeocentricEclipticalSphericalCoordinates $geoEclSphCoordinates
+    public static function correctEffectOfNutation(
+        GeocentricEclipticalSphericalCoordinates $coord,
+        float $T
     ): GeocentricEclipticalSphericalCoordinates
     {
-        $geoEclSphCoordinates = $this->correctEffectOfNutation($geoEclSphCoordinates);
-        $geoEclSphCoordinates = $this->correctEffectOfAberration($geoEclSphCoordinates);
-
-        return $geoEclSphCoordinates;
-    }
-
-    public function correctEffectOfNutation(
-        GeocentricEclipticalSphericalCoordinates $geoEclSphCoordinates
-    ): GeocentricEclipticalSphericalCoordinates
-    {
-        $T = $this->toi->getJulianCenturiesFromJ2000();
-
-        $lon = $geoEclSphCoordinates->getLongitude();
-        $lat = $geoEclSphCoordinates->getLatitude();
-        $radiusVector = $geoEclSphCoordinates->getRadiusVector();
+        $lat = $coord->getLatitude();
+        $lon = $coord->getLongitude();
+        $r = $coord->getRadiusVector();
 
         $dPhi = EarthCalc::getNutationInLongitude($T);
-
         $lon += $dPhi;
 
-        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
+        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $r);
     }
 
-    public function correctEffectOfAberration(
-        GeocentricEclipticalSphericalCoordinates $geoEclSphCoordinates
+    public static function correctEffectOfAberration(
+        GeocentricEclipticalSphericalCoordinates $coord,
+        float $T
     ): GeocentricEclipticalSphericalCoordinates
     {
-        $T = $this->toi->getJulianCenturiesFromJ2000();
-
-        $lon = $geoEclSphCoordinates->getLongitude();
-        $lat = $geoEclSphCoordinates->getLatitude();
-        $radiusVector = $geoEclSphCoordinates->getRadiusVector();
+        $lat = $coord->getLatitude();
+        $lon = $coord->getLongitude();
+        $r = $coord->getRadiusVector();
 
         $k = Constants::CONSTANT_OF_ABERRATION;
         $e = EarthCalc::getEccentricity($T);
         $pi = EarthCalc::getLongitudeOfPerihelionOfOrbit($T);
         $o = SunCalc::getTrueLongitude($T);
-
 
         $lonRad = deg2rad($lon);
         $latRad = deg2rad($lat);
@@ -68,12 +44,12 @@ class GeocentricEclipticalSphericalCorrections
         $oRad = deg2rad($o);
 
         // Meeus 23.2
-        $dLon = (-$k * cos($oRad - $lonRad) + $e * $k * cos($piRad - $lonRad)) / cos($latRad);
         $dLat = -$k * sin($latRad) * (sin($oRad - $lonRad) - $e * sin($piRad - $lonRad));
+        $dLon = (-$k * cos($oRad - $lonRad) + $e * $k * cos($piRad - $lonRad)) / cos($latRad);
 
-        $lon += $dLon;
         $lat += $dLat;
+        $lon += $dLon;
 
-        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
+        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $r);
     }
 }
