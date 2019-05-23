@@ -441,7 +441,7 @@ The result of the calculation should be:\
 *Radius vector: 0.72460*\
 *X: 0.64995327095595*\
 *Y: 0.31860745636351*\
-*Z: -0.033130385747949
+*Z: -0.033130385747949*
 
 <a name="planetGeo"></a>
 ### Geocentric position of a planet
