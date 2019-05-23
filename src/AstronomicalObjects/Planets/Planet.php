@@ -59,16 +59,30 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
 
     public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
     {
-        $helEclRecCoordPlanet = $this->getHeliocentricEclipticalRectangularCoordinates();
+        return $this
+            ->getHeliocentricEclipticalRectangularCoordinates()
+            ->getGeocentricEclipticalRectangularCoordinates($this->T);
+    }
 
-        $earth = new Earth($this->toi);
-        $helEclRecCoordEarth = $earth->getHeliocentricEclipticalRectangularCoordinates();
+    public function test()
+    {
+        $geoEclRecCoord = $this->getGeocentricEclipticalRectangularCoordinates();
 
-        $x = $helEclRecCoordPlanet->getX() - $helEclRecCoordEarth->getX();
-        $y = $helEclRecCoordPlanet->getY() - $helEclRecCoordEarth->getY();
-        $z = $helEclRecCoordPlanet->getZ() - $helEclRecCoordEarth->getZ();
+        $x = $geoEclRecCoord->getX();
+        $y = $geoEclRecCoord->getY();
+        $z = $geoEclRecCoord->getZ();
 
-        return new GeocentricEclipticalRectangularCoordinates($x, $y, $z);
+        // Meeus 33.2
+        $lat = atan($z / (sqrt(pow($x, 2) + pow($y, 2))));
+        $lat = rad2deg($lat);
+        $lon = atan2($y, $z);
+        $lon = AngleUtil::normalizeAngle($lon);
+
+        var_dump($lat, $lon);
+        die();
+
+        var_dump($x, $y, $z);
+        die();
     }
 
     // TODO
@@ -167,7 +181,8 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
      * The apparent position is light-time corrected
      * @return HeliocentricEclipticalRectangularCoordinates
      */
-    public function getApparentHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
+    public function getApparentHeliocentricEclipticalRectangularCoordinates(
+    ): HeliocentricEclipticalRectangularCoordinates
     {
         return $this->getApparentHeliocentricEclipticalSphericalCoordinates()
             ->getHeliocentricEclipticalRectangularCoordinates();
