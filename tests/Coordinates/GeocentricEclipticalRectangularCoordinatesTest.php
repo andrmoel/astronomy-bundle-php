@@ -3,7 +3,6 @@
 namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use PHPUnit\Framework\TestCase;
 
 class GeocentricEclipticalRectangularCoordinatesTest extends TestCase
