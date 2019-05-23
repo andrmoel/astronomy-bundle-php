@@ -2,8 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\EarthRectangularVSOP87;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class HeliocentricEclipticalRectangularCoordinates
@@ -54,20 +54,16 @@ class HeliocentricEclipticalRectangularCoordinates
         return new HeliocentricEquatorialRectangularCoordinates(0, 0, 0);
     }
 
-    public function getGeocentricEclipticalRectangularCoordinates(
-        TimeOfInterest $toi
-    ): GeocentricEclipticalRectangularCoordinates {
+    public function getGeocentricEclipticalRectangularCoordinates(float $T): GeocentricEclipticalRectangularCoordinates
+    {
+        $t = $T / 10;
+
         // Heliocentric coordinates of earth
-        $earth = new Earth($toi);
-        $hcEclRecCoordinatesEarth = $earth->getHeliocentricEclipticalRectangularCoordinates();
+        $coefficients = VSOP87Calc::solve(EarthRectangularVSOP87::class, $t);
 
-        $X0 = $hcEclRecCoordinatesEarth->getX();
-        $Y0 = $hcEclRecCoordinatesEarth->getY();
-        $Z0 = $hcEclRecCoordinatesEarth->getZ();
-
-        $X = $this->x - $X0;
-        $Y = $this->y - $Y0;
-        $Z = $this->z - $Z0;
+        $X = $this->x - $coefficients[0];
+        $Y = $this->y - $coefficients[1];
+        $Z = $this->z - $coefficients[2];
 
         return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
     }
