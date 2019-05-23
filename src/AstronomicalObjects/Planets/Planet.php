@@ -68,20 +68,17 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
     {
         $geoEclRecCoord = $this->getGeocentricEclipticalRectangularCoordinates();
 
-        $x = $geoEclRecCoord->getX();
-        $y = $geoEclRecCoord->getY();
-        $z = $geoEclRecCoord->getZ();
+        $X = $geoEclRecCoord->getX();
+        $Y = $geoEclRecCoord->getY();
+        $Z = $geoEclRecCoord->getZ();
 
-        // Meeus 33.2
-        $lat = atan($z / (sqrt(pow($x, 2) + pow($y, 2))));
-        $lat = rad2deg($lat);
-        $lon = atan2($y, $z);
-        $lon = AngleUtil::normalizeAngle($lon);
+        $d = sqrt(pow($X, 2) + pow($Y, 2) + pow($Z, 2));
 
-        var_dump($lat, $lon);
-        die();
+        // Light time correction
+        $tau = 0.0057755183 * $d;
 
-        var_dump($x, $y, $z);
+        var_dump($tau);
+
         die();
     }
 
@@ -93,17 +90,7 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
 
         // TODO Calculate apparent
 
-        $geoEclRecCoord = $this->getGeocentricEclipticalRectangularCoordinates();
 
-        $x = $geoEclRecCoord->getX();
-        $y = $geoEclRecCoord->getY();
-        $z = $geoEclRecCoord->getZ();
-        var_dump($x, $y, $z);die();
-
-        $d = sqrt(pow($x, 2) + pow($y, 2) + pow($z, 2));
-
-        // Light time correction
-        $tau = 0.0057755183 * $d;
 
         // Repeat
         $JD = $this->toi->getJulianDay() - $tau;
@@ -139,7 +126,7 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
 
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
-        return new GeocentricEquatorialRectangularCoordinates($x, $y, $z);
+        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
     }
 
     // TODO
@@ -170,12 +157,6 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
 
     // ------------------
 
-    public function test()
-    {
-        $geoEquRecCoord = $this->getGeocentricEquatorialRectangularCoordinates();
-
-        var_dump($geoEquRecCoord);
-    }
 
     /**
      * The apparent position is light-time corrected
