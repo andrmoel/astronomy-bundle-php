@@ -35,6 +35,18 @@ class GeocentricEclipticalSphericalCoordinates
         return $this->radiusVector;
     }
 
+    public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
+    {
+        $latRad = deg2rad($this->latitude);
+        $lonRad = deg2rad($this->longitude);
+
+        $X = $this->radiusVector * cos($latRad) * cos($lonRad);
+        $Y = $this->radiusVector * cos($latRad) * sin($lonRad);
+        $Z = $this->radiusVector * sin($latRad);
+
+        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+    }
+
     public function getGeocentricEquatorialRectangularCoordinates(float $T): GeocentricEquatorialRectangularCoordinates
     {
         return $this

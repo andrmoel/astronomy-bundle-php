@@ -5,6 +5,7 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
 use Andrmoel\AstronomyBundle\Calculations\VSOP87\VSOP87Interface;
 use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
@@ -53,40 +54,27 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
         return new HeliocentricEquatorialRectangularCoordinates(0, 0, 0);
     }
 
+    public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
+    {
+        $planetHelEclRecCoord = $this->getHeliocentricEclipticalRectangularCoordinates();
+
+        $earth = new Earth($this->toi);
+        $earthHelEclRecCoord = $earth->getHeliocentricEclipticalRectangularCoordinates();
+
+        $X = $planetHelEclRecCoord->getX() - $earthHelEclRecCoord->getX();
+        $Y = $planetHelEclRecCoord->getY() - $earthHelEclRecCoord->getY();
+        $Z = $planetHelEclRecCoord->getZ() - $earthHelEclRecCoord->getZ();
+
+        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+    }
+
     public function test()
     {
-        $helEclSphCoord = $this->getHeliocentricEclipticalSphericalCoordinates();
+        $geoEclRecCoord = $this->getGeocentricEclipticalRectangularCoordinates();
 
-        $B = $helEclSphCoord->getLatitude();
-        $L = $helEclSphCoord->getLongitude();
-        $R = $helEclSphCoord->getRadiusVector();
-
-        $BRad = deg2rad($B);
-        $LRad = deg2rad($L);
-
-        // Meeus 33.1
-        $X = $R * cos($BRad) * cos($LRad);
-        $Y = $R * cos($BRad) * sin($LRad);
-        $Z = $R * sin($BRad);
-
-        // Earth
-        $earth = new Earth($this->toi);
-        $helEclSphCoord = $earth->getHeliocentricEclipticalSphericalCoordinates();
-
-        $B0 = $helEclSphCoord->getLatitude();
-        $L0 = $helEclSphCoord->getLongitude();
-        $R0 = $helEclSphCoord->getRadiusVector();
-
-        $B0Rad = deg2rad($B0);
-        $L0Rad = deg2rad($L0);
-
-        $X0 = $R0 * cos($B0Rad) * cos($L0Rad);
-        $Y0 = $R0 * cos($B0Rad) * sin($L0Rad);
-        $Z0 = $R0 * sin($B0Rad);
-
-        $x = $X - $X0;
-        $y = $Y - $Y0;
-        $z = $Z - $Z0;
+        $x = $geoEclRecCoord->getX();
+        $y = $geoEclRecCoord->getY();
+        $z = $geoEclRecCoord->getZ();
 
         // Meeus 33.2
         $lat = atan($z / (sqrt(pow($x, 2) + pow($y, 2))));
@@ -116,7 +104,8 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
      * The apparent position is light-time corrected
      * @return HeliocentricEclipticalRectangularCoordinates
      */
-    public function getApparentHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
+    public function getApparentHeliocentricEclipticalRectangularCoordinates(
+    ): HeliocentricEclipticalRectangularCoordinates
     {
         return $this->getApparentHeliocentricEclipticalSphericalCoordinates()
             ->getHeliocentricEclipticalRectangularCoordinates();
