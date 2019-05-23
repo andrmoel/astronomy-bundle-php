@@ -75,7 +75,6 @@ class GeocentricEclipticalSphericalCoordinates
         return new GeocentricEquatorialSphericalCoordinates($ra, $d, $this->radiusVector);
     }
 
-    // TODO
     public function getLocalHorizontalCoordinates(Location $location, float $T): LocalHorizontalCoordinates
     {
         return $this->getGeocentricEquatorialSphericalCoordinates($T)
