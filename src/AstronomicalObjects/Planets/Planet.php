@@ -14,7 +14,9 @@ use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinate
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEquatorialRectangularCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
@@ -110,12 +112,18 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
         return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
     }
 
-    // TODO
     public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
     {
         return $this
             ->getGeocentricEclipticalSphericalCoordinates()
             ->getGeocentricEquatorialSphericalCoordinates($this->T);
+    }
+
+    public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
+    {
+        return $this
+            ->getGeocentricEquatorialSphericalCoordinates()
+            ->getLocalHorizontalCoordinates($location, $this->T);
     }
 
     public function getDistanceToEarthInAu(): float
