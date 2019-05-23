@@ -379,7 +379,7 @@ $mars = new Mars($toi);
 $jupiter = new Jupiter($toi);
 $saturn = new Saturn($toi);
 $uranus = new Uranus($toi);
-$neptune = new Neptune($toi);Uranus
+$neptune = new Neptune($toi);
 ```
 
 <a name="planetHelio"></a>
