@@ -50,7 +50,7 @@ Ecliptical latitude: {$eclLat}
 Right ascension: {$rightAscension}
 Declination: {$declination}
 
-The sun seen from observer's location
+Venus seen from observer's location
 Location: {$location->getLatitude()}°, {$location->getLongitude()}°
 Azimuth: {$azimuth} (apparent)
 Altitude: {$altitude} (apparent)
