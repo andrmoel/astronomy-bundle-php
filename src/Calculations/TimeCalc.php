@@ -2,6 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
+use Andrmoel\AstronomyBundle\CalculationCache;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class TimeCalc
@@ -59,6 +60,29 @@ class TimeCalc
         $GAST = $t0 + $p * cos($eRad);
 
         return $GAST;
+    }
+
+    /**
+     * Get equation of time [degrees]
+     * @param float $T
+     * @return float
+     */
+    public static function getEquationOfTimeInDegrees(float $T): float
+    {
+        $L0 = SunCalc::getMeanLongitude($T);
+        $rightAscension = SunCalc::getApparentRightAscension($T);
+
+        // TODO Use method with higher accuracy (Meeus p.166) 25.9
+//        $rightAscension = 198.378178;
+
+        $dPhi = EarthCalc::getNutationInLongitude($T);
+        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
+        $eRad = deg2rad($e);
+
+        // Meeus 28.1
+        $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($eRad);
+
+        return $E;
     }
 
     public static function getDeltaT(int $year, int $month = 0): float
