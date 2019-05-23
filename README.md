@@ -2,12 +2,13 @@
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Example data](#example)
-4. [Time of Interest](#toi)
+4. [Angle Util](#angle)
+5. [Time of Interest](#toi)
     1. [Julian Day, Centuries & Millennia](#toiJulianDay)
-    1. [Greenwich Mean & Apparent Sidereal Time](#toiGmst)
-5. [Location](#location)
-6. [Coordinate Systems (and transformations)](#coordinates)
-7. [Astronomical Objects](#objects)
+    1. [GMST, GAST & Equation of Time](#toiGmst)
+6. [Location](#location)
+7. [Coordinate Systems (and transformations)](#coordinates)
+8. [Astronomical Objects](#objects)
     1. [Sun](#sun)
         1. [Position](#sunPosition)
         2. [Distance to earth](#sunDistance)
@@ -21,13 +22,13 @@
         1. [Heliocentric position of a planet](#planetHelio)
         1. [Geocentric position of a planet](#planetGeo)
         1. [Rise, Set & Culmination](#planetRise)
-8. [Events](#events)
+9. [Events](#events)
     1. [Solar Eclipse](#solarEclipse)
         1. [Create a Solar Eclipse](#solarEclipseCreate)
         1. [Type, Obscuration, Magnitude, Duration](#solarEclipseType)
         1. [Contacts (C1, C2, MAX, C3, C4)](#solarEclipseContacts)
     2. [Lunar Eclipse](#lunarEclipse)
-9. [Other calculations](#other)
+10. [Other calculations](#other)
     1. [Distance between two locations](#distance)
     1. [Nutatation of earth](#nutation)
 
@@ -56,6 +57,35 @@ Some example calculations are provided inside the `/examples` folder of the proj
 ```
 php examples/sun.php
 ```
+
+<a name="angle"></a>
+# Angle Util
+
+The angle util provides helper methods to convert an angle into different formats.
+
+**Example 1**: Convert decimal angle
+
+```php
+$angleDec = 132.6029282;
+
+$angle = AngleUtil::dec2angle($angleDec);
+$time = AngleUtil::dec2time($angleDec);
+```
+
+The result of the calculation should be:\
+*Angle: "132°36'10.542"*\
+*Time: "8h50m24.703s*
+
+**Example 2**: Convert time into decimal format
+
+```php
+$time = '8h50m24.703s';
+
+$angle = AngleUtil::time2dec($time);
+```
+
+The result of the calculation should be:\
+*Angle: 132.60292916667°*
 
 <a name="toi"></a>
 # Time of Interest
@@ -96,7 +126,7 @@ The result of the calculation should be:\
 *Julian Centuries J2000: 0.1750052665602*\
 *Julian Millennia J2000: 0.01750052665602*
 
-## Greenwich Mean Sidereal Time (GMST) and Greenwich Apparent Sidereal Time (GAST)
+## Greenwich Mean Sidereal Time (GMST), Greenwich Apparent Sidereal Time (GAST) and Equation of Time
 
 With the help of the TOI-Object it is possible to calculate the GMST, GAST and the equation in time (*units of all values are degrees*).
 The following example explains how to get these values for 20 December 1992 at 00:00 UTC.
