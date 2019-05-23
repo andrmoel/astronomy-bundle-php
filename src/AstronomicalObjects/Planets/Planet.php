@@ -13,6 +13,7 @@ use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinate
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEquatorialRectangularCoordinates;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
@@ -72,12 +73,32 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
         $Y = $geoEclRecCoord->getY();
         $Z = $geoEclRecCoord->getZ();
 
+        var_dump($geoEclRecCoord);die();
+
         $d = sqrt(pow($X, 2) + pow($Y, 2) + pow($Z, 2));
 
         // Light time correction
         $tau = 0.0057755183 * $d;
+        $JD = $this->toi->getJulianDay() - $tau;
 
-        var_dump($tau);
+        $toi = new TimeOfInterest();
+        $toi->setJulianDay($JD);
+
+        $className = get_class($this);
+        /** @var Planet $planet */
+        $planet = new $className($toi);
+
+        $geoEclRecCoord = $planet->getGeocentricEclipticalRectangularCoordinates();
+
+        $X = $geoEclRecCoord->getX();
+        $Y = $geoEclRecCoord->getY();
+        $Z = $geoEclRecCoord->getZ();
+
+        $d = sqrt(pow($X, 2) + pow($Y, 2) + pow($Z, 2));
+
+        var_dump($d);die();
+
+        var_dump($this->toi->getJulianDay(), $JD);
 
         die();
     }
