@@ -73,8 +73,8 @@ $time = AngleUtil::dec2time($angleDec);
 ```
 
 The result of the calculation should be:\
-*Angle: "132°36'10.542"*\
-*Time: "8h50m24.703s*
+*Angle: 132°36'10.542"*\
+*Time: 8h50m24.703s*
 
 **Example 2**: Convert time into decimal format
 
