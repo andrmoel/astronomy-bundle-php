@@ -4,8 +4,9 @@ namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class GeocentricEquatorialRectangularCoordinates
+class GeocentricEclipticalRectangularCoordinates
 {
     private $X = 0;
     private $Y = 0;
@@ -33,14 +34,28 @@ class GeocentricEquatorialRectangularCoordinates
         return $this->Z;
     }
 
-    // TODO
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
-        return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
+        // Meeus 33.2
+        $lonRad = atan2($this->Y, $this->X);
+        $lon = AngleUtil::normalizeAngle(rad2deg($lonRad));
+
+        $latRad = atan($this->Z / sqrt(pow($this->X, 2) + pow($this->Y, 2)));
+        $lat = rad2deg($latRad);
+
+        $r = sqrt(pow($this->X, 2) + pow($this->Y, 2) + pow($this->Z, 2));
+
+        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $r);
     }
 
     // TODO
-    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
+    public function getGeocentricEquatorialRectangularCoordinates(float $T): GeocentricEquatorialRectangularCoordinates
+    {
+        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
+    }
+
+    // TODO
+    public function getGeocentricEquatorialSphericalCoordinates(float $T): GeocentricEquatorialSphericalCoordinates
     {
         return new GeocentricEquatorialSphericalCoordinates(0, 0, 0);
     }

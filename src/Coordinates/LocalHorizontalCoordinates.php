@@ -42,8 +42,7 @@ class LocalHorizontalCoordinates
     public function getGeocentricEquatorialSphericalCoordinates(
         Location $location,
         float $T
-    ): GeocentricEquatorialSphericalCoordinates
-    {
+    ): GeocentricEquatorialSphericalCoordinates {
         $lat = $location->getLatitude();
         $L = $location->getLongitudePositiveWest();
         $GAST = TimeCalc::getGreenwichApparentSiderealTime($T);
