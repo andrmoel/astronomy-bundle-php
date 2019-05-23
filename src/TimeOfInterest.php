@@ -2,7 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle;
 
-use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class TimeOfInterest
@@ -344,38 +344,20 @@ class TimeOfInterest
 
     public function getGreenwichMeanSiderealTime(): float
     {
-        $JD = $this->getJulianDay();
         $T = $this->getJulianCenturiesFromJ2000();
 
-        // Meeus 12.3
-//        $t0 = 100.46061837
-//            + 36000.770053608 * $T
-//            + 0.000387933 * pow($T, 2)
-//            - pow($T, 3) / 38710000;
+        $GMST = TimeCalc::getGreenwichMeanSiderealTime($T);
 
-        // Meeus 12.4
-        $t0 = 280.46061837
-            + 360.98564736629 * ($JD - 2451545)
-            + 0.000387933 * pow($T, 2)
-            + pow($T, 3) / 38710000;
-        $t0 = AngleUtil::normalizeAngle($t0);
-
-        return $t0;
+        return $GMST;
     }
 
-    public function getApparentGreenwichMeanSiderealTime(): float
+    public function getGreenwichApparentSiderealTime(): float
     {
         $T = $this->getJulianCenturiesFromJ2000();
 
-        $t0 = $this->getGreenwichMeanSiderealTime();
-        $p = EarthCalc::getNutationInLongitude($T);
-        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
-        $eRad = deg2rad($e);
+        $GAST = TimeCalc::getGreenwichApparentSiderealTime($T);
 
-        // Meeus 12
-        $gmst = $t0 + $p * cos($eRad);
-
-        return $gmst;
+        return $GAST;
     }
 
     /**
@@ -393,5 +375,14 @@ class TimeOfInterest
         $lmst = AngleUtil::normalizeAngle($lmst);
 
         return $lmst;
+    }
+
+    public function getEquationOfTime(): float
+    {
+        $T = $this->getJulianCenturiesFromJ2000();
+
+        $E = TimeCalc::getEquationOfTimeInDegrees($T);
+
+        return $E;
     }
 }
