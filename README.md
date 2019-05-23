@@ -415,7 +415,7 @@ $neptune = new Neptune($toi);
 <a name="planetHelio"></a>
 ### Heliocentric position of a planet
 
-The calculations use the VSOP87 theory to calculat the heliocentric position of a planet.
+The calculations use the VSOP87 theory to obtain the heliocentric position of a planet.
 
 **Example**: Calculate the heliocentric position of Venus for 20. December 1992 at 00:00 UTC.
 
