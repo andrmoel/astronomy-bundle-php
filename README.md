@@ -146,8 +146,7 @@ The result of the calculation should be:\
 *Equation of Time: 0.619485°*
 
 You may convert this values into the more common angle format by using `AngleUtil::dec2time($value)`.
-The result will be:
-
+The result will be:\
 *GMST: 5h55m18.086s*\
 *GAST: 5h55m19.111s*\
 *Equation of Time: 0h2m28.676s*
