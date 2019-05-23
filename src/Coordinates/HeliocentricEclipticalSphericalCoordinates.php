@@ -2,9 +2,6 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
-
 class HeliocentricEclipticalSphericalCoordinates
 {
     protected $latitude = 0.0;
