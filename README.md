@@ -2,10 +2,13 @@
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Example data](#example)
-4. [Time of Interest](#toi)
-5. [Location](#location)
-6. [Coordinate Systems (and transformations)](#coordinates)
-7. [Astronomical Objects](#objects)
+4. [Angle Util](#angle)
+5. [Time of Interest](#toi)
+    1. [Julian Day, Centuries & Millennia](#toiJulianDay)
+    1. [GMST, GAST & Equation of Time](#toiGmst)
+6. [Location](#location)
+7. [Coordinate Systems (and transformations)](#coordinates)
+8. [Astronomical Objects](#objects)
     1. [Sun](#sun)
         1. [Position](#sunPosition)
         2. [Distance to earth](#sunDistance)
@@ -19,13 +22,13 @@
         1. [Heliocentric position of a planet](#planetHelio)
         1. [Geocentric position of a planet](#planetGeo)
         1. [Rise, Set & Culmination](#planetRise)
-8. [Events](#events)
+9. [Events](#events)
     1. [Solar Eclipse](#solarEclipse)
         1. [Create a Solar Eclipse](#solarEclipseCreate)
         1. [Type, Obscuration, Magnitude, Duration](#solarEclipseType)
         1. [Contacts (C1, C2, MAX, C3, C4)](#solarEclipseContacts)
     2. [Lunar Eclipse](#lunarEclipse)
-9. [Other calculations](#other)
+10. [Other calculations](#other)
     1. [Distance between two locations](#distance)
     1. [Nutatation of earth](#nutation)
 
@@ -55,19 +58,57 @@ Some example calculations are provided inside the `/examples` folder of the proj
 php examples/sun.php
 ```
 
+<a name="angle"></a>
+# Angle Util
+
+The angle util provides helper methods to convert an angle into different formats.
+
+**Example 1**: Convert decimal angle
+
+```php
+$angleDec = 132.6029282;
+
+$angle = AngleUtil::dec2angle($angleDec);
+$time = AngleUtil::dec2time($angleDec);
+```
+
+The result of the calculation should be:\
+*Angle: 132°36'10.542"*\
+*Time: 8h50m24.703s*
+
+**Example 2**: Convert time into decimal format
+
+```php
+$time = '8h50m24.703s';
+
+$angle = AngleUtil::time2dec($time);
+```
+
+The result of the calculation should be:\
+*Angle: 132.60292916667°*
+
 <a name="toi"></a>
 # Time of Interest
 
 The time of interest (TOI) object represents the time for which all of the astronomical calculations are done.
-E.g. If you want to calculate the position of the sun for July 02nd 2017 at 12:00:00 UTC, you need to initialize
-the TOI as follow.
+E.g. If you want to calculate the position of the sun for 02 July 2017 at 12:00:00 UTC, you need to initialize
+the TOI as follow:
 
-The TOI objects provides all methods which are needed for astronomical calculations, such as follows:
-* Get Julian Day
-* Get Julian Centuries from J2000
-* Get Julian Millennia from J2000
+```
+$dateTime = new DateTime('2017-07-02 12:00:00');
+$toi = new TimeOfInterest($dateTime);
+```
 
-**Example 1**: Create TOI for 02 July 2017 at 13:37 UTC
+The following example show how to create a TOI-object which correspondends to the **current** date and time:
+
+```php
+$toi = new TimeOfInterest();
+```
+
+<a name="toiJulianDay"></a>
+### Julian Day, Julian Centuries from J2000 and Julian Millennia from J2000
+
+**Example**: Create TOI for 02 July 2017 at 13:37 UTC
 
 ```php
 $dateTime = new \DateTime('2017-07-02 13:37:00'); // DateTime in UTC
@@ -85,15 +126,31 @@ The result of the calculation should be:\
 *Julian Centuries J2000: 0.1750052665602*\
 *Julian Millennia J2000: 0.01750052665602*
 
-**Example 2**: Create TOI for "now"
+<a name="toiGmst"></a>
+## Greenwich Mean Sidereal Time (GMST), Greenwich Apparent Sidereal Time (GAST) and Equation of Time
+
+With the help of the TOI-Object it is possible to calculate the GMST, GAST and the equation in time (*units of all values are degrees*).
+The following example explains how to get these values for 20 December 1992 at 00:00 UTC.
 
 ```php
-$toi = new TimeOfInterest();
+$dateTime = new \DateTime('1992-12-20 00:00:00');
+$toi = new TimeOfInterest($dateTime);
 
-$dateTime = $toi->getDateTime();
+$GMST = $toi->getGreenwichMeanSiderealTime();
+$GAST = $toi->getGreenwichApparentSiderealTime();
+$E = $toi->getEquationOfTime();
 ```
 
-The result is a DateTime object correspondending to the current time.
+The result of the calculation should be:\
+*GMST: 88.82536°*\
+*GAST: 88.829629°*\
+*Equation of Time: 0.619485°*
+
+You may convert this values into the more common angle format by using `AngleUtil::dec2time($value)`.
+The result will be:\
+*GMST: 5h55m18.086s*\
+*GAST: 5h55m19.111s*\
+*Equation of Time: 0h2m28.676s*
 
 <a name="location"></a>
 # Location
@@ -352,13 +409,13 @@ $mars = new Mars($toi);
 $jupiter = new Jupiter($toi);
 $saturn = new Saturn($toi);
 $uranus = new Uranus($toi);
-$neptune = new Neptune($toi);Uranus
+$neptune = new Neptune($toi);
 ```
 
 <a name="planetHelio"></a>
 ### Heliocentric position of a planet
 
-The calculations use the VSOP87 theory to calculat the heliocentric position of a planet.
+The calculations use the VSOP87 theory to obtain the heliocentric position of a planet.
 
 **Example**: Calculate the heliocentric position of Venus for 20. December 1992 at 00:00 UTC.
 
@@ -384,7 +441,7 @@ The result of the calculation should be:\
 *Radius vector: 0.72460*\
 *X: 0.64995327095595*\
 *Y: 0.31860745636351*\
-*Z: -0.033130385747949
+*Z: -0.033130385747949*
 
 <a name="planetGeo"></a>
 ### Geocentric position of a planet

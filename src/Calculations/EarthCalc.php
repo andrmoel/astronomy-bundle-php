@@ -192,55 +192,6 @@ class EarthCalc implements EarthCalcInterface
     }
 
     /**
-     * Get equation of time [degrees]
-     * @param float $T
-     * @return float
-     */
-    public static function getEquationOfTimeInDegrees(float $T): float
-    {
-        if (CalculationCache::has('earthEquationOfTimeInDegrees', $T)) {
-            return CalculationCache::get('earthEquationOfTimeInDegrees', $T);
-        }
-
-        $L0 = SunCalc::getMeanLongitude($T);
-        $rightAscension = SunCalc::getApparentRightAscension($T);
-
-        // TODO Use method with higher accuracy (Meeus p.166) 25.9
-//        $rightAscension = 198.378178;
-
-        $dPhi = EarthCalc::getNutationInLongitude($T);
-        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
-        $eRad = deg2rad($e);
-
-        // Meeus 28.1
-        $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($eRad);
-
-        CalculationCache::set('earthEquationOfTimeInDegrees', $T, $E);
-
-        return $E;
-    }
-
-    /**
-     * Get equation of time [minutes]
-     * @param float $T
-     * @return float
-     */
-    public static function getEquationOfTimeInMinutes(float $T): float
-    {
-        if (CalculationCache::has('earthEquationOfTimeInMinutes', $T)) {
-            return CalculationCache::get('earthEquationOfTimeInMinutes', $T);
-        }
-
-        $E = self::getEquationOfTimeInDegrees($T);
-
-        $Emin = $E / 360 * 1440;
-
-        CalculationCache::set('earthEquationOfTimeInMinutes', $T, $Emin);
-
-        return $Emin;
-    }
-
-    /**
      * Get distance between 2 points on earths surface [km]
      * @param Location $location1
      * @param Location $location2

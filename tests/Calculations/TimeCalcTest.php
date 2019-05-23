@@ -45,6 +45,22 @@ class TimeCalcTest extends TestCase
 
     /**
      * @test
+     * Meeus 28.a
+     */
+    public function getEquationOfTimeInDegreesTest()
+    {
+        $T = -0.072183436;
+
+        $E = TimeCalc::getEquationOfTimeInDegrees($T);
+
+        $this->assertEquals(3.424707, round($E, 6));
+
+        // TODO Use method with higher accuracy (Meeus p.166) 25.9
+//        $this->assertEquals(3.427351, round($E, 6));
+    }
+
+    /**
+     * @test
      * Meeus Table 10.A
      */
     public function getDeltaTTest()

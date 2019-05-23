@@ -154,10 +154,10 @@ class TimeOfInterestTest extends TestCase
     /**
      * Meeus 12.a
      */
-    public function testGetApparentGreenwichMeanSiderealTime()
+    public function testGetGreenwichApparentMeanSiderealTime()
     {
         $toi = new TimeOfInterest(new \DateTime('1987-04-10 00:00:00'));
-        $t = $toi->getApparentGreenwichMeanSiderealTime();
+        $t = $toi->getGreenwichApparentSiderealTime();
 
         $this->assertEquals(197.69223, round($t, 5));
     }

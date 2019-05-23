@@ -105,7 +105,7 @@ class RiseSetTransit
 
         $ra = InterpolationUtil::interpolate($ra1, $ra2, $ra3, $m, $n);
 
-        $T0 = $this->toi->getApparentGreenwichMeanSiderealTime();
+        $T0 = $this->toi->getGreenwichApparentSiderealTime();
         $L = $this->location->getLongitudePositiveWest();
 
         $t0 = $T0 + 360.985647 * $m;
@@ -141,7 +141,7 @@ class RiseSetTransit
         $d = $coordinates->getDeclination();
 
         $h0 = self::getStandardAltitude();
-        $T0 = $this->toi->getApparentGreenwichMeanSiderealTime();
+        $T0 = $this->toi->getGreenwichApparentSiderealTime();
         $L = $this->location->getLongitudePositiveWest();
         $lat = $this->location->getLatitude();
 
