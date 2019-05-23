@@ -63,8 +63,7 @@ class HeliocentricEquatorialRectangularCoordinates
 
     public function getGeocentricEquatorialRectangularCoordinates(
         TimeOfInterest $toi
-    ): GeocentricEquatorialRectangularCoordinates
-    {
+    ): GeocentricEquatorialRectangularCoordinates {
         // Heliocentric coordinates of earth
         $earth = new Earth($toi);
         $hcEclRecCoordinatesEarth = $earth->getHeliocentricEclipticalRectangularCoordinates();

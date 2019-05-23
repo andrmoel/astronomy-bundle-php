@@ -59,7 +59,7 @@ class GeocentricEquatorialSphericalCoordinates
         $dRad = deg2rad($this->declination);
         $R = $this->radiusVector;
 
-        $X = cos($dRad)  * cos($raRad) * $R;
+        $X = cos($dRad) * cos($raRad) * $R;
         $Y = cos($dRad) * sin($raRad) * $R;
         $Z = sin($dRad) * $R;
 

@@ -4,7 +4,6 @@ namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class GeocentricEclipticalSphericalCoordinates
@@ -77,8 +76,9 @@ class GeocentricEclipticalSphericalCoordinates
     }
 
     // TODO
-    public function getLocalHorizontalCoordinates(Location $location, TimeOfInterest $toi): LocalHorizontalCoordinates
+    public function getLocalHorizontalCoordinates(Location $location, float $T): LocalHorizontalCoordinates
     {
-        return new LocalHorizontalCoordinates(0, 0);
+        return $this->getGeocentricEquatorialSphericalCoordinates($T)
+            ->getLocalHorizontalCoordinates($location, $T);
     }
 }

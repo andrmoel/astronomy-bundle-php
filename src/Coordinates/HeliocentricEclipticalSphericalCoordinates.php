@@ -45,9 +45,9 @@ class HeliocentricEclipticalSphericalCoordinates
         return new HeliocentricEclipticalRectangularCoordinates($x, $y, $z);
     }
 
+    // TODO
     public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates
     {
-        // TODO ...
         return new HeliocentricEquatorialRectangularCoordinates(0, 0, 0);
     }
 
@@ -59,8 +59,7 @@ class HeliocentricEclipticalSphericalCoordinates
 
     public function getGeocentricEquatorialRectangularCoordinates(
         TimeOfInterest $toi
-    ): GeocentricEquatorialRectangularCoordinates
-    {
+    ): GeocentricEquatorialRectangularCoordinates {
         $BRad = deg2rad($this->latitude);
         $LRad = deg2rad($this->longitude);
         $R = $this->radiusVector;

@@ -56,16 +56,9 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
 
     public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
     {
-        $planetHelEclRecCoord = $this->getHeliocentricEclipticalRectangularCoordinates();
-
-        $earth = new Earth($this->toi);
-        $earthHelEclRecCoord = $earth->getHeliocentricEclipticalRectangularCoordinates();
-
-        $X = $planetHelEclRecCoord->getX() - $earthHelEclRecCoord->getX();
-        $Y = $planetHelEclRecCoord->getY() - $earthHelEclRecCoord->getY();
-        $Z = $planetHelEclRecCoord->getZ() - $earthHelEclRecCoord->getZ();
-
-        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+        return $this
+            ->getHeliocentricEclipticalRectangularCoordinates()
+            ->getGeocentricEclipticalRectangularCoordinates($this->toi);
     }
 
     public function test()

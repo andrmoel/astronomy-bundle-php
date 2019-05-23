@@ -2,7 +2,6 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
