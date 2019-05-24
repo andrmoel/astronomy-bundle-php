@@ -16,7 +16,7 @@
     2. [Moon](#moon)
         1. [Position](#moonPosition)
         2. [Distance to earth](#moonDistance)
-        3. [Sunrise, Sunset & Culmination](#moonrise)
+        3. [Moonrise, Moonset & Culmination](#moonrise)
         4. [Phases](#moonPhases)
     3. [Planets](#planets)
         1. [Heliocentric position of a planet](#planetHelio)
@@ -293,7 +293,7 @@ The result should be 151797703km.
 <a name="sunrise"></a>
 ### Sunrise, sunset and upper culmination
 
-**Example**: Calculate sunrise, sunset and upper culmination for Berlin, Germany for 17 May 2019
+Calculate sunrise, sunset and upper culmination of the sun on 17 May 2019 in Berlin:
 
 ```php
 $dateTime = new DateTime('2019-05-17');
@@ -494,9 +494,26 @@ The result of the calculation should be:\
 <a name="planetRise"></a>
 ### Rise, set and upper culmination
 
-* ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
+Calculate rise, set and upper culmination of Venus on 25 October 2018 at 07:15 UTC in Berlin:
 
-TODO: Write some nice documentation :)
+```php
+$location = new Location(52.524, 13.411); // Berlin
+
+$dateTime = new DateTime('2018-10-25 07:15:00');
+$toi = new TimeOfInterest($dateTime);
+
+$venus = new Venus($toi);
+
+// Rise, set and upper culmination
+$rise = $venus->getRise($location);
+$set = $venus->getSet($location);
+$upperCulmination = $venus->getUpperCulmination($location);
+```
+
+The result of the calculation should be:\
+*Rise: 06:31 UTC*\
+*Set: 15:06 UTC*\
+*Upper culmination: 10:49 UTC*
 
 <a name="events"></a>
 # Events
