@@ -73,10 +73,9 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
     {
         $T = $this->toi->getJulianCenturiesFromJ2000();
         $t = $this->toi->getJulianMillenniaFromJ2000();
+        $JD = $this->toi->getJulianDay();
 
         $coefficientsEarth = VSOP87Calc::solve(EarthRectangularVSOP87::class, $t);
-
-        $JD = $this->toi->getJulianDay();
 
         // Meeus 33 - Light time corrections
         for ($i = 0; $i < 2; $i++) {
