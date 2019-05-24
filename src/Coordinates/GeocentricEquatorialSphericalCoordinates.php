@@ -81,13 +81,12 @@ class GeocentricEquatorialSphericalCoordinates
         $HRad = deg2rad($H);
 
         // Meeus 13.5
-        $azimuth = atan(sin($HRad) / (cos($HRad) * sin($latRad) - tan($dRad) * cos($latRad)));
-        $azimuth = rad2deg($azimuth);
-        $azimuth = AngleUtil::normalizeAngle($azimuth);
+        $azimuthRad = atan2(sin($HRad), (cos($HRad) * sin($latRad) - tan($dRad) * cos($latRad)));
+        $azimuth = AngleUtil::normalizeAngle(rad2deg($azimuthRad) + 180);
 
         // Meeus 13.6
-        $altitude = asin(sin($latRad) * sin($dRad) + cos($latRad) * cos($dRad) * cos($HRad));
-        $altitude = rad2deg($altitude);
+        $altitudeRad = asin(sin($latRad) * sin($dRad) + cos($latRad) * cos($dRad) * cos($HRad));
+        $altitude = rad2deg($altitudeRad);
 
         return new LocalHorizontalCoordinates($azimuth, $altitude);
     }
