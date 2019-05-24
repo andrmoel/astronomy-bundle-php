@@ -504,7 +504,7 @@ $toi = new TimeOfInterest($dateTime);
 
 $venus = new Venus($toi);
 
-// Rise, set and upper culmination
+// Results are TimeOfInterest objects
 $rise = $venus->getRise($location);
 $set = $venus->getSet($location);
 $upperCulmination = $venus->getUpperCulmination($location);
