@@ -446,9 +446,50 @@ The result of the calculation should be:\
 <a name="planetGeo"></a>
 ### Geocentric position of a planet
 
-* ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
+All solutions for the geocentric calculations give the **apparent** position of a planet.
+That means the position of the planet is corrected by light time and aberration.
 
-TODO: Write some nice documentation :)
+**Example 1**: Calculate the apparent geocentric position of Venus on 25 October 2018 at 17:15 UTC
+
+```php
+$dateTime = new DateTime('2018-10-25 07:15:00'); // UTC
+$toi = new TimeOfInterest($dateTime);
+
+$venus = new Venus($toi);
+
+$geoEclSphCoords = $venus->getGeocentricEclipticalSphericalCoordinates();
+$lat = $geoEclSphCoords->getLatitude();
+$lon = $geoEclSphCoords->getLongitude();
+
+$geoEclSphCoords = $venus->getGeocentricEquatorialSphericalCoordinates();
+$rightAscension = $geoEclSphCoords->getRightAscension();
+$declination = $geoEclSphCoords->getDeclination();
+```
+
+The result of the calculation should be:\
+*Latitude: -6.476359° (-6°28'34.891")*\
+*Longitude: 213.898092° (213°53'53.131")*\
+*Right ascension: 209.340427° (13h57m21.702s)*\
+*Declination: -18.898191° (-18°53'53.487")*
+
+**Example 2**: Calculate the azimuth and altitude of Venus on 25 October 2018 at 17:15 UTC in Berlin
+
+```php
+$location = new Location(52.524, 13.411); // Berlin
+
+$dateTime = new DateTime('2018-10-25 07:15:00');
+$toi = new TimeOfInterest($dateTime);
+
+$venus = new Venus($toi);
+
+$locHorCoords = $venus->getLocalHorizontalCoordinates($location);
+$azimuth = $locHorCoords->getAzimuth();
+$altitude = $locHorCoords->getAltitude();
+```
+
+The result of the calculation should be:\
+*Azimuth: 130.202°*\
+*Altitude: 4.874°*
 
 <a name="planetRise"></a>
 ### Rise, set and upper culmination
