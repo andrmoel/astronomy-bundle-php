@@ -13,10 +13,11 @@ use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordina
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEquatorialRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
+use Andrmoel\AstronomyBundle\Events\RiseSetTransit\RiseSetTransit;
 use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
@@ -53,20 +54,6 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
         $B = rad2deg($B);
 
         return new HeliocentricEclipticalSphericalCoordinates($B, $L, $R);
-    }
-
-    // TODO
-    public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates
-    {
-        return new HeliocentricEquatorialRectangularCoordinates(0, 0, 0);
-    }
-
-    // TODO ...
-    public function getGeocentricEclipticalRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
-    {
-        return $this
-            ->getHeliocentricEclipticalRectangularCoordinates()
-            ->getGeocentricEclipticalRectangularCoordinates($this->T);
     }
 
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
@@ -106,9 +93,11 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
         return $geoEclSphCoord;
     }
 
+    // TODO test it!
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
-        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
+        return $this->getGeocentricEclipticalSphericalCoordinates()
+            ->getGeocentricEquatorialRectangularCoordinates($this->T);
     }
 
     public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
@@ -123,6 +112,24 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
         return $this
             ->getGeocentricEquatorialSphericalCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->T);
+    }
+
+    public function getRise(Location $location): TimeOfInterest
+    {
+        $ras = new RiseSetTransit(get_class($this), $location, $this->toi);
+        return $ras->getRise();
+    }
+
+    public function getUpperCulmination(Location $location): TimeOfInterest
+    {
+        $ras = new RiseSetTransit(get_class($this), $location, $this->toi);
+        return $ras->getTransit();
+    }
+
+    public function getSet(Location $location): TimeOfInterest
+    {
+        $ras = new RiseSetTransit(get_class($this), $location, $this->toi);
+        return $ras->getSet();
     }
 
     public function getDistanceToEarthInAu(): float

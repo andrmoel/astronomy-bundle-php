@@ -44,7 +44,7 @@ class GeocentricEquatorialSphericalCoordinates
 
         // Meeus 13.1
         $lonRad = atan2((sin($raRad) * cos($epsRad) + tan($dRad) * sin($epsRad)), cos($raRad));
-        $lon = AngleUtil::normalizeAngle(rad2deg($lonRad)); // TODO +180 ???
+        $lon = AngleUtil::normalizeAngle(rad2deg($lonRad));
 
         // Meeus 13.2
         $latRad = asin(sin($dRad) * cos($epsRad) - cos($dRad) * sin($epsRad) * sin($raRad));

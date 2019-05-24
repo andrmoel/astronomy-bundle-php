@@ -9,35 +9,53 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 date_default_timezone_set('UTC');
 
-// Berlin
-$location = new Location(52.524, 13.411);
+$location = new Location(52.524, 13.411); // Berlin
 
-$toi = new TimeOfInterest(new DateTime('2019-05-23 00:00:00'));
+$dateTime = new DateTime('2018-10-25 07:15:00');
+$toi = new TimeOfInterest($dateTime);
 
 $venus = new Venus($toi);
 
-// Ecliptical spherical coordinates
-$geoEclSphCoordinates = $venus->getGeocentricEclipticalSphericalCoordinates();
+// Heliocentric ecliptical rectangular coordinates
+$helEclRecCoords = $venus->getHeliocentricEclipticalRectangularCoordinates();
+$x = $helEclRecCoords->getX();
+$y = $helEclRecCoords->getY();
+$z = $helEclRecCoords->getZ();
 
-$eclLon = $geoEclSphCoordinates->getLongitude();
+// Heliocentric ecliptical spherical coordinates
+$helEclSphCoords = $venus->getHeliocentricEclipticalSphericalCoordinates();
+$helLat = $helEclSphCoords->getLatitude();
+$helLat = AngleUtil::dec2angle($helLat);
+$helLon = $helEclSphCoords->getLongitude();
+$helLon = AngleUtil::dec2angle($helLon);
+
+// Geocentric ecliptical spherical coordinates
+$geoEclSphCoords = $venus->getGeocentricEclipticalSphericalCoordinates();
+
+$eclLon = $geoEclSphCoords->getLongitude();
 $eclLon = AngleUtil::dec2angle($eclLon);
-$eclLat = $geoEclSphCoordinates->getLatitude();
+$eclLat = $geoEclSphCoords->getLatitude();
 $eclLat = AngleUtil::dec2angle($eclLat);
-$radiusVector = $geoEclSphCoordinates->getRadiusVector();
+$radiusVector = $geoEclSphCoords->getRadiusVector();
 
-// Equatorial coordinates
-$geoEqaCoordinates = $venus->getGeocentricEquatorialSphericalCoordinates();
+// Geocentric equatorial spherical coordinates
+$geoEqaCoords = $venus->getGeocentricEquatorialSphericalCoordinates();
 
-$rightAscension = $geoEqaCoordinates->getRightAscension();
+$rightAscension = $geoEqaCoords->getRightAscension();
 $rightAscension = AngleUtil::dec2time($rightAscension);
-$declination = $geoEqaCoordinates->getDeclination();
+$declination = $geoEqaCoords->getDeclination();
 $declination = AngleUtil::dec2angle($declination);
 
 // Local horizontal coordinates
-$localHorizontalCoordinates = $venus->getLocalHorizontalCoordinates($location);
+$localHorizontalCoords = $venus->getLocalHorizontalCoordinates($location);
 
-$azimuth = $localHorizontalCoordinates->getAzimuth();
-$altitude = $localHorizontalCoordinates->getAltitude();
+$azimuth = $localHorizontalCoords->getAzimuth();
+$altitude = $localHorizontalCoords->getAltitude();
+
+// Rise, set and upper culmination
+$rise = $venus->getRise($location);
+$culmination = $venus->getUpperCulmination($location);
+$set = $venus->getSet($location);
 
 echo <<<END
 +------------------------------------
@@ -45,6 +63,14 @@ echo <<<END
 +------------------------------------
 Date: {$toi->getDateTime()->format('Y-m-d H:i:s')} UTC
 
+Heliocentric coordinates
+X: {$x}
+Y: {$y}
+z: {$z}
+Ecliptical latitude: {$helLat}
+Ecliptical longitude: {$helLon}
+
+Geocentric coordinates (apparent)
 Ecliptical longitude: {$eclLon}
 Ecliptical latitude: {$eclLat}
 Right ascension: {$rightAscension}
@@ -52,7 +78,10 @@ Declination: {$declination}
 
 Venus seen from observer's location
 Location: {$location->getLatitude()}°, {$location->getLongitude()}°
-Azimuth: {$azimuth} (apparent)
-Altitude: {$altitude} (apparent)
+Azimuth: {$azimuth}
+Altitude: {$altitude}
+Rise: {$rise->getDateTime()->format('Y-m-d H:i:s')} UTC
+Culmination: {$culmination->getDateTime()->format('Y-m-d H:i:s')} UTC
+Set: {$set->getDateTime()->format('Y-m-d H:i:s')} UTC
 
 END;
