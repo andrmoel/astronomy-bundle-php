@@ -2,9 +2,13 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEquatorialRectangularCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 
 interface PlanetInterface
@@ -17,9 +21,17 @@ interface PlanetInterface
 
     public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates;
 
-    public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates;
+    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates;
 
-    public function getDistanceToEarthInAu(): float;
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates;
 
-    public function getDistanceToEarthInKm(): float;
+    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates;
+
+    public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates;
+
+    public function getRise(Location $location): TimeOfInterest;
+
+    public function getUpperCulmination(Location $location): TimeOfInterest;
+
+    public function getSet(Location $location): TimeOfInterest;
 }

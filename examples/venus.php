@@ -9,10 +9,10 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 date_default_timezone_set('UTC');
 
-// Berlin
-$location = new Location(52.524, 13.411);
+$location = new Location(52.524, 13.411); // Berlin
 
-$toi = new TimeOfInterest(new DateTime('2019-05-23 00:00:00'));
+$dateTime = new DateTime('2018-10-25 07:15:00');
+$toi = new TimeOfInterest();
 
 $venus = new Venus($toi);
 
@@ -39,6 +39,11 @@ $localHorizontalCoordinates = $venus->getLocalHorizontalCoordinates($location);
 $azimuth = $localHorizontalCoordinates->getAzimuth();
 $altitude = $localHorizontalCoordinates->getAltitude();
 
+// Rise, set and upper culmination
+$rise = $venus->getRise($location);
+$culmination = $venus->getUpperCulmination($location);
+$set = $venus->getSet($location);
+
 echo <<<END
 +------------------------------------
 | Venus
@@ -54,5 +59,8 @@ Venus seen from observer's location
 Location: {$location->getLatitude()}°, {$location->getLongitude()}°
 Azimuth: {$azimuth} (apparent)
 Altitude: {$altitude} (apparent)
+Rise: {$rise->getDateTime()->format('Y-m-d H:i:s')} UTC
+Culmination: {$culmination->getDateTime()->format('Y-m-d H:i:s')} UTC
+Set: {$set->getDateTime()->format('Y-m-d H:i:s')} UTC
 
 END;
