@@ -4,30 +4,30 @@
 3. [Example data](#example)
 4. [Angle Util](#angle)
 5. [Time of Interest](#toi)
-    1. [Julian Day, Centuries & Millennia](#toiJulianDay)
-    1. [GMST, GAST & Equation of Time](#toiGmst)
+    1. [Julian Day, Centuries & Millennia](#toi-julian-day)
+    1. [GMST, GAST & Equation of Time](#toi-gmst)
 6. [Location](#location)
 7. [Coordinate Systems (and transformations)](#coordinates)
 8. [Astronomical Objects](#objects)
     1. [Sun](#sun)
-        1. [Position](#sunPosition)
-        2. [Distance to earth](#sunDistance)
+        1. [Position](#sun-position)
+        2. [Distance to earth](#sun-distance)
         3. [Sunrise, Sunset & Culmination](#sunrise)
     2. [Moon](#moon)
-        1. [Position](#moonPosition)
-        2. [Distance to earth](#moonDistance)
+        1. [Position](#moon-position)
+        2. [Distance to earth](#moon-distance)
         3. [Moonrise, Moonset & Culmination](#moonrise)
-        4. [Phases](#moonPhases)
+        4. [Phases](#moon-phases)
     3. [Planets](#planets)
-        1. [Heliocentric position of a planet](#planetHelio)
-        1. [Geocentric position of a planet](#planetGeo)
-        1. [Rise, Set & Culmination](#planetRise)
+        1. [Heliocentric position of a planet](#planet-hel-pos)
+        1. [Geocentric position of a planet](#planet-geo-pos)
+        1. [Rise, Set & Culmination](#planet-rise)
 9. [Events](#events)
-    1. [Solar Eclipse](#solarEclipse)
-        1. [Create a Solar Eclipse](#solarEclipseCreate)
-        1. [Type, Obscuration, Magnitude, Duration](#solarEclipseType)
-        1. [Contacts (C1, C2, MAX, C3, C4)](#solarEclipseContacts)
-    2. [Lunar Eclipse](#lunarEclipse)
+    1. [Solar Eclipse](#solar-eclipse)
+        1. [Create a Solar Eclipse](#solar-eclipse-create)
+        1. [Type, Obscuration, Magnitude, Duration](#solar-eclipse-type)
+        1. [Contacts (C1, C2, MAX, C3, C4)](#solar-eclipse-contacts)
+    2. [Lunar Eclipse](#lunar-eclipse)
 10. [Other calculations](#other)
     1. [Distance between two locations](#distance)
     1. [Nutatation of earth](#nutation)
@@ -105,7 +105,7 @@ The following example show how to create a TOI-object which correspondends to th
 $toi = new TimeOfInterest();
 ```
 
-<a name="toiJulianDay"></a>
+<a name="toi-julian-day"></a>
 ### Julian Day, Julian Centuries from J2000 and Julian Millennia from J2000
 
 **Example**: Create TOI for 02 July 2017 at 13:37 UTC
@@ -126,7 +126,7 @@ The result of the calculation should be:\
 *Julian Centuries J2000: 0.1750052665602*\
 *Julian Millennia J2000: 0.01750052665602*
 
-<a name="toiGmst"></a>
+<a name="toi-gmst"></a>
 ## Greenwich Mean Sidereal Time (GMST), Greenwich Apparent Sidereal Time (GAST) and Equation of Time
 
 With the help of the TOI-Object it is possible to calculate the GMST, GAST and the equation in time (*units of all values are degrees*).
@@ -225,7 +225,7 @@ $moon = new Moon($toi);
 <a name="sun"></a>
 ## Sun
 
-<a name="sunPosition"></a>
+<a name="sun-position"></a>
 ### Position of the sun
 
 **Example 1**: Calculate the position of the sun for 17 May 2019 at 17:50 UTC
@@ -264,7 +264,7 @@ The result of the calculation should be:\
 *Azimuth: 291.0°*\
 *Altitude: 8.4°*
 
-<a name="sunDistance"></a>
+<a name="sun-distance"></a>
 ### Distance of the sun to earth
 
 **Example 1**: The current distance of the sun in kimometers can be calculated as follow:
@@ -317,7 +317,7 @@ The result of the calculation should be:\
 <a name="moon"></a>
 ## Moon
 
-<a name="moonPosition"></a>
+<a name="moon-position"></a>
 ### Position of the moon
 
 The position of the moon can be calculated as explained in the following example.
@@ -337,7 +337,7 @@ The result of the calculation should be:\
 *Right ascension: 134.69°*\
 *Declination: 13.77°*
 
-<a name="moonDistance"></a>
+<a name="moon-distance"></a>
 ### Distance of the moon to earth
 
 **Example 1**: The current distance of the moon in kimometers can be calculated as follow:
@@ -368,7 +368,7 @@ The result should be 402970km.
 
 * ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
 
-<a name="moonPhases"></a>
+<a name="moon-phases"></a>
 ### Phases of the moon
 
 The following code sniped explains how to calculate all important parameters which belong to the moons phase
@@ -412,7 +412,7 @@ $uranus = new Uranus($toi);
 $neptune = new Neptune($toi);
 ```
 
-<a name="planetHelio"></a>
+<a name="planet-hel-pos"></a>
 ### Heliocentric position of a planet
 
 The calculations use the VSOP87 theory to obtain the heliocentric position of a planet.
@@ -443,7 +443,7 @@ The result of the calculation should be:\
 *Y: 0.31860745636351*\
 *Z: -0.033130385747949*
 
-<a name="planetGeo"></a>
+<a name="planet-geo-pos"></a>
 ### Geocentric position of a planet
 
 All solutions for the geocentric calculations give the **apparent** position of a planet.
@@ -491,7 +491,7 @@ The result of the calculation should be:\
 *Azimuth: 130.202°*\
 *Altitude: 4.874°*
 
-<a name="planetRise"></a>
+<a name="planet-rise"></a>
 ### Rise, set and upper culmination
 
 Calculate rise, set and upper culmination of Venus on 25 October 2018 at 07:15 UTC in Berlin:
@@ -518,10 +518,10 @@ The result of the calculation should be:\
 <a name="events"></a>
 # Events
 
-<a name="solarEclipse"></a>
+<a name="solar-eclipse"></a>
 ## Solar eclipse
 
-<a name="solarEclipseCreate"></a>
+<a name="solar-eclipse-create"></a>
 ### Create a Solar Eclipse object
 
 **Example**: Create a solar eclipse for 21 August 2017 for the location Madrads in Oregon (USA)
@@ -537,7 +537,7 @@ $solarEclipse = SolarEclipse::create($toi, $location);
 
 *Note: If the date of the eclipse is invalid, an exception will be thrown.*
 
-<a name="solarEclipseType"></a>
+<a name="solar-eclipse-type"></a>
 ### Eclipse type, Obscuration, Magnitude, Duration, etc.
 
 To obtain the eclipse circumstances of the **maximum eclipse** for a given location, see the following examples.
@@ -600,12 +600,12 @@ The result of the calculation should be:\
 *Magnitude: 0.79*\
 *Moon-sun-ratio: 1.05*
 
-<a name="solarEclipseContact"></a>
+<a name="solar-eclipseContact"></a>
 ### Contacts (C1, C2, MAX, C3, C4)
 
 TODO: Write some nice documentation :)
 
-<a name="lunarEclipse"></a>
+<a name="lunar-eclipse"></a>
 # Lunar eclipse
 
 * ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
