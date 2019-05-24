@@ -449,7 +449,7 @@ The result of the calculation should be:\
 All solutions for the geocentric calculations give the **apparent** position of a planet.
 That means the position of the planet is corrected by light time and aberration.
 
-**Example 1**: Calculate the apparent geocentric position of Venus on 25 October 2018 at 17:15 UTC
+**Example 1**: Calculate the apparent geocentric position of Venus on 25 October 2018 at 07:15 UTC
 
 ```php
 $dateTime = new DateTime('2018-10-25 07:15:00'); // UTC
@@ -472,7 +472,7 @@ The result of the calculation should be:\
 *Right ascension: 209.340427° (13h57m21.702s)*\
 *Declination: -18.898191° (-18°53'53.487")*
 
-**Example 2**: Calculate the azimuth and altitude of Venus on 25 October 2018 at 17:15 UTC in Berlin
+**Example 2**: Calculate the azimuth and altitude of Venus on 25 October 2018 at 07:15 UTC in Berlin
 
 ```php
 $location = new Location(52.524, 13.411); // Berlin
