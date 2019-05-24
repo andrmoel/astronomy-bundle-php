@@ -43,45 +43,8 @@ class VenusTest extends TestCase
         $Y = $helEclRecCoordinates->getY();
         $Z = $helEclRecCoordinates->getZ();
 
-        $this->assertEquals(26.114120, round($X, 6));
-        $this->assertEquals(-2.620603, round($Y, 6));
-        $this->assertEquals(0.724602, round($Z, 6));
+        $this->assertEquals(0.649953, round($X, 6));
+        $this->assertEquals(0.318607, round($Y, 6));
+        $this->assertEquals(-0.03313, round($Z, 6));
     }
-
-    /**
-     * @test
-     * Meeus 33.a
-     */
-    public function getApparentHeliocentricEclipticalSphericalCoordinatesTest()
-    {
-//        $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
-//        $venus = new Venus($toi);
-//
-//        $helEclSphCoordinates = $venus->getApparentHeliocentricEclipticalSphericalCoordinates();
-//
-//        $L = $helEclSphCoordinates->getLongitude();
-//        $B = $helEclSphCoordinates->getLatitude();
-//        $R = $helEclSphCoordinates->getRadiusVector();
-//
-//        $this->assertEquals(26.10571, round($L, 5));
-//        $this->assertEquals(-2.62092, round($B, 5));
-//        $this->assertEquals(0.724602, round($R, 6));
-    }
-
-//    public function getHeliocentricEclipticalRectangularCoordinatesTest()
-//    {
-//        $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
-//        $venus = new Venus($toi);
-//
-//        $helEclRecCoordinates = $venus->getHeliocentricEclipticalRectangularCoordinates();
-//
-//        $X = $helEclRecCoordinates->getX();
-//        $Y = $helEclRecCoordinates->getY();
-//        $Z = $helEclRecCoordinates->getZ();
-//
-//        // TODO ... evaluate
-//        $this->assertEquals(0.649953, round($X, 6));
-//        $this->assertEquals(0.318607, round($Y, 6));
-//        $this->assertEquals(-0.03313, round($Z, 6));
-//    }
 }

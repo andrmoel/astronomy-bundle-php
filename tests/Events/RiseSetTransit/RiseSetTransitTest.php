@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 class RiseSetTransitTest extends TestCase
 {
     /**
-     * @test
      * Meeus 15.a
      */
     public function test()

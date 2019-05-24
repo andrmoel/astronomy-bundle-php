@@ -88,7 +88,7 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
         $azimuth = $locHorCoord->getAzimuth();
         $altitude = $locHorCoord->getAltitude();
 
-        $this->assertEquals(68.0325, round($azimuth, 4));
+        $this->assertEquals(248.0325, round($azimuth, 4));
         $this->assertEquals(15.1247, round($altitude, 4));
     }
 }

@@ -47,10 +47,10 @@ class GeocentricEquatorialSphericalCoordinatesTest extends TestCase
         $geoEquSphCoord = new GeocentricEquatorialSphericalCoordinates($ra, $d);
         $locHorCoord = $geoEquSphCoord->getLocalHorizontalCoordinates($location, $T);
 
-        $altitude = $locHorCoord->getAltitude();
         $azimuth = $locHorCoord->getAzimuth();
+        $altitude = $locHorCoord->getAltitude();
 
+        $this->assertEquals(248.0336, round($azimuth, 4));
         $this->assertEquals(15.125, round($altitude, 4));
-        $this->assertEquals(68.0336, round($azimuth, 4));
     }
 }

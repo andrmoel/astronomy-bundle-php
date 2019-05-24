@@ -98,20 +98,4 @@ class EarthCalcTest extends TestCase
 
         $this->assertStringStartsWith('0°0\'9.442', AngleUtil::dec2angle($sumEps));
     }
-
-    /**
-     * @test
-     * Meeus 28.a
-     */
-    public function getEquationOfTimeInMinutesTest()
-    {
-        $T = -0.072183436;
-
-        $E = EarthCalc::getEquationOfTimeInMinutes($T);
-
-        $this->assertEquals(13.69883, round($E, 5));
-
-        // TODO Use method with higher accuracy (Meeus p.166) 25.9
-//        $this->assertEquals(13.70941, round($E, 5));
-    }
 }

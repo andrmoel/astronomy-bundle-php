@@ -46,16 +46,9 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
 
     public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
     {
-        $coordinates = $this
+        return $this
             ->getGeocentricEquatorialSphericalCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->T);
-
-        // Convert south to north
-        $azimuth = $coordinates->getAzimuth() + 180;
-        $azimuth = AngleUtil::normalizeAngle($azimuth);
-        $altitude = $coordinates->getAltitude();
-
-        return new LocalHorizontalCoordinates($azimuth, $altitude);
     }
 
     /**
