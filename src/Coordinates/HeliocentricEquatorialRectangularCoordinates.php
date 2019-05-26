@@ -2,8 +2,6 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-use Andrmoel\AstronomyBundle\Utils\AngleUtil;
-
 class HeliocentricEquatorialRectangularCoordinates
 {
     private $X = 0;
