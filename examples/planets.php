@@ -19,11 +19,7 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 $location = new Location(52.524, 13.411);
 
 // Time of interest
-$dateTime = new DateTime('2019-05-24 22:00:00');
-$toi = new TimeOfInterest($dateTime);
-
-$T = $toi->getJulianCenturiesFromJ2000();
-$e = EarthCalc::getTrueObliquityOfEcliptic($T);
+$toi = TimeOfInterest::createFromString('2019-05-24 22:00:00');
 
 $planets = array(
     new Mercury($toi),

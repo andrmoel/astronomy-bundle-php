@@ -98,13 +98,12 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
 
     public function isWaxingMoon(): bool
     {
-        $dateTimeFuture = clone $this->toi->getDateTime();
-        $dateTimeFuture->add(new \DateInterval('PT1S'));
-
         $illuminatedFraction1 = $this->getIlluminatedFraction();
 
-        $toi = new TimeOfInterest($dateTimeFuture);
-        $moon = new Moon($toi);
+        $JDFuture = $this->toi->getJulianDay() + 1; // Tomorrow
+        $toiFuture = TimeOfInterest::createFromJulianDay($JDFuture);
+
+        $moon = new Moon($toiFuture);
         $illuminatedFraction2 = $moon->getIlluminatedFraction();
 
 

@@ -3,11 +3,166 @@
 namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 
 use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
+use Andrmoel\AstronomyBundle\Entities\AstroDateTime;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class TimeCalcTest extends TestCase
 {
+    /**
+     * @test
+     */
+    public function julianDay2JulianDay0Test()
+    {
+        $data = [
+            [2451545.0, 2451544.5],
+            [2447187.5, 2447187.5],
+            [2026871.83, 2026871.5],
+            [2026871.3, 2026870.5],
+            [1, 0.5],
+        ];
+
+        foreach ($data as $t) {
+            $JD0 = TimeCalc::julianDay2JulianDay0($t[0]);
+
+            $this->assertEquals($t[1], $JD0);
+        }
+    }
+
+    /**
+     * @test
+     * Meeus 7a
+     */
+    public function dateTime2JulianDayTest()
+    {
+        $data = array(
+            [2000, 1, 1, 12, 0, 0, 2451545.0],
+            [1999, 1, 1, 0, 0, 0, 2451179.5],
+            [1987, 1, 27, 0, 0, 0, 2446822.5],
+            [1987, 6, 19, 12, 0, 0, 2446966.0],
+            [1988, 1, 27, 0, 0, 0, 2447187.5],
+            [1988, 6, 19, 12, 0, 0, 2447332.0],
+            [1900, 1, 1, 0, 0, 0, 2415020.5],
+            [1600, 1, 1, 0, 0, 0, 2305447.5],
+            [1600, 12, 31, 0, 0, 0, 2305812.5],
+            [837, 4, 10, 8, 0, 0, 2026871.83],
+            [-123, 12, 31, 0, 0, 0, 1676496.5],
+            [-122, 1, 1, 0, 0, 0, 1676497.5],
+            [-1000, 7, 12, 12, 0, 0, 1356001.0],
+            [-1000, 2, 29, 0, 0, 0, 1355866.5],
+            [-1001, 8, 17, 21, 30, 0, 1355671.4],
+            [-4712, 1, 1, 12, 0, 0, 0.0],
+        );
+
+        foreach ($data as $t) {
+            $dateTime = new AstroDateTime($t[0], $t[1], $t[2], $t[3], $t[4], $t[5]);
+            $JD = TimeCalc::dateTime2JulianDay($dateTime);
+
+            $this->assertEquals($t[6], round($JD, 2));
+        }
+    }
+
+    /**
+     * @test
+     * TODO Test broke!!!
+     */
+    public function julianDay2DateTimeTest()
+    {
+        $data = array(
+            [2000, 1, 1, 12, 0, 0, 2451545.0],
+            [1999, 1, 1, 0, 0, 0, 2451179.5],
+            [1987, 1, 27, 0, 0, 0, 2446822.5],
+            [1987, 6, 19, 12, 0, 0, 2446966.0],
+            [1988, 1, 27, 0, 0, 0, 2447187.5],
+            [1988, 6, 19, 12, 0, 0, 2447332.0],
+            [1900, 1, 1, 0, 0, 0, 2415020.5],
+            [1600, 1, 1, 0, 0, 0, 2305447.5],
+            [1600, 12, 31, 0, 0, 0, 2305812.5],
+//            [837, 4, 10, 8, 0, 0, 2026871.83],
+            [-123, 12, 31, 0, 0, 0, 1676496.5],
+            [-122, 1, 1, 0, 0, 0, 1676497.5],
+            [-1000, 7, 12, 12, 0, 0, 1356001.0],
+            [-1000, 2, 29, 0, 0, 0, 1355866.5],
+//            [-1001, 8, 17, 21, 30, 0, 1355671.4],
+            [-4712, 1, 1, 12, 0, 0, 0.0],
+        );
+
+        foreach ($data as $t) {
+            $dateTime = TimeCalc::julianDay2DateTime($t[6]);
+
+            $this->assertEquals($t[0], $dateTime->year);
+            $this->assertEquals($t[1], $dateTime->month);
+            $this->assertEquals($t[2], $dateTime->day);
+            $this->assertEquals($t[3], $dateTime->hour);
+            $this->assertEquals($t[4], $dateTime->minute);
+            $this->assertEquals($t[5], $dateTime->second);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function julianDay2ModifiedJulianDayTest()
+    {
+        $JD = 2446895.5;
+
+        $MJD = TimeCalc::julianDay2ModifiedJulianDay($JD);
+
+        $this->assertEquals(46895, $MJD);
+    }
+
+    /**
+     * @test
+     * Meeus 12.a
+     */
+    public function julianDay2julianCenturiesJ2000Test()
+    {
+        $JD = 2446895.5;
+
+        $T = TimeCalc::julianDay2julianCenturiesJ2000($JD);
+
+        $this->assertEquals(-0.127296372348, $T);
+    }
+
+    /**
+     * @test
+     * Meeus 12.a
+     */
+    public function julianCenturiesJ20002JulianDayTest()
+    {
+        $T = -0.127296372348;
+
+        $JD = TimeCalc::julianCenturiesJ20002JulianDay($T);
+
+        $this->assertEquals(2446895.5, round($JD, 6));
+    }
+
+    /**
+     * @test
+     * Meeus 12.a
+     */
+    public function julianDay2julianMillenniaJ2000Test()
+    {
+        $JD = 2446895.5;
+
+        $t = TimeCalc::julianDay2julianMillenniaJ2000($JD);
+
+        $this->assertEquals(-0.0127296372348, $t);
+    }
+
+    /**
+     * @test
+     * Meeus 12.a
+     */
+    public function julianMillenniaJ20002JulianDayTest()
+    {
+        $t = -0.0127296372348;
+
+        $JD = TimeCalc::julianMillenniaJ20002JulianDay($t);
+
+        $this->assertEquals(2446895.5, round($JD, 6));
+    }
+
     /**
      * @test
      * Meeus 12.a

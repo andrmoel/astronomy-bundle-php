@@ -2,41 +2,121 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
-use Andrmoel\AstronomyBundle\CalculationCache;
+use Andrmoel\AstronomyBundle\Entities\AstroDateTime;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class TimeCalc
 {
-    public static function getJulianCenturiesFromJ2000(float $jd): float
+    public static function julianDay2JulianDay0(float $JD): float
     {
-        $T = ($jd - 2451545.0) / 36525.0;
+        $JD0 = floor($JD + 0.5) - 0.5;
+
+        return $JD0;
+    }
+
+    public static function dateTime2JulianDay(AstroDateTime $dateTime): float
+    {
+        $tmpYear = floatval($dateTime->year . '.' . self::getDayOfYear($dateTime));
+
+        if ($dateTime->month > 2) {
+            $Y = $dateTime->year;
+            $M = $dateTime->month;
+        } else {
+            $Y = $dateTime->year - 1;
+            $M = $dateTime->month + 12;
+        }
+
+        $D = $dateTime->day;
+        $H = $dateTime->hour / 24 + $dateTime->minute / 1440 + $dateTime->second / 86400;
+
+        if ($tmpYear >= 1582.288) { // YYYY-MM-DD >= 1582-10-15
+            $A = (int)($Y / 100);
+            $B = 2 - $A + (int)($A / 4);
+        } elseif ($tmpYear <= 1582.277) { // YY-MM-DD <= 1582-10-04
+            $B = 0;
+        } else {
+            throw new \Exception('Date between 1582-10-04 and 1582-10-15 is not defined.');
+        }
+
+        // Meeus 7.1
+        $JD = (int)(365.25 * ($Y + 4716)) + (int)(30.6001 * ($M + 1)) + $D + $H + $B - 1524.5;
+
+        return $JD;
+    }
+
+    public static function julianDay2DateTime(float $JD): AstroDateTime
+    {
+        $JD = $JD + 0.5;
+        $Z = (int)$JD;
+        $F = $JD - $Z;
+
+        $A = $Z;
+        if ($Z < 2299161) {
+            $A = $Z;
+        } elseif ($Z >= 2291161) {
+            $a = (int)(($Z - 1867216.25) / 36524.25);
+            $A = $Z + 1 + $a - (int)($a / 4);
+        }
+
+        $B = $A + 1524;
+        $C = (int)(($B - 122.1) / 365.25);
+        $D = (int)(365.25 * $C);
+        $E = (int)(($B - $D) / 30.6001);
+
+        $dayOfMonth = $B - $D - (int)(30.6001 * $E) + $F;
+        $month = $E < 14 ? $E - 1 : $E - 13;
+        $year = $month > 2 ? $C - 4716 : $C - 4715;
+        $hour = ($dayOfMonth - (int)$dayOfMonth) * 24;
+        $minute = ($hour - (int)$hour) * 60;
+        $second = ($minute - (int)$minute) * 60;
+
+        $dateTime = new AstroDateTime((int)$year, (int)$month, (int)$dayOfMonth, (int)$hour, (int)$minute, (int)$second);
+
+        return $dateTime;
+    }
+
+    public static function julianDay2ModifiedJulianDay(float $JD): float
+    {
+        $MJD = $JD - 2400000.5;
+
+        return $MJD;
+    }
+
+    public static function julianDay2JulianCenturiesJ2000(float $JD): float
+    {
+        $T = ($JD - 2451545.0) / 36525.0;
 
         return $T;
     }
 
-    public static function getJulianDay(float $T): float
+    public static function julianCenturiesJ20002JulianDay(float $T): float
     {
-        $jd = $T * 36525.0 + 2451545.0;
+        $JD = $T * 36525.0 + 2451545.0;
 
-        return $jd;
+        return $JD;
     }
 
-    public static function isLeapYear(int $year): bool
+    public static function julianDay2julianMillenniaJ2000(float $JD): float
     {
-        if ($year / 4 != (int)($year / 4)) {
-            return false;
-        } elseif ($year / 100 != (int)($year / 100)) {
-            return true;
-        } elseif ($year / 400 != (int)($year / 400)) {
-            return false;
-        } else {
-            return true;
-        }
+        $T = self::julianDay2JulianCenturiesJ2000($JD);
+
+        $t = $T / 10;
+
+        return $t;
+    }
+
+    public static function julianMillenniaJ20002JulianDay(float $t): float
+    {
+        $T = $t * 10;
+
+        $JD = self::julianCenturiesJ20002JulianDay($T);
+
+        return $JD;
     }
 
     public static function getGreenwichMeanSiderealTime(float $T): float
     {
-        $JD = self::getJulianDay($T);
+        $JD = self::julianCenturiesJ20002JulianDay($T);
 
         // Meeus 12.4
         $GMST = 280.46061837
@@ -215,5 +295,40 @@ class TimeCalc
         }
 
         return $deltaT;
+    }
+
+    public static function isLeapYear(int $year): bool
+    {
+        if ($year / 4 != (int)($year / 4)) {
+            return false;
+        } elseif ($year / 100 != (int)($year / 100)) {
+            return true;
+        } elseif ($year / 400 != (int)($year / 400)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // TODO Test
+    public static function getDayOfWeek(float $JD): int
+    {
+        // Meeus 7.e
+        $DOW = ($JD + 1.5) % 7;
+
+        return $DOW;
+    }
+
+    // TODO Test
+    public static function getDayOfYear(AstroDateTime $dateTime): int
+    {
+        $K = self::isLeapYear($dateTime->year) ? 1 : 2;
+        $M = $dateTime->month;
+        $D = $dateTime->day;
+
+        // Meeus 7.f
+        $N = (int)((275 * $M) / 9) - $K * (int)(($M + 9) / 12) + $D - 30;
+
+        return $N;
     }
 }

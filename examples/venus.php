@@ -11,9 +11,7 @@ date_default_timezone_set('UTC');
 
 $location = new Location(52.524, 13.411); // Berlin
 
-$dateTime = new DateTime('2018-10-25 07:15:00');
-$toi = new TimeOfInterest($dateTime);
-
+$toi = TimeOfInterest::createFromString('2018-10-25 07:15:00');
 $venus = new Venus($toi);
 
 // Heliocentric ecliptical rectangular coordinates
@@ -61,7 +59,7 @@ echo <<<END
 +------------------------------------
 | Venus
 +------------------------------------
-Date: {$toi->getDateTime()->format('Y-m-d H:i:s')} UTC
+Date: {$toi} UTC
 
 Heliocentric coordinates
 X: {$x}
