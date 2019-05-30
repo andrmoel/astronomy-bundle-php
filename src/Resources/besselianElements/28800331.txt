@@ -1,0 +1,34 @@
+   Instant of          21:48:29 TDT     JD = 2773049.40900 
+Greatest Eclipse:    (=20:49:3 UT)
+
+Gamma = -0.7447            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9619             Lunation No. = 10887 
+     Eclipse Type = A                  Saros Series = 153 
+                                                 ΔT = 3566.1 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2880 Mar 31   22.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.4443190 -0.6061410  4.8239002  0.5601610  0.0139540 149.189987 
+  1   0.4640368  0.2518672  0.0154860  0.0001039  0.0001034  15.003860 
+  2  -0.0000202 -0.0000045 -0.0000010 -0.0000107 -0.0000106   0.000000 
+  3  -0.0000058 -0.0000033  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046983        tan f2 = 0.0046749 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  22.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  20:49:3 UT
+
+Latitude:   36.8° S      Sun’s Altitude:    41.6°          Path Width = 201.1 km
+Longitude: 105.1° W      Sun’s Azimuth:    323.8°    Central Duration = 03m32s 

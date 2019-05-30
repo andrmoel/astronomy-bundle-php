@@ -2,12 +2,11 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\SaturnRectangularVSOP87;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\SaturnSphericalVSOP87;
+
 class Saturn extends Planet
 {
-    public function loadVSOP87Data(): array
-    {
-        $data = file_get_contents(self::VSOP87_FILE_PATH . 'saturn.json');
-
-        return json_decode($data, 1);
-    }
+    protected $VSOP87_SPHERICAL = SaturnSphericalVSOP87::class;
+    protected $VSOP87_RECTANGULAR = SaturnRectangularVSOP87::class;
 }

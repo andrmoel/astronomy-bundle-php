@@ -2,69 +2,87 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\EarthRectangularVSOP87;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class HeliocentricEclipticalRectangularCoordinates
 {
-    private $X = 0;
-    private $Y = 0;
-    private $Z = 0;
+    private $x = 0;
+    private $y = 0;
+    private $z = 0;
 
-    public function __construct(float $X, float $Y, float $Z)
+    public function __construct(float $x, float $y, float $z)
     {
-        $this->X = $X;
-        $this->Y = $Y;
-        $this->Z = $Z;
+        $this->x = $x;
+        $this->y = $y;
+        $this->z = $z;
     }
 
     public function getX(): float
     {
-        return $this->X;
+        return $this->x;
     }
 
     public function getY(): float
     {
-        return $this->Y;
+        return $this->y;
     }
 
     public function getZ(): float
     {
-        return $this->Z;
+        return $this->z;
     }
 
     public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
     {
         // Meeus 33.2
-        $longitude = atan($this->Y / $this->X);
-        $longitude = rad2deg($longitude);
-        $longitude = AngleUtil::normalizeAngle($longitude);
+        $lonRad = atan2($this->y, $this->x);
+        $lon = AngleUtil::normalizeAngle(rad2deg($lonRad));
 
-        $latitude = atan($this->Z / sqrt(pow($this->X, 2) + pow($this->Y, 2)));
-        $latitude = rad2deg($latitude);
+        $latRad = atan($this->z / sqrt(pow($this->x, 2) + pow($this->y, 2)));
+        $lat = rad2deg($latRad);
 
-        $radiusVector = sqrt(pow($this->X, 2) + pow($this->Y, 2) + pow($this->Z, 2));
+        $r = sqrt(pow($this->x, 2) + pow($this->y, 2) + pow($this->z, 2));
 
-        return new HeliocentricEclipticalSphericalCoordinates($longitude, $latitude, $radiusVector);
+        return new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $r);
     }
 
-    public function getGeocentricEclipticalRectangularCoordinates(
-        TimeOfInterest $toi
-    ): GeocentricEclipticalRectangularCoordinates
+    // TODO
+    public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates
     {
+        return new HeliocentricEquatorialRectangularCoordinates(0, 0, 0);
+    }
+
+    public function getGeocentricEclipticalRectangularCoordinates(float $T): GeocentricEclipticalRectangularCoordinates
+    {
+        $t = $T / 10;
+
         // Heliocentric coordinates of earth
-        $earth = new Earth($toi);
-        $hcEclRecCoordinatesEarth = $earth->getHeliocentricEclipticalRectangularCoordinates();
+        $coefficients = VSOP87Calc::solve(EarthRectangularVSOP87::class, $t);
 
-        $X0 = $hcEclRecCoordinatesEarth->getX();
-        $Y0 = $hcEclRecCoordinatesEarth->getY();
-        $Z0 = $hcEclRecCoordinatesEarth->getZ();
-
-        $X = $this->X - $X0;
-        $Y = $this->Y - $Y0;
-        $Z = $this->Z - $Z0;
+        $X = $this->x - $coefficients[0];
+        $Y = $this->y - $coefficients[1];
+        $Z = $this->z - $coefficients[2];
 
         return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+    }
+
+    // TODO
+    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
+    {
+        return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
+    }
+
+    // TODO
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
+    {
+        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
+    }
+
+    // TODO
+    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
+    {
+        return new GeocentricEquatorialSphericalCoordinates(0, 0, 0);
     }
 }

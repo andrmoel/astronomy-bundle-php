@@ -3,102 +3,159 @@
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\AstronomicalObject;
+use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\EarthRectangularVSOP87;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\VSOP87Interface;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
+use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
+use Andrmoel\AstronomyBundle\Events\RiseSetTransit\RiseSetTransit;
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
-abstract class Planet extends AstronomicalObject
+abstract class Planet extends AstronomicalObject implements PlanetInterface
 {
-    protected const VSOP87_FILE_PATH = __DIR__ . '/../../Resources/vsop87/json/';
+    /** @var VSOP87Interface */
+    protected $VSOP87_SPHERICAL;
 
-    protected $vsop87 = [];
-
-    abstract function loadVSOP87Data(): array;
-
-    public function __construct(TimeOfInterest $toi = null)
-    {
-        parent::__construct($toi);
-        $this->vsop87 = $this->loadVSOP87Data();
-    }
-
-    /**
-     * The apparent position is light-time corrected
-     * @return HeliocentricEclipticalSphericalCoordinates
-     */
-    public function getApparentHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
-    {
-        // First we need to calculate the distance between the planet and the earth.
-        // With the formula Meeus 33.3 we can calculated the light-time corrected position of the planet.
-        $t = $this->toi->getJulianMillenniaFromJ2000();
-
-        $geoEclSphCoordinates = $this->getHeliocentricEclipticalSphericalCoordinates($t)
-            ->getGeocentricEclipticalSphericalCoordinates($this->toi);
-
-        $distance = $geoEclSphCoordinates->getRadiusVector();
-        $toiCorrected = $this->toi->getTimeOfInterestLightTimeCorrected($distance);
-
-        // With the corrected time, we can calculate the true helopcentric position.
-        $t = $toiCorrected->getJulianMillenniaFromJ2000();
-
-        return $this->getHeliocentricEclipticalSphericalCoordinates($t);
-    }
-
-    public function getHeliocentricEclipticalSphericalCoordinates(
-        float $t = null
-    ): HeliocentricEclipticalSphericalCoordinates
-    {
-        $t = $t ? $t : $this->toi->getJulianMillenniaFromJ2000();
-
-        $L = $this->resolveTerms($this->vsop87['L'], $t);
-        $L = rad2deg($L);
-        $L = AngleUtil::normalizeAngle($L);
-
-        $B = $this->resolveTerms($this->vsop87['B'], $t);
-        $B = rad2deg($B);
-
-        $R = $this->resolveTerms($this->vsop87['R'], $t);
-
-        return new HeliocentricEclipticalSphericalCoordinates($L, $B, $R);
-    }
+    /** @var VSOP87Interface */
+    protected $VSOP87_RECTANGULAR;
 
     public function getHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
     {
-        return $this->getHeliocentricEclipticalSphericalCoordinates()
-            ->getHeliocentricEclipticalRectangularCoordinates();
+        $t = $this->toi->getJulianMillenniaFromJ2000();
+        $coefficients = VSOP87Calc::solve($this->VSOP87_RECTANGULAR, $t);
+
+        $x = $coefficients[0];
+        $y = $coefficients[1];
+        $z = $coefficients[2];
+
+        return new HeliocentricEclipticalRectangularCoordinates($x, $y, $z);
     }
 
-    /**
-     * The apparent position is light-time corrected
-     * @return HeliocentricEclipticalRectangularCoordinates
-     */
-    public function getApparentHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
+    public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
     {
-        return $this->getApparentHeliocentricEclipticalSphericalCoordinates()
-            ->getHeliocentricEclipticalRectangularCoordinates();
+        $t = $this->toi->getJulianMillenniaFromJ2000();
+        $coefficients = VSOP87Calc::solve($this->VSOP87_SPHERICAL, $t);
+
+        $L = $coefficients[0];
+        $B = $coefficients[1];
+        $R = $coefficients[2];
+
+        $L = AngleUtil::normalizeAngle(rad2deg($L));
+        $B = rad2deg($B);
+
+        return new HeliocentricEclipticalSphericalCoordinates($B, $L, $R);
     }
 
-    private function resolveTerms(array $terms, float $t): float
+    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
-        // Meeus 32.2
-        $sum = 0.0;
-        foreach ($terms as $key => $arguments) {
-            $value = $this->sumUpArguments($arguments, $t);
+        $T = $this->toi->getJulianCenturiesFromJ2000();
+        $t = $this->toi->getJulianMillenniaFromJ2000();
+        $JD = $this->toi->getJulianDay();
 
-            $sum += $value * pow($t, $key);
+        $coefficientsEarth = VSOP87Calc::solve(EarthRectangularVSOP87::class, $t);
+
+        // Meeus 33 - Light time corrections
+        for ($i = 0; $i < 2; $i++) {
+            $t = TimeCalc::julianDay2julianMillenniaJ2000($JD);
+
+            $coefficients = VSOP87Calc::solve($this->VSOP87_RECTANGULAR, $t);
+
+            // Get geocentric coordinates
+            $X = $coefficients[0] - $coefficientsEarth[0];
+            $Y = $coefficients[1] - $coefficientsEarth[1];
+            $Z = $coefficients[2] - $coefficientsEarth[2];
+
+            $d = sqrt(pow($X, 2) + pow($Y, 2) + pow($Z, 2));
+            $tau = 0.0057755183 * $d;
+
+            $JD -= $tau;
         }
 
-        return $sum;
+        $geoEclRecCoord = new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+        $geoEclSphCoord = $geoEclRecCoord->getGeocentricEclipticalSphericalCoordinates();
+
+        // Meeus 33 - Aberration correction
+        $geoEclSphCoord = GeocentricEclipticalSphericalCorrections::correctEffectOfAberration($geoEclSphCoord, $T);
+
+        // Meeus 33 - Nutation correction
+        $geoEclSphCoord = GeocentricEclipticalSphericalCorrections::correctEffectOfNutation($geoEclSphCoord, $T);
+
+        return $geoEclSphCoord;
     }
 
-    private function sumUpArguments(array $arguments, float $t): float
+    // TODO test it!
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
-        // Meeus 21.1
-        $sum = 0.0;
-        foreach ($arguments as $argument) {
-            $sum += $argument[0] * cos($argument[1] + $argument[2] * $t);
+        return $this->getGeocentricEclipticalSphericalCoordinates()
+            ->getGeocentricEquatorialRectangularCoordinates($this->T);
+    }
+
+    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
+    {
+        return $this
+            ->getGeocentricEclipticalSphericalCoordinates()
+            ->getGeocentricEquatorialSphericalCoordinates($this->T);
+    }
+
+    public function getLocalHorizontalCoordinates(Location $location, bool $refraction = true): LocalHorizontalCoordinates
+    {
+        $locHorCoord = $this
+            ->getGeocentricEquatorialSphericalCoordinates()
+            ->getLocalHorizontalCoordinates($location, $this->T);
+
+        if ($refraction) {
+            $locHorCoord = LocalHorizontalCorrections::correctAtmosphericRefraction($locHorCoord);
         }
 
-        return $sum;
+        return $locHorCoord;
+    }
+
+    public function getRise(Location $location): TimeOfInterest
+    {
+        $ras = new RiseSetTransit(get_class($this), $location, $this->toi);
+        return $ras->getRise();
+    }
+
+    public function getUpperCulmination(Location $location): TimeOfInterest
+    {
+        $ras = new RiseSetTransit(get_class($this), $location, $this->toi);
+        return $ras->getTransit();
+    }
+
+    public function getSet(Location $location): TimeOfInterest
+    {
+        $ras = new RiseSetTransit(get_class($this), $location, $this->toi);
+        return $ras->getSet();
+    }
+
+    public function getDistanceToEarthInAu(): float
+    {
+        $geoEclRecCoord = $this->getGeocentricEquatorialRectangularCoordinates();
+
+        $x = $geoEclRecCoord->getX();
+        $y = $geoEclRecCoord->getY();
+        $z = $geoEclRecCoord->getZ();
+
+        $d = sqrt($x * $x + $y * $y + $z * $z);
+
+        return $d;
+    }
+
+    public function getDistanceToEarthInKm(): float
+    {
+        $d = $this->getDistanceToEarthInAu();
+
+        return DistanceUtil::au2km($d);
     }
 }

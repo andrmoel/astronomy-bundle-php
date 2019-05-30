@@ -2,15 +2,20 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
+use Andrmoel\AstronomyBundle\CalculationCache;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class MoonCalc implements MoonCalcInterface
 {
     public static function getSumL(float $T): float
     {
-        // Meeus 47.B
+        if (CalculationCache::has('moonSumL', $T)) {
+            return CalculationCache::get('moonSumL', $T);
+        }
+
+        // Meeus 47.b
         $L = MoonCalc::getMeanLongitude($T);
-        $D = MoonCalc::getMeanElongationFromSun($T);
+        $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
         $Mmoon = MoonCalc::getMeanAnomaly($T);
         $F = MoonCalc::getArgumentOfLatitude($T);
@@ -51,13 +56,19 @@ class MoonCalc implements MoonCalcInterface
             $sumL += $tmpSumL;
         }
 
+        CalculationCache::set('moonSumL', $T, $sumL);
+
         return $sumL;
     }
 
     public static function getSumR(float $T): float
     {
-        // Meeus 47.B
-        $D = MoonCalc::getMeanElongationFromSun($T);
+        if (CalculationCache::has('moonSumR', $T)) {
+            return CalculationCache::get('moonSumR', $T);
+        }
+
+        // Meeus 47.b
+        $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
         $Mmoon = MoonCalc::getMeanAnomaly($T);
         $F = MoonCalc::getArgumentOfLatitude($T);
@@ -93,14 +104,20 @@ class MoonCalc implements MoonCalcInterface
             $sumR += $tmpSumR;
         }
 
+        CalculationCache::set('moonSumR', $T, $sumR);
+
         return $sumR;
     }
 
     public static function getSumB(float $T): float
     {
+        if (CalculationCache::has('moonSumB', $T)) {
+            return CalculationCache::get('moonSumB', $T);
+        }
+
         // Meeus 47.B
         $L = MoonCalc::getMeanLongitude($T);
-        $D = MoonCalc::getMeanElongationFromSun($T);
+        $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
         $Mmoon = MoonCalc::getMeanAnomaly($T);
         $F = MoonCalc::getArgumentOfLatitude($T);
@@ -144,12 +161,17 @@ class MoonCalc implements MoonCalcInterface
             $sumB += $tmpSumB;
         }
 
+        CalculationCache::set('moonSumB', $T, $sumB);
+
         return $sumB;
     }
 
-    // TODO Belongs to sun?
-    public static function getMeanElongationFromSun(float $T): float
+    public static function getMeanElongation(float $T): float
     {
+        if (CalculationCache::has('moonMeanElongation', $T)) {
+            return CalculationCache::get('moonMeanElongation', $T);
+        }
+
         // Meeus chapter 22
 //        $D = 297.85036
 //            + 445267.111480 * $T
@@ -164,11 +186,17 @@ class MoonCalc implements MoonCalcInterface
             - pow($T, 4) / 113065000;
         $D = AngleUtil::normalizeAngle($D);
 
+        CalculationCache::set('moonMeanElongation', $T, $D);
+
         return $D;
     }
 
     public static function getMeanAnomaly(float $T): float
     {
+        if (CalculationCache::has('moonMeanAnomaly', $T)) {
+            return CalculationCache::get('moonMeanAnomaly', $T);
+        }
+
         // Meeus chapter 22
 //        $Mmoon = 134.96298
 //            + 477198.867398 * $T
@@ -183,11 +211,17 @@ class MoonCalc implements MoonCalcInterface
             - pow($T, 4) / 1471200;
         $Mmoon = AngleUtil::normalizeAngle($Mmoon);
 
+        CalculationCache::set('moonMeanAnomaly', $T, $Mmoon);
+
         return $Mmoon;
     }
 
     public static function getArgumentOfLatitude(float $T): float
     {
+        if (CalculationCache::has('moonArgumentOfLatitude', $T)) {
+            return CalculationCache::get('moonArgumentOfLatitude', $T);
+        }
+
         // Meeus chapter 22
 //        $F = 93.27191
 //            + 483202.017538 * $T
@@ -202,11 +236,17 @@ class MoonCalc implements MoonCalcInterface
             + pow($T, 4) / 86331000;
         $F = AngleUtil::normalizeAngle($F);
 
+        CalculationCache::set('moonArgumentOfLatitude', $T, $F);
+
         return $F;
     }
 
     public static function getMeanLongitude(float $T): float
     {
+        if (CalculationCache::has('moonMeanLongitude', $T)) {
+            return CalculationCache::get('moonMeanLongitude', $T);
+        }
+
         // Meeus 47.1
         $L = 218.3164477
             + 481267.88123421 * $T
@@ -214,6 +254,8 @@ class MoonCalc implements MoonCalcInterface
             + pow($T, 3) / 538841
             - pow($T, 4) / 65194000;
         $L = AngleUtil::normalizeAngle($L);
+
+        CalculationCache::set('moonMeanLongitude', $T, $L);
 
         return $L;
     }
@@ -224,47 +266,77 @@ class MoonCalc implements MoonCalcInterface
      */
     public static function getDistanceToEarth(float $T): float
     {
+        if (CalculationCache::has('moonDistanceToEarth', $T)) {
+            return CalculationCache::get('moonDistanceToEarth', $T);
+        }
+
         $sumR = self::getSumR($T);
         $d = (385000.56 + ($sumR / 1000));
+
+        CalculationCache::set('moonDistanceToEarth', $T, $d);
 
         return $d;
     }
 
     public static function getEquatorialHorizontalParallax(float $T): float
     {
+        if (CalculationCache::has('moonEquatorialHorizontalParallax', $T)) {
+            return CalculationCache::get('moonEquatorialHorizontalParallax', $T);
+        }
+
         $d = self::getDistanceToEarth($T);
 
         // Meeus 47
         $pi = rad2deg(asin(6378.14 / $d));
+
+        CalculationCache::set('moonEquatorialHorizontalParallax', $T, $pi);
 
         return $pi;
     }
 
     public static function getLatitude(float $T): float
     {
+        if (CalculationCache::has('moonLatitude', $T)) {
+            return CalculationCache::get('moonLatitude', $T);
+        }
+
         $sumB = self::getSumB($T);
 
         $b = $sumB / 1000000;
+
+        CalculationCache::set('moonLatitude', $T, $b);
 
         return $b;
     }
 
     public static function getLongitude(float $T): float
     {
+        if (CalculationCache::has('moonLongitude', $T)) {
+            return CalculationCache::get('moonLongitude', $T);
+        }
+
         $L = self::getMeanLongitude($T);
         $sumL = self::getSumL($T);
 
         $l = $L + ($sumL / 1000000);
+
+        CalculationCache::set('moonLongitude', $T, $l);
 
         return $l;
     }
 
     public static function getApparentLongitude(float $T): float
     {
+        if (CalculationCache::has('moonApparentLongitude', $T)) {
+            return CalculationCache::get('moonApparentLongitude', $T);
+        }
+
         $l = self::getLongitude($T);
         $phi = EarthCalc::getNutationInLongitude($T);
 
         $l = $l + $phi;
+
+        CalculationCache::set('moonApparentLongitude', $T, $l);
 
         return $l;
     }

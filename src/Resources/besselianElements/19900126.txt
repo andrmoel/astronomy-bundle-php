@@ -1,0 +1,34 @@
+   Instant of          19:31:24 TDT     JD = 2447918.31300 
+Greatest Eclipse:    (=19:30:27 UT)
+
+Gamma = -0.9457            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9670             Lunation No. = -123 
+     Eclipse Type = A                  Saros Series = 121 
+                                                 ΔT = 56.9 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   1990 Jan 26   20.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.5677820 -0.7989490 -18.6207294  0.5569490  0.0107570 116.849739 
+  1   0.5074202  0.1864375  0.0101460 -0.0001339 -0.0001332  14.999110 
+  2  -0.0000508  0.0001613  0.0000040 -0.0000113 -0.0000112   0.000000 
+  3  -0.0000069 -0.0000027  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0047488        tan f2 = 0.0047251 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  20.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  19:30:27 UT
+
+Latitude:   71.0° S      Sun’s Altitude:    18.5°          Path Width = 372.8 km
+Longitude:  22.2° W      Sun’s Azimuth:    266.3°    Central Duration = 02m03s 

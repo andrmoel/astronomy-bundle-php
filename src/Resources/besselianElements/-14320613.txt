@@ -1,0 +1,34 @@
+   Instant of          06:11:50 TDT     JD = 1198183.75800 
+Greatest Eclipse:    (=20:50:46 UT)
+
+Gamma = 0.8691             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 1.0420             Lunation No. = -42443 
+     Eclipse Type = T                  Saros Series = 14 
+                                                 ΔT = 33663.9 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   -1432 Jun 13    6.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.1705320  0.8594780 21.9925709  0.5373370 -0.0087570 272.779816 
+  1   0.5661664  0.0385375  0.0064670 -0.0000918 -0.0000914  15.000240 
+  2   0.0000326 -0.0001945 -0.0000050 -0.0000121 -0.0000120   0.000000 
+  3  -0.0000088 -0.0000005  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0045995        tan f2 = 0.0045766 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   6.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  20:50:46 UT
+
+Latitude:   81.9° N      Sun’s Altitude:    29.3°          Path Width = 287.7 km
+Longitude: 159.8° W      Sun’s Azimuth:    153.6°    Central Duration = 02m28s 

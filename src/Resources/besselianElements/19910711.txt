@@ -1,0 +1,34 @@
+   Instant of          19:07:01 TDT     JD = 2448449.29700 
+Greatest Eclipse:    (=19:6:3 UT)
+
+Gamma = -0.0041            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 1.0800             Lunation No. = -105 
+     Eclipse Type = Tm                 Saros Series = 136 
+                                                 ΔT = 57.9 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   1991 Jul 11   19.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.0672590  0.0121270 22.0974293  0.5304140 -0.0156450 103.639778 
+  1   0.5671376 -0.1379772 -0.0052200  0.0000252  0.0000251  15.000060 
+  2  -0.0000369 -0.0001529 -0.0000050 -0.0000128 -0.0000127   0.000000 
+  3  -0.0000096  0.0000025  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0045986        tan f2 = 0.0045757 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  19.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  19:6:3 UT
+
+Latitude:   22.0° N      Sun’s Altitude:    89.9°          Path Width = 258.0 km
+Longitude: 105.2° W      Sun’s Azimuth:     30.1°    Central Duration = 06m53s 

@@ -1,0 +1,34 @@
+   Instant of          23:58:47 TDT     JD = 2163361.49900 
+Greatest Eclipse:    (=23:47:9 UT)
+
+Gamma = 0.7215             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9585             Lunation No. = -9759 
+     Eclipse Type = A                  Saros Series = 119 
+                                                 ΔT = 697.8 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   1210 Dec 17    0.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.0784150  0.7173100 -23.5013104  0.5613030  0.0150890 179.568329 
+  1   0.5278748  0.0656765  0.0009080 -0.0001185 -0.0001179  14.996160 
+  2   0.0000009  0.0001329  0.0000070 -0.0000110 -0.0000109   0.000000 
+  3  -0.0000068 -0.0000010  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0047571        tan f2 = 0.0047334 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   0.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  23:47:9 UT
+
+Latitude:   22.5° N      Sun’s Altitude:    43.7°          Path Width = 217.4 km
+Longitude: 178.1° E      Sun’s Azimuth:    173.0°    Central Duration = 04m51s 

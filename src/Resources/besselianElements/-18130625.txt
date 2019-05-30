@@ -1,0 +1,34 @@
+   Instant of          22:38:32 TDT     JD = 1059035.44300 
+Greatest Eclipse:    (=10:58:11 UT)
+
+Gamma = 0.8105             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 1.0656             Lunation No. = -47155 
+     Eclipse Type = T                  Saros Series = 27 
+                                                 ΔT = 42021.0 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   -1813 Jun 25   23.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.0410340  0.8357880 23.1777000  0.5319000 -0.0141670 167.666016 
+  1   0.5697401  0.1166598  0.0039120 -0.0000529 -0.0000526  14.999350 
+  2   0.0000388 -0.0002100 -0.0000050 -0.0000127 -0.0000126   0.000000 
+  3  -0.0000096 -0.0000021  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046098        tan f2 = 0.0045868 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  23.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  10:58:11 UT
+
+Latitude:   74.1° N      Sun’s Altitude:    35.5°          Path Width = 368.5 km
+Longitude:  23.1° W      Sun’s Azimuth:    137.9°    Central Duration = 03m49s 

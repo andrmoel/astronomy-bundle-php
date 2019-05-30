@@ -1,0 +1,34 @@
+   Instant of          06:18:41 TDT     JD = 2490737.76300 
+Greatest Eclipse:    (=06:15:1 UT)
+
+Gamma = -0.2829            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9918             Lunation No. = 1327 
+     Eclipse Type = A                  Saros Series = 140 
+                                                 ΔT = 219.8 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2107 Apr 23    6.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.0921700 -0.3156550 12.3393097  0.5529090  0.0067380 270.367401 
+  1   0.5215905  0.1337877  0.0136330 -0.0001158 -0.0001152  15.003250 
+  2   0.0000391 -0.0000530 -0.0000030 -0.0000110 -0.0000110   0.000000 
+  3  -0.0000070 -0.0000017  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046535        tan f2 = 0.0046303 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   6.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  06:15:1 UT
+
+Latitude:    3.6° S      Sun’s Altitude:    73.5°          Path Width = 30.0 km
+Longitude:  89.9° E      Sun’s Azimuth:    345.9°    Central Duration = 00m56s 

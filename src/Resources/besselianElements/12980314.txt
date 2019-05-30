@@ -1,0 +1,34 @@
+   Instant of          01:35:41 TDT     JD = 2195224.56600 
+Greatest Eclipse:    (=01:27:31 UT)
+
+Gamma = -1.4573            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.1459             Lunation No. = -8680 
+     Eclipse Type = P                  Saros Series = 89 
+                                                 ΔT = 490.0 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   1298 Mar 14    2.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.9091390 -1.1627040  0.3565000  0.5368780 -0.0092140 208.124878 
+  1   0.5053987  0.2791032  0.0157300  0.0000523  0.0000520  15.004610 
+  2  -0.0000570  0.0000601  0.0000000 -0.0000127 -0.0000126   0.000000 
+  3  -0.0000082 -0.0000048  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046767        tan f2 = 0.0046534 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   2.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  01:27:31 UT
+
+Latitude:   61.1° S      Sun’s Altitude:     0.0°          Path Width = 0.0 km
+Longitude: 110.7° W      Sun’s Azimuth:    270.7°    Central Duration = 00m00s 

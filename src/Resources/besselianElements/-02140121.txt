@@ -1,0 +1,34 @@
+   Instant of          00:38:49 TDT     JD = 1642914.52700 
+Greatest Eclipse:    (=21:3:47 UT)
+
+Gamma = -1.0183            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9634             Lunation No. = -27383 
+     Eclipse Type = P                  Saros Series = 76 
+                                                 ΔT = 12902.0 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   -214 Jan 21    1.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.3051220 -0.9916980 -20.8599796  0.5448350 -0.0012970 191.317047 
+  1   0.5618545  0.0593704  0.0082580 -0.0001135 -0.0001129  14.998530 
+  2  -0.0000153  0.0002046  0.0000050 -0.0000123 -0.0000122   0.000000 
+  3  -0.0000087 -0.0000008  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0047268        tan f2 = 0.0047033 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   1.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  21:3:47 UT
+
+Latitude:   68.3° S      Sun’s Altitude:     0.0°          Path Width = 0.0 km
+Longitude:  31.4° E      Sun’s Azimuth:    195.4°    Central Duration = 00m00s 

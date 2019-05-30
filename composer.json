@@ -1,8 +1,7 @@
 {
     "name": "andrmoel/astronomy-bundle",
-    "description": "Astronomy Bundle",
+    "description": "Bundle for astronomical calculations such as position of moon, sun and planets, sunrise, sunset or solar eclipses. Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.",
     "license": "MIT",
-    "version": "0.0.2",
     "authors": [
         {
             "name": "Andreas Moeller",
@@ -20,7 +19,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Andrmoel\\AstronomyBundle\\tests\\": "tests/"
+            "Andrmoel\\AstronomyBundle\\Tests\\": "tests/"
         }
     },
     "require-dev": {

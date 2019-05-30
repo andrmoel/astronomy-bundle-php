@@ -1,72 +1,30 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle\Tests\Coordinates;
+namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use PHPUnit\Framework\TestCase;
 
 class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
 {
-    public function testGetHeliocentricEclipticalRectangularCoordinates()
-    {
-        $L = 313.08102;
-        $B = -2.08474;
-        $R = 0.910947;
-
-        $hcEclSphCoordinates = new HeliocentricEclipticalSphericalCoordinates($L, $B, $R);
-        $hcEclRecCoordinates = $hcEclSphCoordinates->getHeliocentricEclipticalRectangularCoordinates();
-
-        $X = $hcEclRecCoordinates->getX();
-        $Y = $hcEclRecCoordinates->getY();
-        $Z = $hcEclRecCoordinates->getZ();
-
-        $this->assertEquals(0.621794, round($X, 6));
-        $this->assertEquals(-0.664905, round($Y, 6));
-        $this->assertEquals(-0.033138, round($Z, 6));
-    }
-
     /**
-     * Meeus 33.a
+     * @test
      */
-    public function testGetGeocentricEclipticalRectangularCoordinates()
+    public function getHeliocentricEclipticalRectangularCoordinatesTest()
     {
-        $L = 26.11428;
-        $B = -2.62070;
-        $R = 0.724603;
+        $lat = -2.620603;
+        $lon = 26.11412;
+        $r = 0.724602;
 
-        $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
+        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $r);
+        $helEclRecCoord = $helEclSphCoord->getHeliocentricEclipticalRectangularCoordinates();
 
-        $hcEclSphCoordinates = new HeliocentricEclipticalSphericalCoordinates($L, $B, $R);
-        $geoEquRecCoordinates = $hcEclSphCoordinates->getGeocentricEclipticalRectangularCoordinates($toi);
+        $x = $helEclRecCoord->getX();
+        $y = $helEclRecCoord->getY();
+        $z = $helEclRecCoord->getZ();
 
-        $X = $geoEquRecCoordinates->getX();
-        $Y = $geoEquRecCoordinates->getY();
-        $Z = $geoEquRecCoordinates->getZ();
-
-        $this->assertEquals(0.621746, round($X, 6));
-        $this->assertEquals(-0.664810, round($Y, 6));
-        $this->assertEquals(-0.033135, round($Z, 6));
-    }
-
-    /**
-     * Meeus 33.a
-     */
-    public function testGetGeocentricEclipticalSphericalCoordinates()
-    {
-        $L = 26.11428;
-        $B = -2.62070;
-        $R = 0.724603;
-
-        $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
-
-        $hcEclSphCoordinates = new HeliocentricEclipticalSphericalCoordinates($L, $B, $R);
-        $geoEclSphCoordinates = $hcEclSphCoordinates->getGeocentricEclipticalSphericalCoordinates($toi);
-
-        $latitude = $geoEclSphCoordinates->getLatitude();
-        $longitude = $geoEclSphCoordinates->getLongitude();
-
-        $this->assertEquals(313.08288, round($longitude, 5));
-        $this->assertEquals(-2.08476, round($latitude, 5));
+        $this->assertEquals(0.649954, round($x, 6));
+        $this->assertEquals(0.318608, round($y, 6));
+        $this->assertEquals(-0.033130, round($z, 6));
     }
 }

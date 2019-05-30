@@ -1,48 +1,53 @@
 <?php
 
-namespace Andrmoel\AstronomyBundle\Tests\Coordinates;
+namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordinates;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use PHPUnit\Framework\TestCase;
 
 class HeliocentricEclipticalRectangularCoordinatesTest extends TestCase
 {
-    public function testGetHeliocentricEclipticalSphericalCoordinates()
+    /**
+     * @test
+     */
+    public function getHeliocentricEclipticalSphericalCoordinatesTest()
     {
-        $X = 0.621794;
-        $Y = -0.664905;
-        $Z = -0.033138;
+        $x = 0.64995327095595;
+        $y = 0.31860745636351;
+        $z = -0.033130385747949;
 
-        $hcEclRecCoordinates = new HeliocentricEclipticalRectangularCoordinates($X, $Y, $Z);
-        $hcRecSphCoordinates = $hcEclRecCoordinates->getHeliocentricEclipticalSphericalCoordinates();
+        $helEclRecCoord = new HeliocentricEclipticalRectangularCoordinates($x, $y, $z);
+        $helEclSphCoord = $helEclRecCoord->getHeliocentricEclipticalSphericalCoordinates();
 
-        $L = $hcRecSphCoordinates->getLongitude();
-        $B = $hcRecSphCoordinates->getLatitude();
-        $R = $hcRecSphCoordinates->getRadiusVector();
+        $lat = $helEclSphCoord->getLatitude();
+        $lon = $helEclSphCoord->getLongitude();
+        $r = $helEclSphCoord->getRadiusVector();
 
-        $this->assertEquals(313.08102, round($L, 5));
-        $this->assertEquals(-2.08474, round($B, 5));
-        $this->assertEquals(0.910947, round($R, 6));
+        $this->assertEquals(-2.620603, round($lat, 6));
+        $this->assertEquals(26.11412, round($lon, 6));
+        $this->assertEquals(0.724602, round($r, 6));
     }
 
-    public function testGetGeocentricEclipticalRectangularCoordinates()
+    /**
+     * @test
+     * Meeus 33.a
+     */
+    public function getGeocentricEclipticalRectangularCoordinatesTest()
     {
-        $X = 0.649954;
-        $Y = 0.318610;
-        $Z = -0.033132;
+        $T = -0.070321697467488;
+        $x = 0.64995327095595;
+        $y = 0.31860745636351;
+        $z = -0.033130385747949;
 
-        $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
+        $helEclRecCoord = new HeliocentricEclipticalRectangularCoordinates($x, $y, $z);
+        $geoEclRecCoord = $helEclRecCoord->getGeocentricEclipticalRectangularCoordinates($T);
 
-        $hcEclRecCoordinates = new HeliocentricEclipticalRectangularCoordinates($X, $Y, $Z);
-        $geoEclRecCoordinates = $hcEclRecCoordinates->getGeocentricEclipticalRectangularCoordinates($toi);
+        $X = $geoEclRecCoord->getX();
+        $Y = $geoEclRecCoord->getY();
+        $Z = $geoEclRecCoord->getZ();
 
-        $X = $geoEclRecCoordinates->getX();
-        $Y = $geoEclRecCoordinates->getY();
-        $Z = $geoEclRecCoordinates->getZ();
-
-        $this->assertEquals(0.621746, round($X, 6));
-        $this->assertEquals(-0.66481, round($Y, 6));
-        $this->assertEquals(-0.033135, round($Z, 6));
+        $this->assertEquals(0.621745, round($X, 6));
+        $this->assertEquals(-0.664812, round($Y, 6));
+        $this->assertEquals(-0.033133, round($Z, 6));
     }
 }

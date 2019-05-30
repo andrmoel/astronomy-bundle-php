@@ -2,6 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
@@ -36,22 +37,32 @@ class GeocentricEclipticalRectangularCoordinates
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
         // Meeus 33.2
-        $lon = atan2($this->Y, $this->X);
-        $lon = rad2deg($lon);
-        $lon = AngleUtil::normalizeAngle($lon);
+        $lonRad = atan2($this->Y, $this->X);
+        $lon = AngleUtil::normalizeAngle(rad2deg($lonRad));
 
-        $lat = atan($this->Z / sqrt(pow($this->X, 2) + pow($this->Y, 2)));
-        $lat = rad2deg($lat);
+        $latRad = atan($this->Z / sqrt(pow($this->X, 2) + pow($this->Y, 2)));
+        $lat = rad2deg($latRad);
 
-        $radiusVector = sqrt(pow($this->X, 2) + pow($this->Y, 2) + pow($this->Z, 2));
+        $r = sqrt(pow($this->X, 2) + pow($this->Y, 2) + pow($this->Z, 2));
 
-        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
+        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $r);
     }
 
-    public function getGeocentricEquatorialCoordinates(TimeOfInterest $toi): GeocentricEquatorialCoordinates
+    // TODO
+    public function getGeocentricEquatorialRectangularCoordinates(float $T): GeocentricEquatorialRectangularCoordinates
     {
-        return $this
-            ->getGeocentricEclipticalSphericalCoordinates()
-            ->getGeocentricEquatorialCoordinates($toi);
+        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
+    }
+
+    // TODO
+    public function getGeocentricEquatorialSphericalCoordinates(float $T): GeocentricEquatorialSphericalCoordinates
+    {
+        return new GeocentricEquatorialSphericalCoordinates(0, 0, 0);
+    }
+
+    // TODO
+    public function getLocalHorizontalCoordinates(Location $location, TimeOfInterest $toi): LocalHorizontalCoordinates
+    {
+        return new LocalHorizontalCoordinates(0, 0);
     }
 }

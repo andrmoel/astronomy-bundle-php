@@ -2,55 +2,86 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Calculations\MoonCalc;
 use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
-class Moon extends AstronomicalObject
+class Moon extends AstronomicalObject implements AstronomicalObjectInterface
 {
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
         $T = $this->T;
 
-        $lon = MoonCalc::getLongitude($T);
         $lat = MoonCalc::getLatitude($T);
+        $lon = MoonCalc::getLongitude($T);
         $radiusVector = DistanceUtil::km2au(MoonCalc::getDistanceToEarth($T));
 
-        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
+        // Corrections
+        $dPhi = EarthCalc::getNutationInLongitude($T);
+        $lon = $lon + $dPhi;
+
+        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
     }
 
-    public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
         return $this
             ->getGeocentricEclipticalSphericalCoordinates()
-            ->getGeocentricEquatorialCoordinates($this->toi);
+            ->getGeocentricEquatorialRectangularCoordinates($this->T);
     }
 
-    public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
+    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
     {
         return $this
-            ->getGeocentricEqutorialCoordinates()
-            ->getLocalHorizontalCoordinates($location, $this->toi);
+            ->getGeocentricEclipticalSphericalCoordinates()
+            ->getGeocentricEquatorialSphericalCoordinates($this->T);
+    }
+
+    public function getLocalHorizontalCoordinates(Location $location, bool $refraction = true): LocalHorizontalCoordinates
+    {
+        $locHorCoord = $this
+            ->getGeocentricEquatorialSphericalCoordinates()
+            ->getLocalHorizontalCoordinates($location, $this->T);
+
+        if ($refraction) {
+            $locHorCoord = LocalHorizontalCorrections::correctAtmosphericRefraction($locHorCoord);
+        }
+
+        return $locHorCoord;
+    }
+
+    /**
+     * Distance to earth [km]
+     * @return float
+     */
+    public function getDistanceToEarth(): float
+    {
+        $d = MoonCalc::getDistanceToEarth($this->T);
+
+        return $d;
     }
 
     public function getIlluminatedFraction(): float
     {
         $T = $this->T;
 
-        $geoEquCoordinatesMoon = $this->getGeocentricEquatorialCoordinates();
+        $geoEquCoordinatesMoon = $this->getGeocentricEquatorialSphericalCoordinates();
 
         $aMoon = $geoEquCoordinatesMoon->getRightAscension();
         $dMoon = $geoEquCoordinatesMoon->getDeclination();
         $distMoon = MoonCalc::getDistanceToEarth($T);
 
         $sun = new Sun($this->toi);
-        $geoEquCoordinatesSun = $sun->getGeocentricEquatorialCoordinates();
+        $geoEquCoordinatesSun = $sun->getGeocentricEquatorialSphericalCoordinates();
         $aSun = $geoEquCoordinatesSun->getRightAscension();
         $dSun = $geoEquCoordinatesSun->getDeclination();
         $distSun = SunCalc::getDistanceToEarth($T);
@@ -75,13 +106,12 @@ class Moon extends AstronomicalObject
 
     public function isWaxingMoon(): bool
     {
-        $dateTimeFuture = clone $this->toi->getDateTime();
-        $dateTimeFuture->add(new \DateInterval('PT1S'));
-
         $illuminatedFraction1 = $this->getIlluminatedFraction();
 
-        $toi = new TimeOfInterest($dateTimeFuture);
-        $moon = new Moon($toi);
+        $JDFuture = $this->toi->getJulianDay() + 1; // Tomorrow
+        $toiFuture = TimeOfInterest::createFromJulianDay($JDFuture);
+
+        $moon = new Moon($toiFuture);
         $illuminatedFraction2 = $moon->getIlluminatedFraction();
 
 
@@ -92,8 +122,8 @@ class Moon extends AstronomicalObject
     {
         $sun = new Sun($this->toi);
 
-        $geoEquCoordinatesMoon = $this->getGeocentricEquatorialCoordinates();
-        $geoEquCoordinatesSun = $sun->getGeocentricEquatorialCoordinates();
+        $geoEquCoordinatesMoon = $this->getGeocentricEquatorialSphericalCoordinates();
+        $geoEquCoordinatesSun = $sun->getGeocentricEquatorialSphericalCoordinates();
 
         $aMoon = $geoEquCoordinatesMoon->getRightAscension();
         $dMoon = $geoEquCoordinatesMoon->getDeclination();
@@ -115,21 +145,36 @@ class Moon extends AstronomicalObject
         return $x;
     }
 
+    /**
+     * @param Location $location
+     * @return TimeOfInterest
+     * @deprecated Not yet implemented
+     */
     public function getUpperCulmination(Location $location): TimeOfInterest
     {
         // TODO Implement
-        return new TimeOfInterest();
+        return TimeOfInterest::createFromCurrentTime();
     }
 
-    public function getSunrise(Location $location): TimeOfInterest
+    /**
+     * @param Location $location
+     * @return TimeOfInterest
+     * @deprecated Not yet implemented
+     */
+    public function getMoonrise(Location $location): TimeOfInterest
     {
         // TODO Implement
-        return new TimeOfInterest();
+        return TimeOfInterest::createFromCurrentTime();
     }
 
-    public function getSunset(Location $location): TimeOfInterest
+    /**
+     * @param Location $location
+     * @return TimeOfInterest
+     * @deprecated Not yet implemented
+     */
+    public function getMoonset(Location $location): TimeOfInterest
     {
         // TODO Implement
-        return new TimeOfInterest();
+        return TimeOfInterest::createFromCurrentTime();
     }
 }

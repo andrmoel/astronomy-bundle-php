@@ -2,15 +2,9 @@
 
 namespace Andrmoel\AstronomyBundle\Tests\Corrections;
 
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
-use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
+use PHPUnit\Framework\TestCase;
 
-class GeocentricEclipticalSphericalCorrectionsTest
+class GeocentricEclipticalSphericalCorrectionsTest extends TestCase
 {
-    // TODO Write...
-    public function testFoo()
-    {
-        $geoEclSphCoordinates = new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
-        $corrections = new GeocentricEclipticalSphericalCorrections($toi);
-    }
+    // TODO
 }

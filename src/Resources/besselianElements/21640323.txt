@@ -1,0 +1,34 @@
+   Instant of          00:02:47 TDT     JD = 2511526.50200 
+Greatest Eclipse:    (=23:56:48 UT)
+
+Gamma = 0.5095             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 1.0051             Lunation No. = 2031 
+     Eclipse Type = H                  Saros Series = 132 
+                                                 ΔT = 358.6 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2164 Mar 23    0.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.1796660  0.4775060  1.1603000  0.5487730  0.0026230 178.385971 
+  1   0.5259620  0.1683301  0.0160220  0.0001158  0.0001152  15.004340 
+  2  -0.0000046 -0.0000375  0.0000000 -0.0000117 -0.0000116   0.000000 
+  3  -0.0000076 -0.0000023  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046944        tan f2 = 0.0046710 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   0.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  23:56:48 UT
+
+Latitude:   30.4° N      Sun’s Altitude:    59.2°          Path Width = 20.4 km
+Longitude: 172.1° E      Sun’s Azimuth:    159.5°    Central Duration = 00m29s 

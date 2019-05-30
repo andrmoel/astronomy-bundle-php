@@ -2,12 +2,11 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\MercuryRectangularVSOP87;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\MercurySphericalVSOP87;
+
 class Mercury extends Planet
 {
-    public function loadVSOP87Data(): array
-    {
-        $data = file_get_contents(self::VSOP87_FILE_PATH . 'mercury.json');
-
-        return json_decode($data, 1);
-    }
+    protected $VSOP87_SPHERICAL = MercurySphericalVSOP87::class;
+    protected $VSOP87_RECTANGULAR = MercuryRectangularVSOP87::class;
 }

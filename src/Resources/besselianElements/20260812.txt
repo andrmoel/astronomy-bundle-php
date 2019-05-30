@@ -1,0 +1,34 @@
+   Instant of          17:47:06 TDT     JD = 2461265.24100 
+Greatest Eclipse:    (=17:45:51 UT)
+
+Gamma = 0.8977             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 1.0386             Lunation No. = 329 
+     Eclipse Type = T                  Saros Series = 126 
+                                                 ΔT = 75.4 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   2026 Aug 12   18.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.4755140  0.7711830 14.7966700  0.5379550 -0.0081420  88.747787 
+  1   0.5189249 -0.2301680 -0.0120650  0.0000939  0.0000935  15.003090 
+  2  -0.0000773 -0.0001246 -0.0000030 -0.0000121 -0.0000121   0.000000 
+  3  -0.0000080  0.0000038  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046141        tan f2 = 0.0045911 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  18.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  17:45:51 UT
+
+Latitude:   65.2° N      Sun’s Altitude:    25.8°          Path Width = 293.9 km
+Longitude:  25.2° W      Sun’s Azimuth:    248.4°    Central Duration = 02m18s 

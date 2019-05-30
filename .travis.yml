@@ -1,0 +1,14 @@
+language: php
+php:
+  - 7.2
+  - 7.3
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+    - $HOME/symfony-bridge/.phpunit
+install:
+  - composer install --no-interaction
+script:
+  - ./vendor/bin/phpunit
+notifications:
+  email: false

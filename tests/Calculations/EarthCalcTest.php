@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class EarthCalcTest extends TestCase
@@ -33,8 +34,68 @@ class EarthCalcTest extends TestCase
         $this->assertEquals(0.016711668, round($e, 9));
     }
 
+    /**
+     * @test
+     * Meeus 23.a
+     */
     public function getLongitudeOfPerihelionOfOrbitTest()
     {
-        // TODO ...
+        $T = 0.2886705;
+
+        $pi = EarthCalc::getLongitudeOfPerihelionOfOrbit($T);
+
+        $this->assertEquals(103.434, round($pi, 3));
+    }
+
+    /**
+     * @test
+     * Meeus 22.a
+     */
+    public function getMeanObliquityOfEclipticTest()
+    {
+        $T = -0.127296372458;
+
+        $e0 = EarthCalc::getMeanObliquityOfEcliptic($T);
+
+        $this->assertEquals(23.44094629, round($e0, 8));
+    }
+
+    /**
+     * @test
+     * Meeus 22.a
+     */
+    public function getTrueMeanObliquityOfEclipticTest()
+    {
+        $T = -0.127296372458;
+
+        $e = EarthCalc::getTrueObliquityOfEcliptic($T);
+
+        $this->assertEquals(23.4435692, round($e, 8));
+    }
+
+    /**
+     * @test
+     * Meeus 22.a
+     */
+    public function getNutationInLongitudeTest()
+    {
+        $T = -0.127296372458;
+
+        $sumPhi = EarthCalc::getNutationInLongitude($T);
+
+        $this->assertStringStartsWith('-0°0\'3.788', AngleUtil::dec2angle($sumPhi));
+    }
+
+    /**
+     * @test
+     * Meeus 22.a
+     */
+    public function getNutationInObliquityTest()
+    {
+        $T = -0.127296372458;
+
+        $sumEps = EarthCalc::getNutationInObliquity($T);
+
+        $this->assertStringStartsWith('0°0\'9.442', AngleUtil::dec2angle($sumEps));
     }
 }

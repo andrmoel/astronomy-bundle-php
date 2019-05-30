@@ -2,12 +2,11 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\MarsRectangularVSOP87;
+use Andrmoel\AstronomyBundle\Calculations\VSOP87\MarsSphericalVSOP87;
+
 class Mars extends Planet
 {
-    public function loadVSOP87Data(): array
-    {
-        $data = file_get_contents(self::VSOP87_FILE_PATH . 'mars.json');
-
-        return json_decode($data, 1);
-    }
+    protected $VSOP87_SPHERICAL = MarsSphericalVSOP87::class;
+    protected $VSOP87_RECTANGULAR = MarsRectangularVSOP87::class;
 }

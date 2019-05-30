@@ -7,9 +7,15 @@ use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Constants;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
+/**
+ * Class GeocentricEquatorialCorrections
+ * @package Andrmoel\AstronomyBundle\Corrections
+ * @deprecated do not use
+ */
 class GeocentricEquatorialCorrections
 {
     private $toi;
@@ -20,8 +26,8 @@ class GeocentricEquatorialCorrections
     }
 
     public function correctCoordinates(
-        GeocentricEquatorialCoordinates $geoEquCoordinates
-    ): GeocentricEquatorialCoordinates
+        GeocentricEquatorialSphericalCoordinates $geoEquCoordinates
+    ): GeocentricEquatorialSphericalCoordinates
     {
         // TODO When correcting precession, we get false values
 //        $geoEquCoordinates = $this->correctEffectOfPrecession($geoEquCoordinates);
@@ -32,8 +38,8 @@ class GeocentricEquatorialCorrections
     }
 
     public function correctEffectOfPrecession(
-        GeocentricEquatorialCoordinates $geoEquCoordinates
-    ): GeocentricEquatorialCoordinates
+        GeocentricEquatorialSphericalCoordinates $geoEquCoordinates
+    ): GeocentricEquatorialSphericalCoordinates
     {
         $T = $this->toi->getJulianCenturiesFromJ2000();
 
@@ -65,12 +71,12 @@ class GeocentricEquatorialCorrections
         $rightAscension = rad2deg(atan($A / $B)) + $z;
         $declination = rad2deg(asin($C));
 
-        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
+        return new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $radiusVector);
     }
 
     public function correctEffectOfNutation(
-        GeocentricEquatorialCoordinates $geoEquCoordinates
-    ): GeocentricEquatorialCoordinates
+        GeocentricEquatorialSphericalCoordinates $geoEquCoordinates
+    ): GeocentricEquatorialSphericalCoordinates
     {
         $T = $this->toi->getJulianCenturiesFromJ2000();
 
@@ -79,7 +85,7 @@ class GeocentricEquatorialCorrections
         $radiusVector = $geoEquCoordinates->getRadiusVector();
 
         $dEps = EarthCalc::getNutationInObliquity($T);
-        $eps = EarthCalc::getObliquityOfEcliptic($T);
+        $eps = EarthCalc::getTrueObliquityOfEcliptic($T);
         $dPhi = EarthCalc::getNutationInLongitude($T);
 
         $raRad = deg2rad($rightAscension);
@@ -93,7 +99,7 @@ class GeocentricEquatorialCorrections
         $rightAscension += $dRa1;
         $declination += $dD1;
 
-        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
+        return new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $radiusVector);
     }
 
     /**
@@ -101,12 +107,12 @@ class GeocentricEquatorialCorrections
      * Ron, C. & Vondrak, J.
      * http://adsbit.harvard.edu//full/1986BAICz..37...96R/0000099.000.html
      *
-     * @param GeocentricEquatorialCoordinates $geoEquCoordinates
-     * @return GeocentricEquatorialCoordinates
+     * @param GeocentricEquatorialSphericalCoordinates $geoEquCoordinates
+     * @return GeocentricEquatorialSphericalCoordinates
      */
     public function correctEffectOfAberration(
-        GeocentricEquatorialCoordinates $geoEquCoordinates
-    ): GeocentricEquatorialCoordinates
+        GeocentricEquatorialSphericalCoordinates $geoEquCoordinates
+    ): GeocentricEquatorialSphericalCoordinates
     {
         $T = $this->toi->getJulianCenturiesFromJ2000();
         $rightAscension = $geoEquCoordinates->getRightAscension();
@@ -314,6 +320,6 @@ class GeocentricEquatorialCorrections
         $rightAscension += $dRa;
         $declination += $dD;
 
-        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
+        return new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $radiusVector);
     }
 }

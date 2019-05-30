@@ -2,6 +2,9 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
+use Andrmoel\AstronomyBundle\CalculationCache;
+use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class EarthCalc implements EarthCalcInterface
@@ -12,6 +15,10 @@ class EarthCalc implements EarthCalcInterface
      */
     public static function getMeanAnomaly(float $T): float
     {
+        if (CalculationCache::has('earthMeanAnomaly', $T)) {
+            return CalculationCache::get('earthMeanAnomaly', $T);
+        }
+
         // Meeus chapter 22
 //        $M = 357.52772
 //            + 35999.050340 * $T
@@ -25,33 +32,53 @@ class EarthCalc implements EarthCalcInterface
             + pow($T, 3) / 2449000;
         $M = AngleUtil::normalizeAngle($M);
 
+        CalculationCache::set('earthMeanAnomaly', $T, $M);
+
         return $M;
     }
 
     public static function getEccentricity(float $T): float
     {
+        if (CalculationCache::has('earthEccentricity', $T)) {
+            return CalculationCache::get('earthEccentricity', $T);
+        }
+
         // Meeus 25.4
         $e = 0.016708634
             - 0.000042037 * $T
             - 0.0000001267 * pow($T, 2);
+
+        CalculationCache::set('earthEccentricity', $T, $e);
 
         return $e;
     }
 
     public static function getLongitudeOfPerihelionOfOrbit(float $T): float
     {
+        if (CalculationCache::has('earthLongitudeOfPerihelionOfOrbit', $T)) {
+            return CalculationCache::get('earthLongitudeOfPerihelionOfOrbit', $T);
+        }
+
         // Meeus 23
-        $pi = 102.93735 + 1.71946 * $T + 0.00046 * pow($T, 2);
+        $pi = 102.93735
+            + 1.71946 * $T
+            + 0.00046 * pow($T, 2);
+
+        CalculationCache::set('earthLongitudeOfPerihelionOfOrbit', $T, $pi);
 
         return $pi;
     }
 
     public static function getMeanObliquityOfEcliptic(float $T): float
     {
+        if (CalculationCache::has('earthMeanObliquityOfEcliptic', $T)) {
+            return CalculationCache::get('earthMeanObliquityOfEcliptic', $T);
+        }
+
         $U = $T / 100;
 
         // Meeus 22.3
-        $e0 = 84381.448
+        $eps0 = 84381.448
             - 4680.93 * $U
             - 1.55 * pow($U, 2)
             + 1999.25 * pow($U, 3)
@@ -62,15 +89,38 @@ class EarthCalc implements EarthCalcInterface
             + 27.87 * pow($U, 8)
             + 5.79 * pow($U, 9)
             + 2.45 * pow($U, 10);
-        $e0 = $e0 / 3600;
+        $eps0 = $eps0 / 3600;
 
-        return $e0;
+        CalculationCache::set('earthMeanObliquityOfEcliptic', $T, $eps0);
+
+        return $eps0;
+    }
+
+    public static function getTrueObliquityOfEcliptic(float $T): float
+    {
+        if (CalculationCache::has('earthTrueObliquityOfEcliptic', $T)) {
+            return CalculationCache::get('earthTrueObliquityOfEcliptic', $T);
+        }
+
+        $eps0 = self::getMeanObliquityOfEcliptic($T);
+        $sumEps = self::getNutationInObliquity($T);
+
+        // Meeus chapter 22
+        $eps = $eps0 + $sumEps;
+
+        CalculationCache::set('earthTrueObliquityOfEcliptic', $T, $eps);
+
+        return $eps;
     }
 
     public static function getNutationInLongitude(float $T): float
     {
+        if (CalculationCache::has('earthNutationInLongitude', $T)) {
+            return CalculationCache::get('earthNutationInLongitude', $T);
+        }
+
         // Meeus chapter 22
-        $D = MoonCalc::getMeanElongationFromSun($T);
+        $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
         $Mmoon = MoonCalc::getMeanAnomaly($T);
         $F = MoonCalc::getArgumentOfLatitude($T);
@@ -79,7 +129,6 @@ class EarthCalc implements EarthCalcInterface
             - 1934.136261 * $T
             + 0.0020708 * pow($T, 2)
             + pow($T, 3) / 450000;
-        $O = AngleUtil::normalizeAngle($O);
 
         $sumPhi = 0;
         foreach (self::ARGUMENTS_NUTATION as $args) {
@@ -98,13 +147,19 @@ class EarthCalc implements EarthCalcInterface
 
         $sumPhi *= 0.0001 / 3600;
 
+        CalculationCache::set('earthNutationInLongitude', $T, $sumPhi);
+
         return $sumPhi;
     }
 
     public static function getNutationInObliquity(float $T): float
     {
+        if (CalculationCache::has('earthNutationInObliquity', $T)) {
+            return CalculationCache::get('earthNutationInObliquity', $T);
+        }
+
         // Meeus chapter 22
-        $D = MoonCalc::getMeanElongationFromSun($T);
+        $D = MoonCalc::getMeanElongation($T);
         $Msun = SunCalc::getMeanAnomaly($T);
         $Mmoon = MoonCalc::getMeanAnomaly($T);
         $F = MoonCalc::getArgumentOfLatitude($T);
@@ -113,7 +168,6 @@ class EarthCalc implements EarthCalcInterface
             - 1934.136261 * $T
             + 0.0020708 * pow($T, 2)
             + pow($T, 3) / 450000;
-        $O = AngleUtil::normalizeAngle($O);
 
         $sumEps = 0;
         foreach (self::ARGUMENTS_NUTATION as $args) {
@@ -132,42 +186,42 @@ class EarthCalc implements EarthCalcInterface
 
         $sumEps *= 0.0001 / 3600;
 
+        CalculationCache::set('earthNutationInObliquity', $T, $sumEps);
+
         return $sumEps;
     }
 
-    public static function getObliquityOfEcliptic(float $T): float
+    /**
+     * Get distance between 2 points on earths surface [km]
+     * @param Location $location1
+     * @param Location $location2
+     * @return float
+     */
+    public static function getDistanceBetweenLocations(Location $location1, Location $location2): float
     {
-        $e0 = self::getMeanObliquityOfEcliptic($T);
-        $sumEps = self::getNutationInLongitude($T);
+        $lat1 = $location1->getLatitude();
+        $lon1 = $location1->getLongitude();
+        $lat2 = $location2->getLatitude();
+        $lon2 = $location2->getLongitude();
 
-        // Meeus chapter 22
-        $e = $e0 + $sumEps;
+        // Meeus 11.1
+        $F = deg2rad(($lat1 + $lat2) / 2);
+        $G = deg2rad(($lat1 - $lat2) / 2);
+        $l = deg2rad(($lon1 - $lon2) / 2);
 
-        return $e;
-    }
+        $S = pow(sin($G), 2) * pow(cos($l), 2) + pow(cos($F), 2) * pow(sin($l), 2);
+        $C = pow(cos($G), 2) * pow(cos($l), 2) + pow(sin($F), 2) * pow(sin($l), 2);
 
-    public static function getEquationOfTime(float $T): float
-    {
-        $eps = self::getObliquityOfEcliptic($T);
-        $L0 = SunCalc::getMeanLongitude($T);
-        $e = self::getEccentricity($T);
-        $M = SunCalc::getMeanAnomaly($T);
+        $o = atan(sqrt($S / $C));
+        $R = sqrt($S * $C) / $o;
 
-        $epsRad = deg2rad($eps);
-        $L0rad = deg2rad($L0);
-        $Mrad = deg2rad($M);
+        $D = 2 * $o * (Earth::RADIUS / 100);
+        $H1 = (3 * $R - 1) / (2 * $C);
+        $H2 = (3 * $R + 1) / (2 * $S);
 
-        $y = tan($epsRad / 2);
-        $y = pow($y, 2);
+        $s = $D * (1 + Earth::FLATTENING * $H1 * pow(sin($F), 2) * pow(cos($G), 2)
+                - Earth::FLATTENING * $H2 * pow(cos($F), 2) * pow(sin($G), 2));
 
-        $eqTime = $y * sin(2 * $L0rad)
-            - 2 * $e * sin($Mrad)
-            + 4 * $e * $y * sin($Mrad) * cos(2 * $L0rad)
-            - 0.5 * pow($y, 2) * sin(4 * $L0rad)
-            - 1.25 * pow($e, 2) * sin(2 * $Mrad);
-
-        $eqTime = rad2deg($eqTime) * 4;
-
-        return $eqTime;
+        return $s / 10;
     }
 }

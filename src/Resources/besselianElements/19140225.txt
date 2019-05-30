@@ -1,0 +1,34 @@
+   Instant of          00:13:01 TDT     JD = 2420188.50900 
+Greatest Eclipse:    (=00:12:45 UT)
+
+Gamma = -0.9416            Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9248             Lunation No. = -1062 
+     Eclipse Type = A                  Saros Series = 119 
+                                                 ΔT = 16.0 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   1914 Feb 25    0.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.3320980 -0.8880140 -9.4778204  0.5700050  0.0237490 176.649094 
+  1   0.4540890  0.2334722  0.0148200  0.0000703  0.0000699  15.002680 
+  2  -0.0000492  0.0000824  0.0000020 -0.0000101 -0.0000100   0.000000 
+  3  -0.0000052 -0.0000028  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0047238        tan f2 = 0.0047003 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   0.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  00:12:45 UT
+
+Latitude:   62.1° S      Sun’s Altitude:    19.2°          Path Width = 839.2 km
+Longitude: 113.3° W      Sun’s Azimuth:    286.6°    Central Duration = 05m35s 

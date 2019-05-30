@@ -6,16 +6,18 @@ use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 
 class LocalHorizontalCorrections
 {
-    public function correctAtmosphericRefraction(LocalHorizontalCoordinates $coordinates): LocalHorizontalCoordinates
+    public static function correctAtmosphericRefraction(
+        LocalHorizontalCoordinates $coordinates
+    ): LocalHorizontalCoordinates
     {
-        $az = $coordinates->getAzimuth();
-        $alt = $coordinates->getAltitude();
+        $azimuth = $coordinates->getAzimuth();
+        $altitude = $coordinates->getAltitude();
 
         // Meeus 16.4
-        $R = 1.02 / tan(deg2rad($alt + (10.3 / ($alt + 5.11))));
+        $R = 1.02 / tan(deg2rad($altitude + (10.3 / ($altitude + 5.11))));
 
-        $alt += $R / 60;
+        $altitude += $R / 60;
 
-        return new LocalHorizontalCoordinates($az, $alt);
+        return new LocalHorizontalCoordinates($azimuth, $altitude);
     }
 }

@@ -1,0 +1,34 @@
+   Instant of          03:45:39 TDT     JD = 1183122.65700 
+Greatest Eclipse:    (=18:10:15 UT)
+
+Gamma = 0.9541             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9823             Lunation No. = -42953 
+     Eclipse Type = A                  Saros Series = 35 
+                                                 ΔT = 34523.8 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   -1473 Mar 20    4.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0  -0.3475760  0.8977420 -5.8340602  0.5524630  0.0062940 237.142273 
+  1   0.4704089  0.2589723  0.0152540  0.0001096  0.0001090  15.004950 
+  2  -0.0000153 -0.0000174  0.0000010 -0.0000109 -0.0000109   0.000000 
+  3  -0.0000062 -0.0000036  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046330        tan f2 = 0.0046099 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =   4.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  18:10:15 UT
+
+Latitude:   53.6° N      Sun’s Altitude:    16.9°          Path Width = 207.4 km
+Longitude: 140.1° W      Sun’s Azimuth:    126.4°    Central Duration = 01m19s 

@@ -2,19 +2,20 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
+use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
 use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Calculations\SunCalc;
-use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Earth;
-use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinates;
-use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
+use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
+use Andrmoel\AstronomyBundle\Events\RiseSetTransit\RiseSetTransit;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class Sun extends AstronomicalObject
+class Sun extends AstronomicalObject implements AstronomicalObjectInterface
 {
     const TWILIGHT_DAY = 0;
     const TWILIGHT_CIVIL = 1;
@@ -27,108 +28,110 @@ class Sun extends AstronomicalObject
         $T = $this->T;
 
         $earth = new Earth($this->toi);
-        $helEclSphCoordinates = $earth->getHeliocentricEclipticalSphericalCoordinates();
+        $helEclSphCoord = $earth->getHeliocentricEclipticalSphericalCoordinates();
 
-        // Meeus 25 higher accuracy
-        $lon = $helEclSphCoordinates->getLongitude() + 180;
-        $lat = $helEclSphCoordinates->getLatitude() * -1;
+        $B = $helEclSphCoord->getLatitude();
+        $L = $helEclSphCoord->getLongitude();
+        $R = $helEclSphCoord->getRadiusVector();
 
-        $radiusVector = SunCalc::getDistanceToEarth($T);
+        $beta = -1 * $B;
+        $Theta = $L + 180;
 
-        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
+        // Convert to FK5lon
+        $lonC = $Theta - 1.397 * $T - 0.00031 * pow($T, 2);
+        $lonCRad = deg2rad($lonC);
+
+        // Meeus 25.9
+        $dTheta = -0.00002509167; // 0.09033"
+        $dBeta = 0.000010878 * (cos($lonCRad) - sin($lonCRad)); // 0.000010878 = 0.03916"
+
+        $lat = $beta + $dBeta;
+        $lon = $Theta + $dTheta;
+
+        // Corrections
+        $dPhi = EarthCalc::getNutationInLongitude($T);
+
+        // Meeus 25.10
+        $lon = $lon + $dPhi - 0.005691611111 / $R;
+        $lon = AngleUtil::normalizeAngle($lon);
+
+        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $R);
     }
 
-    public function getGeocentricEquatorialCoordinates(): GeocentricEquatorialCoordinates
+    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
-        // TODO Use method with higher accuracy (Meeus p.166)
         $T = $this->T;
 
-        $L0 = SunCalc::getMeanLongitude($T);
-        $M = SunCalc::getMeanAnomaly($T);
+        $earth = new Earth($this->toi);
+        $helEclSphCoord = $earth->getHeliocentricEclipticalSphericalCoordinates();
 
-        $C = (1.914602 - 0.004817 * $T - 0.000014 * pow($T, 2)) * sin(deg2rad($M))
-            + (0.019993 - 0.000101 * $T) * sin(2 * deg2rad($M))
-            + 0.000289 * sin(3 * deg2rad($M));
+        $B = $helEclSphCoord->getLatitude();
+        $L = $helEclSphCoord->getLongitude();
+        $R = $helEclSphCoord->getRadiusVector();
 
-        // True longitude (o) and true anomaly (v)
-        $o = $L0 + $C;
-        $oRad = deg2rad($o);
+        $beta = -1 * $B;
+        $Theta = $L + 180;
+        $Theta = AngleUtil::normalizeAngle($Theta);
+        $eps0 = EarthCalc::getMeanObliquityOfEcliptic($T);
 
-        $O = 125.04 - 1934.136 * $T;
-        $ORad = deg2rad($O);
-        $lon = $o - 0.00569 - 0.00478 * sin($ORad);
-        $lonRad = deg2rad($lon);
+        $epsRad = deg2rad($eps0);
+        $latRad = deg2rad($beta);
+        $lonRad = deg2rad($Theta);
 
-        // Meeus 25.8 - Corrections
-        $e = EarthCalc::getMeanObliquityOfEcliptic($T);
-        $e = $e + 0.00256 * cos($ORad);
-        $eRad = deg2rad($e);
+        $X = $R * cos($latRad) * cos($lonRad);
+        $Y = $R * (cos($latRad) * sin($lonRad) * cos($epsRad) - sin($latRad) * sin($epsRad));
+        $Z = $R * (cos($latRad) * sin($lonRad) * sin($epsRad) + sin($latRad) * cos($epsRad));
 
-        // Meeus 25.6
-        $rightAscension = atan2(cos($eRad) * sin($lonRad), cos($lonRad));
-        $rightAscension = AngleUtil::normalizeAngle(rad2deg($rightAscension));
+        return new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
+    }
 
-        // Meeus 25.7
-        $declination = asin(sin($eRad) * sin($oRad));
-        $declination = rad2deg($declination);
+    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
+    {
+        return $this
+            ->getGeocentricEclipticalSphericalCoordinates()
+            ->getGeocentricEquatorialSphericalCoordinates($this->T);
+    }
 
-        $radiusVector = SunCalc::getDistanceToEarth($T);
+    public function getLocalHorizontalCoordinates(Location $location, bool $refraction = true): LocalHorizontalCoordinates
+    {
+        $locHorCoord = $this
+            ->getGeocentricEquatorialSphericalCoordinates()
+            ->getLocalHorizontalCoordinates($location, $this->T);
 
-        return new GeocentricEquatorialCoordinates($rightAscension, $declination, $radiusVector);
+        if ($refraction) {
+            $locHorCoord = LocalHorizontalCorrections::correctAtmosphericRefraction($locHorCoord);
+        }
+
+        return $locHorCoord;
     }
 
     /**
-     * @return GeocentricEclipticalRectangularCoordinates
-     * @throws \Exception
-     * @deprecated Not yet working, perfectly
+     * Get distance to earth [km]
+     * @return float
      */
-    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEclipticalRectangularCoordinates
+    public function getDistanceToEarth(): float
     {
-        $T = $this->T;
+        $d = SunCalc::getDistanceToEarth($this->T);
 
-        $R = SunCalc::getRadiusVector($T);
-        $eps = EarthCalc::getObliquityOfEcliptic($T);
-        $epsRad = deg2rad($eps);
-        $L0 = SunCalc::getMeanLongitude($T);
-        $C = SunCalc::getEquationOfCenter($T);
-        $M = SunCalc::getMeanAnomaly($T);
-        $e = EarthCalc::getEccentricity($T);
-
-        // True longitude
-        $o = $L0 + $C;
-        $oRad = deg2rad($o);
-
-        // TODO How do we calculate this one?
-        $bRad = AngleUtil::angle2dec('0°0\'0.62"');
-
-        $X = $R * cos($bRad) * cos($oRad);
-        $Y = $R * (cos($bRad) * sin($oRad) * cos($epsRad) - sin($bRad) * sin($epsRad));
-        $Z = $R * (cos($bRad) * sin($oRad) * sin($epsRad) + sin($bRad) * cos($epsRad));
-
-        return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
+        return $d;
     }
 
-    public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
+    public function getSunrise(Location $location): TimeOfInterest
     {
-        return $this
-            ->getGeocentricEquatorialCoordinates()
-            ->getLocalHorizontalCoordinates($location, $this->toi);
+        $ras = new RiseSetTransit(Sun::class, $location, $this->toi);
+        return $ras->getRise();
     }
 
-    public function getEquationOfTime(): float
+    public function getUpperCulmination(Location $location): TimeOfInterest
     {
-        $T = $this->T;
+        $ras = new RiseSetTransit(Sun::class, $location, $this->toi);
+        return $ras->getTransit();
+    }
 
-        $L0 = SunCalc::getMeanLongitude($T);
-        $geoEquCoordinates = $this->getGeocentricEquatorialCoordinates();
-        $rightAscension = $geoEquCoordinates->getRightAscension();
-        $dPhi = EarthCalc::getNutationInLongitude($T);
-        $e = EarthCalc::getObliquityOfEcliptic($T);
-
-        // Meeus 28.1
-        $E = $L0 - 0.0057183 - $rightAscension + $dPhi * cos($e);
-
-        return $E;
+    public function getSunset(Location $location): TimeOfInterest
+    {
+        $ras = new RiseSetTransit(Sun::class, $location, $this->toi);
+        return $ras->getSet();
     }
 
     public function getTwilight(Location $location): int
@@ -153,41 +156,5 @@ class Sun extends AstronomicalObject
         }
 
         return self::TWILIGHT_NIGHT;
-    }
-
-    public function getUpperCulmination(Location $location): TimeOfInterest
-    {
-        $jd0 = $this->toi->getJulianDay0();
-        $lon = $location->getLongitude();
-
-        $jd = $jd0 - $lon / 360;
-
-        $Tnoon = TimeCalc::getJulianCenturiesFromJ2000($jd);
-        $equationOfTime = EarthCalc::getEquationOfTime($Tnoon);
-
-        $solNoonOffset = 720 - ($lon * 4) - $equationOfTime; // in minutes
-        $Tnew = TimeCalc::getJulianCenturiesFromJ2000($jd + $solNoonOffset / 1440);
-        $equationOfTime = EarthCalc::getEquationOfTime($Tnew);
-
-        $solNoonLocal = 720 - ($lon * 4) - $equationOfTime;
-
-        $jd = $jd0 + $solNoonLocal / 1440;
-
-        $toi = new TimeOfInterest();
-        $toi->setJulianDay($jd);
-
-        return $toi;
-    }
-
-    public function getSunrise(Location $location): TimeOfInterest
-    {
-        // TODO Implement
-        return new TimeOfInterest();
-    }
-
-    public function getSunset(Location $location): TimeOfInterest
-    {
-        // TODO Implement
-        return new TimeOfInterest();
     }
 }

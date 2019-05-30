@@ -2,7 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle;
 
-use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
+use Andrmoel\AstronomyBundle\Entities\Time;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class TimeOfInterest
@@ -32,43 +33,91 @@ class TimeOfInterest
     const DAY_OF_WEEK_FRIDAY = 5;
     const DAY_OF_WEEK_SATURDAY = 6;
 
-    // Time parameter
-    private $year = 0;
-    private $month = 0;
-    private $day = 0;
-    private $hour = 0;
-    private $minute = 0;
-    private $second = 0;
+    /** @var Time */
+    private $time;
 
-    public function __construct(\DateTime $dateTime = null)
+    private function __construct(Time $time = null)
     {
-        $dateTime = $dateTime ? $dateTime : new \DateTime();
-
-        $this->year = (int)$dateTime->format('Y');
-        $this->month = (int)$dateTime->format('m');
-        $this->day = (int)$dateTime->format('d');
-        $this->hour = (int)$dateTime->format('H');
-        $this->minute = (int)$dateTime->format('i');
-        $this->second = (float)$dateTime->format('s');
+        $this->time = $time ? $time : new Time();
     }
 
-    public function setDateTime(\DateTime $dateTime): void
+    public function __toString(): string
     {
-        $this->year = (int)$dateTime->format('Y');
-        $this->month = (int)$dateTime->format('m');
-        $this->day = (int)$dateTime->format('d');
-        $this->hour = (int)$dateTime->format('H');
-        $this->minute = (int)$dateTime->format('i');
-        $this->second = (int)$dateTime->format('s');
+        return $this->time;
     }
 
-    public function getDateTime(): \DateTime
+    public static function createFromCurrentTime(): self
     {
-        $dateTime = new \DateTime();
-        $dateTime->setDate($this->year, $this->month, $this->day);
-        $dateTime->setTime($this->hour, $this->minute, $this->second);
+        return new self();
+    }
 
-        return $dateTime;
+    public static function create(
+        int $year = 0,
+        int $month = 0,
+        int $day = 0,
+        int $hour = 0,
+        int $minute = 0,
+        int $second = 0
+    ): self
+    {
+        $toi = new self();
+        $toi->setTime($year, $month, $day, $hour, $minute, $second);
+
+        return $toi;
+    }
+
+    public static function createFromTime(
+        int $year = 0,
+        int $month = 0,
+        int $day = 0,
+        int $hour = 0,
+        int $minute = 0,
+        int $second = 0
+    ): self
+    {
+        $toi = new self();
+        $toi->setTime($year, $month, $day, $hour, $minute, $second);
+
+        return $toi;
+    }
+
+    public static function createFromDateTime(\DateTime $dateTime): self
+    {
+        $toi = new self();
+        $toi->setDateTime($dateTime);
+
+        return $toi;
+    }
+
+    public static function createFromString(string $dateTimeStr): self
+    {
+        $toi = new self();
+        $toi->setString($dateTimeStr);
+
+        return $toi;
+    }
+
+    public static function createFromJulianDay(float $JD): self
+    {
+        $toi = new self();
+        $toi->setJulianDay($JD);
+
+        return $toi;
+    }
+
+    public static function createFromJulianCenturiesJ2000(float $T): self
+    {
+        $JD = TimeCalc::julianCenturiesJ20002JulianDay($T);
+
+        $toi = new self();
+        $toi->setJulianDay($JD);
+
+        return $toi;
+    }
+
+    public function setCurrentTime(): void
+    {
+        $this->time = new Time();
     }
 
     public function setTime(
@@ -80,185 +129,9 @@ class TimeOfInterest
         int $second = 0
     ): void
     {
-        $this->year = $year;
-        $this->month = $month;
-        $this->day = $day;
-        $this->hour = $hour;
-        $this->minute = $minute;
-        $this->second = $second;
+        $this->time = new Time($year, $month, $day, $hour, $minute, $second);
     }
 
-    public function getYear(): int
-    {
-        return $this->year;
-    }
-
-    public function getMonth(): int
-    {
-        return $this->month;
-    }
-
-    public function getDay(): int
-    {
-        return $this->day;
-    }
-
-    public function getHour(): int
-    {
-        return $this->hour;
-    }
-
-    public function getMinute(): int
-    {
-        return $this->minute;
-    }
-
-    public function getSecond(): int
-    {
-        return $this->second;
-    }
-
-    public function getJulianDay(bool $jd0 = false): float
-    {
-        $tmpYear = floatval($this->year . '.' . $this->getDayOfYear());
-
-        if ($this->month > 2) {
-            $Y = $this->year;
-            $M = $this->month;
-        } else {
-            $Y = $this->year - 1;
-            $M = $this->month + 12;
-        }
-
-        $D = $this->day;
-        $H = $jd0 ? 0 : $this->hour / 24 + $this->minute / 1440 + $this->second / 86400;
-
-        if ($tmpYear >= 1582.288) { // YYYY-MM-DD >= 1582-10-15
-            $A = (int)($Y / 100);
-            $B = 2 - $A + (int)($A / 4);
-        } elseif ($tmpYear <= 1582.277) { // YY-MM-DD <= 1582-10-04
-            $B = 0;
-        } else {
-            throw new \Exception('Date between 1582-10-04 and 1582-10-15 is not defined.');
-        }
-
-        // Meeus 7.1
-        $JD = (int)(365.25 * ($Y + 4716)) + (int)(30.6001 * ($M + 1)) + $D + $H + $B - 1524.5;
-
-        return $JD;
-    }
-
-    public function getJulianDay0(): float
-    {
-        $JD0 = $this->getJulianDay(true);
-
-        return $JD0;
-    }
-
-    public function getModifiedJulianDay(): float
-    {
-        $JD = $this->getJulianDay();
-        $MJD = $JD - 2400000.5;
-
-        return $MJD;
-    }
-
-    public function setJulianDay(float $JD): void
-    {
-        $JD = $JD + 0.5;
-        $Z = (int)$JD;
-        $F = $JD - $Z;
-
-        $A = $Z;
-        if ($Z < 2299161) {
-            $A = $Z;
-        } elseif ($Z >= 2291161) {
-            $a = (int)(($Z - 1867216.25) / 36524.25);
-            $A = $Z + 1 + $a - (int)($a / 4);
-        }
-
-        $B = $A + 1524;
-        $C = (int)(($B - 122.1) / 365.25);
-        $D = (int)(365.25 * $C);
-        $E = (int)(($B - $D) / 30.6001);
-
-        $dayOfMonth = $B - $D - (int)(30.6001 * $E) + $F;
-        $month = $E < 14 ? $E - 1 : $E - 13;
-        $year = $month > 2 ? $C - 4716 : $C - 4715;
-        $hour = ($dayOfMonth - (int)$dayOfMonth) * 24;
-        $minute = ($hour - (int)$hour) * 60;
-        $second = ($minute - (int)$minute) * 60;
-
-        $this->year = $year;
-        $this->month = (int)$month;
-        $this->day = (int)$dayOfMonth;
-        $this->hour = (int)$hour;
-        $this->minute = (int)$minute;
-        $this->second = (int)$second;
-    }
-
-    /**
-     * @param float $distance Distance in AU
-     * @return TimeOfInterest
-     * @throws \Exception
-     */
-    public function getTimeOfInterestLightTimeCorrected(float $distance): TimeOfInterest
-    {
-        // TODO Write test...
-        // Meeus 33.3 - Planetray abberation
-        $t = 0.0057755183 * $distance;
-        $JD = $this->getJulianDay();
-
-        $toi = new TimeOfInterest();
-        $toi->setJulianDay($JD - $t);
-
-        return $toi;
-
-    }
-
-    public function isLeapYear(int $year): bool
-    {
-        if ($year / 4 != (int)($year / 4)) {
-            return false;
-        } elseif ($year / 100 != (int)($year / 100)) {
-            return true;
-        } elseif ($year / 400 != (int)($year / 400)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public function getDayOfWeek(): int
-    {
-        $JD = $this->getJulianDay();
-
-        // Meeus 7.e
-        $DOW = ($JD + 1.5) % 7;
-
-        return $DOW;
-    }
-
-    public function getDayOfYear(): int
-    {
-        $K = $this->isLeapYear($this->year) ? 1 : 2;
-        $M = $this->month;
-        $D = $this->day;
-
-        // Meeus 7.f
-        $N = (int)((275 * $M) / 9) - $K * (int)(($M + 9) / 12) + $D - 30;
-
-        return $N;
-    }
-
-    /**
-     * Meeus 7
-     * @param int $year
-     * @param int $dayOfYear
-     * @param int $hour
-     * @param int $minute
-     * @param int $second
-     */
     public function setTimeByDayOfYear(
         int $year = 0,
         int $dayOfYear = 0,
@@ -267,23 +140,156 @@ class TimeOfInterest
         int $second = 0
     ): void
     {
+        // Meeus 7
         $K = $this->isLeapYear($year) ? 1 : 2;
         $month = $dayOfYear < 32 ? 1 : (int)((9 * ($K + $dayOfYear)) / 275 + 0.98);
         $day = $dayOfYear - (int)((275 * $month) / 9) + $K * (int)(($month + 9) / 12) + 30;
 
-        $this->year = $year;
-        $this->month = $month;
-        $this->day = $day;
-        $this->hour = $hour;
-        $this->minute = $minute;
-        $this->second = $second;
+        $this->time = new Time($year, $month, $day, $hour, $minute, $second);
+    }
+
+    public function setDateTime(\DateTime $dateTime): void
+    {
+        $year = (int)$dateTime->format('Y');
+        $month = (int)$dateTime->format('m');
+        $day = (int)$dateTime->format('d');
+        $hour = (int)$dateTime->format('H');
+        $minute = (int)$dateTime->format('i');
+        $second = (float)$dateTime->format('s');
+
+        $this->time = new Time($year, $month, $day, $hour, $minute, $second);
+    }
+
+    public function setString(string $dateTimeStr): void
+    {
+        $dateTime = new \DateTime($dateTimeStr);
+
+        $this->setDateTime($dateTime);
+    }
+
+    public function setJulianDay(float $JD): void
+    {
+        $this->time = TimeCalc::julianDay2DateTime($JD);
+    }
+
+    public function setJulianCenturiesJ2000(float $T): void
+    {
+        $JD = TimeCalc::julianCenturiesJ20002JulianDay($T);
+
+        $this->setJulianDay($JD);
+    }
+
+    public function getYear(): int
+    {
+        return $this->time->year;
+    }
+
+    public function getMonth(): int
+    {
+        return $this->time->month;
+    }
+
+    public function getDay(): int
+    {
+        return $this->time->day;
+    }
+
+    public function getHour(): int
+    {
+        return $this->time->hour;
+    }
+
+    public function getMinute(): int
+    {
+        return $this->time->minute;
+    }
+
+    public function getSecond(): int
+    {
+        return $this->time->second;
+    }
+
+    public function getDateTime(): \DateTime
+    {
+        $dateTime = new \DateTime();
+        $dateTime->setDate($this->time->year, $this->time->month, $this->time->day);
+        $dateTime->setTime($this->time->hour, $this->time->minute, $this->time->second);
+
+        return $dateTime;
+    }
+
+    public function getString(): string
+    {
+        return $this->time->__toString();
+    }
+
+    public function getJulianDay(): float
+    {
+        $JD = TimeCalc::time2JulianDay($this->time);
+
+        return $JD;
+    }
+
+    public function getJulianDay0(): float
+    {
+        $JD = $this->getJulianDay();
+        $JD0 = TimeCalc::julianDay2JulianDay0($JD);
+
+        return $JD0;
+    }
+
+    public function getJulianCenturiesFromJ2000(): float
+    {
+        $JD = $this->getJulianDay();
+
+        $T = TimeCalc::julianDay2JulianCenturiesJ2000($JD);
+
+        return $T;
+    }
+
+    public function getJulianMillenniaFromJ2000(): float
+    {
+        $JD = $this->getJulianDay();
+
+        $t = TimeCalc::julianDay2julianMillenniaJ2000($JD);
+
+        return $t;
+    }
+
+    // TODO ... use TimeCalc
+    public function getDayOfYear(): int
+    {
+        $K = $this->isLeapYear($this->time->year) ? 1 : 2;
+        $M = $this->time->month;
+        $D = $this->time->day;
+
+        // Meeus 7.f
+        $N = (int)((275 * $M) / 9) - $K * (int)(($M + 9) / 12) + $D - 30;
+
+        return $N;
+    }
+
+    public function getDayOfWeek(): int
+    {
+        $JD = $this->getJulianDay();
+
+        return TimeCalc::getDayOfWeek($JD);
+    }
+
+    public function isLeapYear(): bool
+    {
+        return TimeCalc::isLeapYear($this->time->year);
     }
 
 
     // TODO ------------------------------------
 
 
-    public function setTleEpoch($epoch): void // TODO type
+    /**
+     * @param $epoch
+     * @deprecated
+     */
+    private function setTleEpoch($epoch): void
     {
         $parts = explode('.', $epoch);
         $year = substr($parts[0], 0, 2);
@@ -311,63 +317,22 @@ class TimeOfInterest
         $this->second = (int)$second;
     }
 
-    public function getJulianCenturiesFromJ2000(): float
-    {
-        $jd = $this->getJulianDay();
-        $T = ($jd - 2451545.0) / 36525.0;
-
-        return $T;
-    }
-
-    public function getJulianMillenniaFromJ2000(): float
-    {
-        $T = $this->getJulianCenturiesFromJ2000();
-        $t = $T / 10;
-
-        return $t;
-    }
-
-    public function getUniversalTime(): int
-    {
-        // TODO write
-        $ut = 0;
-        return $ut;
-    }
-
     public function getGreenwichMeanSiderealTime(): float
     {
-        $JD = $this->getJulianDay();
         $T = $this->getJulianCenturiesFromJ2000();
 
-        // Meeus 12.3
-//        $t0 = 100.46061837
-//            + 36000.770053608 * $T
-//            + 0.000387933 * pow($T, 2)
-//            - pow($T, 3) / 38710000;
+        $GMST = TimeCalc::getGreenwichMeanSiderealTime($T);
 
-        // Meeus 12.4
-        $t0 = 280.46061837
-            + 360.98564736629 * ($JD - 2451545)
-            + 0.000387933 * pow($T, 2)
-            + pow($T, 3) / 38710000;
-        $t0 = AngleUtil::normalizeAngle($t0);
-
-        return $t0;
+        return $GMST;
     }
 
-    public function getApparentGreenwichMeanSiderealTime(): float
+    public function getGreenwichApparentSiderealTime(): float
     {
         $T = $this->getJulianCenturiesFromJ2000();
 
-        $t0 = $this->getGreenwichMeanSiderealTime();
-        $p = EarthCalc::getNutationInLongitude($T);
-        $e = EarthCalc::getObliquityOfEcliptic($T);
-        $eRad = deg2rad($e);
+        $GAST = TimeCalc::getGreenwichApparentSiderealTime($T);
 
-        // Meeus 12
-        $gmst = $t0 + $p * cos($eRad);
-
-        return $gmst;
+        return $GAST;
     }
 
     /**
@@ -385,5 +350,14 @@ class TimeOfInterest
         $lmst = AngleUtil::normalizeAngle($lmst);
 
         return $lmst;
+    }
+
+    public function getEquationOfTime(): float
+    {
+        $T = $this->getJulianCenturiesFromJ2000();
+
+        $E = TimeCalc::getEquationOfTimeInDegrees($T);
+
+        return $E;
     }
 }

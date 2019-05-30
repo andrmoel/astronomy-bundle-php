@@ -1,0 +1,34 @@
+   Instant of          20:20:09 TDT     JD = 1710332.34700 
+Greatest Eclipse:    (=17:19:35 UT)
+
+Gamma = 0.8018             Ephemerides  = VSOP87/ELP2000-82 
+Eclipse Magnitude = 0.9341             Lunation No. = -25100 
+     Eclipse Type = A                  Saros Series = 83 
+                                                 ΔT = 10833.6 s
+
+Lunar Radius   k1 = 0.272488 (Penumbra)        Shift in      Δb =  0.00"
+ Constants:    k2 = 0.272281 (Umbra)       Lunar Position:   Δl =  0.00"
+
+
+Polynomial Besselian Elements for:   -30 Aug 20   20.000 TDT  (=t0)
+
+  n        x          y         d          l1         l2          μ
+
+  0   0.0278110  0.8191810 13.5549498  0.5682850  0.0220370 119.629829 
+  1   0.4920104 -0.1219300 -0.0133890 -0.0000288 -0.0000286  15.002810 
+  2  -0.0000163 -0.0001110 -0.0000030 -0.0000098 -0.0000098   0.000000 
+  3  -0.0000056  0.0000013  0.0000000  0.0000000  0.0000000   0.000000
+  
+                tan f1 = 0.0046583        tan f2 = 0.0046351 
+
+At time t1 (decimal hours), each Besselian element is evaluated by:
+
+a = a0 + a1*t + a2*t2 + a3*t3  
+
+where: a = x, y, d, l1, l2, or μ; t = t1 - t0 (decimal hours), and t0 =  20.000 TDT.
+
+
+Circumstances at Greatest Eclipse:  17:19:35 UT
+
+Latitude:   64.0° N      Sun’s Altitude:    36.4°          Path Width = 411.7 km
+Longitude:  53.3° W      Sun’s Azimuth:    212.1°    Central Duration = 05m38s 
