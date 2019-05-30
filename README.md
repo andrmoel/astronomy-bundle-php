@@ -107,6 +107,10 @@ There are several ways how to initialize the TOi object.
 **Example 1**: Initialize the TimeOfInterest object for the date 02 July 2017 at 15:30:00 UTC
 
 ```
+// Create from time
+$toi = TimeOfInterest::create(2017, 7, 2, 15, 30, 0);
+$toi = TimeOfInterest::createFromTime(2017, 7, 2, 15, 30, 0);
+
 // Create from string
 $toi = TimeOfInterest::createFromString('2017-07-02 15:30:00');
 

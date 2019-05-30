@@ -51,6 +51,21 @@ class TimeOfInterest
         return new self();
     }
 
+    public static function create(
+        int $year = 0,
+        int $month = 0,
+        int $day = 0,
+        int $hour = 0,
+        int $minute = 0,
+        int $second = 0
+    ): self
+    {
+        $toi = new self();
+        $toi->setTime($year, $month, $day, $hour, $minute, $second);
+
+        return $toi;
+    }
+
     public static function createFromTime(
         int $year = 0,
         int $month = 0,
