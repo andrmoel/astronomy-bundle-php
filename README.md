@@ -90,20 +90,63 @@ The result of the calculation should be:\
 <a name="toi"></a>
 # Time of Interest
 
-The time of interest (TOI) object represents the time for which all of the astronomical calculations are done.
-E.g. If you want to calculate the position of the sun for 02 July 2017 at 12:00:00 UTC, you need to initialize
-the TOI as follow:
+The TimeOfInterest (TOI) object represents the time for which all of the astronomical calculations are done.
+For that reason it is the **most important object** in this library.
+
+:info: **Why can't we simply use PHP's DateTime object?**:
+The problem with DateTime object is, that its supported range is '1000-01-01' to '9999-12-31'.
+So we cannot process calculations for dates before year 1000.
+
+There are several ways how to initialize the TOi object.
+
+**Example 1**: Initialize the TimeOfInterest object for the date 02 July 2017 at 15:30:00 UTC
 
 ```
-$dateTime = new DateTime('2017-07-02 12:00:00');
-$toi = new TimeOfInterest($dateTime);
+// Create from string
+$toi = TimeOfInterest::createFromString('2017-07-02 15:30:00');
+
+// Create from PHPs DateTime object
+$dateTime = new \DateTime('2017-07-02 15:30:00');
+$toi = TimeOfInterest::createFromDateTime($dateTime);
+
+// Create from Julian Day
+$JD = 2457937.1458333;
+$toi = TimeOfInterest::createFromJulianDay($JD);
+
+// Create from Julian Centuries since J2000
+$T = 0.17500741501255;
+$toi = TimeOfInterest::createFromJulianCenturiesJ2000($T);
+
+echo $toi;
 ```
 
-The following example show how to create a TOI-object which correspondends to the **current** date and time:
+The Result will be always: *2017-07-02 15:30:00*
 
-```php
-$toi = new TimeOfInterest();
+**Example 2**: Create the TOI object for the **current date and time in UTC**
+
 ```
+$toi = TimeOfInterest::createForCurrentTime();
+
+echo $toi;
+```
+
+The TimeOfInterest provides some methods to **modify** the time:
+* `public function setDateTime(\DateTime $dateTime): void`
+* `public function setString(string $dateTimeStr): void`
+* `public function setJulianDay(float $JD): void`
+* `public function setJulianCenturiesJ2000(float $T): void`
+
+**Example 3**: Create the TOI object for the current time and change the time to 2017-07-02 15:30:00 UTC
+
+```
+$toi = TimeOfInterest::createForCurrentTime();
+
+$toi->setString('2017-07-02 15:30:00');
+
+echo $toi;
+```
+
+The Result will be always: *2017-07-02 12:00:00*
 
 <a name="toi-julian-day"></a>
 ### Julian Day, Julian Centuries from J2000 and Julian Millennia from J2000

@@ -3,7 +3,7 @@
 namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 
 use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
-use Andrmoel\AstronomyBundle\Entities\AstroDateTime;
+use Andrmoel\AstronomyBundle\Entities\Time;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
@@ -55,7 +55,7 @@ class TimeCalcTest extends TestCase
         );
 
         foreach ($data as $t) {
-            $dateTime = new AstroDateTime($t[0], $t[1], $t[2], $t[3], $t[4], $t[5]);
+            $dateTime = new Time($t[0], $t[1], $t[2], $t[3], $t[4], $t[5]);
             $JD = TimeCalc::dateTime2JulianDay($dateTime);
 
             $this->assertEquals($t[6], round($JD, 2));

@@ -1,10 +1,8 @@
 <?php
 
-
 namespace Andrmoel\AstronomyBundle\Entities;
 
-
-class AstroDateTime
+class Time
 {
     public $year = 0;
     public $month = 0;
@@ -38,18 +36,6 @@ class AstroDateTime
             $this->minute = $minute;
             $this->second = $second;
         }
-    }
-
-    public static function createFromDateTime(\DateTime $dateTime): self
-    {
-        $year = (int)$dateTime->format('Y');
-        $month = (int)$dateTime->format('m');
-        $day = (int)$dateTime->format('d');
-        $hour = (int)$dateTime->format('H');
-        $minute = (int)$dateTime->format('i');
-        $second = (float)$dateTime->format('s');
-
-        return new AstroDateTime($year, $month, $day, $hour, $minute, $second);
     }
 
     public function __toString(): string

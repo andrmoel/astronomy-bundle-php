@@ -2,7 +2,7 @@
 
 namespace Andrmoel\AstronomyBundle\Calculations;
 
-use Andrmoel\AstronomyBundle\Entities\AstroDateTime;
+use Andrmoel\AstronomyBundle\Entities\Time;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class TimeCalc
@@ -14,7 +14,7 @@ class TimeCalc
         return $JD0;
     }
 
-    public static function dateTime2JulianDay(AstroDateTime $dateTime): float
+    public static function dateTime2JulianDay(Time $dateTime): float
     {
         $tmpYear = floatval($dateTime->year . '.' . self::getDayOfYear($dateTime));
 
@@ -44,7 +44,7 @@ class TimeCalc
         return $JD;
     }
 
-    public static function julianDay2DateTime(float $JD): AstroDateTime
+    public static function julianDay2DateTime(float $JD): Time
     {
         $JD = $JD + 0.5;
         $Z = (int)$JD;
@@ -70,7 +70,7 @@ class TimeCalc
         $minute = ($hour - (int)$hour) * 60;
         $second = ($minute - (int)$minute) * 60;
 
-        $dateTime = new AstroDateTime((int)$year, (int)$month, (int)$dayOfMonth, (int)$hour, (int)$minute, (int)$second);
+        $dateTime = new Time((int)$year, (int)$month, (int)$dayOfMonth, (int)$hour, (int)$minute, (int)$second);
 
         return $dateTime;
     }
@@ -320,7 +320,7 @@ class TimeCalc
     }
 
     // TODO Test
-    public static function getDayOfYear(AstroDateTime $dateTime): int
+    public static function getDayOfYear(Time $dateTime): int
     {
         $K = self::isLeapYear($dateTime->year) ? 1 : 2;
         $M = $dateTime->month;
