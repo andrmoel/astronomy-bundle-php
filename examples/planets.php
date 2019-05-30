@@ -67,7 +67,7 @@ foreach ($planets as $planet) {
 +------------------------------------
 | {$planetName}
 +------------------------------------
-Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
+Date: {$toi} UTC
 
 Ecliptical longitude: {$eclLongitude}
 Ecliptical latitude: {$eclLatitude}
