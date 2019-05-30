@@ -4,8 +4,9 @@
 3. [Example data](#example)
 4. [Angle Util](#angle)
 5. [Time of Interest](#toi)
-    1. [Julian Day, Centuries & Millennia](#toi-julian-day)
-    1. [GMST, GAST & Equation of Time](#toi-gmst)
+    1. [Create TOI](#toi-create)
+    2. [Julian Day, Centuries & Millennia](#toi-julian-day)
+    3. [GMST, GAST & Equation of Time](#toi-gmst)
 6. [Location](#location)
 7. [Coordinate Systems (and transformations)](#coordinates)
 8. [Astronomical Objects](#objects)
@@ -93,9 +94,12 @@ The result of the calculation should be:\
 The TimeOfInterest (TOI) object represents the time for which all of the astronomical calculations are done.
 For that reason it is the **most important object** in this library.
 
-:info: **Why can't we simply use PHP's DateTime object?**:
+:information_source: **Why can't we simply use PHP's DateTime object?**:
 The problem with DateTime object is, that its supported range is '1000-01-01' to '9999-12-31'.
 So we cannot process calculations for dates before year 1000.
+
+<a name="toi-create"></a>
+## Create the TimeOfInterest object
 
 There are several ways how to initialize the TOi object.
 
