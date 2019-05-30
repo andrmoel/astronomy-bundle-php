@@ -130,7 +130,7 @@ The Result will be always: *2017-07-02 15:30:00*
 **Example 2**: Create the TOI object for the **current date and time in UTC**
 
 ```
-$toi = TimeOfInterest::createForCurrentTime();
+$toi = TimeOfInterest::createFromCurrentTime();
 
 echo $toi;
 ```
@@ -144,7 +144,7 @@ The TimeOfInterest provides some methods to **modify** the time:
 **Example 3**: Create the TOI object for the current time and change the time to 2017-07-02 15:30:00 UTC
 
 ```
-$toi = TimeOfInterest::createForCurrentTime();
+$toi = TimeOfInterest::createFromCurrentTime();
 
 $toi->setString('2017-07-02 15:30:00');
 

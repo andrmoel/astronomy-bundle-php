@@ -48,7 +48,7 @@ class TimeOfInterest
         return $this->time;
     }
     
-    public static function createForCurrentTime(): self
+    public static function createFromCurrentTime(): self
     {
         return new self();
     }

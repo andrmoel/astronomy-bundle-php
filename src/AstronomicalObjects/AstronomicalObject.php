@@ -14,7 +14,7 @@ abstract class AstronomicalObject
 
     public function __construct(TimeOfInterest $toi = null)
     {
-        $this->toi = $toi ? $toi : TimeOfInterest::createForCurrentTime();
+        $this->toi = $toi ? $toi : TimeOfInterest::createFromCurrentTime();
         $this->T = $this->toi->getJulianCenturiesFromJ2000();
     }
 
