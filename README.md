@@ -94,8 +94,9 @@ The result of the calculation should be:\
 The TimeOfInterest (TOI) object represents the time for which all of the astronomical calculations are done.
 For that reason it is the **most important object** in this library.
 
-:information_source: **Why can't we simply use PHP's DateTime object?**:
-The problem with DateTime object is, that its supported range is '1000-01-01' to '9999-12-31'.
+:information_source: **Why can't we simply use PHP's DateTime object?**
+
+The problem with PHP's own DateTime object is, that its supported range is '1000-01-01' to '9999-12-31'.
 So we cannot process calculations for dates before year 1000.
 
 <a name="toi-create"></a>
