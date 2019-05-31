@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\Tests;
 
 use Andrmoel\AstronomyBundle\TimeOfInterest;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
 class TimeOfInterestTest extends TestCase
@@ -95,10 +96,10 @@ class TimeOfInterestTest extends TestCase
     /**
      * @test
      */
-    public function setTimeByDayOfYearTest()
-    {
-        // TODO ...
-    }
+//    public function setTimeByDayOfYearTest()
+//    {
+//        // TODO ...
+//    }
 
     /**
      * @test
@@ -144,5 +145,85 @@ class TimeOfInterestTest extends TestCase
         $toi->setJulianCenturiesJ2000(0.17002110426649);
 
         $this->assertEquals('2017-01-01 12:30:00', $toi);
+    }
+
+    /**
+     * @test
+     */
+    public function getterTest()
+    {
+        $toi = TimeOfInterest::create(2000, 12, 5, 13, 56, 45);
+
+        $this->assertEquals(2000, $toi->getYear());
+        $this->assertEquals(12, $toi->getMonth());
+        $this->assertEquals(5, $toi->getDay());
+        $this->assertEquals(13, $toi->getHour());
+        $this->assertEquals(56, $toi->getMinute());
+        $this->assertEquals(45, $toi->getSecond());
+        $this->assertEquals(new \DateTime('2000-12-05 13:56:45'), $toi->getDateTime());
+        $this->assertEquals('2000-12-05 13:56:45', $toi->getString());
+        $this->assertEquals(2451884.08108, round($toi->getJulianDay(), 5));
+        $this->assertEquals(2451883.5, round($toi->getJulianDay0(), 5));
+        $this->assertEquals(0.00928353, round($toi->getJulianCenturiesFromJ2000(), 8));
+        $this->assertEquals(0.00092835, round($toi->getJulianMillenniaFromJ2000(), 8));
+        $this->assertEquals(340, $toi->getDayOfYear());
+        $this->assertEquals(TimeOfInterest::DAY_OF_WEEK_TUESDAY, $toi->getDayOfWeek());
+        $this->assertTrue($toi->isLeapYear());
+    }
+
+    /**
+     * @test
+     */
+    public function getGreenwichMeanSiderealTimeTest()
+    {
+        $toi = TimeOfInterest::createFromString('1987-04-10 00:00:00');
+
+        $GMST = $toi->getGreenwichMeanSiderealTime();
+        $GMST = AngleUtil::dec2time($GMST);
+
+        $this->assertEquals('13h10m46.367s', $GMST);
+
+        $toi = TimeOfInterest::createFromString('1987-04-10 19:21:00');
+
+        $GMST = $toi->getGreenwichMeanSiderealTime();
+        $GMST = AngleUtil::dec2time($GMST);
+
+        $this->assertEquals('8h34m57.09s', $GMST);
+    }
+
+    /**
+     * @test
+     */
+    public function getGreenwichApparentSiderealTime()
+    {
+        $toi = TimeOfInterest::createFromString('1987-04-10 00:00:00');
+
+        $GAST = $toi->getGreenwichApparentSiderealTime();
+        $GAST = AngleUtil::dec2time($GAST);
+
+        $this->assertEquals('13h10m46.135s', $GAST);
+    }
+
+    /**
+     * @test
+     */
+//    public function getLocalMeanSiderealTime()
+//    {
+//        // TODO
+//    }
+
+    /**
+     * @test
+     */
+    public function getEquationOfTime()
+    {
+        $toi = TimeOfInterest::createFromString('1992-10-13 00.00:00');
+
+        $E = $toi->getEquationOfTime();
+
+        $this->assertEquals(3.424707, round($E, 6));
+
+        // TODO Use method with higher accuracy (Meeus p.166) 25.9
+//        $this->assertEquals(3.427351, round($E, 6));
     }
 }

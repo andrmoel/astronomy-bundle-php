@@ -19,7 +19,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Andrmoel\\AstronomyBundle\\tests\\": "tests/"
+            "Andrmoel\\AstronomyBundle\\Tests\\": "tests/"
         }
     },
     "require-dev": {

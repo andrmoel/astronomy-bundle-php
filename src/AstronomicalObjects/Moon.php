@@ -31,10 +31,11 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
         return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
     }
 
-    // TODO
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
-        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
+        return $this
+            ->getGeocentricEclipticalSphericalCoordinates()
+            ->getGeocentricEquatorialRectangularCoordinates($this->T);
     }
 
     public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates

@@ -4,6 +4,7 @@ namespace Andrmoel\AstronomyBundle\Tests\Calculations;
 
 use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
 use Andrmoel\AstronomyBundle\Entities\Time;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 use PHPUnit\Framework\TestCase;
 
@@ -33,7 +34,7 @@ class TimeCalcTest extends TestCase
      * @test
      * Meeus 7a
      */
-    public function dateTime2JulianDayTest()
+    public function time2JulianDayTest()
     {
         $data = array(
             [2000, 1, 1, 12, 0, 0, 2451545.0],
@@ -56,7 +57,7 @@ class TimeCalcTest extends TestCase
 
         foreach ($data as $t) {
             $dateTime = new Time($t[0], $t[1], $t[2], $t[3], $t[4], $t[5]);
-            $JD = TimeCalc::dateTime2JulianDay($dateTime);
+            $JD = TimeCalc::time2JulianDay($dateTime);
 
             $this->assertEquals($t[6], round($JD, 2));
         }
@@ -271,6 +272,83 @@ class TimeCalcTest extends TestCase
 
             $this->assertEquals($expectedDeltaT, round($deltaT, 1));
         }
+    }
 
+    /**
+     * @test
+     * Meeus 7f
+     */
+    public function getDayOfYearTest()
+    {
+        $dateTime = new \DateTime('2001-01-01');
+
+        for ($expectedDayOfYear = 1; $expectedDayOfYear <= 365; $expectedDayOfYear++) {
+            $time = new Time(
+                (int)$dateTime->format('Y'),
+                (int)$dateTime->format('m'),
+                (int)$dateTime->format('d')
+            );
+            $dayOfYear = TimeCalc::getDayOfYear($time);
+
+            $this->assertEquals($expectedDayOfYear, $dayOfYear);
+
+            $dateTime->add(new \DateInterval('P1D'));
+        }
+    }
+
+    /**
+     * @test
+     * Meeus 7.e
+     */
+    public function getDayOfWeek()
+    {
+        $days = [
+            [2434923.5, TimeOfInterest::DAY_OF_WEEK_WEDNESDAY],
+            [2434923.8, TimeOfInterest::DAY_OF_WEEK_WEDNESDAY],
+            [2458634.5, TimeOfInterest::DAY_OF_WEEK_FRIDAY],
+        ];
+
+        foreach ($days as $expectedDayOfWeek) {
+            $dayOfWeek = TimeCalc::getDayOfWeek($expectedDayOfWeek[0]);
+
+            $this->assertEquals($expectedDayOfWeek[1], $dayOfWeek);
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function isLeapYearTest()
+    {
+        $years = [
+            1700 => false,
+            1800 => false,
+            1900 => false,
+            2000 => true,
+            2001 => false,
+            2002 => false,
+            2003 => false,
+            2004 => true,
+            2005 => false,
+            2006 => false,
+            2007 => false,
+            2008 => true,
+            2012 => true,
+            2016 => true,
+            2020 => true,
+            2024 => true,
+            2028 => true,
+            2032 => true,
+            2036 => true,
+            2040 => true,
+            2044 => true,
+            2048 => true,
+        ];
+
+        foreach ($years as $year => $expectedValue) {
+            $isLeapYear = TimeCalc::isLeapYear($year);
+
+            $this->assertEquals($expectedValue, $isLeapYear);
+        }
     }
 }

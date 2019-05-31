@@ -14,20 +14,20 @@ class TimeCalc
         return $JD0;
     }
 
-    public static function dateTime2JulianDay(Time $dateTime): float
+    public static function time2JulianDay(Time $time): float
     {
-        $tmpYear = floatval($dateTime->year . '.' . self::getDayOfYear($dateTime));
+        $tmpYear = floatval($time->year . '.' . self::getDayOfYear($time));
 
-        if ($dateTime->month > 2) {
-            $Y = $dateTime->year;
-            $M = $dateTime->month;
+        if ($time->month > 2) {
+            $Y = $time->year;
+            $M = $time->month;
         } else {
-            $Y = $dateTime->year - 1;
-            $M = $dateTime->month + 12;
+            $Y = $time->year - 1;
+            $M = $time->month + 12;
         }
 
-        $D = $dateTime->day;
-        $H = $dateTime->hour / 24 + $dateTime->minute / 1440 + $dateTime->second / 86400;
+        $D = $time->day;
+        $H = $time->hour / 24 + $time->minute / 1440 + $time->second / 86400;
 
         if ($tmpYear >= 1582.288) { // YYYY-MM-DD >= 1582-10-15
             $A = (int)($Y / 100);
@@ -297,6 +297,26 @@ class TimeCalc
         return $deltaT;
     }
 
+    public static function getDayOfYear(Time $dateTime): int
+    {
+        $K = self::isLeapYear($dateTime->year) ? 1 : 2;
+        $M = $dateTime->month;
+        $D = $dateTime->day;
+
+        // Meeus 7.f
+        $N = (int)((275 * $M) / 9) - $K * (int)(($M + 9) / 12) + $D - 30;
+
+        return $N;
+    }
+
+    public static function getDayOfWeek(float $JD): int
+    {
+        // Meeus 7.e
+        $DOW = ($JD + 1.5) % 7;
+
+        return $DOW;
+    }
+
     public static function isLeapYear(int $year): bool
     {
         if ($year / 4 != (int)($year / 4)) {
@@ -308,27 +328,5 @@ class TimeCalc
         } else {
             return true;
         }
-    }
-
-    // TODO Test
-    public static function getDayOfWeek(float $JD): int
-    {
-        // Meeus 7.e
-        $DOW = ($JD + 1.5) % 7;
-
-        return $DOW;
-    }
-
-    // TODO Test
-    public static function getDayOfYear(Time $dateTime): int
-    {
-        $K = self::isLeapYear($dateTime->year) ? 1 : 2;
-        $M = $dateTime->month;
-        $D = $dateTime->day;
-
-        // Meeus 7.f
-        $N = (int)((275 * $M) / 9) - $K * (int)(($M + 9) / 12) + $D - 30;
-
-        return $N;
     }
 }
