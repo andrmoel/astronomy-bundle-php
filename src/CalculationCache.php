@@ -6,6 +6,11 @@ class CalculationCache
 {
     private static $cache = [];
 
+    public static function clear()
+    {
+        self::$cache = [];
+    }
+
     public static function set(string $cacheKey, float $time, $value): void
     {
         $key = self::getCacheKey($cacheKey, $time);
