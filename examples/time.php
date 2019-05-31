@@ -7,8 +7,7 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 date_default_timezone_set('UTC');
 
-$dateTime = new DateTime('1992-12-20 00:00:00');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('1992-12-20 00:00:00');
 
 $JD = $toi->getJulianDay();
 $T = $toi->getJulianCenturiesFromJ2000();
@@ -24,7 +23,7 @@ echo <<<END
 +------------------------------------
 | Time calculations
 +------------------------------------
-Date: {$toi->getDateTime()->format('Y-m-d H:i:s')} UTC
+Date: {$toi} UTC
 
 Julian Day: {$JD}
 Julian Centuries J2000: {$T}

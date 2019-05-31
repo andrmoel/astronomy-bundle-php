@@ -10,7 +10,6 @@ use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Planet;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Saturn;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Uranus;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Venus;
-use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
@@ -19,11 +18,7 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 $location = new Location(52.524, 13.411);
 
 // Time of interest
-$dateTime = new DateTime('2019-05-24 22:00:00');
-$toi = new TimeOfInterest($dateTime);
-
-$T = $toi->getJulianCenturiesFromJ2000();
-$e = EarthCalc::getTrueObliquityOfEcliptic($T);
+$toi = TimeOfInterest::createFromString('2019-05-24 22:00:00');
 
 $planets = array(
     new Mercury($toi),
@@ -71,7 +66,7 @@ foreach ($planets as $planet) {
 +------------------------------------
 | {$planetName}
 +------------------------------------
-Date: {$toi->getDateTime()->format('Y-m-d H:i:s')}
+Date: {$toi} UTC
 
 Ecliptical longitude: {$eclLongitude}
 Ecliptical latitude: {$eclLatitude}

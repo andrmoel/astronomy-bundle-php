@@ -27,8 +27,8 @@ class RiseSetTransit
 
     public function __construct(string $astronomicalObjectClass, Location $location, TimeOfInterest $toi)
     {
-        $toiJD0 = new TimeOfInterest();
-        $toiJD0->setJulianDay($toi->getJulianDay0());
+        $JD0 = $toi->getJulianDay0();
+        $toiJD0 = TimeOfInterest::createFromJulianDay($JD0);
 
         /** @var AstronomicalObjectInterface $astronomicalObject */
         $astronomicalObject = new $astronomicalObjectClass();

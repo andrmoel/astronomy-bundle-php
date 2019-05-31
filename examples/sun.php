@@ -5,7 +5,6 @@ include __DIR__ . '/../vendor/autoload.php';
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Sun;
 use Andrmoel\AstronomyBundle\Calculations\SunCalc;
 use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 date_default_timezone_set('UTC');
@@ -14,8 +13,7 @@ date_default_timezone_set('UTC');
 $location = new Location(52.524, 13.411);
 
 // Create sun
-$toi = new TimeOfInterest();
-$sun = new Sun($toi);
+$sun = new Sun();
 
 // Ecliptical spherical coordinates
 $geoEclSphCoordinates = $sun->getGeocentricEclipticalSphericalCoordinates();
@@ -42,7 +40,7 @@ $azimuth = AngleUtil::dec2angle(AngleUtil::normalizeAngle($azimuth));
 $altitude = $localHorizontalCoordinates->getAltitude();
 $altitude = AngleUtil::dec2angle($altitude);
 $distance = $sun->getDistanceToEarth();
-$distanceAu = SunCalc::getRadiusVector($toi->getJulianCenturiesFromJ2000());
+$distanceAu = SunCalc::getRadiusVector($sun->getTimeOfInterest()->getJulianCenturiesFromJ2000());
 
 // Rise, set and upper culmination
 $rise = $sun->getSunrise($location);
@@ -53,7 +51,7 @@ echo <<<END
 +------------------------------------
 | Sun
 +------------------------------------
-Date: {$toi->getDateTime()->format('Y-m-d H:i:s')} UTC
+Date: {$sun->getTimeOfInterest()} UTC
 
 Ecliptical longitude: {$eclLon}
 Ecliptical latitude: {$eclLat}

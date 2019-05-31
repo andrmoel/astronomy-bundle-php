@@ -12,8 +12,7 @@ date_default_timezone_set('UTC');
 $location = new Location(44.61040, -121.23848);
 
 // Time of interest (Great American Eclipse)
-$dateTime = new DateTime('2017-08-21');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2017-08-21');
 
 // Create solar eclipse
 $solarEclipse = SolarEclipse::create($toi, $location);
@@ -41,10 +40,10 @@ Magnitude: {$solarEclipse->getMagnitude()}
 Moon-sun-ratio: {$solarEclipse->getMoonSunRatio()}
 
 Contact times
-C1: {$solarEclipse->getTimeOfInterest($c1)->getDateTime()->format('Y-m-d H:i:s')} UTC
-C2: {$solarEclipse->getTimeOfInterest($c2)->getDateTime()->format('Y-m-d H:i:s')} UTC
-Max: {$solarEclipse->getTimeOfInterest($max)->getDateTime()->format('Y-m-d H:i:s')} UTC
-C3: {$solarEclipse->getTimeOfInterest($c3)->getDateTime()->format('Y-m-d H:i:s')} UTC
-C4: {$solarEclipse->getTimeOfInterest($c4)->getDateTime()->format('Y-m-d H:i:s')} UTC
+C1: {$solarEclipse->getTimeOfInterest($c1)} UTC
+C2: {$solarEclipse->getTimeOfInterest($c2)} UTC
+Max: {$solarEclipse->getTimeOfInterest($max)} UTC
+C3: {$solarEclipse->getTimeOfInterest($c3)} UTC
+C4: {$solarEclipse->getTimeOfInterest($c4)} UTC
 
 END;

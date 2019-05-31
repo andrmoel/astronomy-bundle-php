@@ -4,7 +4,6 @@ include __DIR__ . '/../vendor/autoload.php';
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
 use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 date_default_timezone_set('UTC');
@@ -12,11 +11,8 @@ date_default_timezone_set('UTC');
 // Berlin
 $location = new Location(52.52, 13.405);
 
-// Time of interest
-$toi = new TimeOfInterest();
-
 // Create moon
-$moon = new Moon($toi);
+$moon = new Moon();
 
 // Ecliptical spherical coordinates
 $geoEclSphCoordinates = $moon->getGeocentricEclipticalSphericalCoordinates();
@@ -51,7 +47,7 @@ echo <<<END
 +------------------------------------
 | Moon
 +------------------------------------
-Date: {$toi->getDateTime()->format('Y-m-d H:i:s')} UTC
+Date: {$moon->getTimeOfInterest()} UTC
 
 Ecliptical longitude: {$eclLon}
 Ecliptical latitude: {$eclLat}

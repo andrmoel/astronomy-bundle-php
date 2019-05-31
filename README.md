@@ -4,8 +4,9 @@
 3. [Example data](#example)
 4. [Angle Util](#angle)
 5. [Time of Interest](#toi)
-    1. [Julian Day, Centuries & Millennia](#toi-julian-day)
-    1. [GMST, GAST & Equation of Time](#toi-gmst)
+    1. [Create TOI](#toi-create)
+    2. [Julian Day, Centuries & Millennia](#toi-julian-day)
+    3. [GMST, GAST & Equation of Time](#toi-gmst)
 6. [Location](#location)
 7. [Coordinate Systems (and transformations)](#coordinates)
 8. [Astronomical Objects](#objects)
@@ -90,20 +91,71 @@ The result of the calculation should be:\
 <a name="toi"></a>
 # Time of Interest
 
-The time of interest (TOI) object represents the time for which all of the astronomical calculations are done.
-E.g. If you want to calculate the position of the sun for 02 July 2017 at 12:00:00 UTC, you need to initialize
-the TOI as follow:
+The TimeOfInterest (TOI) object represents the time for which all of the astronomical calculations are done.
+For that reason it is the **most important object** in this library.
+
+:information_source: **Why can't we simply use PHP's DateTime object?**
+
+The problem with PHP's own DateTime object is, that its supported range is '1000-01-01' to '9999-12-31'.
+So we cannot process calculations for dates before year 1000.
+
+<a name="toi-create"></a>
+## Create the TimeOfInterest object
+
+There are several ways how to initialize the TOi object.
+
+**Example 1**: Initialize the TimeOfInterest object for the date 02 July 2017 at 15:30:00 UTC
 
 ```
-$dateTime = new DateTime('2017-07-02 12:00:00');
-$toi = new TimeOfInterest($dateTime);
+// Create from time
+$toi = TimeOfInterest::create(2017, 7, 2, 15, 30, 0);
+$toi = TimeOfInterest::createFromTime(2017, 7, 2, 15, 30, 0);
+
+// Create from string
+$toi = TimeOfInterest::createFromString('2017-07-02 15:30:00');
+
+// Create from PHPs DateTime object
+$dateTime = new \DateTime('2017-07-02 15:30:00');
+$toi = TimeOfInterest::createFromDateTime($dateTime);
+
+// Create from Julian Day
+$JD = 2457937.1458333;
+$toi = TimeOfInterest::createFromJulianDay($JD);
+
+// Create from Julian Centuries since J2000
+$T = 0.17500741501255;
+$toi = TimeOfInterest::createFromJulianCenturiesJ2000($T);
+
+echo $toi;
 ```
 
-The following example show how to create a TOI-object which correspondends to the **current** date and time:
+The Result will be always: *2017-07-02 15:30:00*
 
-```php
-$toi = new TimeOfInterest();
+**Example 2**: Create the TOI object for the **current date and time in UTC**
+
 ```
+$toi = TimeOfInterest::createFromCurrentTime();
+
+echo $toi;
+```
+
+The TimeOfInterest provides some methods to **modify** the time:
+* `public function setDateTime(\DateTime $dateTime): void`
+* `public function setString(string $dateTimeStr): void`
+* `public function setJulianDay(float $JD): void`
+* `public function setJulianCenturiesJ2000(float $T): void`
+
+**Example 3**: Create the TOI object for the current time and change the time to 2017-07-02 15:30:00 UTC
+
+```
+$toi = TimeOfInterest::createFromCurrentTime();
+
+$toi->setString('2017-07-02 15:30:00');
+
+echo $toi;
+```
+
+The Result will be always: *2017-07-02 12:00:00*
 
 <a name="toi-julian-day"></a>
 ### Julian Day, Julian Centuries from J2000 and Julian Millennia from J2000
@@ -111,8 +163,7 @@ $toi = new TimeOfInterest();
 **Example**: Create TOI for 02 July 2017 at 13:37 UTC
 
 ```php
-$dateTime = new \DateTime('2017-07-02 13:37:00'); // DateTime in UTC
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2017-07-02 13:37:00');
 
 $JD = $toi->getJulianDay();
 $JD0 = $toi->getJulianDay0();
@@ -133,8 +184,7 @@ With the help of the TOI-Object it is possible to calculate the GMST, GAST and t
 The following example explains how to get these values for 20 December 1992 at 00:00 UTC.
 
 ```php
-$dateTime = new \DateTime('1992-12-20 00:00:00');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('1992-12-20 00:00:00');
 
 $GMST = $toi->getGreenwichMeanSiderealTime();
 $GAST = $toi->getGreenwichApparentSiderealTime();
@@ -216,8 +266,7 @@ An astronomical object **must** be initialized with the TOI. If you don't pass t
 **current** time is chosen.
 
 ```php
-$dateTime = new \DateTime('2017-07-02 12:00:00');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2017-07-02 12:00:00');
 
 $moon = new Moon($toi);
 ```
@@ -231,8 +280,7 @@ $moon = new Moon($toi);
 **Example 1**: Calculate the position of the sun for 17 May 2019 at 17:50 UTC
 
 ```php
-$dateTime = new DateTime('2019-05-17 17:50');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2019-05-17 17:50');
 
 $sun = new Sun($toi);
 
@@ -248,8 +296,7 @@ The result of the calculation should be:\
 **Example 2**: Calculate azimuth and altitude of the sun observed in Berlin, Germany for 17 May 2019 at 17:50 UTC
 
 ```php
-$dateTime = new DateTime('2019-05-17 17:50');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2019-05-17 17:50');
 
 $location = new Location(52.524, 13.411); // Berlin
 
@@ -280,8 +327,7 @@ The result should be between 147.1 mio and 152.1 mio kilometers.
 **Example 2**: Get the distance of the sun on 05 June 2017 at 20:50 UTC
 
 ```php
-$dateTime = new DateTime('2017-06-05 20:50');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2017-06-05 20:50');
 
 $sun = new Sun($toi);
 
@@ -296,8 +342,7 @@ The result should be 151797703km.
 Calculate sunrise, sunset and upper culmination of the sun on 17 May 2019 in Berlin:
 
 ```php
-$dateTime = new DateTime('2019-05-17');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2019-05-17');
 
 $location = new Location(52.524, 13.411); // Berlin
 
@@ -323,8 +368,7 @@ The result of the calculation should be:\
 The position of the moon can be calculated as explained in the following example.
 
 ```php
-$dateTime = new DateTime('1992-04-12 00:00:00');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
 $moon = new Moon($toi);
 
@@ -353,8 +397,7 @@ The result should be between 363300km and 405500km.
 **Example 2**: Get the distance of the moon on 05 June 2017 at 20:50 UTC
 
 ```php
-$dateTime = new DateTime('2017-06-05 20:50');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2017-06-05 20:50');
 
 $moon = new Moon($toi);
 
@@ -375,8 +418,7 @@ The following code sniped explains how to calculate all important parameters whi
 for an specific date. In this example it is 13 May 2019 at 21:30 UTC.
 
 ```php
-$dateTime = new DateTime('2019-05-13 21:30:00');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2019-05-13 21:30:00');
 
 $moon = new Moon($toi);
 
@@ -399,8 +441,7 @@ If no TimeOfInteressed is passed, the **current date and time** are used for fur
 **Example**: Create some planets
 
 ```php
-$dateTime = new DateTime('2018-06-03 19:00:00'); // UTC
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2018-06-03 19:00:00');
 
 $mercury = new Mercury();  // Time = now
 $venus = new Venus($toi); // Time = 2018-06-03 19:00:00
@@ -420,8 +461,7 @@ The calculations use the VSOP87 theory to obtain the heliocentric position of a 
 **Example**: Calculate the heliocentric position of Venus for 20. December 1992 at 00:00 UTC.
 
 ```php
-$dateTime = new DateTime('1992-12-20 00:00:00');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('1992-12-20 00:00:00');
 
 $venus = new Venus($toi);
 
@@ -452,8 +492,7 @@ That means the position of the planet is corrected by light time and aberration.
 **Example 1**: Calculate the apparent geocentric position of Venus on 25 October 2018 at 07:15 UTC
 
 ```php
-$dateTime = new DateTime('2018-10-25 07:15:00'); // UTC
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2018-10-25 07:15:00');
 
 $venus = new Venus($toi);
 
@@ -477,8 +516,7 @@ The result of the calculation should be:\
 ```php
 $location = new Location(52.524, 13.411); // Berlin
 
-$dateTime = new DateTime('2018-10-25 07:15:00');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2018-10-25 07:15:00');
 
 $venus = new Venus($toi);
 
@@ -499,8 +537,7 @@ Calculate rise, set and upper culmination of Venus on 25 October 2018 at 07:15 U
 ```php
 $location = new Location(52.524, 13.411); // Berlin
 
-$dateTime = new DateTime('2018-10-25 07:15:00');
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2018-10-25 07:15:00');
 
 $venus = new Venus($toi);
 
@@ -529,8 +566,7 @@ The result of the calculation should be:\
 ```php
 $location = new Location(44.61040, -121.23848); // Madras, OR
 
-$dateTime = new DateTime('2017-08-21'); // Date of the eclipse (UTC)
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2017-08-21'); // Date of the eclipse (UTC)
 
 $solarEclipse = SolarEclipse::create($toi, $location);
 ```
@@ -553,8 +589,7 @@ The **type of an eclipse** (for the given location) is expressed in a string. Bu
 ```php
 $location = new Location(44.61040, -121.23848); // Madras, OR
 
-$dateTime = new DateTime('2017-08-21'); // Date of the eclipse (UTC)
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2017-08-21'); // Date of the eclipse (UTC)
 
 $solarEclipse = SolarEclipse::create($toi, $location);
 
@@ -579,8 +614,7 @@ The result of the calculation should be:\
 ```php
 $location = new Location(52.52, 13.405); // Berlin
 
-$dateTime = new DateTime('2015-03-20'); // Date of the eclipse (UTC)
-$toi = new TimeOfInterest($dateTime);
+$toi = TimeOfInterest::createFromString('2015-03-20'); // Date of the eclipse (UTC)
 
 $solarEclipse = SolarEclipse::create($toi, $location);
 
