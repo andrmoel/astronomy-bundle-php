@@ -1,0 +1,10 @@
+dist: trusty
+sudo: false
+language: php
+php:
+  - "7.2"
+before_install:
+  - composer require phpunit/phpunit-bridge
+  - composer require phpunit/phpunit
+script:
+  - ./vendor/bin/phpunit
