@@ -179,6 +179,36 @@ class TimeOfInterest
         $this->setJulianDay($JD);
     }
 
+    public function getYear(): int
+    {
+        return $this->time->year;
+    }
+
+    public function getMonth(): int
+    {
+        return $this->time->month;
+    }
+
+    public function getDay(): int
+    {
+        return $this->time->day;
+    }
+
+    public function getHour(): int
+    {
+        return $this->time->hour;
+    }
+
+    public function getMinute(): int
+    {
+        return $this->time->minute;
+    }
+
+    public function getSecond(): int
+    {
+        return $this->time->second;
+    }
+
     public function getDateTime(): \DateTime
     {
         $dateTime = new \DateTime();
@@ -195,7 +225,7 @@ class TimeOfInterest
 
     public function getJulianDay(): float
     {
-        $JD = TimeCalc::dateTime2JulianDay($this->time);
+        $JD = TimeCalc::time2JulianDay($this->time);
 
         return $JD;
     }
@@ -239,16 +269,16 @@ class TimeOfInterest
         return $N;
     }
 
-    public function isLeapYear(int $year): bool
-    {
-        return TimeCalc::isLeapYear($year);
-    }
-
     public function getDayOfWeek(): int
     {
         $JD = $this->getJulianDay();
 
         return TimeCalc::getDayOfWeek($JD);
+    }
+
+    public function isLeapYear(): bool
+    {
+        return TimeCalc::isLeapYear($this->time->year);
     }
 
 
