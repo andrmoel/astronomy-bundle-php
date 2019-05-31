@@ -19,7 +19,6 @@ class RiseSetTransit
     const EVENT_TYPE_TRANSIT = 'transit';
     const EVENT_TYPE_SET = 'set';
 
-    private $astronomicalObjectClass;
     /** @var AstronomicalObjectInterface */
     private $astronomicalObject;
     private $location;
@@ -34,7 +33,6 @@ class RiseSetTransit
         $astronomicalObject = new $astronomicalObjectClass();
         $astronomicalObject->setTimeOfInterest($toiJD0);
 
-        $this->astronomicalObjectClass = $astronomicalObjectClass;
         $this->astronomicalObject = $astronomicalObject;
         $this->location = $location;
         $this->toi = $toiJD0;
@@ -155,14 +153,7 @@ class RiseSetTransit
 
         // Meeus 15.2
         $m0 = ($ra + $L - $T0) / 360; // Transit
-
-        if ($m0 < 0) {
-            $m0 += 1;
-        }
-
-        if ($m0 > 1) {
-            $m0 -= 1;
-        }
+        $m0 = $this->normalizeM($m0);
 
         switch ($eventType) {
             case self::EVENT_TYPE_TRANSIT:
@@ -176,15 +167,7 @@ class RiseSetTransit
                 break;
         }
 
-        if ($m < 0) {
-            $m += 1;
-        }
-
-        if ($m > 1) {
-            $m -= 1;
-        }
-
-        // TODO $m must be between 0 and 1 ?
+        $m = $this->normalizeM($m);
 
         return $m;
     }
@@ -192,12 +175,12 @@ class RiseSetTransit
     private function getStandardAltitude()
     {
         // Meeus chapter 15
-        switch ($this->astronomicalObjectClass) {
+        switch (get_class($this->astronomicalObject)) {
             case Sun::class:
                 $h0 = -0.8333;
                 break;
             case Moon::class:
-                $T = 0; // TODO $h0 for the moon (Meeus 15.1)
+                // TODO $h0 for the moon (Meeus 15.1)
                 $T = $this->astronomicalObject->getTimeOfInterest()->getJulianCenturiesFromJ2000();
                 $pi = MoonCalc::getEquatorialHorizontalParallax($T);
                 $h0 = 0.7275 * $pi * 0.5667;
@@ -212,7 +195,8 @@ class RiseSetTransit
 
     private function getGeocentricEquatorialCoordinatesOfAstronomicalObject(
         int $diff = 0
-    ): GeocentricEquatorialSphericalCoordinates {
+    ): GeocentricEquatorialSphericalCoordinates
+    {
         $jd0 = $this->toi->getJulianDay0();
         $toi = TimeOfInterest::createFromJulianDay($jd0 + $diff);
 
@@ -220,5 +204,16 @@ class RiseSetTransit
         $astronomicalObject->setTimeOfInterest($toi);
 
         return $astronomicalObject->getGeocentricEquatorialSphericalCoordinates();
+    }
+
+    private function normalizeM(float $m): float
+    {
+        if ($m < 0) {
+            $m += 1;
+        } elseif ($m > 1) {
+            $m -= 1;
+        }
+
+        return $m;
     }
 }
