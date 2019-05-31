@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObjects;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
+use Andrmoel\AstronomyBundle\Entities\Time;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +16,7 @@ class MoonTest extends TestCase
      */
     public function getGeocentricEclipticalSphericalCoordinatesTest()
     {
-        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
+        $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
         $moon = new Moon($toi);
         $geoEclSphCoordinates = $moon->getGeocentricEclipticalSphericalCoordinates();
@@ -43,7 +44,7 @@ class MoonTest extends TestCase
      */
     public function getGeocentricEquatorialSphericalCoordinatesTest()
     {
-        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
+        $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
         $moon = new Moon($toi);
         $geoEquSphCoordinates = $moon->getGeocentricEquatorialSphericalCoordinates();
@@ -61,7 +62,7 @@ class MoonTest extends TestCase
      */
     public function getLocalHorizontalCoordinatesTest()
     {
-        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
+        $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
         // Berlin
         $location = new Location(52.524, 13.411);
@@ -82,7 +83,7 @@ class MoonTest extends TestCase
      */
     public function getIlluminatedFractionTest()
     {
-        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
+        $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
         $moon = new Moon($toi);
         $illuminatedFraction = $moon->getIlluminatedFraction();
@@ -95,14 +96,14 @@ class MoonTest extends TestCase
      */
     public function isWaxingMoonTest()
     {
-        $toi = new TimeOfInterest(new \DateTime('2018-09-17 00:00:00'));
+        $toi = TimeOfInterest::createFromString('2018-09-17 00:00:00');
 
         $moon = new Moon($toi);
         $isWaxingMoon = $moon->isWaxingMoon();
 
         $this->assertTrue($isWaxingMoon);
 
-        $toi = new TimeOfInterest(new \DateTime('2018-10-02 00:00:00'));
+        $toi = TimeOfInterest::createFromString('2018-10-02 00:00:00');
 
         $moon = new Moon($toi);
         $isWaxingMoon = $moon->isWaxingMoon();
@@ -116,7 +117,7 @@ class MoonTest extends TestCase
      */
     public function getPositionAngleOfMoonsBrightLimbTest()
     {
-        $toi = new TimeOfInterest(new \DateTime('1992-04-12 00:00:00'));
+        $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
         $moon = new Moon($toi);
         $x = $moon->getPositionAngleOfMoonsBrightLimb();

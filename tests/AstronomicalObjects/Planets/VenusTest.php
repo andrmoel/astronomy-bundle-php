@@ -14,7 +14,8 @@ class VenusTest extends TestCase
      */
     public function getHeliocentricEclipticalSphericalCoordinatesTest()
     {
-        $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
+        $toi = TimeOfInterest::createFromString('1992-12-20 00:00:00');
+
         $venus = new Venus($toi);
 
         $helEclSphCoordinates = $venus->getHeliocentricEclipticalSphericalCoordinates();
@@ -34,7 +35,8 @@ class VenusTest extends TestCase
      */
     public function getHeliocentricEclipticalRectangularCoordinatesTest()
     {
-        $toi = new TimeOfInterest(new \DateTime('1992-12-20 00:00:00'));
+        $toi = TimeOfInterest::createFromString('1992-12-20 00:00:00');
+
         $venus = new Venus($toi);
 
         $helEclRecCoordinates = $venus->getHeliocentricEclipticalRectangularCoordinates();

@@ -140,18 +140,18 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
     public function getUpperCulmination(Location $location): TimeOfInterest
     {
         // TODO Implement
-        return new TimeOfInterest();
+        return TimeOfInterest::createFromCurrentTime();
     }
 
     public function getSunrise(Location $location): TimeOfInterest
     {
         // TODO Implement
-        return new TimeOfInterest();
+        return TimeOfInterest::createFromCurrentTime();
     }
 
     public function getSunset(Location $location): TimeOfInterest
     {
         // TODO Implement
-        return new TimeOfInterest();
+        return TimeOfInterest::createFromCurrentTime();
     }
 }
