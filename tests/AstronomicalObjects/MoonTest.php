@@ -3,7 +3,6 @@
 namespace Andrmoel\AstronomyBundle\Tests\AstronomicalObjects;
 
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Moon;
-use Andrmoel\AstronomyBundle\Entities\Time;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use PHPUnit\Framework\TestCase;
@@ -35,7 +34,18 @@ class MoonTest extends TestCase
      */
     public function getGeocentricEquatorialRectangularCoordinatesTest()
     {
-        // TODO
+        $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
+
+        $moon = new Moon($toi);
+        $geoEquRecCoords = $moon->getGeocentricEquatorialRectangularCoordinates();
+
+        $X = $geoEquRecCoords->getX();
+        $Y = $geoEquRecCoords->getY();
+        $Z = $geoEquRecCoords->getZ();
+
+        $this->assertEquals(-0.001682, round($X, 6));
+        $this->assertEquals(0.001701, round($Y, 6));
+        $this->assertEquals(0.0005860, round($Z, 6));
     }
 
     /**
