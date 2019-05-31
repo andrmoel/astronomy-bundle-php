@@ -10,7 +10,6 @@ use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Planet;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Saturn;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Uranus;
 use Andrmoel\AstronomyBundle\AstronomicalObjects\Planets\Venus;
-use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
