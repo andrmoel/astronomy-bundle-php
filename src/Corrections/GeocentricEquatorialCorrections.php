@@ -11,6 +11,11 @@ use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinate
 use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
+/**
+ * Class GeocentricEquatorialCorrections
+ * @package Andrmoel\AstronomyBundle\Corrections
+ * @deprecated do not use
+ */
 class GeocentricEquatorialCorrections
 {
     private $toi;

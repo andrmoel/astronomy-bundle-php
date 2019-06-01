@@ -314,6 +314,11 @@ The result of the calculation should be:\
 *Azimuth: 291.0°*\
 *Altitude: 8.4°*
 
+The result of the altitude is **corrected by atmospheric refraction**.
+To obtain the local horizontal coordinates **without correction of refraction**, pass `false` as second parameter:
+
+`$locHorCoord = $sun->getLocalHorizontalCoordinates($location, false);`
+
 <a name="sun-distance"></a>
 ### Distance of the sun to earth
 
@@ -401,6 +406,11 @@ $altitude = $locHorCoord->getAltitude();
 The result of the calculation should be:\
 *Azimuth: 153.3°*\
 *Altitude: 12.2°*
+
+The result of the altitude is **corrected by atmospheric refraction**.
+To obtain the local horizontal coordinates **without correction of refraction**, pass `false` as second parameter:
+
+`$locHorCoord = $moon->getLocalHorizontalCoordinates($location, false);`
 
 <a name="moon-distance"></a>
 ### Distance of the moon to earth
@@ -549,6 +559,11 @@ $altitude = $locHorCoords->getAltitude();
 The result of the calculation should be:\
 *Azimuth: 130.202°*\
 *Altitude: 4.874°*
+
+The result of the altitude is **corrected by atmospheric refraction**.
+To obtain the local horizontal coordinates **without correction of refraction**, pass `false` as second parameter:
+
+`$locHorCoord = $venus->getLocalHorizontalCoordinates($location, false);`
 
 <a name="planet-rise"></a>
 ### Rise, set and upper culmination
@@ -705,6 +720,11 @@ The result of the calculation for the second contact (C2) should be:\
 *Time of Interest: 2017-06-21 17:19:24 UTC*\
 *Azimuth of sun: 118.9°*\
 *Altitude of sun: 41.4°*
+
+The result of the altitude is **corrected by atmospheric refraction**.
+To obtain the local horizontal coordinates **without correction of refraction**, pass `false` as parameter:
+
+`$locHorCoord = $c2->getLocalHorizontalCoordinates(false);`
 
 <a name="lunar-eclipse"></a>
 # Lunar eclipse

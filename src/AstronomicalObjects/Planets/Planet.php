@@ -15,6 +15,7 @@ use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalRectangularCoordi
 use Andrmoel\AstronomyBundle\Coordinates\HeliocentricEclipticalSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
 use Andrmoel\AstronomyBundle\Corrections\GeocentricEclipticalSphericalCorrections;
+use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Events\RiseSetTransit\RiseSetTransit;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
@@ -107,11 +108,17 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
             ->getGeocentricEquatorialSphericalCoordinates($this->T);
     }
 
-    public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
+    public function getLocalHorizontalCoordinates(Location $location, bool $refraction = true): LocalHorizontalCoordinates
     {
-        return $this
+        $locHorCoord = $this
             ->getGeocentricEquatorialSphericalCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->T);
+
+        if ($refraction) {
+            $locHorCoord = LocalHorizontalCorrections::correctAtmosphericRefraction($locHorCoord);
+        }
+
+        return $locHorCoord;
     }
 
     public function getRise(Location $location): TimeOfInterest
