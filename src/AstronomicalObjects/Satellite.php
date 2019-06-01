@@ -2,8 +2,6 @@
 
 namespace Andrmoel\AstronomyBundle\AstronomicalObjects;
 
-use Andrmoel\AstronomyBundle\TimeOfInterest;
-
 class Satellite extends AstronomicalObject
 {
     /** @var string two line element */
