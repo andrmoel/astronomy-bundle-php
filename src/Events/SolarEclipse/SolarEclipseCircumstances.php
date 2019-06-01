@@ -3,6 +3,7 @@
 namespace Andrmoel\AstronomyBundle\Events\SolarEclipse;
 
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 
 class SolarEclipseCircumstances
 {
@@ -23,7 +24,7 @@ class SolarEclipseCircumstances
     private $l1s;
     private $l2s;
     private $n2;
-    
+
     private $p;
     private $alt;
     private $q;
@@ -220,7 +221,7 @@ class SolarEclipseCircumstances
         $this->sunAzimuth = $sunAzimuth;
     }
 
-    public function getLocalHorizontalCoordinates(): LocalHorizontalCoordinates
+    public function getLocalHorizontalCoordinates(bool $refraction = true): LocalHorizontalCoordinates
     {
         $azimuth = rad2deg($this->sunAzimuth);
         if ($azimuth < 0) {
@@ -228,6 +229,12 @@ class SolarEclipseCircumstances
         }
         $altitude = rad2deg($this->sunAltitude);
 
-        return new LocalHorizontalCoordinates($azimuth, $altitude);
+        $locHorCoord = new LocalHorizontalCoordinates($azimuth, $altitude);
+
+        if ($refraction) {
+            $locHorCoord = LocalHorizontalCorrections::correctAtmosphericRefraction($locHorCoord);
+        }
+
+        return $locHorCoord;
     }
 }

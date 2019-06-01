@@ -78,7 +78,7 @@ class MoonTest extends TestCase
         $location = new Location(52.524, 13.411);
 
         $moon = new Moon($toi);
-        $localHorizontalCoordinates = $moon->getLocalHorizontalCoordinates($location);
+        $localHorizontalCoordinates = $moon->getLocalHorizontalCoordinates($location, false);
 
         $azimuth = $localHorizontalCoordinates->getAzimuth();
         $altitude = $localHorizontalCoordinates->getAltitude();

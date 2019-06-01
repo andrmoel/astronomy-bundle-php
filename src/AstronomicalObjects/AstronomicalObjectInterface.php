@@ -21,7 +21,7 @@ interface AstronomicalObjectInterface
 
     public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates;
 
-    public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates;
+    public function getLocalHorizontalCoordinates(Location $location, bool $refraction = true): LocalHorizontalCoordinates;
 
     public function getDistanceToEarth(): float;
 }
