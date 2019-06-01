@@ -3,7 +3,6 @@
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
 use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class GeocentricEclipticalRectangularCoordinates
@@ -48,21 +47,24 @@ class GeocentricEclipticalRectangularCoordinates
         return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $r);
     }
 
-    // TODO
     public function getGeocentricEquatorialRectangularCoordinates(float $T): GeocentricEquatorialRectangularCoordinates
     {
-        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
+        return $this
+            ->getGeocentricEclipticalSphericalCoordinates()
+            ->getGeocentricEquatorialRectangularCoordinates($T);
     }
 
-    // TODO
     public function getGeocentricEquatorialSphericalCoordinates(float $T): GeocentricEquatorialSphericalCoordinates
     {
-        return new GeocentricEquatorialSphericalCoordinates(0, 0, 0);
+        return $this
+            ->getGeocentricEclipticalSphericalCoordinates()
+            ->getGeocentricEquatorialSphericalCoordinates($T);
     }
 
-    // TODO
-    public function getLocalHorizontalCoordinates(Location $location, TimeOfInterest $toi): LocalHorizontalCoordinates
+    public function getLocalHorizontalCoordinates(Location $location, float $T): LocalHorizontalCoordinates
     {
-        return new LocalHorizontalCoordinates(0, 0);
+        return $this
+            ->getGeocentricEclipticalSphericalCoordinates()
+            ->getLocalHorizontalCoordinates($location, $T);
     }
 }
