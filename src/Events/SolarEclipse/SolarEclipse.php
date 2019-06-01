@@ -102,9 +102,9 @@ class SolarEclipse
         $t = $t + $t0 - (($deltaT - 0.05) / 3600.0);
 
         if ($t < 0.0) {
-            $jd--;
+            $JD--;
         } elseif ($t >= 24.0) {
-            $jd++;
+            $JD++;
         }
 
         $JD += ($t + 12) / 24;
