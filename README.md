@@ -27,7 +27,7 @@
     1. [Solar Eclipse](#solar-eclipse)
         1. [Create a Solar Eclipse](#solar-eclipse-create)
         1. [Type, Obscuration, Magnitude, Duration](#solar-eclipse-type)
-        1. [Contacts (C1, C2, MAX, C3, C4)](#solar-eclipse-contacts)
+        1. [Contacts (C1, C2, MAX, C3, C4)](#solar-eclipse-contact)
     2. [Lunar Eclipse](#lunar-eclipse)
 10. [Other calculations](#other)
     1. [Distance between two locations](#distance)
@@ -655,7 +655,7 @@ The result of the calculation should be:\
 *Magnitude: 0.79*\
 *Moon-sun-ratio: 1.05*
 
-<a name="solar-eclipseContact"></a>
+<a name="solar-eclipse-contact"></a>
 ### Contacts (C1, C2, MAX, C3, C4)
 
 It is possible to obtains the current circumstances for each contact type (C1, C2, MAX, C3 and X4) for an eclipse.
