@@ -22,11 +22,11 @@ class GeocentricEclipticalRectangularCoordinatesTest extends TestCase
 
         $lat = $geoEclSphCoord->getLatitude();
         $lon = $geoEclSphCoord->getLongitude();
-        $r = $geoEclSphCoord->getRadiusVector();
+        $radiusVector = $geoEclSphCoord->getRadiusVector();
 
         $this->assertEquals(-2.084721, round($lat, 6));
         $this->assertEquals(313.082894, round($lon, 6));
-        $this->assertEquals(0.910845, round($r, 6));
+        $this->assertEquals(0.910845, round($radiusVector, 6));
     }
 
     /**
@@ -64,13 +64,13 @@ class GeocentricEclipticalRectangularCoordinatesTest extends TestCase
         $geoEclRecCoord = new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
         $geoEquSphCoord = $geoEclRecCoord->getGeocentricEquatorialSphericalCoordinates($T);
 
-        $ra = $geoEquSphCoord->getRightAscension();
-        $d = $geoEquSphCoord->getDeclination();
-        $r = $geoEquSphCoord->getRadiusVector();
+        $rightAscension = $geoEquSphCoord->getRightAscension();
+        $declination = $geoEquSphCoord->getDeclination();
+        $radiusVector = $geoEquSphCoord->getRadiusVector();
 
-        $this->assertEquals(316.174262, round($ra, 6));
-        $this->assertEquals(-18.887468, round($d, 6));
-        $this->assertEquals(0.910845, round($r, 6));
+        $this->assertEquals(316.174262, round($rightAscension, 6));
+        $this->assertEquals(-18.887468, round($declination, 6));
+        $this->assertEquals(0.910845, round($radiusVector, 6));
     }
 
     /**
