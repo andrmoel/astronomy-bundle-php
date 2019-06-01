@@ -10,6 +10,28 @@ class GeocentricEquatorialSphericalCoordinatesTest extends TestCase
 {
     /**
      * @test
+     */
+    public function getGeocentricEclipticalRectangularCoordinatesTest()
+    {
+        $T = -0.070321697467488; // 1992-12-20 00:00:00
+        $rightAscension = 316.174262;
+        $declination = -18.887468;
+        $radiusVector = 0.910845;
+
+        $geoEquSphCoord = new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $radiusVector);
+        $geoEclRecCoord = $geoEquSphCoord->getGeocentricEclipticalRectangularCoordinates($T);
+
+        $X = $geoEclRecCoord->getX();
+        $Y = $geoEclRecCoord->getY();
+        $Z = $geoEclRecCoord->getZ();
+
+        $this->assertEquals(0.621746, round($X, 6));
+        $this->assertEquals(-0.664810, round($Y, 6));
+        $this->assertEquals(-0.033134, round($Z, 6));
+    }
+
+    /**
+     * @test
      * Meeus 13.a
      */
     public function getGeocentricEclipticalSphericalCoordinatesTest()
@@ -28,9 +50,25 @@ class GeocentricEquatorialSphericalCoordinatesTest extends TestCase
         $this->assertEquals(113.215630, round($lon, 6));
     }
 
+    /**
+     * @test
+     */
     public function getGeocentricEquatorialRectangularCoordinatesTest()
     {
-        // TODO ...
+        $rightAscension = 316.174262;
+        $declination = -18.887468;
+        $radiusVector = 0.910845;
+
+        $geoEquSphCoord = new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $radiusVector);
+        $geoEquRecCoord = $geoEquSphCoord->getGeocentricEquatorialRectangularCoordinates();
+
+        $X = $geoEquRecCoord->getX();
+        $Y = $geoEquRecCoord->getY();
+        $Z = $geoEquRecCoord->getZ();
+
+        $this->assertEquals(0.621746, round($X, 6));
+        $this->assertEquals(-0.596769, round($Y, 6));
+        $this->assertEquals(-0.29485, round($Z, 6));
     }
 
     /**
@@ -41,10 +79,10 @@ class GeocentricEquatorialSphericalCoordinatesTest extends TestCase
     {
         $location = new Location(38.921389, -77.065556);
         $T = -0.12727429842574; // 1987-04-10 19:21:00
-        $ra = 347.3193375; // 23h09m16.641s
-        $d = -6.719891667; // 6°43'11.61"
+        $rightAscension = 347.3193375;
+        $declination = -6.719891667;
 
-        $geoEquSphCoord = new GeocentricEquatorialSphericalCoordinates($ra, $d);
+        $geoEquSphCoord = new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination);
         $locHorCoord = $geoEquSphCoord->getLocalHorizontalCoordinates($location, $T);
 
         $azimuth = $locHorCoord->getAzimuth();

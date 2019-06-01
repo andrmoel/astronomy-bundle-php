@@ -35,6 +35,13 @@ class GeocentricEquatorialSphericalCoordinates
         return $this->radiusVector;
     }
 
+    public function getGeocentricEclipticalRectangularCoordinates(float $T): GeocentricEclipticalRectangularCoordinates
+    {
+        return $this
+            ->getGeocentricEclipticalSphericalCoordinates($T)
+            ->getGeocentricEclipticalRectangularCoordinates();
+    }
+
     public function getGeocentricEclipticalSphericalCoordinates(float $T): GeocentricEclipticalSphericalCoordinates
     {
         $eps = EarthCalc::getTrueObliquityOfEcliptic($T);
