@@ -4,30 +4,30 @@ namespace Andrmoel\AstronomyBundle\Coordinates;
 
 class HeliocentricEquatorialSphericalCoordinates
 {
-    private $X = 0;
-    private $Y = 0;
-    private $Z = 0;
+    private $rightAscension = 0;
+    private $declination = 0;
+    private $radiusVector = 0;
 
-    public function __construct(float $X, float $Y, float $Z)
+    public function __construct(float $rightAscension, float $declination, float $radiusVector = 0.0)
     {
-        $this->X = $X;
-        $this->Y = $Y;
-        $this->Z = $Z;
+        $this->rightAscension = $rightAscension;
+        $this->declination = $declination;
+        $this->radiusVector = $radiusVector;
     }
 
-    public function getX(): float
+    public function getRightAscension(): float
     {
-        return $this->X;
+        return $this->rightAscension;
     }
 
-    public function getY(): float
+    public function getDeclination(): float
     {
-        return $this->Y;
+        return $this->declination;
     }
 
-    public function getZ(): float
+    public function getRadiusVector(): float
     {
-        return $this->Z;
+        return $this->radiusVector;
     }
 
     // TODO
@@ -40,6 +40,20 @@ class HeliocentricEquatorialSphericalCoordinates
     public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
     {
         return new HeliocentricEclipticalSphericalCoordinates(0, 0, 0);
+    }
+
+    // TODO Test!
+    public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates
+    {
+        $raRad = deg2rad($this->rightAscension);
+        $dRad = deg2rad($this->declination);
+        $R = $this->radiusVector;
+
+        $X = cos($dRad) * cos($raRad) * $R;
+        $Y = cos($dRad) * sin($raRad) * $R;
+        $Z = sin($dRad) * $R;
+
+        return new HeliocentricEquatorialRectangularCoordinates($X, $Y, $Z);
     }
 
     // TODO

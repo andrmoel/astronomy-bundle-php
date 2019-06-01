@@ -29,9 +29,48 @@ class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
         $this->assertEquals(-0.033130, round($z, 6));
     }
 
+    /**
+     * @test
+     */
     public function getHeliocentricEquatorialRectangularCoordinatesTest()
     {
-        // TODO
+        $T = -0.070321697467488;
+        $lat = -2.620603;
+        $lon = 26.11412;
+        $radiusVector = 0.724602;
+
+        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
+        $helEquRecCoord = $helEclSphCoord->getHeliocentricEquatorialRectangularCoordinates($T);
+
+        $X = $helEquRecCoord->getX();
+        $Y = $helEquRecCoord->getY();
+        $Z = $helEquRecCoord->getZ();
+
+        $this->assertEquals(0.649954, round($X, 6));
+        $this->assertEquals(0.305495, round($Y, 6));
+        $this->assertEquals(0.09634, round($Z, 6));
+    }
+
+    /**
+     * @test
+     */
+    public function getHeliocentricEquatorialSphericalCoordinatesTest()
+    {
+        $T = -0.070321697467488;
+        $lat = -2.620603;
+        $lon = 26.11412;
+        $radiusVector = 0.724602;
+
+        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
+        $helEquSphCoord = $helEclSphCoord->getHeliocentricEquatorialSphericalCoordinates($T);
+
+        $rightAcension = $helEquSphCoord->getRightAscension();
+        $declination = $helEquSphCoord->getDeclination();
+        $radiusVector = $helEquSphCoord->getRadiusVector();
+
+        $this->assertEquals(25.174714, round($rightAcension, 6));
+        $this->assertEquals(7.64045, round($declination, 6));
+        $this->assertEquals(0.724602, round($radiusVector, 6));
     }
 
     /**

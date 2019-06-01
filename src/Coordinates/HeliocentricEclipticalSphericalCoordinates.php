@@ -2,7 +2,9 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
+use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
 use Andrmoel\AstronomyBundle\Location;
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class HeliocentricEclipticalSphericalCoordinates
 {
@@ -44,10 +46,33 @@ class HeliocentricEclipticalSphericalCoordinates
         return new HeliocentricEclipticalRectangularCoordinates($x, $y, $z);
     }
 
-    // TODO
-    public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates
+    public function getHeliocentricEquatorialRectangularCoordinates(float $T): HeliocentricEquatorialRectangularCoordinates
     {
-        return new HeliocentricEquatorialRectangularCoordinates(0, 0, 0);
+        return $this
+            ->getHeliocentricEquatorialSphericalCoordinates($T)
+            ->getHeliocentricEquatorialRectangularCoordinates();
+    }
+
+    public function getHeliocentricEquatorialSphericalCoordinates(float $T): HeliocentricEquatorialSphericalCoordinates
+    {
+        $eps = EarthCalc::getTrueObliquityOfEcliptic($T);
+
+        $epsRad = deg2rad($eps);
+        $latRad = deg2rad($this->latitude);
+        $lonRad = deg2rad($this->longitude);
+
+        // Meeus 13.3
+        $rightAscensionRad = atan2(
+            sin($lonRad) * cos($epsRad) - (sin($latRad) / cos($latRad)) * sin($epsRad),
+            cos($lonRad)
+        );
+        $rightAscension = AngleUtil::normalizeAngle(rad2deg($rightAscensionRad));
+
+        // Meeus 13.4
+        $declinationRad = asin(sin($latRad) * cos($epsRad) + cos($latRad) * sin($epsRad) * sin($lonRad));
+        $declination = rad2deg($declinationRad);
+
+        return new HeliocentricEquatorialSphericalCoordinates($rightAscension, $declination, $this->radiusVector);
     }
 
     public function getGeocentricEclipticalRectangularCoordinates(float $T): GeocentricEclipticalRectangularCoordinates
