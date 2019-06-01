@@ -27,7 +27,7 @@
     1. [Solar Eclipse](#solar-eclipse)
         1. [Create a Solar Eclipse](#solar-eclipse-create)
         1. [Type, Obscuration, Magnitude, Duration](#solar-eclipse-type)
-        1. [Contacts (C1, C2, MAX, C3, C4)](#solar-eclipse-contacts)
+        1. [Contacts (C1, C2, MAX, C3, C4)](#solar-eclipse-contact)
     2. [Lunar Eclipse](#lunar-eclipse)
 10. [Other calculations](#other)
     1. [Distance between two locations](#distance)
@@ -36,10 +36,13 @@
 <a name="introduction"></a>
 # Introduction
 
-* ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**:
-This bundle on Version 0.X.X is still in development. Use on your own risk.
-A stable release will be provided with version 1.X.X.
+This library provides tools and methods for astronomical calculations.
+With this bundle it is possible to calculate the position of moon, sun and planets and several coordinate systems.
+For a higher accuracy, several corrections, like nutation and precision, were taken into account.
+It is also possible to calculate rise, set and culmination events for celestial objects.
+For a detailed see the table of contents.
 
+Most of the calculations are based on Jean Meeus 'Astronomical Algorithms' book and the VSOP87 theory.
 
 <a name="installation"></a>
 # Installation
@@ -314,7 +317,7 @@ The result of the calculation should be:\
 <a name="sun-distance"></a>
 ### Distance of the sun to earth
 
-**Example 1**: The current distance of the sun in kimometers can be calculated as follow:
+**Example 1**: The current distance of the sun in kilometers can be calculated as follow:
 
 ```php
 $sun = new Sun();
@@ -365,7 +368,7 @@ The result of the calculation should be:\
 <a name="moon-position"></a>
 ### Position of the moon
 
-The position of the moon can be calculated as explained in the following example.
+**Example 1**: Calculate the geocentric position of the moon for 12 April 1992 at 00:00 UTC.
 
 ```php
 $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
@@ -380,6 +383,24 @@ $declination = $geoEquSphCoord->getDeclination();
 The result of the calculation should be:\
 *Right ascension: 134.69°*\
 *Declination: 13.77°*
+
+**Example 2**: Calculate azimuth and altitude of the moon observed in Berlin, Germany for 20 May 2019 at 23:00 UTC
+
+```php
+$toi = TimeOfInterest::createFromString('2019-05-20 23:00:00');
+
+$location = new Location(52.524, 13.411); // Berlin
+
+$moon = new Moon($toi);
+
+$locHorCoord = $moon->getLocalHorizontalCoordinates($location);
+$azimuth = $locHorCoord->getAzimuth();
+$altitude = $locHorCoord->getAltitude();
+```
+
+The result of the calculation should be:\
+*Azimuth: 153.3°*\
+*Altitude: 12.2°*
 
 <a name="moon-distance"></a>
 ### Distance of the moon to earth
@@ -634,17 +655,61 @@ The result of the calculation should be:\
 *Magnitude: 0.79*\
 *Moon-sun-ratio: 1.05*
 
-<a name="solar-eclipseContact"></a>
+<a name="solar-eclipse-contact"></a>
 ### Contacts (C1, C2, MAX, C3, C4)
 
-TODO: Write some nice documentation :)
+It is possible to obtains the current circumstances for each contact type (C1, C2, MAX, C3 and X4) for an eclipse.
+
+* C1: First contact - Eclipse begins
+* C2: Second contact - Begin of totality or annularity
+* MAX: Maximum obscuration of eclipse
+* C3: Third content - End of totality or annularity
+* C4: Fourth contact - Eclipse ends
+
+```php
+$location = new Location(44.61040, -121.23848); // Madras, OR
+
+$toi = TimeOfInterest::createFromString('2017-08-21'); // Date of the eclipse (UTC)
+
+$solarEclipse = SolarEclipse::create($toi, $location);
+
+$c1 = $solarEclipse->getCircumstancesC1();
+$c2 = $solarEclipse->getCircumstancesC2();
+$max = $solarEclipse->getCircumstancesMax();
+$c3 = $solarEclipse->getCircumstancesC3();
+$c4 = $solarEclipse->getCircumstancesC4();
+```
+
+**Example**: Obtain the exact time of the second contact (C2) and the position of the sun.
+The solar eclipse happens on 21 August 2017 in Madras, Oregon.
+
+```php
+$location = new Location(44.61040, -121.23848); // Madras, OR
+
+$toi = TimeOfInterest::createFromString('2017-08-21'); // Date of the eclipse (UTC)
+
+$solarEclipse = SolarEclipse::create($toi, $location);
+
+$c2 = $solarEclipse->getCircumstancesC2();
+
+// Get time for C2
+$toiC2 = $solarEclipse->getTimeOfInterest($c2);
+
+// Get local horizontal coordinates (azimuth, altitude) of C2
+$locHorCoord = $c2->getLocalHorizontalCoordinates();
+$azimuth = $locHorCoord->getAzimuth();
+$altitude = $locHorCoord->getAltitude();
+```
+
+The result of the calculation for the second contact (C2) should be:\
+*Time of Interest: 2017-06-21 17:19:24 UTC*\
+*Azimuth of sun: 118.9°*\
+*Altitude of sun: 41.4°*
 
 <a name="lunar-eclipse"></a>
 # Lunar eclipse
 
 * ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **ATTENTION**: Feature not yet implemented
-
-TODO: Write some nice documentation :)
 
 <a name="other"></a>
 # Other calculations
