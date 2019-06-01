@@ -9,6 +9,7 @@ use Andrmoel\AstronomyBundle\Coordinates\GeocentricEclipticalSphericalCoordinate
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialRectangularCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\GeocentricEquatorialSphericalCoordinates;
 use Andrmoel\AstronomyBundle\Coordinates\LocalHorizontalCoordinates;
+use Andrmoel\AstronomyBundle\Corrections\LocalHorizontalCorrections;
 use Andrmoel\AstronomyBundle\Events\RiseSetTransit\RiseSetTransit;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\TimeOfInterest;
@@ -91,11 +92,17 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
             ->getGeocentricEquatorialSphericalCoordinates($this->T);
     }
 
-    public function getLocalHorizontalCoordinates(Location $location): LocalHorizontalCoordinates
+    public function getLocalHorizontalCoordinates(Location $location, bool $refraction = true): LocalHorizontalCoordinates
     {
-        return $this
+        $locHorCoord = $this
             ->getGeocentricEquatorialSphericalCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->T);
+
+        if ($refraction) {
+            $locHorCoord = LocalHorizontalCorrections::correctAtmosphericRefraction($locHorCoord);
+        }
+
+        return $locHorCoord;
     }
 
     /**
