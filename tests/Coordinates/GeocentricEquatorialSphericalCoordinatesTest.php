@@ -43,11 +43,11 @@ class GeocentricEquatorialSphericalCoordinatesTest extends TestCase
         $geoEquSphCoord = new GeocentricEquatorialSphericalCoordinates($ra, $d);
         $geoEclSphCoord = $geoEquSphCoord->getGeocentricEclipticalSphericalCoordinates($T);
 
-        $lat = $geoEclSphCoord->getLatitude();
         $lon = $geoEclSphCoord->getLongitude();
+        $lat = $geoEclSphCoord->getLatitude();
 
-        $this->assertEquals(6.684170, round($lat, 6));
         $this->assertEquals(113.215630, round($lon, 6));
+        $this->assertEquals(6.684170, round($lat, 6));
     }
 
     /**

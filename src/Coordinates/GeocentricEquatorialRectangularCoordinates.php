@@ -2,37 +2,11 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
+use Andrmoel\AstronomyBundle\Calculations\CoordinateTransformations;
 use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class GeocentricEquatorialRectangularCoordinates
+class GeocentricEquatorialRectangularCoordinates extends AbstractRectangularCoordinates
 {
-    private $X = 0;
-    private $Y = 0;
-    private $Z = 0;
-
-    public function __construct(float $X, float $Y, float $Z)
-    {
-        $this->X = $X;
-        $this->Y = $Y;
-        $this->Z = $Z;
-    }
-
-    public function getX(): float
-    {
-        return $this->X;
-    }
-
-    public function getY(): float
-    {
-        return $this->Y;
-    }
-
-    public function getZ(): float
-    {
-        return $this->Z;
-    }
-
     public function getGeocentricEclipticalRectangularCoordinates(float $T): GeocentricEclipticalRectangularCoordinates
     {
         return $this
@@ -49,16 +23,9 @@ class GeocentricEquatorialRectangularCoordinates
 
     public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
     {
-        // Meeus 33.2
-        $rightAscensionRad = atan2($this->Y, $this->X);
-        $rightAscension = AngleUtil::normalizeAngle(rad2deg($rightAscensionRad));
+        $coord = CoordinateTransformations::rectangular2spherical($this->x, $this->y, $this->z);
 
-        $declinationRad = atan($this->Z / sqrt(pow($this->X, 2) + pow($this->Y, 2)));
-        $declination = rad2deg($declinationRad);
-
-        $radiusVector = sqrt(pow($this->X, 2) + pow($this->Y, 2) + pow($this->Z, 2));
-
-        return new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination, $radiusVector);
+        return new GeocentricEquatorialSphericalCoordinates($coord[0], $coord[1], $coord[2]);
     }
 
     public function getLocalHorizontalCoordinates(Location $location, float $T): LocalHorizontalCoordinates

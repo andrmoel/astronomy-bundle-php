@@ -54,7 +54,7 @@ abstract class Planet extends AstronomicalObject implements PlanetInterface
         $L = AngleUtil::normalizeAngle(rad2deg($L));
         $B = rad2deg($B);
 
-        return new HeliocentricEclipticalSphericalCoordinates($B, $L, $R);
+        return new HeliocentricEclipticalSphericalCoordinates($L, $B, $R);
     }
 
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates

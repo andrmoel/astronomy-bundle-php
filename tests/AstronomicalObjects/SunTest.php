@@ -20,11 +20,11 @@ class SunTest extends TestCase
         $sun = new Sun($toi);
         $geoEclSphCoord = $sun->getGeocentricEclipticalSphericalCoordinates();
 
-        $lat = $geoEclSphCoord->getLatitude();
         $lon = $geoEclSphCoord->getLongitude();
+        $lat = $geoEclSphCoord->getLatitude();
 
-        $this->assertEquals(0.0002, round($lat, 5));
         $this->assertEquals(199.90599, round($lon, 5));
+        $this->assertEquals(0.0002, round($lat, 5));
     }
 
     /**

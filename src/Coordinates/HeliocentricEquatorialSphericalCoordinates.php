@@ -2,58 +2,40 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-class HeliocentricEquatorialSphericalCoordinates
+use Andrmoel\AstronomyBundle\Calculations\CoordinateTransformations;
+
+class HeliocentricEquatorialSphericalCoordinates extends AbstractEquatorialSphericalCoordinates
 {
-    private $rightAscension = 0;
-    private $declination = 0;
-    private $radiusVector = 0;
-
-    public function __construct(float $rightAscension, float $declination, float $radiusVector = 0.0)
+    public function getHeliocentricEclipticalRectangularCoordinates(
+        float $T
+    ): HeliocentricEclipticalRectangularCoordinates
     {
-        $this->rightAscension = $rightAscension;
-        $this->declination = $declination;
-        $this->radiusVector = $radiusVector;
+        return $this
+            ->getHeliocentricEclipticalSphericalCoordinates($T)
+            ->getHeliocentricEclipticalRectangularCoordinates();
     }
 
-    public function getRightAscension(): float
+    public function getHeliocentricEclipticalSphericalCoordinates(float $T): HeliocentricEclipticalSphericalCoordinates
     {
-        return $this->rightAscension;
+        $coord = CoordinateTransformations::equatorialSpherical2eclipticalSpherical(
+            $this->rightAscension,
+            $this->declination,
+            $this->radiusVector,
+            $T
+        );
+
+        return new HeliocentricEclipticalSphericalCoordinates($coord[0], $coord[1], $coord[2]);
     }
 
-    public function getDeclination(): float
-    {
-        return $this->declination;
-    }
-
-    public function getRadiusVector(): float
-    {
-        return $this->radiusVector;
-    }
-
-    // TODO
-    public function getHeliocentricEclipticalRectangularCoordinates(): HeliocentricEclipticalRectangularCoordinates
-    {
-        return new HeliocentricEclipticalRectangularCoordinates(0, 0, 0);
-    }
-
-    // TODO
-    public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
-    {
-        return new HeliocentricEclipticalSphericalCoordinates(0, 0, 0);
-    }
-
-    // TODO Test!
     public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates
     {
-        $raRad = deg2rad($this->rightAscension);
-        $dRad = deg2rad($this->declination);
-        $R = $this->radiusVector;
+        $coord = CoordinateTransformations::spherical2rectangular(
+            $this->rightAscension,
+            $this->declination,
+            $this->radiusVector
+        );
 
-        $X = cos($dRad) * cos($raRad) * $R;
-        $Y = cos($dRad) * sin($raRad) * $R;
-        $Z = sin($dRad) * $R;
-
-        return new HeliocentricEquatorialRectangularCoordinates($X, $Y, $Z);
+        return new HeliocentricEquatorialRectangularCoordinates($coord[0], $coord[1], $coord[2]);
     }
 
     // TODO

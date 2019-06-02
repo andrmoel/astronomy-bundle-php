@@ -13,11 +13,11 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
      */
     public function getGeocentricEclipticalRectangularCoordinatesTest()
     {
-        $lat = -2.084721;
         $lon = 313.082894;
+        $lat = -2.084721;
         $r = 0.910845;
 
-        $geoEclSphCoord = new GeocentricEclipticalSphericalCoordinates($lat, $lon, $r);
+        $geoEclSphCoord = new GeocentricEclipticalSphericalCoordinates($lon, $lat, $r);
         $geoEclRecCoord = $geoEclSphCoord->getGeocentricEclipticalRectangularCoordinates();
 
         $X = $geoEclRecCoord->getX();
@@ -35,11 +35,11 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
     public function getGeocentricEquatorialRectangularCoordinatesTest()
     {
         $T = 0.021;
-        $lat = 6.684170;
         $lon = 113.215630;
+        $lat = 6.684170;
         $r = 0.910845;
 
-        $geoEclSphCoord = new GeocentricEclipticalSphericalCoordinates($lat, $lon, $r);
+        $geoEclSphCoord = new GeocentricEclipticalSphericalCoordinates($lon, $lat, $r);
         $geoEquRecCoord = $geoEclSphCoord->getGeocentricEquatorialRectangularCoordinates($T);
 
         $X = $geoEquRecCoord->getX();
@@ -59,10 +59,10 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
     public function getGeocentricEquatorialSphericalCoordinatesTest()
     {
         $T = 0.021;
-        $lat = 6.684170;
         $lon = 113.215630;
+        $lat = 6.684170;
 
-        $geoEclSphCoord = new GeocentricEclipticalSphericalCoordinates($lat, $lon);
+        $geoEclSphCoord = new GeocentricEclipticalSphericalCoordinates($lon, $lat);
         $geoEquSphCoord = $geoEclSphCoord->getGeocentricEquatorialSphericalCoordinates($T);
 
         $ra = $geoEquSphCoord->getRightAscension();
@@ -79,10 +79,10 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
     {
         $location = new Location(38.921389, -77.065556);
         $T = -0.12727429842574; // 1987-04-10 19:21:00
-        $lat = -1.1827089713027;
         $lon = 345.72253406182;
+        $lat = -1.1827089713027;
 
-        $geoEclSphCoord = new GeocentricEclipticalSphericalCoordinates($lat, $lon);
+        $geoEclSphCoord = new GeocentricEclipticalSphericalCoordinates($lon, $lat);
         $locHorCoord = $geoEclSphCoord->getLocalHorizontalCoordinates($location, $T);
 
         $azimuth = $locHorCoord->getAzimuth();

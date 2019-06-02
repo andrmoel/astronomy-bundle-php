@@ -21,15 +21,15 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
     {
         $T = $this->T;
 
-        $lat = MoonCalc::getLatitude($T);
         $lon = MoonCalc::getLongitude($T);
+        $lat = MoonCalc::getLatitude($T);
         $radiusVector = DistanceUtil::km2au(MoonCalc::getDistanceToEarth($T));
 
         // Corrections
         $dPhi = EarthCalc::getNutationInLongitude($T);
         $lon = $lon + $dPhi;
 
-        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
+        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
     }
 
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates

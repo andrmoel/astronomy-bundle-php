@@ -13,11 +13,11 @@ class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
      */
     public function getHeliocentricEclipticalRectangularCoordinatesTest()
     {
-        $lat = -2.620603;
         $lon = 26.11412;
+        $lat = -2.620603;
         $radiusVector = 0.724602;
 
-        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
+        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
         $helEclRecCoord = $helEclSphCoord->getHeliocentricEclipticalRectangularCoordinates();
 
         $x = $helEclRecCoord->getX();
@@ -35,11 +35,11 @@ class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
     public function getHeliocentricEquatorialRectangularCoordinatesTest()
     {
         $T = -0.070321697467488;
-        $lat = -2.620603;
         $lon = 26.11412;
+        $lat = -2.620603;
         $radiusVector = 0.724602;
 
-        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
+        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
         $helEquRecCoord = $helEclSphCoord->getHeliocentricEquatorialRectangularCoordinates($T);
 
         $X = $helEquRecCoord->getX();
@@ -57,11 +57,11 @@ class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
     public function getHeliocentricEquatorialSphericalCoordinatesTest()
     {
         $T = -0.070321697467488;
-        $lat = -2.620603;
         $lon = 26.11412;
+        $lat = -2.620603;
         $radiusVector = 0.724602;
 
-        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
+        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
         $helEquSphCoord = $helEclSphCoord->getHeliocentricEquatorialSphericalCoordinates($T);
 
         $rightAcension = $helEquSphCoord->getRightAscension();
@@ -79,11 +79,11 @@ class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
     public function getGeocentricEclipticalRectangularCoordinatesTest()
     {
         $T = -0.070321697467488;
-        $lat = -2.620603;
         $lon = 26.11412;
+        $lat = -2.620603;
         $radiusVector = 0.724602;
 
-        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
+        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
         $geoEclRecCoord = $helEclSphCoord->getGeocentricEclipticalRectangularCoordinates($T);
 
         $X = $geoEclRecCoord->getX();
@@ -101,19 +101,19 @@ class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
     public function getGeocentricEclipticalSphericalCoordinatesTest()
     {
         $T = -0.070321697467488;
-        $lat = -2.620603;
         $lon = 26.11412;
+        $lat = -2.620603;
         $radiusVector = 0.724602;
 
-        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
+        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
         $geoEclSphCoord = $helEclSphCoord->getGeocentricEclipticalSphericalCoordinates($T);
 
         $lat = $geoEclSphCoord->getLatitude();
         $lon = $geoEclSphCoord->getLongitude();
         $radiusVector = $geoEclSphCoord->getRadiusVector();
 
-        $this->assertEquals(-2.084671, round($lat, 6));
         $this->assertEquals(313.082785, round($lon, 6));
+        $this->assertEquals(-2.084671, round($lat, 6));
         $this->assertEquals(0.910846, round($radiusVector, 6));
     }
 
@@ -123,11 +123,11 @@ class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
     public function getGeocentricEquatorialRectangularCoordinatesTest()
     {
         $T = -0.070321697467488;
-        $lat = -2.620603;
         $lon = 26.11412;
+        $lat = -2.620603;
         $radiusVector = 0.724602;
 
-        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
+        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
         $geoEquRecCoord = $helEclSphCoord->getGeocentricEquatorialRectangularCoordinates($T);
 
         $X = $geoEquRecCoord->getX();
@@ -145,11 +145,11 @@ class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
     public function getGeocentricEquatorialSphericalCoordinatesTest()
     {
         $T = -0.070321697467488;
-        $lat = -2.620603;
         $lon = 26.11412;
+        $lat = -2.620603;
         $radiusVector = 0.724602;
 
-        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
+        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
         $geoEquSphCoord = $helEclSphCoord->getGeocentricEquatorialSphericalCoordinates($T);
 
         $rightAscension = $geoEquSphCoord->getRightAscension();
@@ -172,7 +172,7 @@ class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
         $lon = 26.11412;
         $radiusVector = 0.724602;
 
-        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $radiusVector);
+        $helEclSphCoord = new HeliocentricEclipticalSphericalCoordinates($lon, $lat, $radiusVector);
         $locHorCoord = $helEclSphCoord->getLocalHorizontalCoordinates($location, $T);
 
         $azimuth = $locHorCoord->getAzimuth();
