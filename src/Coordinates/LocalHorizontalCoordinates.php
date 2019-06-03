@@ -27,22 +27,41 @@ class LocalHorizontalCoordinates
         return $this->altitude;
     }
 
-    // TODO
-    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
+    public function getGeocentricEclipticalRectangularCoordinates(
+        Location $location,
+        float $T
+    ): GeocentricEclipticalRectangularCoordinates
     {
-        return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
+        return $this
+            ->getGeocentricEquatorialSphericalCoordinates($location, $T)
+            ->getGeocentricEclipticalRectangularCoordinates($T);
     }
 
-    // TODO
-    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
+    public function getGeocentricEclipticalSphericalCoordinates(
+        Location $location,
+        float $T
+    ): GeocentricEclipticalSphericalCoordinates
     {
-        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
+        return $this
+            ->getGeocentricEquatorialSphericalCoordinates($location, $T)
+            ->getGeocentricEclipticalSphericalCoordinates($T);
+    }
+
+    public function getGeocentricEquatorialRectangularCoordinates(
+        Location $location,
+        float $T
+    ): GeocentricEquatorialRectangularCoordinates
+    {
+        return $this
+            ->getGeocentricEquatorialSphericalCoordinates($location, $T)
+            ->getGeocentricEquatorialRectangularCoordinates();
     }
 
     public function getGeocentricEquatorialSphericalCoordinates(
         Location $location,
         float $T
-    ): GeocentricEquatorialSphericalCoordinates {
+    ): GeocentricEquatorialSphericalCoordinates
+    {
         $lat = $location->getLatitude();
         $L = $location->getLongitudePositiveWest();
         $GAST = TimeCalc::getGreenwichApparentSiderealTime($T);

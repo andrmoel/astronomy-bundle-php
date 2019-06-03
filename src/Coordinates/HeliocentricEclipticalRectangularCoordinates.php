@@ -2,56 +2,32 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
+use Andrmoel\AstronomyBundle\Calculations\CoordinateTransformations;
 use Andrmoel\AstronomyBundle\Calculations\VSOP87\EarthRectangularVSOP87;
 use Andrmoel\AstronomyBundle\Calculations\VSOP87Calc;
-use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+use Andrmoel\AstronomyBundle\Location;
 
-class HeliocentricEclipticalRectangularCoordinates
+class HeliocentricEclipticalRectangularCoordinates extends AbstractRectangularCoordinates
 {
-    private $x = 0;
-    private $y = 0;
-    private $z = 0;
-
-    public function __construct(float $x, float $y, float $z)
-    {
-        $this->x = $x;
-        $this->y = $y;
-        $this->z = $z;
-    }
-
-    public function getX(): float
-    {
-        return $this->x;
-    }
-
-    public function getY(): float
-    {
-        return $this->y;
-    }
-
-    public function getZ(): float
-    {
-        return $this->z;
-    }
-
     public function getHeliocentricEclipticalSphericalCoordinates(): HeliocentricEclipticalSphericalCoordinates
     {
-        // Meeus 33.2
-        $lonRad = atan2($this->y, $this->x);
-        $lon = AngleUtil::normalizeAngle(rad2deg($lonRad));
+        $coord = CoordinateTransformations::rectangular2spherical($this->x, $this->y, $this->z);
 
-        $latRad = atan($this->z / sqrt(pow($this->x, 2) + pow($this->y, 2)));
-        $lat = rad2deg($latRad);
-
-        $r = sqrt(pow($this->x, 2) + pow($this->y, 2) + pow($this->z, 2));
-
-        return new HeliocentricEclipticalSphericalCoordinates($lat, $lon, $r);
+        return new HeliocentricEclipticalSphericalCoordinates($coord[0], $coord[1], $coord[2]);
     }
 
-    // TODO
-    public function getHeliocentricEquatorialRectangularCoordinates(): HeliocentricEquatorialRectangularCoordinates
+    public function getHeliocentricEquatorialRectangularCoordinates(float $T): HeliocentricEquatorialRectangularCoordinates
     {
-        return new HeliocentricEquatorialRectangularCoordinates(0, 0, 0);
+        return $this
+            ->getHeliocentricEclipticalSphericalCoordinates()
+            ->getHeliocentricEquatorialRectangularCoordinates($T);
+    }
+
+    public function getHeliocentricEquatorialSphericalCoordinates(float $T): HeliocentricEquatorialSphericalCoordinates
+    {
+        return $this
+            ->getHeliocentricEclipticalSphericalCoordinates()
+            ->getHeliocentricEquatorialSphericalCoordinates($T);
     }
 
     public function getGeocentricEclipticalRectangularCoordinates(float $T): GeocentricEclipticalRectangularCoordinates
@@ -68,21 +44,31 @@ class HeliocentricEclipticalRectangularCoordinates
         return new GeocentricEclipticalRectangularCoordinates($X, $Y, $Z);
     }
 
-    // TODO
-    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
+    public function getGeocentricEclipticalSphericalCoordinates(float $T): GeocentricEclipticalSphericalCoordinates
     {
-        return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
+        return $this
+            ->getGeocentricEclipticalRectangularCoordinates($T)
+            ->getGeocentricEclipticalSphericalCoordinates();
     }
 
-    // TODO
-    public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
+    public function getGeocentricEquatorialRectangularCoordinates(float $T): GeocentricEquatorialRectangularCoordinates
     {
-        return new GeocentricEquatorialRectangularCoordinates(0, 0, 0);
+        return $this
+            ->getGeocentricEclipticalRectangularCoordinates($T)
+            ->getGeocentricEquatorialRectangularCoordinates($T);
     }
 
-    // TODO
-    public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
+    public function getGeocentricEquatorialSphericalCoordinates(float $T): GeocentricEquatorialSphericalCoordinates
     {
-        return new GeocentricEquatorialSphericalCoordinates(0, 0, 0);
+        return $this
+            ->getGeocentricEclipticalRectangularCoordinates($T)
+            ->getGeocentricEquatorialSphericalCoordinates($T);
+    }
+
+    public function getLocalHorizontalCoordinates(Location $location, $T): LocalHorizontalCoordinates
+    {
+        return $this
+            ->getGeocentricEclipticalRectangularCoordinates($T)
+            ->getLocalHorizontalCoordinates($location, $T);
     }
 }

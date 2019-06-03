@@ -2,52 +2,36 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
+use Andrmoel\AstronomyBundle\Calculations\CoordinateTransformations;
 use Andrmoel\AstronomyBundle\Location;
-use Andrmoel\AstronomyBundle\TimeOfInterest;
 
-class GeocentricEquatorialRectangularCoordinates
+class GeocentricEquatorialRectangularCoordinates extends AbstractRectangularCoordinates
 {
-    private $X = 0;
-    private $Y = 0;
-    private $Z = 0;
-
-    public function __construct(float $X, float $Y, float $Z)
+    public function getGeocentricEclipticalRectangularCoordinates(float $T): GeocentricEclipticalRectangularCoordinates
     {
-        $this->X = $X;
-        $this->Y = $Y;
-        $this->Z = $Z;
+        return $this
+            ->getGeocentricEclipticalSphericalCoordinates($T)
+            ->getGeocentricEclipticalRectangularCoordinates();
     }
 
-    public function getX(): float
+    public function getGeocentricEclipticalSphericalCoordinates(float $T): GeocentricEclipticalSphericalCoordinates
     {
-        return $this->X;
+        return $this
+            ->getGeocentricEquatorialSphericalCoordinates()
+            ->getGeocentricEclipticalSphericalCoordinates($T);
     }
 
-    public function getY(): float
-    {
-        return $this->Y;
-    }
-
-    public function getZ(): float
-    {
-        return $this->Z;
-    }
-
-    // TODO
-    public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
-    {
-        return new GeocentricEclipticalSphericalCoordinates(0, 0, 0);
-    }
-
-    // TODO
     public function getGeocentricEquatorialSphericalCoordinates(): GeocentricEquatorialSphericalCoordinates
     {
-        return new GeocentricEquatorialSphericalCoordinates(0, 0, 0);
+        $coord = CoordinateTransformations::rectangular2spherical($this->x, $this->y, $this->z);
+
+        return new GeocentricEquatorialSphericalCoordinates($coord[0], $coord[1], $coord[2]);
     }
 
-    // TODO
-    public function getLocalHorizontalCoordinates(Location $location, TimeOfInterest $toi): LocalHorizontalCoordinates
+    public function getLocalHorizontalCoordinates(Location $location, float $T): LocalHorizontalCoordinates
     {
-        return new LocalHorizontalCoordinates(0, 0);
+        return $this
+            ->getGeocentricEquatorialSphericalCoordinates()
+            ->getLocalHorizontalCoordinates($location, $T);
     }
 }

@@ -2,68 +2,41 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
-use Andrmoel\AstronomyBundle\Calculations\EarthCalc;
+use Andrmoel\AstronomyBundle\Calculations\CoordinateTransformations;
 use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
 use Andrmoel\AstronomyBundle\Location;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
-class GeocentricEquatorialSphericalCoordinates
+class GeocentricEquatorialSphericalCoordinates extends AbstractEquatorialSphericalCoordinates
 {
-    private $rightAscension = 0;
-    private $declination = 0;
-    private $radiusVector = 0;
-
-    public function __construct(float $rightAscension, float $declination, float $radiusVector = 0.0)
+    public function getGeocentricEclipticalRectangularCoordinates(float $T): GeocentricEclipticalRectangularCoordinates
     {
-        $this->rightAscension = $rightAscension;
-        $this->declination = $declination;
-        $this->radiusVector = $radiusVector;
-    }
-
-    public function getRightAscension(): float
-    {
-        return $this->rightAscension;
-    }
-
-    public function getDeclination(): float
-    {
-        return $this->declination;
-    }
-
-    public function getRadiusVector(): float
-    {
-        return $this->radiusVector;
+        return $this
+            ->getGeocentricEclipticalSphericalCoordinates($T)
+            ->getGeocentricEclipticalRectangularCoordinates();
     }
 
     public function getGeocentricEclipticalSphericalCoordinates(float $T): GeocentricEclipticalSphericalCoordinates
     {
-        $eps = EarthCalc::getTrueObliquityOfEcliptic($T);
-        $raRad = deg2rad($this->rightAscension);
-        $dRad = deg2rad($this->declination);
-        $epsRad = deg2rad($eps);
+        $coord = CoordinateTransformations::equatorialSpherical2eclipticalSpherical(
+            $this->rightAscension,
+            $this->declination,
+            $this->radiusVector,
+            $T
+        );
 
-        // Meeus 13.1
-        $lonRad = atan2((sin($raRad) * cos($epsRad) + tan($dRad) * sin($epsRad)), cos($raRad));
-        $lon = AngleUtil::normalizeAngle(rad2deg($lonRad));
-
-        // Meeus 13.2
-        $latRad = asin(sin($dRad) * cos($epsRad) - cos($dRad) * sin($epsRad) * sin($raRad));
-        $lat = rad2deg($latRad);
-
-        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $this->radiusVector);
+        return new GeocentricEclipticalSphericalCoordinates($coord[0], $coord[1], $coord[2]);
     }
 
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
     {
-        $raRad = deg2rad($this->rightAscension);
-        $dRad = deg2rad($this->declination);
-        $R = $this->radiusVector;
+        $coord = CoordinateTransformations::spherical2rectangular(
+            $this->rightAscension,
+            $this->declination,
+            $this->radiusVector
+        );
 
-        $X = cos($dRad) * cos($raRad) * $R;
-        $Y = cos($dRad) * sin($raRad) * $R;
-        $Z = sin($dRad) * $R;
-
-        return new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
+        return new GeocentricEquatorialRectangularCoordinates($coord[0], $coord[1], $coord[2]);
     }
 
     public function getLocalHorizontalCoordinates(Location $location, float $T): LocalHorizontalCoordinates
