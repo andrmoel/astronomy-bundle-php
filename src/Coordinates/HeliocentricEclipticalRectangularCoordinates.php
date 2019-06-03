@@ -23,7 +23,6 @@ class HeliocentricEclipticalRectangularCoordinates extends AbstractRectangularCo
             ->getHeliocentricEquatorialRectangularCoordinates($T);
     }
 
-    // TODO Not working
     public function getHeliocentricEquatorialSphericalCoordinates(float $T): HeliocentricEquatorialSphericalCoordinates
     {
         return $this
