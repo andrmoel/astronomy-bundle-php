@@ -293,8 +293,8 @@ $lat = $geoEclSphCoordinates->getLatitude();
 ```
 
 The result of the calculation should be:\
-*Longitude: 56.544°*
-*Latitude: 0.0001°*\
+*Longitude: 56.544°*\
+*Latitude: 0.0001°*
 
 **Example 2**: Calculate azimuth and altitude of the sun observed in Berlin, Germany for 17 May 2019 at 17:50 UTC
 
