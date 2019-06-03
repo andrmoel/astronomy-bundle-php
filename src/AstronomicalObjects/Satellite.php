@@ -24,10 +24,6 @@ class Satellite extends AstronomicalObject
     private $meanAnomaly = 0;
     private $meanMotion = 0;
 
-
-    /**
-     * Constructor
-     */
     public function __construct($tle)
     {
         parent::__construct();
