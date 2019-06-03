@@ -14,14 +14,14 @@ class GeocentricEclipticalSphericalCorrections
         float $T
     ): GeocentricEclipticalSphericalCoordinates
     {
-        $lat = $coord->getLatitude();
         $lon = $coord->getLongitude();
+        $lat = $coord->getLatitude();
         $r = $coord->getRadiusVector();
 
         $dPhi = EarthCalc::getNutationInLongitude($T);
         $lon += $dPhi;
 
-        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $r);
+        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $r);
     }
 
     public static function correctEffectOfAberration(
@@ -50,6 +50,6 @@ class GeocentricEclipticalSphericalCorrections
         $lat += $dLat;
         $lon += $dLon;
 
-        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $r);
+        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $r);
     }
 }

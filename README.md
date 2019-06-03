@@ -243,8 +243,8 @@ $declination = 28.026183;
 $geoEquSphCoord = new GeocentricEquatorialSphericalCoordinates($rightAscension, $declination);
 $geoEclSphCoord = $geoEquSphCoord->getGeocentricEclipticalSphericalCoordinates($T);
 
-$lat = $geoEclSphCoord->getLatitude();
 $lon = $geoEclSphCoord->getLongitude();
+$lat = $geoEclSphCoord->getLatitude();
 ```
 
 **Example 2**: Convert Geocentric Equatorial Spherical Coordinates to Local Horizontal Coordinates
@@ -288,13 +288,13 @@ $toi = TimeOfInterest::createFromString('2019-05-17 17:50');
 $sun = new Sun($toi);
 
 $geoEclSphCoordinates = $sun->getGeocentricEclipticalSphericalCoordinates();
-$lat = $geoEclSphCoordinates->getLatitude();
 $lon = $geoEclSphCoordinates->getLongitude();
+$lat = $geoEclSphCoordinates->getLatitude();
 ```
 
 The result of the calculation should be:\
+*Longitude: 56.544°*
 *Latitude: 0.0001°*\
-*Altitude: 56.544°*
 
 **Example 2**: Calculate azimuth and altitude of the sun observed in Berlin, Germany for 17 May 2019 at 17:50 UTC
 
@@ -312,7 +312,7 @@ $altitude = $locHorCoord->getAltitude();
 
 The result of the calculation should be:\
 *Azimuth: 291.0°*\
-*Altitude: 8.4°*
+*Altitude: 8.49°*
 
 The result of the altitude is **corrected by atmospheric refraction**.
 To obtain the local horizontal coordinates **without correction of refraction**, pass `false` as second parameter:
@@ -405,7 +405,7 @@ $altitude = $locHorCoord->getAltitude();
 
 The result of the calculation should be:\
 *Azimuth: 153.3°*\
-*Altitude: 12.2°*
+*Altitude: 12.28°*
 
 The result of the altitude is **corrected by atmospheric refraction**.
 To obtain the local horizontal coordinates **without correction of refraction**, pass `false` as second parameter:
@@ -497,8 +497,8 @@ $toi = TimeOfInterest::createFromString('1992-12-20 00:00:00');
 $venus = new Venus($toi);
 
 $helEclSphCoord = $venus->getHeliocentricEclipticalSphericalCoordinates();
-$lat = $helEclSphCoord->getLatitude();
 $lon = $helEclSphCoord->getLongitude();
+$lat = $helEclSphCoord->getLatitude();
 $r = $helEclSphCoord->getRadiusVector();
 
 $helEclRecCoord = $venus->getHeliocentricEclipticalRectangularCoordinates();
@@ -507,8 +507,8 @@ $y = $helEclRecCoord->getY();
 $z = $helEclRecCoord->getZ();
 ```
 The result of the calculation should be:\
-*Latitude: -2.62063°*\
 *Longitude: 26.11412°*\
+*Latitude: -2.62063°*\
 *Radius vector: 0.72460*\
 *X: 0.64995327095595*\
 *Y: 0.31860745636351*\
@@ -528,8 +528,8 @@ $toi = TimeOfInterest::createFromString('2018-10-25 07:15:00');
 $venus = new Venus($toi);
 
 $geoEclSphCoords = $venus->getGeocentricEclipticalSphericalCoordinates();
-$lat = $geoEclSphCoords->getLatitude();
 $lon = $geoEclSphCoords->getLongitude();
+$lat = $geoEclSphCoords->getLatitude();
 
 $geoEclSphCoords = $venus->getGeocentricEquatorialSphericalCoordinates();
 $rightAscension = $geoEclSphCoords->getRightAscension();
@@ -537,8 +537,8 @@ $declination = $geoEclSphCoords->getDeclination();
 ```
 
 The result of the calculation should be:\
-*Latitude: -6.476359° (-6°28'34.891")*\
 *Longitude: 213.898092° (213°53'53.131")*\
+*Latitude: -6.476359° (-6°28'34.891")*\
 *Right ascension: 209.340427° (13h57m21.702s)*\
 *Declination: -18.898191° (-18°53'53.487")*
 
@@ -558,7 +558,7 @@ $altitude = $locHorCoords->getAltitude();
 
 The result of the calculation should be:\
 *Azimuth: 130.202°*\
-*Altitude: 4.874°*
+*Altitude: 5.038°*
 
 The result of the altitude is **corrected by atmospheric refraction**.
 To obtain the local horizontal coordinates **without correction of refraction**, pass `false` as second parameter:

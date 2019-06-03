@@ -30,8 +30,8 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
         $earth = new Earth($this->toi);
         $helEclSphCoord = $earth->getHeliocentricEclipticalSphericalCoordinates();
 
-        $B = $helEclSphCoord->getLatitude();
         $L = $helEclSphCoord->getLongitude();
+        $B = $helEclSphCoord->getLatitude();
         $R = $helEclSphCoord->getRadiusVector();
 
         $beta = -1 * $B;
@@ -45,8 +45,8 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
         $dTheta = -0.00002509167; // 0.09033"
         $dBeta = 0.000010878 * (cos($lonCRad) - sin($lonCRad)); // 0.000010878 = 0.03916"
 
-        $lat = $beta + $dBeta;
         $lon = $Theta + $dTheta;
+        $lat = $beta + $dBeta;
 
         // Corrections
         $dPhi = EarthCalc::getNutationInLongitude($T);
@@ -55,7 +55,7 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
         $lon = $lon + $dPhi - 0.005691611111 / $R;
         $lon = AngleUtil::normalizeAngle($lon);
 
-        return new GeocentricEclipticalSphericalCoordinates($lat, $lon, $R);
+        return new GeocentricEclipticalSphericalCoordinates($lon, $lat, $R);
     }
 
     public function getGeocentricEquatorialRectangularCoordinates(): GeocentricEquatorialRectangularCoordinates
