@@ -2,6 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+
 abstract class AbstractEclipticalSphericalCoordinates
 {
     protected $longitude = 0.0;
@@ -13,6 +15,13 @@ abstract class AbstractEclipticalSphericalCoordinates
         $this->longitude = $longitude;
         $this->latitude = $latitude;
         $this->radiusVector = $radiusVector;
+    }
+
+    public function __toString()
+    {
+        return 'Longitude: ' . AngleUtil::dec2angle($this->longitude) . "\n"
+            . 'Latitude: ' . AngleUtil::dec2angle($this->latitude) . "\n"
+            . 'Radius Vector: ' . $this->radiusVector . "\n";
     }
 
     public function getLongitude(): float

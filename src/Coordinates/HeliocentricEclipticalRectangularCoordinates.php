@@ -16,16 +16,19 @@ class HeliocentricEclipticalRectangularCoordinates extends AbstractRectangularCo
         return new HeliocentricEclipticalSphericalCoordinates($coord[0], $coord[1], $coord[2]);
     }
 
-    // TODO
     public function getHeliocentricEquatorialRectangularCoordinates(float $T): HeliocentricEquatorialRectangularCoordinates
     {
-        return new HeliocentricEquatorialRectangularCoordinates(0, 0, 0);
+        return $this
+            ->getHeliocentricEclipticalSphericalCoordinates()
+            ->getHeliocentricEquatorialRectangularCoordinates($T);
     }
 
-    // TODO
+    // TODO Not working
     public function getHeliocentricEquatorialSphericalCoordinates(float $T): HeliocentricEquatorialSphericalCoordinates
     {
-        return new HeliocentricEquatorialSphericalCoordinates(0, 0, 0);
+        return $this
+            ->getHeliocentricEclipticalSphericalCoordinates()
+            ->getHeliocentricEquatorialSphericalCoordinates($T);
     }
 
     public function getGeocentricEclipticalRectangularCoordinates(float $T): GeocentricEclipticalRectangularCoordinates

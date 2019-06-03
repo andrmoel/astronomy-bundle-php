@@ -8,26 +8,34 @@ use PHPUnit\Framework\TestCase;
 
 class GeocentricEquatorialRectangularCoordinatesTest extends TestCase
 {
+    private $T = -0.070321697467488; // 1992-12-20 00:00:00
+
+    /** @var GeocentricEquatorialRectangularCoordinates */
+    private $geoEquRecCoord;
+
+    public function setUp()
+    {
+        $x = 0.6300182;
+        $y = -0.5808598;
+        $z = -0.2871083;
+
+        $this->geoEquRecCoord = new GeocentricEquatorialRectangularCoordinates($x, $y, $z);
+    }
+
     /**
      * @test
      */
     public function getGeocentricEclipticalRectangularCoordinatesTest()
     {
-        $T = -0.070321697467488; // 1992-12-20 00:00:00
-        $X = 0.621746;
-        $Y = -0.596769;
-        $Z = -0.29485;
+        $geoEclRecCoord = $this->geoEquRecCoord->getGeocentricEclipticalRectangularCoordinates($this->T);
 
-        $geoEquRecCoord = new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
-        $geoEclRecCoord = $geoEquRecCoord->getGeocentricEclipticalRectangularCoordinates($T);
+        $x = $geoEclRecCoord->getX();
+        $y = $geoEclRecCoord->getY();
+        $z = $geoEclRecCoord->getZ();
 
-        $X = $geoEclRecCoord->getX();
-        $Y = $geoEclRecCoord->getY();
-        $Z = $geoEclRecCoord->getZ();
-
-        $this->assertEquals(0.621746, round($X, 6));
-        $this->assertEquals(-0.664810, round($Y, 6));
-        $this->assertEquals(-0.033134, round($Z, 6));
+        $this->assertEquals(0.630018, round($x, 6));
+        $this->assertEquals(-0.647134, round($y, 6));
+        $this->assertEquals(-0.03236, round($z, 6));
     }
 
     /**
@@ -35,21 +43,15 @@ class GeocentricEquatorialRectangularCoordinatesTest extends TestCase
      */
     public function getGeocentricEclipticalSphericalCoordinatesTest()
     {
-        $T = -0.070321697467488; // 1992-12-20 00:00:00
-        $X = 0.621746;
-        $Y = -0.596769;
-        $Z = -0.29485;
+        $geoEclSphCoord = $this->geoEquRecCoord->getGeocentricEclipticalSphericalCoordinates($this->T);
 
-        $geoEquRecCoord = new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
-        $geoEclSphCoord = $geoEquRecCoord->getGeocentricEclipticalSphericalCoordinates($T);
-
-        $lat = $geoEclSphCoord->getLatitude();
-        $lon = $geoEclSphCoord->getLongitude();
+        $longitude = $geoEclSphCoord->getLongitude();
+        $latitude = $geoEclSphCoord->getLatitude();
         $radiusVector = $geoEclSphCoord->getRadiusVector();
 
-        $this->assertEquals(-2.08473, round($lat, 6));
-        $this->assertEquals(313.082908, round($lon, 6));
-        $this->assertEquals(0.910845, round($radiusVector, 6));
+        $this->assertEquals(314.232204, round($longitude, 6));
+        $this->assertEquals(-2.051987, round($latitude, 6));
+        $this->assertEquals(0.903743, round($radiusVector, 6));
     }
 
     /**
@@ -57,20 +59,15 @@ class GeocentricEquatorialRectangularCoordinatesTest extends TestCase
      */
     public function getGeocentricEquatorialSphericalCoordinatesTest()
     {
-        $X = 0.621746;
-        $Y = -0.596769;
-        $Z = -0.29485;
-
-        $geoEquRecCoord = new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
-        $geoEquSphCoord = $geoEquRecCoord->getGeocentricEquatorialSphericalCoordinates();
+        $geoEquSphCoord = $this->geoEquRecCoord->getGeocentricEquatorialSphericalCoordinates();
 
         $rightAscension = $geoEquSphCoord->getRightAscension();
         $declination = $geoEquSphCoord->getDeclination();
         $radiusVector = $geoEquSphCoord->getRadiusVector();
 
-        $this->assertEquals(316.174279, round($rightAscension, 6));
-        $this->assertEquals(-18.887472, round($declination, 6));
-        $this->assertEquals(0.910845, round($radiusVector, 6));
+        $this->assertEquals(317.324778, round($rightAscension, 6));
+        $this->assertEquals(-18.523153, round($declination, 6));
+        $this->assertEquals(0.903743, round($radiusVector, 6));
     }
 
     /**
@@ -79,18 +76,13 @@ class GeocentricEquatorialRectangularCoordinatesTest extends TestCase
     public function getLocalHorizontalCoordinatesTest()
     {
         $location = new Location(38.921389, -77.065556);
-        $T = -0.070321697467488; // 1992-12-20 00:00:00
-        $X = 0.621746;
-        $Y = -0.596769;
-        $Z = -0.29485;
 
-        $geoEquRecCoord = new GeocentricEquatorialRectangularCoordinates($X, $Y, $Z);
-        $locHorCoord = $geoEquRecCoord->getLocalHorizontalCoordinates($location, $T);
+        $locHorCoord = $this->geoEquRecCoord->getLocalHorizontalCoordinates($location, $this->T);
 
         $azimuth = $locHorCoord->getAzimuth();
         $altitude = $locHorCoord->getAltitude();
 
-        $this->assertEquals(233.02105, round($azimuth, 5));
-        $this->assertEquals(12.27582, round($altitude, 5));
+        $this->assertEquals(232.41951, round($azimuth, 5));
+        $this->assertEquals(13.26379, round($altitude, 5));
     }
 }

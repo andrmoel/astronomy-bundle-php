@@ -15,6 +15,13 @@ abstract class AbstractRectangularCoordinates
         $this->z = $z;
     }
 
+    public function __toString()
+    {
+        return 'X: ' . $this->x . "\n"
+            . 'Y: ' . $this->y . "\n"
+            . 'Z: ' . $this->z . "\n";
+    }
+
     public function getX(): float
     {
         return $this->x;

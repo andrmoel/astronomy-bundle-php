@@ -2,6 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\Coordinates;
 
+use Andrmoel\AstronomyBundle\Utils\AngleUtil;
+
 abstract class AbstractEquatorialSphericalCoordinates
 {
     protected $rightAscension = 0;
@@ -13,6 +15,13 @@ abstract class AbstractEquatorialSphericalCoordinates
         $this->rightAscension = $rightAscension;
         $this->declination = $declination;
         $this->radiusVector = $radiusVector;
+    }
+
+    public function __toString()
+    {
+        return 'Right Ascension: ' . AngleUtil::dec2time($this->rightAscension) . "\n"
+            . 'Declination: ' . AngleUtil::dec2angle($this->declination) . "\n"
+            . 'Radius Vector: ' . $this->radiusVector . "\n";
     }
 
     public function getRightAscension(): float
