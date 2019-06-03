@@ -15,9 +15,9 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
 
     public function setUp()
     {
-        $longitude = 314.23219;
-        $latitude = -2.051607;
-        $radiusVector = 0.903743;
+        $longitude = 313.083545;
+        $latitude = -2.084642;
+        $radiusVector = 0.910841;
 
         $this->geoEclSphCoord = new GeocentricEclipticalSphericalCoordinates($longitude, $latitude, $radiusVector);
     }
@@ -33,9 +33,9 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
         $y = $geoEclRecCoord->getY();
         $z = $geoEclRecCoord->getZ();
 
-        $this->assertEquals(0.630018, round($x, 6));
-        $this->assertEquals(-0.647134, round($y, 6));
-        $this->assertEquals(-0.032354, round($z, 6));
+        $this->assertEquals(0.621751, round($x, 6));
+        $this->assertEquals(-0.6648, round($y, 6));
+        $this->assertEquals(-0.033133, round($z, 6));
     }
 
     /**
@@ -49,9 +49,9 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
         $y = $geoEquRecCoord->getY();
         $z = $geoEquRecCoord->getZ();
 
-        $this->assertEquals(0.630018, round($x, 6));
-        $this->assertEquals(-0.580862, round($y, 6));
-        $this->assertEquals(-0.287103, round($z, 6));
+        $this->assertEquals(0.621751, round($x, 6));
+        $this->assertEquals(-0.596761, round($y, 6));
+        $this->assertEquals(-0.294845, round($z, 6));
     }
 
     /**
@@ -65,9 +65,9 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
         $declination = $geoEquSphCoord->getDeclination();
         $radiusVector = $geoEquSphCoord->getRadiusVector();
 
-        $this->assertEquals(317.324647, round($rightAscension, 6));
-        $this->assertEquals(-18.522793, round($declination, 6));
-        $this->assertEquals(0.903743, round($radiusVector, 6));
+        $this->assertEquals(316.174897, round($rightAscension, 6));
+        $this->assertEquals(-18.887205, round($declination, 6));
+        $this->assertEquals(0.910841, round($radiusVector, 6));
     }
 
     /**
@@ -82,7 +82,7 @@ class GeocentricEclipticalSphericalCoordinatesTest extends TestCase
         $azimuth = $locHorCoord->getAzimuth();
         $altitude = $locHorCoord->getAltitude();
 
-        $this->assertEquals(232.41984, round($azimuth, 5));
-        $this->assertEquals(13.26398, round($altitude, 5));
+        $this->assertEquals(233.02078, round($azimuth, 5));
+        $this->assertEquals(12.27641, round($altitude, 5));
     }
 }
