@@ -2,15 +2,25 @@
 
 namespace Andrmoel\AstronomyBundle\Entities;
 
+use Andrmoel\AstronomyBundle\TimeOfInterest;
+
 class TwoLineElements
 {
+    const EPHEMERIS_TYPE_SGP4 = 0;
+    const EPHEMERIS_TYPE_SGP = 1;
+//    const EPHEMERIS_TYPE_SGP4 = 2;
+    const EPHEMERIS_TYPE_SDP4 = 3;
+    const EPHEMERIS_TYPE_SGP8 = 4;
+    const EPHEMERIS_TYPE_SDP8 = 5;
+
     private $satelliteNo = '';
     private $classification = '';
     private $internationalDesignator = '';
     private $epoch = null;
-    private $td1MeanMotion = 0.0;
-    private $td2MeanMotion = 0.0;
+    private $d1MeanMotion = 0.0;
+    private $d2MeanMotion = 0.0;
     private $BSTARDragTerm = 0.0;
+    private $ephemerisType = '';
     private $setNumber = 0;
     private $inclination = 0.0;
     private $rightAscensionOfAscendingNode = 0.0;
@@ -30,5 +40,30 @@ class TwoLineElements
     public static function createFromTLEData(array $tleData)
     {
 
+    }
+
+    public function getEpoch(): TimeOfInterest
+    {
+        return $this->epoch;
+    }
+
+    public function get1thDerivativeOfMeanMotion(): float
+    {
+        return $this->d1MeanMotion;
+    }
+
+    public function get2ndDerivativeOfMeanMotion(): float
+    {
+        return $this->d2MeanMotion;
+    }
+
+    public function getMeanAnomaly(): float
+    {
+        return $this->meanAnomaly;
+    }
+
+    public function getMeanMotion(): float
+    {
+        return $this->meanMotion;
     }
 }

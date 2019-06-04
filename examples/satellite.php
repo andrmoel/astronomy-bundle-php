@@ -9,12 +9,15 @@ use Andrmoel\AstronomyBundle\TimeOfInterest;
 date_default_timezone_set('UTC');
 
 $string = <<<END
-ISS (ZARYA)
-1 25544U 98067A   08264.51782528 -.00002182  00000-0 -11606-4 0  2927
-2 25544  51.6416 247.4627 0006703 130.5360 325.0288 15.72125391563537
+ISS             109. 73.0 27.5 -2.0 v  402
+1 25544U 98067A   19155.51091253  .00000344  00000-0  13620-4 0  9994
+2 25544  51.6453  64.2093 0007540  13.2790 173.5287 15.51165870173281
 END;
 
 $TLEParser = \Andrmoel\AstronomyBundle\Parsers\ParserFactory::get(\Andrmoel\AstronomyBundle\Parsers\TLEParser::class, $string);
-$res = $TLEParser->getParsedData();
+$tle = $TLEParser->getParsedData();
 
-var_dump($res);die();
+$T = TimeOfInterest::createFromString('2019-06-04 00:00:00')->getJulianCenturiesFromJ2000();
+$kep = \Andrmoel\AstronomyBundle\Calculations\SatelliteCalc::twoLineElements2keplerianElements($tle, $T);
+
+var_dump($kep);die();
