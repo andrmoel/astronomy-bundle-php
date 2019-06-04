@@ -297,11 +297,28 @@ class TimeCalc
         return $deltaT;
     }
 
-    public static function getDayOfYear(Time $dateTime): int
+    public static function dayOfYear2time(int $year, float $dayOfYear): Time
     {
-        $K = self::isLeapYear($dateTime->year) ? 1 : 2;
-        $M = $dateTime->month;
-        $D = $dateTime->day;
+        // Meeus 7
+        $K = self::isLeapYear($year) ? 1 : 2;
+        $month = $dayOfYear < 32 ? 1 : (int)((9 * ($K + $dayOfYear)) / 275 + 0.98);
+        $day = $dayOfYear - (int)((275 * $month) / 9) + $K * (int)(($month + 9) / 12) + 30;
+
+        $hourFloat = 24 * ($dayOfYear - floor($dayOfYear));
+        $hour = floor($hourFloat);
+        $minuteFloat = 60 * ($hourFloat - $hour);
+        $minute = floor($minuteFloat);
+        $second = 60 * ($minuteFloat - $minute);
+        $second = round($second);
+
+        return new Time($year, $month, $day, $hour, $minute, $second);
+    }
+
+    public static function getDayOfYear(Time $time): int
+    {
+        $K = self::isLeapYear($time->year) ? 1 : 2;
+        $M = $time->month;
+        $D = $time->day;
 
         // Meeus 7.f
         $N = (int)((275 * $M) / 9) - $K * (int)(($M + 9) / 12) + $D - 30;
@@ -328,5 +345,32 @@ class TimeCalc
         } else {
             return true;
         }
+    }
+
+    /*
+         * 2000: 00 -> 2000
+         * 2010: 00 -> 2000
+         * 2090: 00 -> 2000
+         * 2100: 00 -> 2100
+         * 2000: 99 -> 1999
+         * 2010: 99 -> 1999
+         * 2090: 99 -> 1999
+         * 2100: 99 -> 2099
+         */
+    // TODO Test
+    public static function yearTwoDigits2year(int $yearTwoDigits): int
+    {
+        $currentYear = date('Y');
+        if (preg_match('/^([0-9]+)[0-9]{2}$/', $currentYear, $matches)) {
+            $yearHundreds = (int)$matches[1];
+
+            if ($yearTwoDigits >= 50) {
+                $yearHundreds++;
+            }
+
+            return $yearHundreds * 100 + $yearTwoDigits;
+        }
+
+        throw new \Exception('FOFO'); // TODO
     }
 }

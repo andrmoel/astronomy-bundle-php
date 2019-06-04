@@ -2,17 +2,13 @@
 
 namespace Andrmoel\AstronomyBundle\Parsers;
 
+use Andrmoel\AstronomyBundle\Calculations\TimeCalc;
 use Andrmoel\AstronomyBundle\Entities\TwoLineElements;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 
 class TLEParser extends AbstractParser
 {
-    /** @var TwoLineElements */
-    private $tle;
-
-    public function __construct()
-    {
-        $this->tle = new TwoLineElements();
-    }
+    private $tleData = [];
 
     public function getParsedData()
     {
@@ -31,42 +27,60 @@ class TLEParser extends AbstractParser
                 }
             }
         }
-        // TODO: Implement getParsedData() method.
+
+        return new TwoLineElements($this->tleData);
     }
 
     private function parseLineOne(string $line): void
     {
-        $tle = $this->tle;
-
-        $satelliteNo = substr($line, 2, 4);
-        $classification = substr($line, 7, 1);
-        $internationalDesignator = trim(substr($line, 9, 8));
-        $year = $this->getYearFromEpochYear(substr($line, 18, 2));
-        $epochDay = floatval(substr($line, 20, 12));
-        $meanMotion = substr($line, 33, 10);
+        $this->tleData['satelliteNo'] = substr($line, 2, 5);
+        $this->tleData['classification'] = substr($line, 7, 1);
+        $this->tleData['internationalDesignator'] = trim(substr($line, 9, 8));
+        $this->tleData['epoch'] = $this->getEpoch(substr($line, 18, 2), substr($line, 20, 12));
+        $this->tleData['td1MeanMotion'] = $this->addDecimalPoint(substr($line, 33, 10));
+        $this->tleData['td2MeanMotion'] = $this->addDecimalPoint(substr($line, 44, 8));
+        $this->tleData['BSTARDragTerm'] = $this->addDecimalPoint(substr($line, 53, 8));
+        $this->tleData['setNumber'] = (int)substr($line, 64, 4);
     }
 
     private function parseLineTwo(string $line): void
     {
-        $tle = $this->tle;
-
-        $inclination = floatval(substr($line, 8, 8));
-        $rightAscension = floatval(substr($line, 17, 8));
-        $eccentricity = floatval('0.' . trim(substr($line, 26, 7)));
-        $argumentOfPerigee = floatval(substr($line, 34, 8));
-        $meanAnomaly = floatval(substr($line, 43, 8));
-        $meanMotion = floatval(substr($line, 52, 11));
-        $revolutionNoAtEpoch = (int)substr($line, 63, 5);
-
-        var_dump($eccentricity);
+        $this->tleData['inclination'] = floatval(substr($line, 8, 8));
+        $this->tleData['rightAscensionOfAscendingNode'] = floatval(substr($line, 17, 8));
+        $this->tleData['eccentricity'] = $this->addDecimalPoint(substr($line, 26, 7));
+        $this->tleData['argumentOfPerigee'] = floatval(substr($line, 34, 8));
+        $this->tleData['meanAnomaly'] = floatval(substr($line, 43, 8));
+        $this->tleData['meanMotion'] = floatval(substr($line, 52, 11));
+        $this->tleData['revolutionNoAtEpoch'] = (int)substr($line, 63, 5);
     }
 
-    private function getYearFromEpochYear(string $epochYear): int
+    private function getEpoch(string $year, string $dayOfYear): TimeOfInterest
     {
-        if (floatval($epochYear) < 50) {
-            return '20' . $epochYear;
-        } else {
-            return '19' . $epochYear;
+        $year = TimeCalc::yearTwoDigits2year((int)$year);
+        $dayOfYear = floatval($dayOfYear);
+
+        return TimeOfInterest::createFromDayOfYear($year, $dayOfYear);
+    }
+
+    private function addDecimalPoint(string $value): float
+    {
+        $value = trim($value);
+
+        // -11606-4 -> -0.11606-4
+        if (preg_match('/^\-([0-9-]+)$/', $value, $matches)) {
+            $value = '-0.' . $matches[1];
         }
+
+        // -0.11606-4 -> -0.11606e-4
+        if (preg_match('/^([0-9.-]+)(\-[0-9]+)$/', $value, $matches)) {
+            $value = $matches[1] . 'e' . $matches[2];
+        }
+
+        // 123456 -> 0.123456
+        if (strpos($value, '.') === false) {
+            $value = '0.' . $value;
+        }
+
+        return floatval($value);
     }
 }
