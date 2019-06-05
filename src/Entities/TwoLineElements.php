@@ -57,6 +57,11 @@ class TwoLineElements
         return $this->d2MeanMotion;
     }
 
+    public function getEccentricity(): float
+    {
+        return $this->eccentricity;
+    }
+
     public function getMeanAnomaly(): float
     {
         return $this->meanAnomaly;
