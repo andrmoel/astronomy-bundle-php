@@ -278,6 +278,34 @@ class TimeCalcTest extends TestCase
      * @test
      * Meeus 7f
      */
+    public function dayOfYear2timeTest()
+    {
+        $dataArray = [
+            [2000, 1, '2000-01-01 00:00:00'],
+            [2000, 1.5, '2000-01-01 12:00:00'],
+            [2000, 1.87654, '2000-01-01 21:02:13'],
+            [2000, 10, '2000-01-10 00:00:00'],
+            [2000, 10.5, '2000-01-10 12:00:00'],
+            [2000, 10.87654, '2000-01-10 21:02:13'],
+            [2011, 100, '2011-04-10 00:00:00'],
+            [2011, 100.5, '2011-04-10 12:00:00'],
+            [2011, 100.87654, '2011-04-10 21:02:13'],
+            [2011, 321, '2011-11-17 00:00:00'],
+            [2011, 321.5, '2011-11-17 12:00:00'],
+            [2011, 321.87654, '2011-11-17 21:02:13'],
+        ];
+
+        foreach ($dataArray as $data) {
+            $time = TimeCalc::dayOfYear2time($data[0], $data[1]);
+
+            $this->assertEquals($data[2], $time);
+        }
+    }
+
+    /**
+     * @test
+     * Meeus 7f
+     */
     public function getDayOfYearTest()
     {
         $dateTime = new \DateTime('2001-01-01');
@@ -350,5 +378,24 @@ class TimeCalcTest extends TestCase
 
             $this->assertEquals($expectedValue, $isLeapYear);
         }
+    }
+
+    /**
+     * @test
+     */
+    public static function yearTwoDigits2yearTest()
+    {
+        /*
+         * 2000: 00 -> 2000
+         * 2010: 00 -> 2000
+         * 2090: 00 -> 2000
+         * 2100: 00 -> 2100
+         * 2000: 99 -> 1999
+         * 2010: 99 -> 1999
+         * 2090: 99 -> 1999
+         * 2100: 99 -> 2099
+         */
+
+        $twoYearDigits
     }
 }

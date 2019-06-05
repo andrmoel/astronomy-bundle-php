@@ -347,21 +347,9 @@ class TimeCalc
         }
     }
 
-    /*
-         * 2000: 00 -> 2000
-         * 2010: 00 -> 2000
-         * 2090: 00 -> 2000
-         * 2100: 00 -> 2100
-         * 2000: 99 -> 1999
-         * 2010: 99 -> 1999
-         * 2090: 99 -> 1999
-         * 2100: 99 -> 2099
-         */
-    // TODO Test
     public static function yearTwoDigits2year(int $yearTwoDigits): int
     {
-        $currentYear = date('Y');
-        if (preg_match('/^([0-9]+)[0-9]{2}$/', $currentYear, $matches)) {
+        if (preg_match('/^([0-9]+)[0-9]{2}$/', date('Y'), $matches)) {
             $yearHundreds = (int)$matches[1];
 
             if ($yearTwoDigits >= 50) {
@@ -371,6 +359,6 @@ class TimeCalc
             return $yearHundreds * 100 + $yearTwoDigits;
         }
 
-        throw new \Exception('FOFO'); // TODO
+        throw new \Exception('Could not convert two digit year to year');
     }
 }
