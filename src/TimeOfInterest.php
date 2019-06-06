@@ -81,6 +81,13 @@ class TimeOfInterest
         return $toi;
     }
 
+    public static function createFromDayOfYear(int $year = 0, float $dayOfYear = 0): self
+    {
+        $toi = new self();
+        $toi->setTimeByDayOfYear($year, $dayOfYear);
+        return $toi;
+    }
+
     public static function createFromDateTime(\DateTime $dateTime): self
     {
         $toi = new self();
@@ -107,7 +114,7 @@ class TimeOfInterest
 
     public static function createFromJulianCenturiesJ2000(float $T): self
     {
-        $JD = TimeCalc::julianCenturiesJ20002JulianDay($T);
+        $JD = TimeCalc::julianCenturiesJ20002julianDay($T);
 
         $toi = new self();
         $toi->setJulianDay($JD);
@@ -132,20 +139,9 @@ class TimeOfInterest
         $this->time = new Time($year, $month, $day, $hour, $minute, $second);
     }
 
-    public function setTimeByDayOfYear(
-        int $year = 0,
-        int $dayOfYear = 0,
-        int $hour = 0,
-        int $minute = 0,
-        int $second = 0
-    ): void
+    public function setTimeByDayOfYear(int $year, float $dayOfYear): void
     {
-        // Meeus 7
-        $K = $this->isLeapYear($year) ? 1 : 2;
-        $month = $dayOfYear < 32 ? 1 : (int)((9 * ($K + $dayOfYear)) / 275 + 0.98);
-        $day = $dayOfYear - (int)((275 * $month) / 9) + $K * (int)(($month + 9) / 12) + 30;
-
-        $this->time = new Time($year, $month, $day, $hour, $minute, $second);
+        $this->time = TimeCalc::dayOfYear2time($year, $dayOfYear);
     }
 
     public function setDateTime(\DateTime $dateTime): void
@@ -169,12 +165,12 @@ class TimeOfInterest
 
     public function setJulianDay(float $JD): void
     {
-        $this->time = TimeCalc::julianDay2DateTime($JD);
+        $this->time = TimeCalc::julianDay2time($JD);
     }
 
     public function setJulianCenturiesJ2000(float $T): void
     {
-        $JD = TimeCalc::julianCenturiesJ20002JulianDay($T);
+        $JD = TimeCalc::julianCenturiesJ20002julianDay($T);
 
         $this->setJulianDay($JD);
     }
@@ -225,7 +221,7 @@ class TimeOfInterest
 
     public function getJulianDay(): float
     {
-        $JD = TimeCalc::time2JulianDay($this->time);
+        $JD = TimeCalc::time2julianDay($this->time);
 
         return $JD;
     }
@@ -233,7 +229,7 @@ class TimeOfInterest
     public function getJulianDay0(): float
     {
         $JD = $this->getJulianDay();
-        $JD0 = TimeCalc::julianDay2JulianDay0($JD);
+        $JD0 = TimeCalc::julianDay2julianDay0($JD);
 
         return $JD0;
     }
@@ -242,7 +238,7 @@ class TimeOfInterest
     {
         $JD = $this->getJulianDay();
 
-        $T = TimeCalc::julianDay2JulianCenturiesJ2000($JD);
+        $T = TimeCalc::julianDay2julianCenturiesJ2000($JD);
 
         return $T;
     }
@@ -256,15 +252,9 @@ class TimeOfInterest
         return $t;
     }
 
-    // TODO ... use TimeCalc
     public function getDayOfYear(): int
     {
-        $K = $this->isLeapYear($this->time->year) ? 1 : 2;
-        $M = $this->time->month;
-        $D = $this->time->day;
-
-        // Meeus 7.f
-        $N = (int)((275 * $M) / 9) - $K * (int)(($M + 9) / 12) + $D - 30;
+        $N = TimeCalc::getDayOfYear($this->time);
 
         return $N;
     }
@@ -279,42 +269,6 @@ class TimeOfInterest
     public function isLeapYear(): bool
     {
         return TimeCalc::isLeapYear($this->time->year);
-    }
-
-
-    // TODO ------------------------------------
-
-
-    /**
-     * @param $epoch
-     * @deprecated
-     */
-    private function setTleEpoch($epoch): void
-    {
-        $parts = explode('.', $epoch);
-        $year = substr($parts[0], 0, 2);
-        $dayOfYear = substr($parts[0], 2, strlen($parts[0]) - 2);
-
-        // Get full year from 2-char year
-        $prefix = $year <= self::CENTURY_SPLIT ? self::CUR_CENTURY_YEAR_PREFIX : self::PAST_CENTURY_YEAR_PREFIX;
-        $year = intval($prefix . $year);
-
-        // Get TimeOfInterest for day of month
-        $toi = new self();
-        $toi->setTimeByDayOfYear($year, $dayOfYear);
-
-        // Calculate hours, minutes and seconds
-        $decimalPart = doubleval('0.' . $parts[1]);
-        $hour = ($decimalPart - (int)$decimalPart) * 24;
-        $minute = ($hour - (int)$hour) * 60;
-        $second = ($minute - (int)$minute) * 60;
-
-        $this->year = $year;
-        $this->month = $toi->getMonth();
-        $this->day = $toi->getDay();
-        $this->hour = (int)$hour;
-        $this->minute = (int)$minute;
-        $this->second = (int)$second;
     }
 
     public function getGreenwichMeanSiderealTime(): float
