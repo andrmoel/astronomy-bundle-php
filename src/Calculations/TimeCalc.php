@@ -7,14 +7,21 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 class TimeCalc
 {
-    public static function julianDay2JulianDay0(float $JD): float
+    public static function julianDay2julianDay0(float $JD): float
     {
         $JD0 = floor($JD + 0.5) - 0.5;
 
         return $JD0;
     }
 
-    public static function time2JulianDay(Time $time): float
+    public static function julianDay2ModifiedJulianDay(float $JD): float
+    {
+        $MJD = $JD - 2400000.5;
+
+        return $MJD;
+    }
+
+    public static function time2julianDay(Time $time): float
     {
         $tmpYear = floatval($time->year . '.' . self::getDayOfYear($time));
 
@@ -44,7 +51,7 @@ class TimeCalc
         return $JD;
     }
 
-    public static function julianDay2DateTime(float $JD): Time
+    public static function julianDay2time(float $JD): Time
     {
         $JD = $JD + 0.5;
         $Z = (int)$JD;
@@ -70,26 +77,19 @@ class TimeCalc
         $minute = ($hour - (int)$hour) * 60;
         $second = ($minute - (int)$minute) * 60;
 
-        $dateTime = new Time((int)$year, (int)$month, (int)$dayOfMonth, (int)$hour, (int)$minute, (int)$second);
+        $time = new Time((int)$year, (int)$month, (int)$dayOfMonth, (int)$hour, (int)$minute, (int)$second);
 
-        return $dateTime;
+        return $time;
     }
 
-    public static function julianDay2ModifiedJulianDay(float $JD): float
-    {
-        $MJD = $JD - 2400000.5;
-
-        return $MJD;
-    }
-
-    public static function julianDay2JulianCenturiesJ2000(float $JD): float
+    public static function julianDay2julianCenturiesJ2000(float $JD): float
     {
         $T = ($JD - 2451545.0) / 36525.0;
 
         return $T;
     }
 
-    public static function julianCenturiesJ20002JulianDay(float $T): float
+    public static function julianCenturiesJ20002julianDay(float $T): float
     {
         $JD = $T * 36525.0 + 2451545.0;
 
@@ -98,25 +98,25 @@ class TimeCalc
 
     public static function julianDay2julianMillenniaJ2000(float $JD): float
     {
-        $T = self::julianDay2JulianCenturiesJ2000($JD);
+        $T = self::julianDay2julianCenturiesJ2000($JD);
 
         $t = $T / 10;
 
         return $t;
     }
 
-    public static function julianMillenniaJ20002JulianDay(float $t): float
+    public static function julianMillenniaJ20002julianDay(float $t): float
     {
         $T = $t * 10;
 
-        $JD = self::julianCenturiesJ20002JulianDay($T);
+        $JD = self::julianCenturiesJ20002julianDay($T);
 
         return $JD;
     }
 
     public static function getGreenwichMeanSiderealTime(float $T): float
     {
-        $JD = self::julianCenturiesJ20002JulianDay($T);
+        $JD = self::julianCenturiesJ20002julianDay($T);
 
         // Meeus 12.4
         $GMST = 280.46061837
@@ -314,6 +314,7 @@ class TimeCalc
         return new Time($year, $month, $day, $hour, $minute, $second);
     }
 
+
     public static function getDayOfYear(Time $time): int
     {
         $K = self::isLeapYear($time->year) ? 1 : 2;
@@ -351,9 +352,8 @@ class TimeCalc
     {
         if (preg_match('/^([0-9]+)[0-9]{2}$/', date('Y'), $matches)) {
             $yearHundreds = (int)$matches[1];
-
-            if ($yearTwoDigits >= 50) {
-                $yearHundreds++;
+            if ($yearTwoDigits > 50) {
+                $yearHundreds--;
             }
 
             return $yearHundreds * 100 + $yearTwoDigits;

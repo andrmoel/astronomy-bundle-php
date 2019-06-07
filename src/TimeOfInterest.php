@@ -85,7 +85,6 @@ class TimeOfInterest
     {
         $toi = new self();
         $toi->setTimeByDayOfYear($year, $dayOfYear);
-
         return $toi;
     }
 
@@ -115,7 +114,7 @@ class TimeOfInterest
 
     public static function createFromJulianCenturiesJ2000(float $T): self
     {
-        $JD = TimeCalc::julianCenturiesJ20002JulianDay($T);
+        $JD = TimeCalc::julianCenturiesJ20002julianDay($T);
 
         $toi = new self();
         $toi->setJulianDay($JD);
@@ -140,7 +139,7 @@ class TimeOfInterest
         $this->time = new Time($year, $month, $day, $hour, $minute, $second);
     }
 
-    public function setTimeByDayOfYear(int $year = 0, float $dayOfYear = 0): void
+    public function setTimeByDayOfYear(int $year, float $dayOfYear): void
     {
         $this->time = TimeCalc::dayOfYear2time($year, $dayOfYear);
     }
@@ -166,12 +165,12 @@ class TimeOfInterest
 
     public function setJulianDay(float $JD): void
     {
-        $this->time = TimeCalc::julianDay2DateTime($JD);
+        $this->time = TimeCalc::julianDay2time($JD);
     }
 
     public function setJulianCenturiesJ2000(float $T): void
     {
-        $JD = TimeCalc::julianCenturiesJ20002JulianDay($T);
+        $JD = TimeCalc::julianCenturiesJ20002julianDay($T);
 
         $this->setJulianDay($JD);
     }
@@ -222,7 +221,7 @@ class TimeOfInterest
 
     public function getJulianDay(): float
     {
-        $JD = TimeCalc::time2JulianDay($this->time);
+        $JD = TimeCalc::time2julianDay($this->time);
 
         return $JD;
     }
@@ -230,7 +229,7 @@ class TimeOfInterest
     public function getJulianDay0(): float
     {
         $JD = $this->getJulianDay();
-        $JD0 = TimeCalc::julianDay2JulianDay0($JD);
+        $JD0 = TimeCalc::julianDay2julianDay0($JD);
 
         return $JD0;
     }
@@ -239,7 +238,7 @@ class TimeOfInterest
     {
         $JD = $this->getJulianDay();
 
-        $T = TimeCalc::julianDay2JulianCenturiesJ2000($JD);
+        $T = TimeCalc::julianDay2julianCenturiesJ2000($JD);
 
         return $T;
     }
