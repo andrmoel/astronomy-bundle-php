@@ -32,6 +32,32 @@ class TimeOfInterestTest extends TestCase
     /**
      * @test
      */
+    public function createFromDayOfYearTest()
+    {
+        $dataArray = [
+            [2000, 1, '2000-01-01 00:00:00'],
+            [2000, 1.5, '2000-01-01 12:00:00'],
+            [2000, 1.87654, '2000-01-01 21:02:13'],
+            [2000, 10, '2000-01-10 00:00:00'],
+            [2000, 10.5, '2000-01-10 12:00:00'],
+            [2000, 10.87654, '2000-01-10 21:02:13'],
+            [2011, 100, '2011-04-10 00:00:00'],
+            [2011, 100.5, '2011-04-10 12:00:00'],
+            [2011, 100.87654, '2011-04-10 21:02:13'],
+            [2011, 321, '2011-11-17 00:00:00'],
+            [2011, 321.5, '2011-11-17 12:00:00'],
+            [2011, 321.87654, '2011-11-17 21:02:13'],
+        ];
+
+        foreach ($dataArray as $data) {
+            $toi = TimeOfInterest::createFromDayOfYear($data[0], $data[1]);
+            $this->assertEquals($data[2], $toi);
+        }
+    }
+
+    /**
+     * @test
+     */
     public function createFromDateTimeTest()
     {
         $dateTime = new \DateTime('2017-01-01 12:30:00');
@@ -96,10 +122,30 @@ class TimeOfInterestTest extends TestCase
     /**
      * @test
      */
-//    public function setTimeByDayOfYearTest()
-//    {
-//        // TODO ...
-//    }
+    public function setTimeByDayOfYearTest()
+    {
+        $dataArray = [
+            [2000, 1, '2000-01-01 00:00:00'],
+            [2000, 1.5, '2000-01-01 12:00:00'],
+            [2000, 1.87654, '2000-01-01 21:02:13'],
+            [2000, 10, '2000-01-10 00:00:00'],
+            [2000, 10.5, '2000-01-10 12:00:00'],
+            [2000, 10.87654, '2000-01-10 21:02:13'],
+            [2011, 100, '2011-04-10 00:00:00'],
+            [2011, 100.5, '2011-04-10 12:00:00'],
+            [2011, 100.87654, '2011-04-10 21:02:13'],
+            [2011, 321, '2011-11-17 00:00:00'],
+            [2011, 321.5, '2011-11-17 12:00:00'],
+            [2011, 321.87654, '2011-11-17 21:02:13'],
+        ];
+
+        $toi = TimeOfInterest::createFromString('1999-01-01 00:00:00');
+
+        foreach ($dataArray as $data) {
+            $toi->setTimeByDayOfYear($data[0], $data[1]);
+            $this->assertEquals($data[2], $toi);
+        }
+    }
 
     /**
      * @test

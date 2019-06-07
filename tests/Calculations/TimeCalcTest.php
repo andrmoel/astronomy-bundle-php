@@ -293,6 +293,7 @@ class TimeCalcTest extends TestCase
             [2011, 321.5, '2011-11-17 12:00:00'],
             [2011, 321.87654, '2011-11-17 21:02:13'],
         ];
+
         foreach ($dataArray as $data) {
             $time = TimeCalc::dayOfYear2time($data[0], $data[1]);
             $this->assertEquals($data[2], $time);
