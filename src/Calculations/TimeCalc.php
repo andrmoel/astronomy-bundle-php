@@ -352,8 +352,8 @@ class TimeCalc
     {
         if (preg_match('/^([0-9]+)[0-9]{2}$/', date('Y'), $matches)) {
             $yearHundreds = (int)$matches[1];
-            if ($yearTwoDigits >= 50) {
-                $yearHundreds++;
+            if ($yearTwoDigits > 50) {
+                $yearHundreds--;
             }
 
             return $yearHundreds * 100 + $yearTwoDigits;

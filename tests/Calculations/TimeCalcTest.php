@@ -380,7 +380,7 @@ class TimeCalcTest extends TestCase
     /**
      * @test
      */
-    public static function yearTwoDigits2yearTest()
+    public function yearTwoDigits2yearTest()
     {
         /*
          * 2000: 00 -> 2000
@@ -392,7 +392,12 @@ class TimeCalcTest extends TestCase
          * 2090: 99 -> 1999
          * 2100: 99 -> 2099
          */
-//        $twoYearDigits
-        // TODO Write test
+
+        $this->assertEquals(2000, TimeCalc::yearTwoDigits2year('00'));
+        $this->assertEquals(2001, TimeCalc::yearTwoDigits2year('01'));
+        $this->assertEquals(2010, TimeCalc::yearTwoDigits2year('10'));
+        $this->assertEquals(2050, TimeCalc::yearTwoDigits2year('50'));
+        $this->assertEquals(1951, TimeCalc::yearTwoDigits2year('51'));
+        $this->assertEquals(1999, TimeCalc::yearTwoDigits2year('99'));
     }
 }
