@@ -13,7 +13,7 @@ class TimeCalcTest extends TestCase
     /**
      * @test
      */
-    public function julianDay2JulianDay0Test()
+    public function julianDay2julianDay0Test()
     {
         $data = [
             [2451545.0, 2451544.5],
@@ -24,79 +24,9 @@ class TimeCalcTest extends TestCase
         ];
 
         foreach ($data as $t) {
-            $JD0 = TimeCalc::julianDay2JulianDay0($t[0]);
+            $JD0 = TimeCalc::julianDay2julianDay0($t[0]);
 
             $this->assertEquals($t[1], $JD0);
-        }
-    }
-
-    /**
-     * @test
-     * Meeus 7a
-     */
-    public function time2JulianDayTest()
-    {
-        $data = array(
-            [2000, 1, 1, 12, 0, 0, 2451545.0],
-            [1999, 1, 1, 0, 0, 0, 2451179.5],
-            [1987, 1, 27, 0, 0, 0, 2446822.5],
-            [1987, 6, 19, 12, 0, 0, 2446966.0],
-            [1988, 1, 27, 0, 0, 0, 2447187.5],
-            [1988, 6, 19, 12, 0, 0, 2447332.0],
-            [1900, 1, 1, 0, 0, 0, 2415020.5],
-            [1600, 1, 1, 0, 0, 0, 2305447.5],
-            [1600, 12, 31, 0, 0, 0, 2305812.5],
-            [837, 4, 10, 8, 0, 0, 2026871.83],
-            [-123, 12, 31, 0, 0, 0, 1676496.5],
-            [-122, 1, 1, 0, 0, 0, 1676497.5],
-            [-1000, 7, 12, 12, 0, 0, 1356001.0],
-            [-1000, 2, 29, 0, 0, 0, 1355866.5],
-            [-1001, 8, 17, 21, 30, 0, 1355671.4],
-            [-4712, 1, 1, 12, 0, 0, 0.0],
-        );
-
-        foreach ($data as $t) {
-            $dateTime = new Time($t[0], $t[1], $t[2], $t[3], $t[4], $t[5]);
-            $JD = TimeCalc::time2JulianDay($dateTime);
-
-            $this->assertEquals($t[6], round($JD, 2));
-        }
-    }
-
-    /**
-     * @test
-     * TODO Test broke!!!
-     */
-    public function julianDay2DateTimeTest()
-    {
-        $data = array(
-            [2000, 1, 1, 12, 0, 0, 2451545.0],
-            [1999, 1, 1, 0, 0, 0, 2451179.5],
-            [1987, 1, 27, 0, 0, 0, 2446822.5],
-            [1987, 6, 19, 12, 0, 0, 2446966.0],
-            [1988, 1, 27, 0, 0, 0, 2447187.5],
-            [1988, 6, 19, 12, 0, 0, 2447332.0],
-            [1900, 1, 1, 0, 0, 0, 2415020.5],
-            [1600, 1, 1, 0, 0, 0, 2305447.5],
-            [1600, 12, 31, 0, 0, 0, 2305812.5],
-//            [837, 4, 10, 8, 0, 0, 2026871.83],
-            [-123, 12, 31, 0, 0, 0, 1676496.5],
-            [-122, 1, 1, 0, 0, 0, 1676497.5],
-            [-1000, 7, 12, 12, 0, 0, 1356001.0],
-            [-1000, 2, 29, 0, 0, 0, 1355866.5],
-//            [-1001, 8, 17, 21, 30, 0, 1355671.4],
-            [-4712, 1, 1, 12, 0, 0, 0.0],
-        );
-
-        foreach ($data as $t) {
-            $dateTime = TimeCalc::julianDay2DateTime($t[6]);
-
-            $this->assertEquals($t[0], $dateTime->year);
-            $this->assertEquals($t[1], $dateTime->month);
-            $this->assertEquals($t[2], $dateTime->day);
-            $this->assertEquals($t[3], $dateTime->hour);
-            $this->assertEquals($t[4], $dateTime->minute);
-            $this->assertEquals($t[5], $dateTime->second);
         }
     }
 
@@ -110,6 +40,75 @@ class TimeCalcTest extends TestCase
         $MJD = TimeCalc::julianDay2ModifiedJulianDay($JD);
 
         $this->assertEquals(46895, $MJD);
+    }
+
+    /**
+     * @test
+     * Meeus 7a
+     */
+    public function time2julianDayTest()
+    {
+        $data = array(
+            [2000, 1, 1, 12, 0, 0, 2451545.0],
+            [1999, 1, 1, 0, 0, 0, 2451179.5],
+            [1987, 1, 27, 0, 0, 0, 2446822.5],
+            [1987, 6, 19, 12, 0, 0, 2446966.0],
+            [1988, 1, 27, 0, 0, 0, 2447187.5],
+            [1988, 6, 19, 12, 0, 0, 2447332.0],
+            [1900, 1, 1, 0, 0, 0, 2415020.5],
+            [1600, 1, 1, 0, 0, 0, 2305447.5],
+            [1600, 12, 31, 0, 0, 0, 2305812.5],
+            [837, 4, 10, 8, 0, 0, 2026871.833333],
+            [-123, 12, 31, 0, 0, 0, 1676496.5],
+            [-122, 1, 1, 0, 0, 0, 1676497.5],
+            [-1000, 7, 12, 12, 0, 0, 1356001.0],
+            [-1000, 2, 29, 0, 0, 0, 1355866.5],
+            [-1001, 8, 17, 21, 30, 0, 1355671.395833],
+            [-4712, 1, 1, 12, 0, 0, 0.0],
+        );
+
+        foreach ($data as $t) {
+            $dateTime = new Time($t[0], $t[1], $t[2], $t[3], $t[4], $t[5]);
+            $JD = TimeCalc::time2julianDay($dateTime);
+
+            $this->assertEquals($t[6], round($JD, 6));
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function julianDay2timeTest()
+    {
+        $data = array(
+            [2000, 1, 1, 12, 0, 0, 2451545.0],
+            [1999, 1, 1, 0, 0, 0, 2451179.5],
+            [1987, 1, 27, 0, 0, 0, 2446822.5],
+            [1987, 6, 19, 12, 0, 0, 2446966.0],
+            [1988, 1, 27, 0, 0, 0, 2447187.5],
+            [1988, 6, 19, 12, 0, 0, 2447332.0],
+            [1900, 1, 1, 0, 0, 0, 2415020.5],
+            [1600, 1, 1, 0, 0, 0, 2305447.5],
+            [1600, 12, 31, 0, 0, 0, 2305812.5],
+            [837, 4, 10, 8, 0, 0, 2026871.83334],
+            [-123, 12, 31, 0, 0, 0, 1676496.5],
+            [-122, 1, 1, 0, 0, 0, 1676497.5],
+            [-1000, 7, 12, 12, 0, 0, 1356001.0],
+            [-1000, 2, 29, 0, 0, 0, 1355866.5],
+            [-1001, 8, 17, 21, 30, 0, 1355671.395834],
+            [-4712, 1, 1, 12, 0, 0, 0.0],
+        );
+
+        foreach ($data as $t) {
+            $dateTime = TimeCalc::julianDay2time($t[6]);
+
+            $this->assertEquals($t[0], $dateTime->year);
+            $this->assertEquals($t[1], $dateTime->month);
+            $this->assertEquals($t[2], $dateTime->day);
+            $this->assertEquals($t[3], $dateTime->hour);
+            $this->assertEquals($t[4], $dateTime->minute);
+            $this->assertEquals($t[5], $dateTime->second);
+        }
     }
 
     /**
@@ -129,11 +128,11 @@ class TimeCalcTest extends TestCase
      * @test
      * Meeus 12.a
      */
-    public function julianCenturiesJ20002JulianDayTest()
+    public function julianCenturiesJ20002julianDayTest()
     {
         $T = -0.127296372348;
 
-        $JD = TimeCalc::julianCenturiesJ20002JulianDay($T);
+        $JD = TimeCalc::julianCenturiesJ20002julianDay($T);
 
         $this->assertEquals(2446895.5, round($JD, 6));
     }
@@ -155,11 +154,11 @@ class TimeCalcTest extends TestCase
      * @test
      * Meeus 12.a
      */
-    public function julianMillenniaJ20002JulianDayTest()
+    public function julianMillenniaJ20002julianDayTest()
     {
         $t = -0.0127296372348;
 
-        $JD = TimeCalc::julianMillenniaJ20002JulianDay($t);
+        $JD = TimeCalc::julianMillenniaJ20002julianDay($t);
 
         $this->assertEquals(2446895.5, round($JD, 6));
     }
@@ -278,6 +277,33 @@ class TimeCalcTest extends TestCase
      * @test
      * Meeus 7f
      */
+    public function dayOfYear2timeTest()
+    {
+        $dataArray = [
+            [2000, 1, '2000-01-01 00:00:00'],
+            [2000, 1.5, '2000-01-01 12:00:00'],
+            [2000, 1.87654, '2000-01-01 21:02:13'],
+            [2000, 10, '2000-01-10 00:00:00'],
+            [2000, 10.5, '2000-01-10 12:00:00'],
+            [2000, 10.87654, '2000-01-10 21:02:13'],
+            [2011, 100, '2011-04-10 00:00:00'],
+            [2011, 100.5, '2011-04-10 12:00:00'],
+            [2011, 100.87654, '2011-04-10 21:02:13'],
+            [2011, 321, '2011-11-17 00:00:00'],
+            [2011, 321.5, '2011-11-17 12:00:00'],
+            [2011, 321.87654, '2011-11-17 21:02:13'],
+        ];
+
+        foreach ($dataArray as $data) {
+            $time = TimeCalc::dayOfYear2time($data[0], $data[1]);
+            $this->assertEquals($data[2], $time);
+        }
+    }
+
+    /**
+     * @test
+     * Meeus 7f
+     */
     public function getDayOfYearTest()
     {
         $dateTime = new \DateTime('2001-01-01');
@@ -350,5 +376,29 @@ class TimeCalcTest extends TestCase
 
             $this->assertEquals($expectedValue, $isLeapYear);
         }
+    }
+
+    /**
+     * @test
+     */
+    public function yearTwoDigits2yearTest()
+    {
+        /*
+         * 2000: 00 -> 2000
+         * 2010: 00 -> 2000
+         * 2090: 00 -> 2000
+         * 2100: 00 -> 2100
+         * 2000: 99 -> 1999
+         * 2010: 99 -> 1999
+         * 2090: 99 -> 1999
+         * 2100: 99 -> 2099
+         */
+
+        $this->assertEquals(2000, TimeCalc::yearTwoDigits2year('00'));
+        $this->assertEquals(2001, TimeCalc::yearTwoDigits2year('01'));
+        $this->assertEquals(2010, TimeCalc::yearTwoDigits2year('10'));
+        $this->assertEquals(2050, TimeCalc::yearTwoDigits2year('50'));
+        $this->assertEquals(1951, TimeCalc::yearTwoDigits2year('51'));
+        $this->assertEquals(1999, TimeCalc::yearTwoDigits2year('99'));
     }
 }
