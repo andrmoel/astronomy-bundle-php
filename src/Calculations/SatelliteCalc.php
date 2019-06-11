@@ -21,7 +21,12 @@ class SatelliteCalc
 
         $dT = $T - $T0;
 
-        $M = self::getMeanAnomaly($dT, $M0, $n, $d1mm, $d2mm);
+        $M = self::getMeanAnomaly($tle, $dT);
+
+        $a = self::getSemiMajorAxis($tle, $dT);
+
+        var_dump($a);
+        die();
 
         $E = self::getEccentricAnomaly($M0, $e);
 
@@ -32,8 +37,13 @@ class SatelliteCalc
         return [];
     }
 
-    private static function getMeanAnomaly(float $dT, float $M0, float $n, float $d1mm, float $d2mm): float
+    private static function getMeanAnomaly(TwoLineElements $tle, float $dT): float
     {
+        $M0 = $tle->getMeanAnomaly();
+        $n = $tle->getMeanMotion();
+        $d1mm = $tle->get1thDerivativeOfMeanMotion();
+        $d2mm = $tle->get2ndDerivativeOfMeanMotion();
+
         $M = $M0
             + $n * $dT
             + $d1mm * pow($dT, 2)
@@ -42,9 +52,10 @@ class SatelliteCalc
         return $M;
     }
 
-    public static function getTrueAnomaly(float $M, float $e): float
+    public static function getTrueAnomaly(TwoLineElements $tle): float
     {
-        $E = self::getEccentricAnomaly($M, $e);
+        $e = $tle->getEccentricity();
+        $E = self::getEccentricAnomaly($tle);
 
         $ERad = deg2rad($E);
 
@@ -57,8 +68,10 @@ class SatelliteCalc
         return $Theta;
     }
 
-    public static function getEccentricAnomaly(float $M, float $e): float
+    public static function getEccentricAnomaly(TwoLineElements $tle): float
     {
+        $M = $tle->getMeanAnomaly();
+        $e = $tle->getEccentricity();
         $MRad = deg2rad($M);
 
         $Ei = $M + 0.85 * $e * GeneralUtil::sign(sin($MRad));
@@ -75,22 +88,25 @@ class SatelliteCalc
         return $Ei;
     }
 
-    private static function getSemiMajorAxis(float $dT, float $n, float $d1mm, float $d2mm): float
+    private static function getSemiMajorAxis(TwoLineElements $tle, float $dT): float
     {
-        $GM = Constants::GRAVITATIONAL_PARAMETER;
+        $n = $tle->getMeanMotion();
+        $nRad = deg2rad($n);
+        $d1mm = $tle->get1thDerivativeOfMeanMotion();
+        $d2mm = $tle->get2ndDerivativeOfMeanMotion();
 
-        $a0 = pow(sqrt($GM / $n), 2 / 3);
+        $mu0 = sqrt(Constants::GRAVITATIONAL_PARAMETER);
 
-        $term = $n
-            + 2 * $d1mm * $dT
-            + 3 * $d2mm * pow($dT, 2);
+        $a0 = pow($mu0 / $n, 2 / 3);
 
-        $a = $a0 * pow($n * pow($term, -1), 2 / 3);
+        var_dump($a1);die();
+
+        $a = pow($GM, 1 / 3) / pow((2 * $n * pi()) / 86400, 2 / 3);
 
         return $a;
     }
 
-    public static function getRightAscensionOfAscendingNode(float $dT, float $i, float $a, float $e): float
+    public static function getRightAscensionOfAscendingNode(TwoLineElements $tle, float $dT): float
     {
         $iRad = deg2rad($i);
 
@@ -100,7 +116,7 @@ class SatelliteCalc
         return $Omega;
     }
 
-    public static function getArgumentOfPerigee(float $dT, float $a, float $i): float
+    public static function getArgumentOfPerigee(TwoLineElements $tle, float $dT): float
     {
         $iRad = deg2rad($i);
 
@@ -110,7 +126,7 @@ class SatelliteCalc
         return $omega;
     }
 
-    public static function getPerifocalCoordinateSystem(float $a, float $e, float $trueAnomaly): array
+    public static function getPerifocalCoordinateSystem(TwoLineElements $tle): array
     {
         $TRad = deg2rad($trueAnomaly);
 
@@ -137,8 +153,8 @@ class SatelliteCalc
         $Py = cos($aopRad) * sin($raanRad) + sin($aopRad) * cos($raanRad) * cos($iRad);
         $Pz = sin($aopRad) * sin($iRad);
 
-        $Qx = - sin($aopRad) * cos($raanRad) - cos($aopRad) * sin($raanRad) * cos($iRad);
-        $Qy = - sin($aopRad) * sin($raanRad) + cos($aopRad) * cos($raanRad) * cos($iRad);
+        $Qx = -sin($aopRad) * cos($raanRad) - cos($aopRad) * sin($raanRad) * cos($iRad);
+        $Qy = -sin($aopRad) * sin($raanRad) + cos($aopRad) * cos($raanRad) * cos($iRad);
         $Qz = cos($aopRad) * sin($iRad);
 
         $x = $Px * $x0 + $Qx * $y0;
