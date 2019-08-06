@@ -213,6 +213,10 @@ class SolarEclipse
             $obscuration = (pow($moonSunRatio, 2) * $a + $b - $moonSunRatio * sin($c)) / M_PI;
         }
 
+        if (is_nan($obscuration)) {
+            return 0.0; // Eclipse is below horizon
+        }
+
         return $obscuration;
     }
 
