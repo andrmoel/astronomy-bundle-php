@@ -46,7 +46,7 @@ class SolarEclipse
         $this->location = new Location();
     }
 
-    public static function create(TimeOfInterest $toi, Location $location): self
+    public static function create(TimeOfInterest $toi, Location $location = null): self
     {
         // Generate filename for besselian elements
         $fileName = GeneralUtil::year2string($toi->getYear())
@@ -69,7 +69,10 @@ class SolarEclipse
 
         // Create eclipse
         $eclipse = new SolarEclipse($besselianElements);
-        $eclipse->setLocation($location);
+
+        if ($location) {
+            $eclipse->setLocation($location);
+        }
 
         return $eclipse;
     }
