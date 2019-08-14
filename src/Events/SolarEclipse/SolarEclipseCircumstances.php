@@ -221,6 +221,11 @@ class SolarEclipseCircumstances
         $this->sunAzimuth = $sunAzimuth;
     }
 
+    public function getSunAzimuth()
+    {
+        return rad2deg($this->sunAzimuth);
+    }
+
     public function getLocalHorizontalCoordinates(bool $refraction = true): LocalHorizontalCoordinates
     {
         $azimuth = rad2deg($this->sunAzimuth);
