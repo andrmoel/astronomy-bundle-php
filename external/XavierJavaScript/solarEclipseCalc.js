@@ -1,29 +1,27 @@
-<
-!--
 //<![CDATA[
 // Solar Eclipse Calculator & Diagram for Google Maps v3 (Xavier Jubier: http://xjubier.free.fr/)
-// Copyright (C) 2007-2017 Xavier M. Jubier
+// Copyright (C) 2007-2019 Xavier M. Jubier
 //
 
 /*
- Javascript Solar Eclipse Calculator for "FIVE MILLENNIUM CANON OF SOLAR ECLIPSES: -1999 TO +3000"
- Copyright (C) 2007-2017 Xavier M. Jubier
+Javascript Solar Eclipse Calculator for "FIVE MILLENNIUM CANON OF SOLAR ECLIPSES: -1999 TO +3000"
+Copyright (C) 2007-2019 Xavier M. Jubier
 
- Modifications:
- 2007-01-30   Xavier Jubier   Version for "FIVE MILLENNIUM CANON OF SOLAR ECLIPSES: -1999 TO +3000"
- 2007-07-20   Xavier Jubier   Added eclipse diagram and XML
- 2008-01-18   Xavier Jubier   Added altitude with refraction (no time correction)
- 2008-03-12   Xavier Jubier   Minor corrections and huge code adaptation for most browsers
- 2009-01-05   Xavier Jubier   Moon libration calculation for Watts chart
- 2009-01-29   Xavier Jubier   Lunar limb corrections with Watts chart
- 2009-11-20   Xavier Jubier   Lunar limb corrections with Kaguya's DEM
- 2010-06-31   Xavier Jubier   Added elevation profile at click location
- 2010-07-01   Xavier Jubier   Improved HTML5 Canvas support
- 2013-01-31   Xavier Jubier   Solar mesosphere 0.5" correction (add &Mes=1 to URL)
- 2013-03-26   Xavier Jubier   Fix for annulars near the limits
- 2014-05-30   Xavier Jubier   Geolocation tracking (https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation)
- 2016-01-03   Xavier Jubier   (Ant-)Umbral shadow outline at maximum eclipse, c1, c2, c3 and c4
- */
+Modifications:
+2007-01-30   Xavier Jubier   Version for "FIVE MILLENNIUM CANON OF SOLAR ECLIPSES: -1999 TO +3000"
+2007-07-20   Xavier Jubier   Added eclipse diagram and XML
+2008-01-18   Xavier Jubier   Added altitude with refraction (no time correction)
+2008-03-12   Xavier Jubier   Minor corrections and huge code adaptation for most browsers
+2009-01-05   Xavier Jubier   Moon libration calculation for Watts chart
+2009-01-29   Xavier Jubier   Lunar limb corrections with Watts chart
+2009-11-20   Xavier Jubier   Lunar limb corrections with Kaguya's DEM
+2010-06-31   Xavier Jubier   Added elevation profile at click location
+2010-07-01   Xavier Jubier   Improved HTML5 Canvas support
+2013-01-31   Xavier Jubier   Solar mesosphere 0.5" correction (add &Mes=1 to URL)
+2013-03-26   Xavier Jubier   Fix for annulars near the limits
+2014-05-30   Xavier Jubier   Geolocation tracking (https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/Using_geolocation)
+2016-01-03   Xavier Jubier   (Ant-)Umbral shadow outline at maximum eclipse, c1, c2, c3 and c4
+*/
 
 var strUserAgent = navigator.userAgent.toLowerCase();
 var isSafari = (strUserAgent.indexOf("safari") != -1) && (strUserAgent.indexOf("chrome") == -1);
@@ -179,12 +177,10 @@ function timedependent(circumstances) {
     ans = ans * t + elements[7];
     ans = ans * t + elements[6];
     circumstances[2] = ans;
-
     // dx
     ans = 3.0 * elements[9] * t + 2.0 * elements[8];
     ans = ans * t + elements[7];
     circumstances[10] = ans;
-
     // y
     ans = elements[13] * t + elements[12];
     ans = ans * t + elements[11];
@@ -194,7 +190,6 @@ function timedependent(circumstances) {
     ans = 3.0 * elements[13] * t + 2.0 * elements[12];
     ans = ans * t + elements[11];
     circumstances[11] = ans;
-
     // d
     ans = elements[16] * t + elements[15];
     ans = ans * t + elements[14];
@@ -239,31 +234,20 @@ function timedependent(circumstances) {
 // Populate the circumstances array with the time and location dependent circumstances
 function timelocdependent(circumstances) {
     timedependent(circumstances);
-
     // h, sin h, cos h
     circumstances[16] = circumstances[7] - obsvconst[1] - (elements[5] / 13713.440924999626077);
     circumstances[17] = Math.sin(circumstances[16]);
     circumstances[18] = Math.cos(circumstances[16]);
-
-
     // xi
     circumstances[19] = obsvconst[5] * circumstances[17];
     // eta
     circumstances[20] = (obsvconst[4] * circumstances[6]) - (obsvconst[5] * circumstances[18] * circumstances[5]);
-
-
     // zeta
     circumstances[21] = (obsvconst[4] * circumstances[5]) + (obsvconst[5] * circumstances[18] * circumstances[6]);
-
-
     // dxi
     circumstances[22] = circumstances[13] * obsvconst[5] * circumstances[18];
-
-
     // deta
     circumstances[23] = (circumstances[13] * circumstances[19] * circumstances[5]) - (circumstances[21] * circumstances[12]);
-
-
     // u
     circumstances[24] = circumstances[2] - circumstances[19];
     // v
@@ -272,18 +256,15 @@ function timelocdependent(circumstances) {
     circumstances[26] = circumstances[10] - circumstances[22];
     // b
     circumstances[27] = circumstances[11] - circumstances[23];
-
     var type = circumstances[0];
     // l1'
     if ((type == -2) || (type == 0) || (type == 2))
         circumstances[28] = circumstances[8] - (circumstances[21] * elements[26]);
-
     // l2'
     if ((type == -1) || (type == 0) || (type == 1))
         circumstances[29] = circumstances[9] - (circumstances[21] * elements[27]);
     // n^2
     circumstances[30] = (circumstances[26] * circumstances[26]) + (circumstances[27] * circumstances[27]);
-
 
     return circumstances;
 }
@@ -304,17 +285,12 @@ function c1c4iterate(circumstances) {
         n = Math.sqrt(circumstances[30]);
         tau = (circumstances[26] * circumstances[25]) - (circumstances[24] * circumstances[27]);
         tau /= n * circumstances[28];
-
-
-        if (Math.abs(tau) <= 1.0) {
+        if (Math.abs(tau) <= 1.0)
             tau = sign * Math.sqrt(1.0 - (tau * tau)) * circumstances[28] / n;
-        } else {
+        else
             tau = 0.0;
-        }
-
         tau = ((circumstances[24] * circumstances[26]) + (circumstances[25] * circumstances[27])) / circumstances[30] - tau;
         circumstances[1] -= tau;
-
         timelocdependent(circumstances);
         iter++;
     }
@@ -331,7 +307,6 @@ function getc1c4() {
     var n = Math.sqrt(mid[30]);
     var tmp = (mid[26] * mid[25]) - (mid[24] * mid[27]);
     tmp = tmp / (n * mid[28]);
-
     if (Math.abs(tmp) <= 1.0)
         tmp = Math.sqrt(1.0 - (tmp * tmp)) * mid[28] / n;
     else
@@ -340,7 +315,6 @@ function getc1c4() {
     c4[0] = 2;
     c1[1] = mid[1] - tmp;
     c4[1] = mid[1] + tmp;
-
     c1c4iterate(c1);
     c1c4iterate(c4);
 }
@@ -363,16 +337,12 @@ function c2c3iterate(circumstances) {
         n = Math.sqrt(circumstances[30]);
         tmp = (circumstances[26] * circumstances[25]) - (circumstances[24] * circumstances[27]);
         tmp = tmp / (n * circumstances[29]);
-
         if (Math.abs(tmp) <= 1.0)
             tmp = sign * Math.sqrt(1.0 - (tmp * tmp)) * circumstances[29] / n;
         else
             tmp = 0.0;
-
         tmp = ((circumstances[24] * circumstances[26]) + (circumstances[25] * circumstances[27])) / circumstances[30] - tmp;
         circumstances[1] -= tmp;
-
-
         timelocdependent(circumstances);
         iter++;
     }
@@ -389,12 +359,10 @@ function getc2c3() {
     var n = Math.sqrt(mid[30]);
     var tmp = (mid[26] * mid[25]) - (mid[24] * mid[27]);
     tmp = tmp / (n * mid[29]);
-
     if (Math.abs(tmp) <= 1.0)
         tmp = Math.sqrt(1.0 - (tmp * tmp)) * mid[29] / n;
     else
         tmp = 0.0;
-
     c2[0] = -1;
     c3[0] = 1;
     if (mid[29] < 0.0) {
@@ -404,7 +372,6 @@ function getc2c3() {
         c2[1] = mid[1] - tmp;
         c3[1] = mid[1] + tmp;
     }
-
     c2c3iterate(c2);
     c2c3iterate(c3);
 }
@@ -427,21 +394,16 @@ function observational(circumstances) {
     }
     // p
     circumstances[31] = Math.atan2(contacttype * circumstances[24], contacttype * circumstances[25]);
-
-
     // alt
     var sinlat = Math.sin(obsvconst[0]);
     var coslat = Math.cos(obsvconst[0]);
     circumstances[32] = Math.asin((circumstances[5] * sinlat) + (circumstances[6] * coslat * circumstances[18]));
-
     // q
     circumstances[33] = Math.asin(coslat * circumstances[17] / Math.cos(circumstances[32]));
     if (circumstances[20] < 0.0)
         circumstances[33] = Math.PI - circumstances[33];
-
     // v
     circumstances[34] = circumstances[31] - circumstances[33];
-
     // azi
     circumstances[35] = Math.atan2(-circumstances[17] * circumstances[6], (circumstances[5] * coslat) - (circumstances[18] * sinlat * circumstances[6]));
 
@@ -790,7 +752,6 @@ function getmid() {
     timelocdependent(mid);
     while (((tmp > 0.000001) || (tmp < -0.000001)) && (iter < 50)) {
         tmp = ((mid[24] * mid[26]) + (mid[25] * mid[27])) / mid[30];
-
         mid[1] -= tmp;
         timelocdependent(mid);
         iter++;
@@ -810,12 +771,10 @@ function getall(language, limbCorrections) {
     mid[36] = Math.sqrt((mid[24] * mid[24]) + (mid[25] * mid[25]));
     mid[37] = (mid[28] - mid[36]) / (mid[28] + mid[29]);
     mid[38] = (mid[28] - mid[29]) / (mid[28] + mid[29]);
-    console.log("MSR: " + mid[38]);
     if (mid[37] > 0.0) {
         getc1c4();
         if ((mid[36] < mid[29]) || (mid[36] < -mid[29])) {
             getc2c3();
-
             if (mid[29] < 0.0)
                 mid[39] = 3; // Total solar eclipse
             else
@@ -950,16 +909,18 @@ function readdata(lat, lon, elv) {
     var Elv = 0.0;
     if (typeof window.TZ !== "undefined")
         var TZ = window.TZ;
-    else
+    else {
+        window.TZ = 0.0;
         var TZ = 0.0;
+    }
     if ((elv == -1.0) || (elv == 0.0)) {
         if (location.search.length > 1) {
             var argstr = location.search.substring(1, location.search.length);
             var args = argstr.split("&");
             for (var i = 0; i < args.length; i++) {
-                if (args[i].substring(0, 4) == "Elv=")
+                if ((args[i].substring(0, 4) == "Elv=") && (gElevationActive == false))
                     eval(unescape(args[i]));
-                else if (args[i].substring(0, 3) == "TZ=")
+                else if ((args[i].substring(0, 3) == "TZ=") && (gTimeZoneActive == false))
                     eval(unescape(args[i]));
             }
         }
@@ -1555,6 +1516,136 @@ function getlc(circumstances, language) {
 }
 
 //
+// Get the Peakfinder parameters
+function getparams(circumstances, language) {
+    var ans, t, jd, a, b, c, d, e, year;
+
+    ans = "?lat=" + (obsvconst[0] * R2D).toFixed(4);
+    ans += "&lng=" + (-obsvconst[1] * R2D).toFixed(4);
+    ans += "&off=1&azi=";
+    t = circumstances[35] * R2D;
+    if (t < 0.0)
+        t += 360.0;
+    else if (t >= 360.0)
+        t -= 360.0;
+    ans += t.toFixed(0);
+    ans += "&zoom=4&cfg=rs&date=";
+    // UT date
+    jd = Math.floor(elements[0] - (elements[1] / 24.0));
+    t = circumstances[1] + elements[1] - ((elements[5] - 0.05) / 3600.0);
+    if (t < 0.0)
+        jd--;
+    else if (t >= 24.0)
+        jd++;
+    if (jd >= 2299160.5) {
+        a = Math.floor((jd - 1867216.25) / 36524.25);
+        a += jd + 1.0 - Math.floor(a / 4.0);
+    } else
+        a = jd;
+    b = a + 1525.0;
+    c = Math.floor((b - 122.1) / 365.25);
+    d = Math.floor(365.25 * c);
+    e = Math.floor((b - d) / 30.6001);
+    d = b - d - Math.floor(30.6001 * e);
+    if (e < 13.5)
+        e -= 1;
+    else
+        e -= 13;
+    if (e > 2.5)
+        year = c - 4716;
+    else
+        year = c - 4715;
+    ans += year + "-";
+    if (e < 10)
+        ans += "0";
+    ans += e + "-";
+    if (d < 10)
+        ans += "0";
+    ans += d;
+    ans += "T";
+    // UT time to the nearest minute
+    t = circumstances[1] + elements[1] - ((elements[5] - 0.05) / 3600.0);
+    if (t < 0.0)
+        t += 24.0;
+    else if (t >= 24.0)
+        t -= 24.0;
+    if (t < 10.0)
+        ans += "0";
+    ans += Math.floor(t) + ":";
+    t = (t - Math.floor(t)) * 60.0;
+    if (t < 10.0)
+        ans += "0";
+    ans += Math.round(t) + "Z";
+    if ((circumstances[32] * R2D) < 20.0) {
+        ans += "&binoazi=";
+        t = circumstances[35] * R2D;
+        if (t < 0.0)
+            t += 360.0;
+        else if (t >= 360.0)
+            t -= 360.0;
+        ans += t.toFixed(2);
+        ans += "&binoalt=";
+        t = circumstances[32] * R2D;
+        ans += t.toFixed(2);
+    }
+
+    return ans;
+}
+
+//
+// Get the Peakfinder title
+function gettitle(circumstances, language) {
+    var ans = "";
+
+    switch (circumstances) {
+        case sunrise:
+            if (language == "fr")
+                ans = "Panoramique du terrain au lever du Soleil...";
+            else
+                ans = "Terrain panorama at sunrise...";
+            break;
+        case c1:
+            if (language == "fr")
+                ans = "Panoramique du terrain au premier contact...";
+            else
+                ans = "Terrain panorama at first contact...";
+            break;
+        case c2:
+            if (language == "fr")
+                ans = "Panoramique du terrain au second contact...";
+            else
+                ans = "Terrain panorama at second contact...";
+            break;
+        case mid:
+            if (language == "fr")
+                ans = "Panoramique du terrain au maximum de l&rsquo;&eacute;clipse...";
+            else
+                ans = "Terrain panorama at maximum eclipse...";
+            break;
+        case c3:
+            if (language == "fr")
+                ans = "Panoramique du terrain au troisi&egrave;me contact...";
+            else
+                ans = "Terrain panorama at third contact...";
+            break;
+        case c4:
+            if (language == "fr")
+                ans = "Panoramique du terrain au quatri&egrave;me contact...";
+            else
+                ans = "Terrain panorama at fourth contact...";
+            break;
+        case sunset:
+            if (language == "fr")
+                ans = "Panoramique du terrain au coucher du Soleil...";
+            else
+                ans = "Terrain panorama at sunset...";
+            break;
+    }
+
+    return ans;
+}
+
+//
 // Display the information about 1st contact
 function displayc1(language) {
     var html = '<tr onmouseover="this.style.backgroundColor = \'#D8E4F1\'; drawDiagram(\'C1\', false, ' + ((language == "fr") ? '\'fr\'' : '\'en\'') + '); shadowOutlineLowAccuracy(c1[1]);" onmouseout="this.style.backgroundColor = \'#FDF3D0\';"><td align="right" class="EclipseRight" nowrap="nowrap">';
@@ -1567,7 +1658,7 @@ function displayc1(language) {
     true_alt = true_alt.toFixed(1);
     if (language == "fr")
         true_alt = true_alt.replace(/\./, ',');
-    html += '&nbsp;(C1)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(c1, language) + '</td><td class="EclipseLeft" nowrap="nowrap">' + gettime(c1, language) + '</td><td class="EclipseRight" ' + ((alt > -0.3) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(c1, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(c1, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getp(c1) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getv(c1, language) + '</td>' + ((mid[39] > 1) ? '<td class="Eclipse">&nbsp;</td>' : '') + '</tr>';
+    html += '&nbsp;(<a href="http://www.peakfinder.org/' + getparams(c1, language) + '" class="watts" target="_blank" title="' + gettitle(c1, language) + '">C1</a>)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(c1, language) + '</td><td class="EclipseLeft" nowrap="nowrap">' + gettime(c1, language) + '</td><td class="EclipseRight" ' + ((alt > -0.9) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(c1, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(c1, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getp(c1) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getv(c1, language) + '</td>' + ((mid[39] > 1) ? '<td class="Eclipse">&nbsp;</td>' : '') + '</tr>';
 
     return html;
 }
@@ -1592,7 +1683,7 @@ function displayc2(language) {
     true_alt = true_alt.toFixed(1);
     if (language == "fr")
         true_alt = true_alt.replace(/\./, ',');
-    html += '&nbsp;(C2)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(c2, language) + '</td><td class="EclipseLeft" nowrap="nowrap"><span id="c2_time" class="EclipseLeft">' + gettime(c2, language) + '</span></td><td class="EclipseRight" ' + ((alt > -0.3) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(c2, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(c2, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getp(c2) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getv(c2, language) + '</td><td class="EclipseRight" nowrap="nowrap"><div id="c2_lc" class="EclipseRight">' + getlc(c2, language) + '</div></td></tr>';
+    html += '&nbsp;(<a href="http://www.peakfinder.org/' + getparams(c2, language) + '" class="watts" target="_blank" title="' + gettitle(c2, language) + '">C2</a>)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(c2, language) + '</td><td class="EclipseLeft" nowrap="nowrap"><span id="c2_time" class="EclipseLeft">' + gettime(c2, language) + '</span></td><td class="EclipseRight" ' + ((alt > -0.9) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(c2, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(c2, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getp(c2) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getv(c2, language) + '</td><td class="EclipseRight" nowrap="nowrap"><div id="c2_lc" class="EclipseRight">' + getlc(c2, language) + '</div></td></tr>';
 
     return html;
 }
@@ -1612,7 +1703,7 @@ function displaymid(language) {
     if (language == "fr")
         true_alt = true_alt.replace(/\./, ',');
     gMaximumEclipseAzimuth = getazi(mid, "en");
-    html += '&nbsp;(MAX)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(mid, language) + '</td><td class="EclipseLeft" nowrap="nowrap">' + gettime(mid, language) + '</td><td class="EclipseRight" ' + ((alt > -0.3) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(mid, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(mid, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getp(mid) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getv(mid, language) + '</td>' + ((mid[39] > 1) ? '<td class="Eclipse">&nbsp;</td>' : '') + '</tr>';
+    html += '&nbsp;(<a href="http://www.peakfinder.org/' + getparams(mid, language) + '" class="watts" target="_blank" title="' + gettitle(mid, language) + '">MAX</a>)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(mid, language) + '</td><td class="EclipseLeft" nowrap="nowrap">' + gettime(mid, language) + '</td><td class="EclipseRight" ' + ((alt > -0.9) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(mid, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(mid, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getp(mid) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getv(mid, language) + '</td>' + ((mid[39] > 1) ? '<td class="Eclipse">&nbsp;</td>' : '') + '</tr>';
 
     return html;
 }
@@ -1637,7 +1728,7 @@ function displayc3(language) {
     true_alt = true_alt.toFixed(1);
     if (language == "fr")
         true_alt = true_alt.replace(/\./, ',');
-    html += '&nbsp;(C3)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(c3, language) + '</td><td class="EclipseLeft" nowrap="nowrap"><span id="c3_time" class="EclipseLeft">' + gettime(c3, language) + '</span></td><td class="EclipseRight" ' + ((alt > -0.3) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(c3, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(c3, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getp(c3) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getv(c3, language) + '</td><td class="EclipseRight" nowrap="nowrap"><div id="c3_lc" class="EclipseRight">' + getlc(c3, language) + '</div></td></tr>';
+    html += '&nbsp;(<a href="http://www.peakfinder.org/' + getparams(c3, language) + '" class="watts" target="_blank" title="' + gettitle(c3, language) + '">C3</a>)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(c3, language) + '</td><td class="EclipseLeft" nowrap="nowrap"><span id="c3_time" class="EclipseLeft">' + gettime(c3, language) + '</span></td><td class="EclipseRight" ' + ((alt > -0.9) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(c3, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(c3, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getp(c3) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getv(c3, language) + '</td><td class="EclipseRight" nowrap="nowrap"><div id="c3_lc" class="EclipseRight">' + getlc(c3, language) + '</div></td></tr>';
 
     return html;
 }
@@ -1655,7 +1746,7 @@ function displayc4(language) {
     true_alt = true_alt.toFixed(1);
     if (language == "fr")
         true_alt = true_alt.replace(/\./, ',');
-    html += '&nbsp;(C4)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(c4, language) + '</td><td class="EclipseLeft" nowrap="nowrap">' + gettime(c4, language) + '</td><td class="EclipseRight" ' + ((alt > -0.3) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(c4, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(c4, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getp(c4) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getv(c4, language) + '</td>' + ((mid[39] > 1) ? '<td class="Eclipse">&nbsp;</td>' : '') + '</tr>';
+    html += '&nbsp;(<a href="http://www.peakfinder.org/' + getparams(c4, language) + '" class="watts" target="_blank" title="' + gettitle(c4, language) + '">C4</a>)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(c4, language) + '</td><td class="EclipseLeft" nowrap="nowrap">' + gettime(c4, language) + '</td><td class="EclipseRight" ' + ((alt > -0.9) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(c4, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(c4, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getp(c4) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getv(c4, language) + '</td>' + ((mid[39] > 1) ? '<td class="Eclipse">&nbsp;</td>' : '') + '</tr>';
 
     return html;
 }
@@ -1673,7 +1764,7 @@ function displaysunrise(language) {
     true_alt = true_alt.toFixed(1);
     if (language == "fr")
         true_alt = true_alt.replace(/\./, ',');
-    html += '&nbsp;(RISE)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(sunrise, language) + '</td><td class="EclipseLeft" nowrap="nowrap">' + gettimeshort(sunrise) + '</td><td class="EclipseRight" ' + ((alt > -0.3) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(sunrise, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(sunrise, language) + '&deg;</td><td colspan="2" class="EclipseCenter"' + (((sunrise[1] >= c1[1]) && (sunrise[1] != mid[1])) ? ' title="' + ((language == "fr") ? 'Degr&eacute; d&rsquo;obscurit&eacute; au lever du soleil (grandeur: ' + sunrise[37].toFixed(5).replace(/\./, ',') + ')' : 'Obscuration at sunrise (magnitude: ' + sunrise[37].toFixed(5) + ')') + '"' : '') + ' nowrap="nowrap">' + (((sunrise[1] >= c1[1]) && (sunrise[1] != mid[1])) ? getcoveragesunrisesunset(sunrise, language) : '&nbsp;') + '</td>' + ((mid[39] > 1) ? '<td class="Eclipse">&nbsp;</td>' : '') + '</tr>';
+    html += '&nbsp;(<a href="http://www.peakfinder.org/' + getparams(sunrise, language) + '" class="watts" target="_blank" title="' + gettitle(sunrise, language) + '">RISE</a>)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(sunrise, language) + '</td><td class="EclipseLeft" nowrap="nowrap">' + gettimeshort(sunrise) + '</td><td class="EclipseRight" ' + ((alt > -0.9) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(sunrise, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(sunrise, language) + '&deg;</td><td colspan="2" class="EclipseCenter"' + (((sunrise[1] >= c1[1]) && (sunrise[1] != mid[1])) ? ' title="' + ((language == "fr") ? 'Degr&eacute; d&rsquo;obscurit&eacute; au lever du soleil (grandeur: ' + sunrise[37].toFixed(5).replace(/\./, ',') + ')' : 'Obscuration at sunrise (magnitude: ' + sunrise[37].toFixed(5) + ')') + '"' : '') + ' nowrap="nowrap">' + (((sunrise[1] >= c1[1]) && (sunrise[1] != mid[1])) ? getcoveragesunrisesunset(sunrise, language) : '&nbsp;') + '</td>' + ((mid[39] > 1) ? '<td class="Eclipse">&nbsp;</td>' : '') + '</tr>';
 
     return html;
 }
@@ -1691,23 +1782,44 @@ function displaysunset(language) {
     true_alt = true_alt.toFixed(1);
     if (language == "fr")
         true_alt = true_alt.replace(/\./, ',');
-    html += '&nbsp;(SET)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(sunset, language) + '</td><td class="EclipseLeft" nowrap="nowrap">' + gettimeshort(sunset) + '</td><td class="EclipseRight" ' + ((alt > -0.3) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(sunset, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(sunset, language) + '&deg;</td><td colspan="2" class="EclipseCenter"' + (((sunset[1] <= c4[1]) && (sunset[1] != mid[1])) ? ' title="' + ((language == "fr") ? 'Degr&eacute; d&rsquo;obscurit&eacute; au coucher du soleil (grandeur: ' + sunset[37].toFixed(5).replace(/\./, ',') + ')' : 'Obscuration at sunset (magnitude: ' + sunset[37].toFixed(5) + ')') + '"' : '') + ' nowrap="nowrap">' + (((sunset[1] <= c4[1]) && (sunset[1] != mid[1])) ? getcoveragesunrisesunset(sunset, language) : '&nbsp;') + '</td>' + ((mid[39] > 1) ? '<td class="Eclipse">&nbsp;</td>' : '') + '</tr>';
+    html += '&nbsp;(<a href="http://www.peakfinder.org/' + getparams(sunset, language) + '" class="watts" target="_blank" title="' + gettitle(sunset, language) + '">SET</a>)&nbsp;:&nbsp;</td><td class="' + ((language == "fr") ? 'EclipseRight' : 'EclipseLeft') + '" nowrap="nowrap">' + getdate(sunset, language) + '</td><td class="EclipseLeft" nowrap="nowrap">' + gettimeshort(sunset) + '</td><td class="EclipseRight" ' + ((alt > -0.9) ? 'title="' + true_alt + '&deg; ' + ((language == "fr") ? 'avec la r&eacute;fraction' : 'with refraction') + '" ' : ' ') + 'nowrap="nowrap">' + getalt(sunset, language) + '&deg;</td><td class="EclipseRight" nowrap="nowrap">' + getazi(sunset, language) + '&deg;</td><td colspan="2" class="EclipseCenter"' + (((sunset[1] <= c4[1]) && (sunset[1] != mid[1])) ? ' title="' + ((language == "fr") ? 'Degr&eacute; d&rsquo;obscurit&eacute; au coucher du soleil (grandeur: ' + sunset[37].toFixed(5).replace(/\./, ',') + ')' : 'Obscuration at sunset (magnitude: ' + sunset[37].toFixed(5) + ')') + '"' : '') + ' nowrap="nowrap">' + (((sunset[1] <= c4[1]) && (sunset[1] != mid[1])) ? getcoveragesunrisesunset(sunset, language) : '&nbsp;') + '</td>' + ((mid[39] > 1) ? '<td class="Eclipse">&nbsp;</td>' : '') + '</tr>';
 
     return html;
 }
 
 //
-// Get the duration in 00m 00.0s format
-function getduration(language) {
-    var tmp = c3[1] - c2[1];
+// Get the penumbral duration in 0h 00m 00.0s format
+function getpenumbralduration(language) {
+    var tmp, ans;
+
+    console.log(c1[1], c4[1], sunrise[1], sunset[1]);
+
+    if ((c1[1] > sunrise[1]) && (sunrise[40] == 2) && (c4[1] < sunset[1]) && (sunset[40] == 3))
+        tmp = c4[1] - c1[1];
+    else if ((c1[1] < sunrise[1]) && (sunrise[40] == 2) && (c4[1] > sunset[1]) && (sunset[40] == 3))
+        tmp = sunset[1] - sunrise[1];
+    else {
+        if ((c1[1] < sunrise[1]) && (sunrise[40] == 2))
+            tmp = c4[1] - sunrise[1];
+        else if ((c4[1] > sunset[1]) && (sunset[40] == 3))
+            tmp = sunset[1] - c1[1];
+        else
+            tmp = c4[1] - c1[1];
+    }
     if (tmp < 0.0)
         tmp += 24.0;
     else if (tmp >= 24.0)
         tmp -= 24.0;
-    tmp = (tmp * 60.0) - 60.0 * Math.floor(tmp) + 0.05 / 60.0;
-
-    var ans = Math.floor(tmp) + "m&nbsp;";
-    tmp = (tmp * 60.0) - 60.0 * Math.floor(tmp);
+    if (tmp >= 1.0) {
+        ans = Math.floor(tmp) + "h&nbsp;";
+        tmp -= Math.floor(tmp);
+    } else
+        ans = "";
+    tmp = (tmp * 60.0) - (60.0 * Math.floor(tmp)) + (0.05 / 60.0);
+    if ((tmp < 10.0) && (ans != ""))
+        ans += "0";
+    ans += Math.floor(tmp) + "m&nbsp;";
+    tmp = (tmp * 60.0) - (60.0 * Math.floor(tmp));
     if (tmp < 10.0)
         ans += "0";
     ans += Math.floor(tmp);
@@ -1716,21 +1828,69 @@ function getduration(language) {
     else
         ans += ".";
     ans += Math.floor((tmp - Math.floor(tmp)) * 10.0).toString() + "s";
+
+    return ans;
+}
+
+//
+// Get the duration in 00m 00.0s format
+function getduration(language) {
+    var tmp;
+
+    if ((c2[32] > gRefractionHeight) && (c3[32] > gRefractionHeight))
+        tmp = c3[1] - c2[1];
+    else {
+        if (c2[32] > gRefractionHeight)
+            tmp = sunset[1] - c2[1];
+        else if (c3[32] > gRefractionHeight)
+            tmp = c3[1] - sunrise[1];
+    }
+    if (tmp < 0.0)
+        tmp += 24.0;
+    else if (tmp >= 24.0)
+        tmp -= 24.0;
+    tmp = (tmp * 60.0) - (60.0 * Math.floor(tmp)) + (0.05 / 60.0);
+    var ans = Math.floor(tmp) + "m&nbsp;";
+    tmp = (tmp * 60.0) - (60.0 * Math.floor(tmp));
+    if (tmp < 10.0)
+        ans += "0";
+    ans += Math.floor(tmp);
+    if (language == "fr")
+        ans += ",";
+    else
+        ans += ".";
+    ans += Math.floor((tmp - Math.floor(tmp)) * 10.0).toString() + "s";
+
     return ans;
 }
 
 //
 // Get the limb corrected duration in 00m 00.0s format
 function getdurationlc(language) {
+    var tmp;
     var ans = "";
 
-    var tmp = c3[1] - c2[1];
+    if ((c2[32] > gRefractionHeight) && (c3[32] > gRefractionHeight))
+        tmp = c3[1] - c2[1];
+    else {
+        if (c2[32] > gRefractionHeight)
+            tmp = sunset[1] - c2[1];
+        else if (c3[32] > gRefractionHeight)
+            tmp = c3[1] - sunrise[1];
+    }
     if (tmp < 0.0)
         tmp += 24.0;
     else if (tmp >= 24.0)
         tmp -= 24.0;
     if (hasValidLimbCorrections() == true) {
-        tmp += (c3[36] - c2[36]) / 3600.0;
+        if ((c2[32] > gRefractionHeight) && (c3[32] > gRefractionHeight))
+            tmp += (c3[36] - c2[36]) / 3600.0;
+        else {
+            if (c2[32] > gRefractionHeight)
+                tmp -= c2[36] / 3600.0;
+            else if (c3[32] > gRefractionHeight)
+                tmp += c3[36] / 3600.0;
+        }
         if (tmp > 0.0) {
             tmp = (tmp * 60.0) - 60.0 * Math.floor(tmp) + 0.05 / 60.0;
             ans += Math.floor(tmp) + "m&nbsp;";
@@ -1818,18 +1978,14 @@ function getcoverage(language) {
         else
             return "100.00%";
     }
-
-
     if (mid[39] == 2)
         c = mid[38] * mid[38];
     else {
-
         c = Math.acos((mid[28] * mid[28] + mid[29] * mid[29] - 2.0 * mid[36] * mid[36]) / (mid[28] * mid[28] - mid[29] * mid[29]));
         b = Math.acos((mid[28] * mid[29] + mid[36] * mid[36]) / mid[36] / (mid[28] + mid[29]));
         a = Math.PI - b - c;
         c = ((mid[38] * mid[38] * a + b) - mid[38] * Math.sin(c)) / Math.PI;
     }
-
     var ans = (c * 100).toFixed(3);
     if (language == "fr")
         ans = ans.replace(/\./, ',');
@@ -2119,14 +2275,14 @@ function recalculate(language, lat, lon, elv, type) {
 
     gSVG_VML_Support = CheckSVG_VML();
     readdata(lat, lon, elv);
-
-    console.log(obsvconst);
     getall(language, true);
     var deltaT = getdTValue(1);
     if (durationOnly == false)
         htmlmid = displaymid(language);
+    // Look for sunrise/sunset during/around the eclipse
+    getsunrise(sunrise);
+    getsunset(sunset);
     // Is there an event?
-
     if (mid[39] > 0) {
         var centralEclipse = isCentralEclipse();
         if (durationOnly == false) {
@@ -2155,10 +2311,13 @@ function recalculate(language, lat, lon, elv, type) {
                 // Is the Sun below the horizon for just the total/annular event?
                 if ((c2[32] <= gRefractionHeight) && (c3[32] <= gRefractionHeight)) {
                     partialEvent = true;
-                    if (language == "fr")
+                    if (language == "fr") {
+                        htmlEclipse += "Dur\xE9e p\xE9nombrale\xA0:\xA0" + getpenumbralduration(language) + "<br />";
                         htmlEclipse += "(\xE9clipse partielle de soleil)";
-                    else
+                    } else {
+                        htmlEclipse += "Penumbral duration\xA0:\xA0" + getpenumbralduration(language) + "<br />";
                         htmlEclipse += "(partial solar eclipse)";
+                    }
                     if (durationOnly == false) {
                         if (language == "fr") {
                             if (mid[39] == 2)
@@ -2229,7 +2388,37 @@ function recalculate(language, lat, lon, elv, type) {
                         }
                     } else // ... or is the Sun below the horizon for at least some of the annular/total event
                     {
-                        htmlEclipse += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;???&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                        // Is the Sun above the horizon at C2 or C3?
+                        if ((c2[32] > gRefractionHeight) || (c3[32] > gRefractionHeight)) {
+                            htmlEclipse += getduration(language);
+                            if (durationOnly == true)
+                                htmlEclipse += "<br />";
+                            htmlEclipse += " (";
+                            // Is it an annular event?
+                            if (mid[39] == 2) {
+                                if (language == "fr")
+                                    htmlEclipse += "\xE9clipse annulaire de soleil";
+                                else
+                                    htmlEclipse += "annular solar eclipse";
+                            } else // ... or is it a total event?
+                            {
+                                if (language == "fr") {
+                                    if ((mid[37] >= 1.0) && (mid[37] <= 1.00012))
+                                        htmlEclipse += "\xE9clipse totale perl\xE9e de soleil";
+                                    else
+                                        htmlEclipse += "\xE9clipse totale de soleil";
+                                } else {
+                                    if ((mid[37] >= 1.0) && (mid[37] <= 1.00012))
+                                        htmlEclipse += "beaded total solar eclipse";
+                                    else
+                                        htmlEclipse += "total solar eclipse";
+                                }
+                            }
+                            htmlEclipse += ")";
+                            if (durationOnly == false)
+                                htmlEclipse += '<div id="duration_lc" class="EclipseCenter"></div>';
+                        } else
+                            htmlEclipse += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;???&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                         // Is the Sun above the horizon at C2 or C3? (the obscuration remains constant during a total/annular event)
                         if (language == "fr")
                             htmlCoverage = "Degr\xE9 d\u2019obscurit\xE9\xA0:\xA0";
@@ -2257,10 +2446,13 @@ function recalculate(language, lat, lon, elv, type) {
             {
                 partialEvent = true;
                 gNoEclipse = false;
-                if (language == "fr")
+                if (language == "fr") {
+                    htmlEclipse += "Dur\xE9e p\xE9nombrale\xA0:\xA0" + getpenumbralduration(language) + "<br />";
                     htmlEclipse += "(\xE9clipse partielle de soleil)";
-                else
+                } else {
+                    htmlEclipse += "Penumbral duration\xA0:\xA0" + getpenumbralduration(language) + "<br />";
                     htmlEclipse += "(partial solar eclipse)";
+                }
                 if (durationOnly == false) {
                     if (language == "fr")
                         htmlCoverage = "Degr\xE9 d\u2019obscurit\xE9\xA0:\xA0";
@@ -2287,17 +2479,17 @@ function recalculate(language, lat, lon, elv, type) {
     if (isEclipse == true) {
         if (type == "full") {
             /*      if (mid[39] > 1)
-             html = '<div style="width: ' + (( language == "fr" ) ? '495' : ((mid[39] >= 2) ? '510' : '475')) + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';
-             else
-             html = '<div style="width: ' + (( language == "fr" ) ? '450' : '430') + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';*/
+        html = '<div style="width: ' + (( language == "fr" ) ? '495' : ((mid[39] >= 2) ? '510' : '475')) + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';
+      else
+        html = '<div style="width: ' + (( language == "fr" ) ? '450' : '430') + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';*/
             html = '<div style="width: 100%; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';
         } else {
             if (document.getElementById("chbDetails")) {
                 if (document.getElementById("chbDetails").checked == true) {
                     /*          if (mid[39] > 1)
-                     html = '<div style="width: ' + (( language == "fr" ) ? '495' : ((mid[39] >= 2) ? '510' : '475')) + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';
-                     else
-                     html = '<div style="width: ' + (( language == "fr" ) ? '450' : '430') + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';*/
+            html = '<div style="width: ' + (( language == "fr" ) ? '495' : ((mid[39] >= 2) ? '510' : '475')) + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';
+          else
+            html = '<div style="width: ' + (( language == "fr" ) ? '450' : '430') + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';*/
                     html = '<div style="width: 100%; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';
                 } else {
                     durationOnly = true;
@@ -2306,199 +2498,11 @@ function recalculate(language, lat, lon, elv, type) {
                 }
             } else {
                 /*        if (mid[39] > 1)
-                 html = '<div style="width: ' + (( language == "fr" ) ? '495' : ((mid[39] >= 2) ? '510' : '475')) + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';
-                 else
-                 html = '<div style="width: ' + (( language == "fr" ) ? '450' : '430') + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';*/
+          html = '<div style="width: ' + (( language == "fr" ) ? '495' : ((mid[39] >= 2) ? '510' : '475')) + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';
+        else
+          html = '<div style="width: ' + (( language == "fr" ) ? '450' : '430') + 'px; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';*/
                 html = '<div style="width: 100%; font-size: 7pt; font-weight: bold; text-align: left; background-color: #FDF3D0;">';
             }
-        }
-        html += '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
-        html += '<tr>';
-        html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + dd2dms(lat, 1, language) + '</td>';
-        html += '<td align="center" class="EclipseCenter" nowrap="nowrap">&nbsp;&nbsp;&lt;&mdash;&gt;&nbsp;&nbsp;</td>';
-        html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + ((language == "fr") ? lat.toFixed(5).replace(/\./, ',') : lat.toFixed(5)) + '&deg;</td>';
-        html += '<td rowspan="' + ((obsvconst[2] == 0.0) ? '2' : '3') + '" align="center" class="EclipseCenter">&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-        if (durationOnly == false) {
-            html += '<td rowspan="' + ((obsvconst[2] == 0.0) ? '2' : '3') + '" align="center" class="EclipseCenter" nowrap="nowrap">';
-            html += htmlEclipse;
-            html += '</td>';
-            html += '<td rowspan="' + ((obsvconst[2] == 0.0) ? '2' : '3') + '" align="center" class="EclipseCenter">&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-        }
-        if (language == "fr")
-            html += '<td rowspan="' + ((obsvconst[2] == 0.0) ? '2' : '3') + '" align="center" class="EclipseCenter"><a href="javascript:openGMWindow(\'../solar_eclipses/xSE_GoogleMap3_Help.html\',\'\');" class="EclipseHelp" title="Aide &laquo;Cartographie Google&raquo;">Aide</a></td>';
-        else
-            html += '<td rowspan="' + ((obsvconst[2] == 0.0) ? '2' : '3') + '" align="center" class="EclipseCenter"><a href="javascript:openGMWindow(\'../solar_eclipses/xSE_GoogleMap3_Help.html\',\'\');" class="EclipseHelp" title="&quot;Google Map&quot; Help">Help</a></td>';
-        html += '</tr>';
-        html += '<tr>';
-        html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + dd2dms(lon, 2, language) + '</td>';
-        html += '<td align="center" class="EclipseCenter" nowrap="nowrap">&nbsp;&nbsp;&lt;&mdash;&gt;&nbsp;&nbsp;</td>';
-        html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + ((language == "fr") ? lon.toFixed(5).replace(/\./, ',') : lon.toFixed(5)) + '&deg;</td>';
-        html += '</tr>';
-        if (obsvconst[2] != 0.0) {
-            html += '<tr>';
-            if (obsvconst[2] < 9000.0)
-                html += '<td colspan="3" align="center" class="EclipseCenter" nowrap="nowrap">' + ((language == "fr") ? (obsvconst[2]).toFixed(1).replace(/\./, ',') : (obsvconst[2]).toFixed(1)) + 'm (' + ((obsvconst[2] * 3.2808399).toFixed(0)) + 'ft)</td>';
-            else	// From an aircraft
-                html += '<td colspan="3" align="center" class="EclipseCenter" nowrap="nowrap">' + ((language == "fr") ? (obsvconst[2]).toFixed(1).replace(/\./, ',') : (obsvconst[2]).toFixed(1)) + 'm (' + ((obsvconst[2] * 3.2808399).toFixed(0)) + 'ft); ' + ((language == "fr") ? ('d&eacute;pression: ' + getHorizonDip(obsvconst[2]).toFixed(1).replace(/\./, ',')) : ('dip: ' + getHorizonDip(obsvconst[2]).toFixed(1))) + '&deg;</td>';
-            html += '</tr>';
-        }
-        if (durationOnly == true) {
-            html += '<tr>';
-            html += '<td colspan="3" align="center" class="EclipseCenter">';
-            html += htmlEclipse;
-            html += '</td>';
-            html += '<td align="center" class="EclipseCenter">&nbsp;&nbsp;&nbsp;&nbsp;</td>';
-            html += '<td align="center" class="EclipseCenter">&nbsp;</td>';
-            html += '</tr>';
-        }
-        html += '</table>';
-
-        if (durationOnly == false) {
-            var htmlVelocity = getVelocity(language);
-            if (language == "fr") {
-                htmlMagnitude = "Grandeur au maximum\xA0:\xA0" + mid[37].toFixed(5).replace(/\./, ',');
-                htmlMagnitude += "<br />Rapport Lune/Soleil\xA0:\xA0" + mid[38].toFixed(5).replace(/\./, ',');
-                if (htmlVelocity != "") {
-                    if (mid[39] == 2)
-                        htmlMagnitude += "<br />V\xE9locit\xE9 de l\u2019ant\xE9-ombre\xA0:\xA0" + htmlVelocity;
-                    else
-                        htmlMagnitude += "<br />V\xE9locit\xE9 de l\u2019ombre\xA0:\xA0" + htmlVelocity;
-                }
-            } else {
-                htmlMagnitude = "Magnitude at maximum\xA0:\xA0" + mid[37].toFixed(5);
-                htmlMagnitude += "<br />Moon/Sun size ratio\xA0:\xA0" + mid[38].toFixed(5);
-                if (htmlVelocity != "") {
-                    if (mid[39] == 2)
-                        htmlMagnitude += "<br />Antumb. vel.\xA0:\xA0" + htmlVelocity;
-                    else
-                        htmlMagnitude += "<br />Umbral vel.\xA0:\xA0" + htmlVelocity;
-                }
-            }
-
-            if ((htmlCoverage != "") || (htmlMagnitude != "")) {
-                html += '<table border="0" cellspacing="1" width="100%">';
-                html += '<tr>';
-                if (htmlCoverage != "") {
-                    html += '<td class="EclipseLeft" title="' + ((language == "fr") ? "Degr&eacute; d&rsquo;obscurit&eacute; au maximum de l&rsquo;&eacute;clipse" : "Obscuration at maximum eclipse") + '" nowrap="nowrap">';
-                    html += htmlCoverage;
-                } else
-                    html += '<td class="Eclipse" nowrap="nowrap">';
-                html += '</td>';
-                html += '<td width="2">&nbsp;</td>';
-                html += '<td class="Eclipse" style="width: 102px; height: 42px;" nowrap="nowrap">';
-                if (gSupportHTML5Canvas) {
-                    html += '<div id="canvas_container" style="text-align: center; border: solid 1px lightgrey; width: 100px; height: 40px;">';
-                    html += '<canvas id="SE_diagram" width="100" height="40" style="width: 100px; height: 40px;"></canvas>';
-                    html += '<div id="circum_label" align="left" style="position: relative; left: 5px; top: -40px; text-align: left; color: #FF6600; height: 0px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 8pt; font-weight: bold;"></div>';
-                    html += '</div>';
-                } else {
-                    if (!isIE) // Use SVG
-                    {
-                        // Doesn't work well in Firefox because of a long-standing bug with iframe!!!
-                        if (isFirefox) {
-                            gIFRAMEid = "SE_diagram" + gIFRAMEindex;
-                            if ((gIFRAMEindex % 2) == 0)
-                                html += '<iframe src="SolarEclipse_Diagram.xhtml" name="' + gIFRAMEid + '" id="' + gIFRAMEid + '" width="100" height="40" align="middle" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="true" style="overflow: hidden; border: none;">' + ((language == "fr") ? 'Sch&#233;ma Eclipse' : 'Eclipse Diagram') + '</iframe>';
-                            else
-                                html += '<iframe src="SolarEclipse_Diagram2.xhtml" name="' + gIFRAMEid + '" id="' + gIFRAMEid + '" width="100" height="40" align="middle" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="true" style="overflow: hidden; border: none;">' + ((language == "fr") ? 'Sch&#233;ma Eclipse' : 'Eclipse Diagram') + '</iframe>';
-                            gIFRAMEindex++;
-                            html += '<div id="circum_label" align="left" style="position: relative; left: 5px; top: -38px; display: block; text-align: left; color: #FF6600; height: 0px; font-size: 8pt;"></div>';
-                        } else {
-                            gIFRAMEid = "SE_diagram";
-                            html += '<iframe src="SolarEclipse_Diagram.xhtml" name="SE_diagram" id="SE_diagram" width="102" height="42" align="middle" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="true" style="overflow: hidden; border: none;">' + ((language == "fr") ? 'Sch&#233;ma Eclipse' : 'Eclipse Diagram') + '</iframe>';
-                        }
-                    } else // Use VML
-                    {
-                        html += '<div id="eclipse_diagram" align="center" style="position: relative; left: 0px; top: 0px; text-align: center; vertical-align: top; width: 100px; height: 40px; clip: rect(0px 100px 40px 0px); overflow: hidden;">';
-                        html += drawDiagram('mid', true, language);
-                        html += '</div>';
-                    }
-                }
-                html += '</td>';
-                html += '<td width="2">&nbsp;</td>';
-                html += '<td class="Eclipse" nowrap="nowrap">';
-                if (htmlMagnitude != "")
-                    html += htmlMagnitude;
-                html += '</td>';
-                html += '</tr>';
-                html += '</table>';
-            }
-
-            /*      if (mid[39] > 1)
-             html += '<div align="center" style="width: ' + (( language == "fr" ) ? '495' : ((mid[39] >= 2) ? '510' : '475')) + 'px; font-size: 7pt; font-weight: bold;"><center>';
-             else
-             html += '<div align="center" style="width: ' + (( language == "fr" ) ? '450' : '430') + 'px; font-size: 7pt; font-weight: bold;"><center>';*/
-            html += '<div align="center" style="width: 100%; font-size: 7pt; font-weight: bold;"><center>';
-            html += '<table border="0" cellspacing="1" width="100%">';
-            html += '<tr align="center" bgcolor="#DDAD08">';
-            if (mid[39] > 1) {
-                var numDate = new Object();
-                getnumUTdate(mid, numDate);
-            }
-            var TZ = (-obsvconst[3]).toFixed(1);
-            if (obsvconst[3] < 0.0)
-                TZ = "+" + TZ;
-            if (language == "fr") {
-                if (mid[39] > 1)
-                    html += '<th class="Eclipse" nowrap="nowrap">Phase&nbsp;(&Delta;T=' + deltaT.replace(/\./, ',') + 's' + ((elv > 0) ? ';&nbsp;alt.=' + elv.toFixed(0) + 'm' : '') + ')</th><th class="Eclipse">Date</th><th class="Eclipse" nowrap="nowrap">Heure&nbsp;(' + ((obsvconst[3] == 0.0) ? 'TU' : TZ.replace(/\./, ',')) + ')</th><th class="Eclipse">Alt</th><th class="Eclipse">Azi</th><th class="Eclipse">P</th><th class="Eclipse">V</th>' + ((mid[39] > 1) ? '<th class="Eclipse"><a href="../../php/php5/WattsChartBailyBeads.php?DF=15&BB=3.0&RM=' + mid[44] + '&ZM=' + mid[47] + '&RS=' + mid[43] + '&LibL=' + mid[48].toFixed(2) + '&LibB=' + mid[49].toFixed(2) + '&MN=' + mid[50].toFixed(2) + '&PA2=' + (rev(c2[31] * R2D).toFixed(2)) + '&PA3=' + (rev(c3[31] * R2D).toFixed(2)) + '&Dur=' + getdurationseconds() + '&Zen=' + (mid[33] * R2D).toFixed(2) + '&SN=' + mid[51].toFixed(2) + '&Lat=' + (obsvconst[0] * R2D).toFixed(7) + '&Lng=' + (-obsvconst[1] * R2D).toFixed(7) + '&Elv=' + (obsvconst[2].toFixed(2)) + '&Y=' + numDate.year + '&M=' + numDate.month + '&D=' + numDate.day + '&T=' + ((mid[39] == 3) ? 'T' : 'A') + '&dT=' + getdTValue(2) + '&Mes=' + gMes + '&VSOP=' + gVSOP + '&Lang=fr" class="watts" target="_blank" title="Diagramme de ' + ((Math.abs(mid[49]) > 1.6) ? 'Watts' : 'Kaguya') + ' avec les corrections dues au limbe lunaire...">CL</a></th>' : '');
-                else
-                    html += '<th class="Eclipse" nowrap="nowrap">Phase&nbsp;(&Delta;T=' + deltaT.replace(/\./, ',') + 's' + ((elv > 0) ? ';&nbsp;alt.=' + elv.toFixed(0) + 'm' : '') + ')</th><th class="Eclipse">Date</th><th class="Eclipse" nowrap="nowrap">Heure&nbsp;(' + ((obsvconst[3] == 0.0) ? 'TU' : TZ.replace(/\./, ',')) + ')</th><th class="Eclipse">Alt</th><th class="Eclipse">Azi</th><th class="Eclipse">P</th><th class="Eclipse">V</th>' + ((mid[39] > 1) ? '<th class="Eclipse">CL</th>' : '');
-            } else {
-                if (mid[39] > 1)
-                    html += '<th class="Eclipse" nowrap="nowrap">Event&nbsp;(&Delta;T=' + deltaT + 's' + ((elv > 0) ? ';&nbsp;alt.=' + elv.toFixed(0) + 'm' : '') + ')</th><th class="Eclipse">Date</th><th class="Eclipse" nowrap="nowrap">Time&nbsp;(' + ((obsvconst[3] == 0.0) ? 'UT' : TZ.replace(/\./, ',')) + ')</th><th class="Eclipse">Alt</th><th class="Eclipse">Azi</th><th class="Eclipse">P</th><th class="Eclipse">V</th>' + ((mid[39] > 1) ? '<th class="Eclipse"><a href="../../../php/php5/WattsChartBailyBeads.php?DF=15&BB=3.0&RM=' + mid[44] + '&ZM=' + mid[47] + '&RS=' + mid[43] + '&LibL=' + mid[48].toFixed(2) + '&LibB=' + mid[49].toFixed(2) + '&MN=' + mid[50].toFixed(2) + '&PA2=' + (rev(c2[31] * R2D).toFixed(2)) + '&PA3=' + (rev(c3[31] * R2D).toFixed(2)) + '&Dur=' + getdurationseconds() + '&Zen=' + (mid[33] * R2D).toFixed(2) + '&SN=' + mid[51].toFixed(2) + '&Lat=' + (obsvconst[0] * R2D).toFixed(7) + '&Lng=' + (-obsvconst[1] * R2D).toFixed(7) + '&Elv=' + (obsvconst[2].toFixed(2)) + '&Y=' + numDate.year + '&M=' + numDate.month + '&D=' + numDate.day + '&T=' + ((mid[39] == 3) ? 'T' : 'A') + '&dT=' + getdTValue(2) + '&Mes=' + gMes + '&VSOP=' + gVSOP + '&Lang=en" class="watts" target="_blank" title="' + ((Math.abs(mid[49]) > 1.6) ? 'Watts' : 'Kaguya') + ' chart with the lunar limb contact corrections...">LC</a></th>' : '');
-                else
-                    html += '<th class="Eclipse" nowrap="nowrap">Event&nbsp;(&Delta;T=' + deltaT + 's' + ((elv > 0) ? ';&nbsp;alt.=' + elv.toFixed(0) + 'm' : '') + ')</th><th class="Eclipse">Date</th><th class="Eclipse" nowrap="nowrap">Time&nbsp;(' + ((obsvconst[3] == 0.0) ? 'UT' : TZ.replace(/\./, ',')) + ')</th><th class="Eclipse">Alt</th><th class="Eclipse">Azi</th><th class="Eclipse">P</th><th class="Eclipse">V</th>' + ((mid[39] > 1) ? '<th class="Eclipse">LC</th>' : '');
-            }
-            html += "</tr>";
-
-            // Look for sunrise/sunset during/around the eclipse
-            getsunrise(sunrise);
-            if (sunrise[1] != mid[1])
-                htmlsunrise = displaysunrise(language);
-            getsunset(sunset);
-            if (sunset[1] != mid[1])
-                htmlsunset = displaysunset(language);
-
-            if ((htmlsunrise != "") && (c1[1] >= sunrise[1]))
-                html += htmlsunrise;
-            html += htmlc1;
-            if (partialEvent == false) {
-                if ((htmlsunrise != "") && (c1[1] < sunrise[1]) && (c2[1] >= sunrise[1]))
-                    html += htmlsunrise;
-                if ((htmlsunset != "") && (c1[1] < sunset[1]) && (c2[1] >= sunset[1]))
-                    html += htmlsunset;
-                html += htmlc2;
-                if ((htmlsunrise != "") && (c2[1] < sunrise[1]) && (mid[1] >= sunrise[1]))
-                    html += htmlsunrise;
-                if ((htmlsunset != "") && (c2[1] < sunset[1]) && (mid[1] >= sunset[1]))
-                    html += htmlsunset;
-            } else {
-                if ((htmlsunrise != "") && (c1[1] < sunrise[1]) && (mid[1] >= sunrise[1]))
-                    html += htmlsunrise;
-                if ((htmlsunset != "") && (c1[1] < sunset[1]) && (mid[1] >= sunset[1]))
-                    html += htmlsunset;
-            }
-            html += htmlmid;
-            if (partialEvent == false) {
-                if ((htmlsunrise != "") && (mid[1] < sunrise[1]) && (c3[1] >= sunrise[1]))
-                    html += htmlsunrise;
-                if ((htmlsunset != "") && (c3[1] > sunset[1]) && (mid[1] <= sunset[1]))
-                    html += htmlsunset;
-                html += htmlc3;
-                if ((htmlsunrise != "") && (c3[1] < sunrise[1]) && (c4[1] >= sunrise[1]))
-                    html += htmlsunrise;
-                if ((htmlsunset != "") && (c3[1] < sunset[1]) && (c4[1] >= sunset[1]))
-                    html += htmlsunset;
-            } else {
-                if ((htmlsunrise != "") && (mid[1] < sunrise[1]) && (c4[1] >= sunrise[1]))
-                    html += htmlsunrise;
-                if ((htmlsunset != "") && (c4[1] > sunset[1]) && (mid[1] <= sunset[1]))
-                    html += htmlsunset;
-            }
-            html += htmlc4;
-            if ((htmlsunset != "") && (c4[1] <= sunset[1]))
-                html += htmlsunset;
-            html += '</table></center></div>';
         }
 
         if (typeof daynight !== "undefined") {
@@ -2508,28 +2512,28 @@ function recalculate(language, lat, lon, elv, type) {
         }
     } else // No eclipse
     {
-        html = '<div style="width: 200px; font-size: 7pt; font-weight: bold; text-align: center; background-color: #FDF3D0;">';
-        html += '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
-        html += '<tr>';
-        html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + dd2dms(lat, 1, language) + '</td>';
-        html += '<td align="center" class="EclipseCenter" nowrap="nowrap">&nbsp;&nbsp;&lt;&mdash;&gt;&nbsp;&nbsp;</td>';
-        html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + ((language == "fr") ? lat.toFixed(5).replace(/\./, ',') : lat.toFixed(5)) + '&deg;</td>';
-        html += '</tr>';
-        html += '<tr>';
-        html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + dd2dms(lon, 2, language) + '</td>';
-        html += '<td align="center" class="EclipseCenter" nowrap="nowrap">&nbsp;&nbsp;&lt;&mdash;&gt;&nbsp;&nbsp;</td>';
-        html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + ((language == "fr") ? lon.toFixed(5).replace(/\./, ',') : lon.toFixed(5)) + '&deg;</td>';
-        html += '</tr>';
-        if (obsvconst[2] != 0.0) {
-            html += '<tr>';
-            if (obsvconst[2] < 9000.0)
-                html += '<td colspan="3" align="center" class="EclipseCenter" nowrap="nowrap">' + ((language == "fr") ? (obsvconst[2]).toFixed(1).replace(/\./, ',') : (obsvconst[2]).toFixed(1)) + 'm (' + ((obsvconst[2] * 3.2808399).toFixed(0)) + 'ft)</td>';
-            else	// From an aircraft
-                html += '<td colspan="3" align="center" class="EclipseCenter" nowrap="nowrap">' + ((language == "fr") ? (obsvconst[2]).toFixed(1).replace(/\./, ',') : (obsvconst[2]).toFixed(1)) + 'm (' + ((obsvconst[2] * 3.2808399).toFixed(0)) + 'ft); ' + ((language == "fr") ? ('d&eacute;pression: ' + getHorizonDip(obsvconst[2]).toFixed(1).replace(/\./, ',')) : ('dip: ' + getHorizonDip(obsvconst[2]).toFixed(1))) + '&deg;</td>';
-            html += '</tr>';
-        }
-        html += '</table>';
-        html += '<br /><p style="text-align: center;">' + htmlEclipse + '</p>';
+        // html = '<div style="width: 210px; font-size: 7pt; font-weight: bold; text-align: center; background-color: #FDF3D0;">';
+        // html += '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
+        // html += '<tr>';
+        // html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + dd2dms(lat, 1, language) + '</td>';
+        // html += '<td align="center" class="EclipseCenter" nowrap="nowrap">&nbsp;&nbsp;&lt;&mdash;&gt;&nbsp;&nbsp;</td>';
+        // html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + ((language == "fr") ? lat.toFixed(5).replace(/\./, ',') : lat.toFixed(5)) + '&deg;</td>';
+        // html += '</tr>';
+        // html += '<tr>';
+        // html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + dd2dms(lon, 2, language) + '</td>';
+        // html += '<td align="center" class="EclipseCenter" nowrap="nowrap">&nbsp;&nbsp;&lt;&mdash;&gt;&nbsp;&nbsp;</td>';
+        // html += '<td align="right" class="EclipseLatLon" nowrap="nowrap">' + ((language == "fr") ? lon.toFixed(5).replace(/\./, ',') : lon.toFixed(5)) + '&deg;</td>';
+        // html += '</tr>';
+        // if (obsvconst[2] != 0.0) {
+        //     html += '<tr>';
+        //     if (obsvconst[2] < 9000.0)
+        //         html += '<td colspan="3" align="center" class="EclipseCenter" nowrap="nowrap">' + ((language == "fr") ? (obsvconst[2]).toFixed(1).replace(/\./, ',') : (obsvconst[2]).toFixed(1)) + 'm (' + ((obsvconst[2] * 3.2808399).toFixed(0)) + 'ft)</td>';
+        //     else	// From an aircraft
+        //         html += '<td colspan="3" align="center" class="EclipseCenter" nowrap="nowrap">' + ((language == "fr") ? (obsvconst[2]).toFixed(1).replace(/\./, ',') : (obsvconst[2]).toFixed(1)) + 'm (' + ((obsvconst[2] * 3.2808399).toFixed(0)) + 'ft); ' + ((language == "fr") ? ('d&eacute;pression: ' + getHorizonDip(obsvconst[2]).toFixed(1).replace(/\./, ',')) : ('dip: ' + getHorizonDip(obsvconst[2]).toFixed(1))) + '&deg;</td>';
+        //     html += '</tr>';
+        // }
+        // html += '</table>';
+        // html += '<br /><p style="text-align: center;">' + htmlEclipse + '</p>';
     }
     html += '</div>';
 
@@ -2638,7 +2642,31 @@ function recal_geo(language, lat, lon, elv, speed, heading) {
                         }
                     } else // ... or is the Sun below the horizon for at least some of the annular/total event
                     {
-                        htmlEclipse += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;???&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                        // Is the Sun above the horizon at C2 or C3?
+                        if ((c2[32] > gRefractionHeight) || (c3[32] > gRefractionHeight)) {
+                            // Is it an annular event?
+                            if (mid[39] == 2) {
+                                if (language == "fr")
+                                    htmlEclipse += "Annulaire";
+                                else
+                                    htmlEclipse += "Annular";
+                            } else // ... or is it a total event?
+                            {
+                                if (language == "fr") {
+                                    if ((mid[37] >= 1.0) && (mid[37] <= 1.00012))
+                                        htmlEclipse += "Totale perl\xE9e";
+                                    else
+                                        htmlEclipse += "Totale";
+                                } else {
+                                    if ((mid[37] >= 1.0) && (mid[37] <= 1.00012))
+                                        htmlEclipse += "Beaded total";
+                                    else
+                                        htmlEclipse += "Total";
+                                }
+                            }
+                            htmlEclipse += " (" + getduration(language) + ((language == "fr") ? " non corrig\xE9e)" : " uncorrected)");
+                        } else
+                            htmlEclipse += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;???&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                         // Is the Sun above the horizon at C2 or C3? (the obscuration remains constant during a total/annular event)
                         if (language == "fr")
                             htmlCoverage = "Degr\xE9 d\u2019obscurit\xE9:\xA0";
@@ -2705,16 +2733,16 @@ function recal_geo(language, lat, lon, elv, speed, heading) {
         }
 
         /*    var Dist = 0;
-         if (location.search.length > 1)
-         {
-         var argstr = location.search.substring(1, location.search.length);
-         var args = argstr.split("&");
-         for (var i = 0; i < args.length; i++)
-         {
-         if ( args[i].substring(0, 5) == "Dist=" )
-         eval(unescape(args[i]));
-         }
-         }*/
+    if (location.search.length > 1)
+    {
+      var argstr = location.search.substring(1, location.search.length);
+      var args = argstr.split("&");
+      for (var i = 0; i < args.length; i++)
+      {
+        if ( args[i].substring(0, 5) == "Dist=" )
+          eval(unescape(args[i]));
+      }
+    }*/
 
 //    html = '<div id="geolocationdata" style="font-size: ' + (( isPhoneTablet == false ) ? '7' : '6') + 'pt; font-weight: bold; text-align: left; letter-spacing: -0.5px; white-space: nowrap;" nowrap="nowrap">';
         html = '<div id="geolocationdata" style="font-size: ' + ((isPhoneTablet == false) ? '7' : '6') + 'pt; font-weight: bold; text-align: left; white-space: nowrap;" nowrap="nowrap">';
@@ -3467,11 +3495,11 @@ function drawDiagram(event, inline, language) {
             {
                 if (yor <= 5) {
                     /*          html += ' <v:oval id="coronaX1" style="left: ' + (parseInt(scx, 10) - (parseFloat(srd) * 4)).toFixed(0) + 'px; top: ' + (parseInt(scy, 10) - (parseFloat(srd) * 0.75)).toFixed(0) + 'px; width: ' + (parseFloat(srd) * 8).toFixed(0) + 'px; height: ' + (parseFloat(srd) * 1.5).toFixed(0) + 'px; rotation: ' + (angle_ns - 8).toFixed(1) + ';" fillcolor="white" stroked="false" strokecolor="' + sky_color + '" strokeweight="0">';
-                     html += '  <v:fill id="corona_gradient1" type="gradientradial" color2="' + sky_color + '" colors="0% white, 30% white, 100% ' + sky_color + '" focusposition="0.5,0.5" focussize="0.0,0.0" focus="100%" opacity="20%" />';
-                     html += ' </v:oval>';
-                     html += ' <v:oval id="coronaX2" style="left: ' + (parseInt(scx, 10) - (parseFloat(srd) * 3)).toFixed(0) + 'px; top: ' + (parseInt(scy, 10) - (parseFloat(srd) * 0.75)).toFixed(0) + 'px; width: ' + (parseFloat(srd) * 6).toFixed(0) + 'px; height: ' + Math.floor(parseFloat(srd) * 1.5) + 'px; rotation: ' + (angle_ns + 15).toFixed(1) + ';" fillcolor="white" stroked="false" strokecolor="' + sky_color + '" strokeweight="0">';
-                     html += '  <v:fill id="corona_gradient2" type="gradientradial" color2="' + sky_color + '" colors="0% white, 30% white, 100% ' + sky_color + '" focusposition="0.5,0.5" focussize="0.0,0.0" focus="100%" opacity="20%" />';
-                     html += ' </v:oval>';*/
+          html += '  <v:fill id="corona_gradient1" type="gradientradial" color2="' + sky_color + '" colors="0% white, 30% white, 100% ' + sky_color + '" focusposition="0.5,0.5" focussize="0.0,0.0" focus="100%" opacity="20%" />';
+          html += ' </v:oval>';
+          html += ' <v:oval id="coronaX2" style="left: ' + (parseInt(scx, 10) - (parseFloat(srd) * 3)).toFixed(0) + 'px; top: ' + (parseInt(scy, 10) - (parseFloat(srd) * 0.75)).toFixed(0) + 'px; width: ' + (parseFloat(srd) * 6).toFixed(0) + 'px; height: ' + Math.floor(parseFloat(srd) * 1.5) + 'px; rotation: ' + (angle_ns + 15).toFixed(1) + ';" fillcolor="white" stroked="false" strokecolor="' + sky_color + '" strokeweight="0">';
+          html += '  <v:fill id="corona_gradient2" type="gradientradial" color2="' + sky_color + '" colors="0% white, 30% white, 100% ' + sky_color + '" focusposition="0.5,0.5" focussize="0.0,0.0" focus="100%" opacity="20%" />';
+          html += ' </v:oval>';*/
                     html += ' <v:oval id="corona" style="left: ' + (parseInt(scx, 10) - (parseFloat(srd) * 2)).toFixed(0) + 'px; top: ' + (parseInt(scy, 10) - (parseFloat(srd) * 2)).toFixed(0) + 'px; width: ' + (parseFloat(srd) * 4).toFixed(0) + 'px; height: ' + (parseFloat(srd) * 4).toFixed(0) + 'px;" fillcolor="white" stroked="false" strokecolor="' + sky_color + '" strokeweight="0">';
                     html += '  <v:fill id="corona_gradient" type="gradientradial" color2="' + sky_color + '" colors="0% white, 30% white, 100% ' + sky_color + '" focusposition="0.5,0.5" focussize="0.0,0.0" focus="100%" opacity="60%" />';
                     html += ' </v:oval>';
@@ -3561,10 +3589,10 @@ function drawDiagram(event, inline, language) {
 }
 
 //
-// The values given are for 10¡C and 100.3 kPa. Add 1% to the refraction for every 3¡C colder, subtract if hotter
+// The values given are for 10�C and 100.3 kPa. Add 1% to the refraction for every 3�C colder, subtract if hotter
 // (hot air is less dense, and will therefore have less refraction). Add 1% for every 0.9 kPa higher pressure,
 // subtract if lower.
-// As the atmospheric refraction is 34' on the horizon itself, but only 29' above it, the setting or rising sun
+// As the atmospheric refraction is 34' on the horizon itself, but only 29' above it, the setting or rising Sun
 // seems to be flattened by about 5' (about 1/6 of its apparent diameter).
 function elevationRefraction(elv_geometric) {
     if (elv_geometric > 10.2)
@@ -3664,10 +3692,10 @@ function retrieveLimbCorrections() {
             setTimeout("displayNoLimbCorrections()", 1000);
             if (console)
                 console.log("There was a problem retrieving the XML data:\n(" + gXMLRequest.status + ") " + gXMLRequest.statusText);
-            /*      if ( myLanguage == "fr" )
-             updateErrorLog("fr", "Un probl\xE8me est survenu lors de la lecture des donn\xE9es XML:\n(" + gXMLRequest.status + ") " + gXMLRequest.statusText);
-             else
-             updateErrorLog("en", "There was a problem retrieving the XML data:\n(" + gXMLRequest.status + ") " + gXMLRequest.statusText);*/
+            /*      if (myLanguage == "fr")
+        updateErrorLog("fr", "Un probl\xE8me est survenu lors de la lecture des donn\xE9es XML:\n(" + gXMLRequest.status + ") " + gXMLRequest.statusText);
+      else
+        updateErrorLog("en", "There was a problem retrieving the XML data:\n(" + gXMLRequest.status + ") " + gXMLRequest.statusText);*/
         }
     }
 }
@@ -4404,11 +4432,11 @@ function buildShadowOutline(Q1, Q2, bufferIndex, x, y, d, M, l2, omega, sunBelow
             else  // To allow taking into account the average refraction at low Sun elevations
                 B = -Math.sqrt(Math.abs(B));
             /*      else  // No point on Earth
-             {
-             validPt = false;
-             //        i = kITERATION_OUTLINE;
-             break;
-             }*/
+      {
+        validPt = false;
+//        i = kITERATION_OUTLINE;
+        break;
+      }*/
             delta_B = Math.abs(B - B_Old);
             B_Old = B;
 
@@ -4441,7 +4469,6 @@ function buildShadowOutline(Q1, Q2, bufferIndex, x, y, d, M, l2, omega, sunBelow
                 }
                 phi *= R2D;
 
-                gShadowOutlineCoords.push(new google.maps.LatLng(phi, -lambda));
                 j++;
             }
         }
@@ -4478,11 +4505,11 @@ function checkShadowOutlineSection(Q, x, y, d, M, l2, omega, sunBelowHorizon) {
         else  // To allow taking into account the average refraction at low Sun elevations
             B = -Math.sqrt(Math.abs(B));
         /*    else  // No point on Earth
-         {
-         validPt = false;
-         //      i = kITERATION_OUTLINE;
-         break;
-         }*/
+    {
+      validPt = false;
+//      i = kITERATION_OUTLINE;
+      break;
+    }*/
         delta_B = Math.abs(B - B_Old);
         B_Old = B;
 
