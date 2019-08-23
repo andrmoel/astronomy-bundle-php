@@ -127,10 +127,10 @@ class SolarEclipse
         $m = $circumstances->getM();
         $magnitude = $circumstances->getMagnitude();
 
-//        // Check if sun is under horizon
-//        if ($circumstances->getSunAltitude() < 0) {
-//            return self::TYPE_NONE;
-//        }
+        // Check if sun is under horizon
+        if ($this->getEclipseDuration() === 0.0) {
+            return self::TYPE_NONE;
+        }
 
         if ($magnitude > 0.0) {
             if (($m < $l2s) || ($m < -$l2s)) {
