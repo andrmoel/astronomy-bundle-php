@@ -10,6 +10,8 @@ use Andrmoel\AstronomyBundle\Utils\GeneralUtil;
 
 class SolarEclipse
 {
+    const REFRACTION_HEIGHT = -0.00524;
+
     const TYPE_NONE = 'none';
     const TYPE_PARTIAL = 'partial';
     const TYPE_ANNULAR = 'annular';
@@ -38,7 +40,7 @@ class SolarEclipse
     private $location;
 
 
-    public function __construct(BesselianElements $besselianElements)
+    private function __construct(BesselianElements $besselianElements)
     {
         $this->besselianElements = $besselianElements;
         $this->dT = $besselianElements->getDeltaT();
@@ -125,10 +127,10 @@ class SolarEclipse
         $m = $circumstances->getM();
         $magnitude = $circumstances->getMagnitude();
 
-        // Check if sun is under horizon
-        if ($circumstances->getSunAltitude() < 0) {
-            return self::TYPE_NONE;
-        }
+//        // Check if sun is under horizon
+//        if ($circumstances->getSunAltitude() < 0) {
+//            return self::TYPE_NONE;
+//        }
 
         if ($magnitude > 0.0) {
             if (($m < $l2s) || ($m < -$l2s)) {
@@ -153,17 +155,39 @@ class SolarEclipse
         $c1 = $this->getCircumstancesC1();
         $c4 = $this->getCircumstancesC4();
 
-        $duration = $c4->getT() - $c1->getT();
+        $tC1 = $c1->getT();
+        $tC4 = $c4->getT();
+        $tSunrise = $this->getSunriseT();
+        $tSunset = $this->getSunsetT();
 
-        if ($duration < 0.0) {
-            $duration += 24.0;
-        } elseif ($duration >= 24.0) {
-            $duration -= 24.0;
+        switch (true) {
+            // Eclipse is not visible
+            case $tC1 < $tSunrise && $tC4 < $tSunrise:
+            case $tC1 > $tSunset && $tC4 > $tSunset:
+                $duration = 0.0;
+                break;
+            // TODO: Eclipse is visible from sunrise to sunset
+//            case $tC1 > $tSunrise && $tC4 > $tSunset:
+//                $duration = $tSunset - $tSunrise;
+//                break;
+            // Complete eclipse visible
+            case $tC1 > $tSunrise && $tC4 < $tSunset:
+                $duration = $tC4 - $tC1;
+                break;
+            default:
+                if ($tC1 < $tSunrise) {
+                    // Eclipse is visible from sunrise to C4
+                    $duration = $tC4 - $tSunrise;
+                } elseif ($tC4 > $tSunset) {
+                    // Eclipse is visible from C1 to sunset
+                    $duration = $tSunset - $tC1;
+                } else {
+                    $duration = 0.0; // TODO What case is that? Can't happen, or?
+                }
+                break;
         }
 
-        $duration = $duration * 3600;
-
-        return $duration;
+        return $this->hours2seconds($duration);
     }
 
     /**
@@ -174,17 +198,26 @@ class SolarEclipse
         $c2 = $this->getCircumstancesC2();
         $c3 = $this->getCircumstancesC3();
 
-        $duration = $c3->getT() - $c2->getT();
+        $c2SunAltitude = $c2->getSunAltitude();
+        $c3SunAltitude = $c3->getSunAltitude();
 
-        if ($duration < 0.0) {
-            $duration += 24.0;
-        } elseif ($duration >= 24.0) {
-            $duration -= 24.0;
+        if ($c2SunAltitude > self::REFRACTION_HEIGHT && $c3SunAltitude > self::REFRACTION_HEIGHT) {
+            // Complete eclipse is visible
+            $duration = $c3->getT() - $c2->getT();
+        } else {
+            if ($c2SunAltitude > self::REFRACTION_HEIGHT) {
+                // Eclipse is visible from C2 to sunset
+                $duration = $this->getSunsetT() - $c2->getT();
+            } elseif ($c3SunAltitude > self::REFRACTION_HEIGHT) {
+                // Eclipse is visible from sunrise to C3
+                $duration = $c3->getT() - $this->getSunriseT();
+            } else {
+                // Eclipse is not visible
+                $duration = 0.0;
+            }
         }
 
-        $duration = $duration * 3600;
-
-        return $duration;
+        return $this->hours2seconds($duration);
     }
 
     public function getObscuration(SolarEclipseCircumstances $circumstances = null): float
@@ -526,6 +559,74 @@ class SolarEclipse
         return $circumstances;
     }
 
+    public function getSunriseT(): float
+    {
+        $c1 = $this->getCircumstancesC1();
+        $t = $c1->getT() - 0.8;
+
+        $latRad = $this->location->getLatitudeRad();
+        $lonRad = $this->location->getLongitudePositiveWestRad();
+
+        $sinLat = sin($latRad);
+        $cosLat = cos($latRad);
+
+        do {
+            $t += 1 / 180; // Every 20 seconds
+
+            $d = $this->besselianElements->getD($t);
+            $dRad = deg2rad($d);
+            $sinD = sin($dRad);
+            $cosD = cos($dRad);
+
+            $mu = $this->besselianElements->getMu($t);
+            if ($mu >= 360.0) {
+                $mu -= 360.0;
+            }
+            $muRad = deg2rad($mu);
+
+            $h = $muRad - $lonRad - ($this->dT / 13713.440924999626077);
+            $cosH = cos($h);
+
+            $alt = asin($sinD * $sinLat + $cosD * $cosLat * $cosH);
+        } while ($alt < self::REFRACTION_HEIGHT);
+
+        return $t;
+    }
+
+    public function getSunsetT(): float
+    {
+        $c4 = $this->getCircumstancesC4();
+        $t = $c4->getT() + 0.8;
+
+        $latRad = $this->location->getLatitudeRad();
+        $lonRad = $this->location->getLongitudePositiveWestRad();
+
+        $sinLat = sin($latRad);
+        $cosLat = cos($latRad);
+
+        do {
+            $t -= 1 / 180; // Every 20 seconds
+
+            $d = $this->besselianElements->getD($t);
+            $dRad = deg2rad($d);
+            $sinD = sin($dRad);
+            $cosD = cos($dRad);
+
+            $mu = $this->besselianElements->getMu($t);
+            if ($mu >= 360.0) {
+                $mu -= 360.0;
+            }
+            $muRad = deg2rad($mu);
+
+            $h = $muRad - $lonRad - ($this->dT / 13713.440924999626077);
+            $cosH = cos($h);
+
+            $alt = asin($sinD * $sinLat + $cosD * $cosLat * $cosH);
+        } while ($alt < self::REFRACTION_HEIGHT);
+
+        return $t;
+    }
+
     private function getTimeDependentCircumstances(string $eventType, float $t): SolarEclipseCircumstances
     {
         $x = $this->besselianElements->getX($t);
@@ -618,8 +719,7 @@ class SolarEclipse
     public function getObservationalCircumstances(
         $eventType,
         SolarEclipseCircumstances &$circumstances
-    ): SolarEclipseCircumstances
-    {
+    ): SolarEclipseCircumstances {
         $sinD = $circumstances->getSinD();
         $cosD = $circumstances->getCosD();
         $sinH = $circumstances->getSinH();
@@ -674,5 +774,17 @@ class SolarEclipse
         $circumstances->setSunAzimuth($azi);
 
         return $circumstances;
+    }
+
+    // TODO Not in SolarEclipse class
+    private function hours2seconds(float $hours): float
+    {
+        if ($hours < 0.0) {
+            $hours += 24.0;
+        } elseif ($hours >= 24.0) {
+            $hours -= 24.0;
+        }
+
+        return $hours * 3600;
     }
 }
