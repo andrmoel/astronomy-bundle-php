@@ -40,7 +40,7 @@ class SolarEclipse
     private $location;
 
 
-    public function __construct(BesselianElements $besselianElements)
+    private function __construct(BesselianElements $besselianElements)
     {
         $this->besselianElements = $besselianElements;
         $this->dT = $besselianElements->getDeltaT();
@@ -160,32 +160,32 @@ class SolarEclipse
         $tSunrise = $this->getSunriseT();
         $tSunset = $this->getSunsetT();
 
-        if ($tC1 > $tSunrise && $tC4 < $tSunset) {
-            $duration = $tC4 - $tC1;
-        } else {
-            if ($tC1 < $tSunrise) {
-                $duration = $tC4 - $tSunrise;
-            } elseif ($tC4 > $tSunset) {
-                $duration = $tSunset - $tC1;
-            } else {
-                // TODO ELSE .. was dann?
-                var_dump("ELSE!");
-                die();
-            }
+        switch (true) {
+            // Eclipse is not visible
+            case $tC1 < $tSunrise && $tC4 < $tSunrise:
+            case $tC1 > $tSunset && $tC4 > $tSunset:
+                $duration = 0;
+                break;
+            // Eclipse is visible from sunrise to sunset
+            case $tC1 > $tSunrise && $tC4 > $tSunset:
+                $duration = $tSunset - $tSunrise;
+                break;
+            // Complete eclipse visible
+            case $tC1 > $tSunrise && $tC4 < $tSunset:
+                $duration = $tC4 - $tC1;
+                break;
+            default:
+                if ($tC1 < $tSunrise) {
+                    $duration = $tC4 - $tSunrise; // Eclipse is visible from sunrise until end
+                } elseif ($tC4 > $tSunset) {
+                    $duration = $tSunset - $tC1; // Eclipse is visible from start until sunset
+                } else {
+                    $duration = 0; // TODO What case is that? Can't happen, or?
+                }
+                break;
         }
 
-        // TODO Separate function
-        if ($duration < 0.0) {
-            $duration += 24.0;
-        } elseif ($duration >= 24.0) {
-            $duration -= 24.0;
-        }
-
-        $duration = $duration * 3600;
-
-//        var_dump($duration);die("---");
-
-        return $duration;
+        return $this->hours2seconds($duration);
     }
 
     /**
@@ -216,16 +216,7 @@ class SolarEclipse
             }
         }
 
-        // TODO Separate function
-        if ($duration < 0.0) {
-            $duration += 24.0;
-        } elseif ($duration >= 24.0) {
-            $duration -= 24.0;
-        }
-
-        $duration = $duration * 3600;
-
-        return $duration;
+        return $this->hours2seconds($duration);
     }
 
     public function getObscuration(SolarEclipseCircumstances $circumstances = null): float
@@ -727,8 +718,7 @@ class SolarEclipse
     public function getObservationalCircumstances(
         $eventType,
         SolarEclipseCircumstances &$circumstances
-    ): SolarEclipseCircumstances
-    {
+    ): SolarEclipseCircumstances {
         $sinD = $circumstances->getSinD();
         $cosD = $circumstances->getCosD();
         $sinH = $circumstances->getSinH();
@@ -783,5 +773,17 @@ class SolarEclipse
         $circumstances->setSunAzimuth($azi);
 
         return $circumstances;
+    }
+
+    // TODO Not in SolarEclipse class
+    private function hours2seconds(float $hours): float
+    {
+        if ($hours < 0.0) {
+            $hours += 24.0;
+        } elseif ($hours >= 24.0) {
+            $hours -= 24.0;
+        }
+
+        return $hours * 3600;
     }
 }
