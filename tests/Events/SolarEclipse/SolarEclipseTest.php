@@ -36,30 +36,33 @@ class SolarEclipseTest extends TestCase
 
             $this->assertEquals($data[1], round($duration, 1));
         }
-
-        // Edge case: Eclipse happens
     }
-//
-//    /**
-//     * @test
-//     */
-//    public function getEclipseUmbraDurationTest()
-//    {
-//        $toi = TimeOfInterest::createFromString('2013-05-10');
-//        $solarEclipse = SolarEclipse::create($toi);
-//
-//        $array = [
-//            [new Location(-24.78330, 118.00307), 0.0], // Eclipse happens below horizon
-////            [new Location(-24.53202, 118.92287), 120.0], // Eclipse happens during sunrise
-//            [new Location(-24.20177, 120.08742), 251.3], // Eclipse happens after sunrise
-////            [new Location(-24.78330, 118.00307), 0.0], // Eclipse happens above sunset
-//        ];
-//
-//        foreach ($array as $data) {
-//            $solarEclipse->setLocation($data[0]);
-//            $duration = $solarEclipse->getEclipseUmbraDuration();
-//
-//            $this->assertEquals($data[1], round($duration, 1));
-//        }
-//    }
+
+    /**
+     * @test
+     */
+    public function getEclipseUmbraDurationTest()
+    {
+        $toi = TimeOfInterest::createFromString('2013-05-10');
+        $solarEclipse = SolarEclipse::create($toi);
+
+        $array = [
+            [new Location(-32.96072, 90.95353), 0.0], // Eclipse is not visible
+            [new Location(-24.85881, 117.13999), 0.0], // Eclipse happens right before sunset
+            [new Location(-24.53202, 118.92287),118.3], // Eclipse happens during sunrise
+            [new Location(-24.20177, 120.08742), 251.3], // Eclipse happens right after sunrise
+            [new Location(-15.42228, 141.88698), 279.6], // Eclipse happens high above horizon
+            [new Location(-5.10543, -128.12308), 255.5], // Eclipse happens right before sunset
+            [new Location(-5.48116, -126.97582), 156.8], // Eclipse happens during sunset
+            [new Location(-5.82896, -125.64058), 0.0], // Eclipse happens right after sunset
+            [new Location(-18.48712, 138.24995), 0.0], // No annular eclipse, only partial eclipse
+        ];
+
+        foreach ($array as $data) {
+            $solarEclipse->setLocation($data[0]);
+            $duration = $solarEclipse->getEclipseUmbraDuration();
+
+            $this->assertEquals($data[1], round($duration, 1));
+        }
+    }
 }

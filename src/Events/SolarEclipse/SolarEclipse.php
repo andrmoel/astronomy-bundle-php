@@ -164,23 +164,25 @@ class SolarEclipse
             // Eclipse is not visible
             case $tC1 < $tSunrise && $tC4 < $tSunrise:
             case $tC1 > $tSunset && $tC4 > $tSunset:
-                $duration = 0;
+                $duration = 0.0;
                 break;
-            // Eclipse is visible from sunrise to sunset
-            case $tC1 > $tSunrise && $tC4 > $tSunset:
-                $duration = $tSunset - $tSunrise;
-                break;
+            // TODO: Eclipse is visible from sunrise to sunset
+//            case $tC1 > $tSunrise && $tC4 > $tSunset:
+//                $duration = $tSunset - $tSunrise;
+//                break;
             // Complete eclipse visible
             case $tC1 > $tSunrise && $tC4 < $tSunset:
                 $duration = $tC4 - $tC1;
                 break;
             default:
                 if ($tC1 < $tSunrise) {
-                    $duration = $tC4 - $tSunrise; // Eclipse is visible from sunrise until end
+                    // Eclipse is visible from sunrise to C4
+                    $duration = $tC4 - $tSunrise;
                 } elseif ($tC4 > $tSunset) {
-                    $duration = $tSunset - $tC1; // Eclipse is visible from start until sunset
+                    // Eclipse is visible from C1 to sunset
+                    $duration = $tSunset - $tC1;
                 } else {
-                    $duration = 0; // TODO What case is that? Can't happen, or?
+                    $duration = 0.0; // TODO What case is that? Can't happen, or?
                 }
                 break;
         }
@@ -200,19 +202,18 @@ class SolarEclipse
         $c3SunAltitude = $c3->getSunAltitude();
 
         if ($c2SunAltitude > self::REFRACTION_HEIGHT && $c3SunAltitude > self::REFRACTION_HEIGHT) {
+            // Complete eclipse is visible
             $duration = $c3->getT() - $c2->getT();
         } else {
             if ($c2SunAltitude > self::REFRACTION_HEIGHT) {
-                var_dump("SUNSET!");
-                die();
-//                $duration = $sunset->getT() - $c2->getT();
+                // Eclipse is visible from C2 to sunset
+                $duration = $this->getSunsetT() - $c2->getT();
             } elseif ($c3SunAltitude > self::REFRACTION_HEIGHT) {
-                var_dump("SUNRISE!");
-                die();
-//                $duration = $c3->getSunAltitude() - $sunrise->getT();
+                // Eclipse is visible from sunrise to C3
+                $duration = $c3->getT() - $this->getSunriseT();
             } else {
-                // Eclipse happens below horizon
-                return 0.0;
+                // Eclipse is not visible
+                $duration = 0.0;
             }
         }
 
