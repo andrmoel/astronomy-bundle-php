@@ -31,7 +31,7 @@ class RiseSetTransitTest extends TestCase
             Venus::class => ['1988-03-20', '1988-03-20 12:25:25'],
         ];
 
-        $location = new Location(42.3333, -71.0833);
+        $location = Location::create(42.3333, -71.0833);
 
         foreach ($astronomicalObjects as $astronomicalObject => $expectedToi) {
             $toi = TimeOfInterest::createFromString($expectedToi[0]);
@@ -54,7 +54,7 @@ class RiseSetTransitTest extends TestCase
             Venus::class => ['1988-03-20', '1988-03-20 19:40:30'],
         ];
 
-        $location = new Location(42.3333, -71.0833);
+        $location = Location::create(42.3333, -71.0833);
 
         foreach ($astronomicalObjects as $astronomicalObject => $expectedToi) {
             $toi = TimeOfInterest::createFromString($expectedToi[0]);
@@ -77,7 +77,7 @@ class RiseSetTransitTest extends TestCase
             Venus::class => ['1988-03-20', '1988-03-20 02:54:39'],
         ];
 
-        $location = new Location(42.3333, -71.0833);
+        $location = Location::create(42.3333, -71.0833);
 
         foreach ($astronomicalObjects as $astronomicalObject => $expectedToi) {
             $toi = TimeOfInterest::createFromString($expectedToi[0]);
@@ -105,7 +105,7 @@ class RiseSetTransitTest extends TestCase
             Neptune::class => -0.5667,
         ];
 
-        $location = new Location(0, 0);
+        $location = Location::create(0, 0);
         $toi = TimeOfInterest::createFromCurrentTime();
 
         foreach ($astronomicalObjects as $astronomicalObject => $expectedStdAlt) {

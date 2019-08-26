@@ -139,7 +139,7 @@ class HeliocentricEquatorialSphericalCoordinatesTest extends TestCase
      */
     public function getLocalHorizontalCoordinatesTest()
     {
-        $location = new Location(38.921389, -77.065556);
+        $location = Location::create(38.921389, -77.065556);
 
         $locHorCoord = $this->helEquSphCoord->getLocalHorizontalCoordinates($location, $this->T);
 

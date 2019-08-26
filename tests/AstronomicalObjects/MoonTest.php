@@ -75,7 +75,7 @@ class MoonTest extends TestCase
         $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
         // Berlin
-        $location = new Location(52.524, 13.411);
+        $location = Location::create(52.524, 13.411);
 
         $moon = new Moon($toi);
         $localHorizontalCoordinates = $moon->getLocalHorizontalCoordinates($location, false);

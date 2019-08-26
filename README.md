@@ -212,10 +212,10 @@ The location object represents the location of the observer on the earth's surfa
 
 ```php
 // Initialize Location object for Berlin
-$location = new Location(52.524, 13.411);
+$location = Location::create(52.524, 13.411);
 
 // Initialize Location with elevation (Mt. Everest)
-$location = new Location(27.98787, 86.92483, 8848);
+$location = Location::create(27.98787, 86.92483, 8848);
 ```
 
 <a name="coordinates"></a>
@@ -250,7 +250,7 @@ $lat = $geoEclSphCoord->getLatitude();
 **Example 2**: Convert Geocentric Equatorial Spherical Coordinates to Local Horizontal Coordinates
 
 ```php
-$location = new Location(38.921389, -77.065556); // Washington DC
+$location = Location::create(38.921389, -77.065556); // Washington DC
 $T = -0.12727429842574; // Julian Centuries since J2000 (1987-04-10 19:21:00)
 $rightAscension = 347.3193375;
 $declination = -6.719891667;
@@ -301,7 +301,7 @@ The result of the calculation should be:\
 ```php
 $toi = TimeOfInterest::createFromString('2019-05-17 17:50');
 
-$location = new Location(52.524, 13.411); // Berlin
+$location = Location::create(52.524, 13.411); // Berlin
 
 $sun = new Sun($toi);
 
@@ -352,7 +352,7 @@ Calculate sunrise, sunset and upper culmination of the sun on 17 May 2019 in Ber
 ```php
 $toi = TimeOfInterest::createFromString('2019-05-17');
 
-$location = new Location(52.524, 13.411); // Berlin
+$location = Location::create(52.524, 13.411); // Berlin
 
 $sun = new Sun($toi);
 
@@ -394,7 +394,7 @@ The result of the calculation should be:\
 ```php
 $toi = TimeOfInterest::createFromString('2019-05-20 23:00:00');
 
-$location = new Location(52.524, 13.411); // Berlin
+$location = Location::create(52.524, 13.411); // Berlin
 
 $moon = new Moon($toi);
 
@@ -545,7 +545,7 @@ The result of the calculation should be:\
 **Example 2**: Calculate the azimuth and altitude of Venus on 25 October 2018 at 07:15 UTC in Berlin
 
 ```php
-$location = new Location(52.524, 13.411); // Berlin
+$location = Location::create(52.524, 13.411); // Berlin
 
 $toi = TimeOfInterest::createFromString('2018-10-25 07:15:00');
 
@@ -571,7 +571,7 @@ To obtain the local horizontal coordinates **without correction of refraction**,
 Calculate rise, set and upper culmination of Venus on 25 October 2018 at 07:15 UTC in Berlin:
 
 ```php
-$location = new Location(52.524, 13.411); // Berlin
+$location = Location::create(52.524, 13.411); // Berlin
 
 $toi = TimeOfInterest::createFromString('2018-10-25 07:15:00');
 
@@ -600,7 +600,7 @@ The result of the calculation should be:\
 **Example**: Create a solar eclipse for 21 August 2017 for the location Madrads in Oregon (USA)
 
 ```php
-$location = new Location(44.61040, -121.23848); // Madras, OR
+$location = Location::create(44.61040, -121.23848); // Madras, OR
 
 $toi = TimeOfInterest::createFromString('2017-08-21'); // Date of the eclipse (UTC)
 
@@ -623,7 +623,7 @@ The **type of an eclipse** (for the given location) is expressed in a string. Bu
 **Example 1**: Local circumstances for the total solar eclipse of 21 August 2017 for Madras, OR
 
 ```php
-$location = new Location(44.61040, -121.23848); // Madras, OR
+$location = Location::create(44.61040, -121.23848); // Madras, OR
 
 $toi = TimeOfInterest::createFromString('2017-08-21'); // Date of the eclipse (UTC)
 
@@ -648,7 +648,7 @@ The result of the calculation should be:\
 **Example 2**: Local circumstances for the partial solar eclipse of 20 March 2015 in Berlin
 
 ```php
-$location = new Location(52.52, 13.405); // Berlin
+$location = Location::create(52.52, 13.405); // Berlin
 
 $toi = TimeOfInterest::createFromString('2015-03-20'); // Date of the eclipse (UTC)
 
@@ -682,7 +682,7 @@ It is possible to obtains the current circumstances for each contact type (C1, C
 * C4: Fourth contact - Eclipse ends
 
 ```php
-$location = new Location(44.61040, -121.23848); // Madras, OR
+$location = Location::create(44.61040, -121.23848); // Madras, OR
 
 $toi = TimeOfInterest::createFromString('2017-08-21'); // Date of the eclipse (UTC)
 
@@ -699,7 +699,7 @@ $c4 = $solarEclipse->getCircumstancesC4();
 The solar eclipse happens on 21 August 2017 in Madras, Oregon.
 
 ```php
-$location = new Location(44.61040, -121.23848); // Madras, OR
+$location = Location::create(44.61040, -121.23848); // Madras, OR
 
 $toi = TimeOfInterest::createFromString('2017-08-21'); // Date of the eclipse (UTC)
 
@@ -738,8 +738,8 @@ To obtain the local horizontal coordinates **without correction of refraction**,
 ## Distance between two locations
 
 ```php
-$location1 = new Location(52.524, 13.411); // Berlin
-$location2 = new Location(40.697,-74.539); // New York
+$location1 = Location::create(52.524, 13.411); // Berlin
+$location2 = Location::create(40.697,-74.539); // New York
 
 $distance = EarthCalc::getDistanceBetweenLocations($location1, $location2);
 ```

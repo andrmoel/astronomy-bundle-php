@@ -45,7 +45,7 @@ class SolarEclipse
         $this->besselianElements = $besselianElements;
         $this->dT = $besselianElements->getDeltaT();
 
-        $this->location = new Location();
+        $this->location = Location::create();
     }
 
     public static function create(TimeOfInterest $toi, Location $location = null): self
