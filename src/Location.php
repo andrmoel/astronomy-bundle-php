@@ -14,8 +14,13 @@ class Location
     private $longitudeRad;
     private $rhoSinOs;
     private $rhoCosOs;
+    
+    public static function create(float $latitude = 0.0, float $longitude = 0.0, float $elevation = 0.0)
+    {
+        return new self($latitude, $longitude, $elevation);
+    }
 
-    public function __construct(float $latitude = 0.0, float $longitude = 0.0, float $elevation = 0.0)
+    private function __construct(float $latitude = 0.0, float $longitude = 0.0, float $elevation = 0.0)
     {
         $this->latitude = $latitude;
         $this->longitude = $longitude;

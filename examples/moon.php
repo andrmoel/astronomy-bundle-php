@@ -9,7 +9,7 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 date_default_timezone_set('UTC');
 
 // Berlin
-$location = new Location(52.52, 13.405);
+$location = Location::create(52.52, 13.405);
 
 // Create moon
 $moon = new Moon();

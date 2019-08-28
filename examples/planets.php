@@ -15,7 +15,7 @@ use Andrmoel\AstronomyBundle\TimeOfInterest;
 use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 // Berlin
-$location = new Location(52.524, 13.411);
+$location = Location::create(52.524, 13.411);
 
 // Time of interest
 $toi = TimeOfInterest::createFromString('2019-05-24 22:00:00');

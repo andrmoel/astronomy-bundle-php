@@ -14,7 +14,7 @@ class LocalHorizontalCoordinatesTest extends TestCase
      */
     public function getGeocentricEquatorialSphericalCoordinatesTest()
     {
-        $location = new Location(38.921389, -77.065556);
+        $location = Location::create(38.921389, -77.065556);
         $T = -0.12727429842574; // 1987-04-10 19:21:00
         $azimuth = 68.0337;
         $altitude = 15.1249;

@@ -75,7 +75,7 @@ class GeocentricEquatorialRectangularCoordinatesTest extends TestCase
      */
     public function getLocalHorizontalCoordinatesTest()
     {
-        $location = new Location(38.921389, -77.065556);
+        $location = Location::create(38.921389, -77.065556);
 
         $locHorCoord = $this->geoEquRecCoord->getLocalHorizontalCoordinates($location, $this->T);
 

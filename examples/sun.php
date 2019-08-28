@@ -10,7 +10,7 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 date_default_timezone_set('UTC');
 
 // Berlin
-$location = new Location(52.524, 13.411);
+$location = Location::create(52.524, 13.411);
 
 // Create sun
 $sun = new Sun();

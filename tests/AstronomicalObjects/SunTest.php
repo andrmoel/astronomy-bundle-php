@@ -83,7 +83,7 @@ class SunTest extends TestCase
 
         $lat = 52.518611;
         $lon = 13.408333;
-        $location = new Location($lat, $lon);
+        $location = Location::create($lat, $lon);
 
         foreach ($data as $t) {
             $toi = TimeOfInterest::createFromString($t[0]);

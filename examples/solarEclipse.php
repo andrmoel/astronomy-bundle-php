@@ -9,7 +9,7 @@ use Andrmoel\AstronomyBundle\TimeOfInterest;
 date_default_timezone_set('UTC');
 
 // Madras, Oregon
-$location = new Location(44.61040, -121.23848);
+$location = Location::create(44.61040, -121.23848);
 
 // Time of interest (Great American Eclipse)
 $toi = TimeOfInterest::createFromString('2017-08-21');

@@ -9,7 +9,7 @@ use Andrmoel\AstronomyBundle\Utils\AngleUtil;
 
 date_default_timezone_set('UTC');
 
-$location = new Location(52.524, 13.411); // Berlin
+$location = Location::create(52.524, 13.411); // Berlin
 
 $toi = TimeOfInterest::createFromString('2018-10-25 07:15:00');
 $venus = new Venus($toi);
