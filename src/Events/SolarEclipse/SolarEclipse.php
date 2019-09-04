@@ -87,6 +87,14 @@ class SolarEclipse
         $this->lon = $location->getLongitude();
     }
 
+    public function getLocationOfGreatestEclipse(): Location
+    {
+        $lat = $this->besselianElements->getLatitudeGreatestEclipse();
+        $lon = $this->besselianElements->getLongitudeGreatestEclipse();
+
+        return new Location($lat, $lon);
+    }
+
     public function getTimeOfInterest(SolarEclipseCircumstances $circumstances = null): TimeOfInterest
     {
         if (!isset($circumstances)) {
@@ -719,7 +727,8 @@ class SolarEclipse
     public function getObservationalCircumstances(
         $eventType,
         SolarEclipseCircumstances &$circumstances
-    ): SolarEclipseCircumstances {
+    ): SolarEclipseCircumstances
+    {
         $sinD = $circumstances->getSinD();
         $cosD = $circumstances->getCosD();
         $sinH = $circumstances->getSinH();

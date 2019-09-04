@@ -26,6 +26,8 @@ $max = $solarEclipse->getCircumstancesMax();
 $c3 = $solarEclipse->getCircumstancesC3();
 $c4 = $solarEclipse->getCircumstancesC4();
 
+$locationGreatest = $solarEclipse->getLocationOfGreatestEclipse();
+
 echo <<<END
 +------------------------------------
 | Solar eclipse
@@ -45,5 +47,7 @@ C2: {$solarEclipse->getTimeOfInterest($c2)} UTC
 Max: {$solarEclipse->getTimeOfInterest($max)} UTC
 C3: {$solarEclipse->getTimeOfInterest($c3)} UTC
 C4: {$solarEclipse->getTimeOfInterest($c4)} UTC
+
+Location of greatest eclipse: {$locationGreatest->getLatitude()}°, {$locationGreatest->getLongitude()}°
 
 END;
