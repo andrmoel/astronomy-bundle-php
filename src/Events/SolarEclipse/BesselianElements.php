@@ -2,6 +2,8 @@
 
 namespace Andrmoel\AstronomyBundle\Events\SolarEclipse;
 
+use Andrmoel\AstronomyBundle\Location;
+
 class BesselianElements
 {
     private $tMax = 0.0;
@@ -18,11 +20,9 @@ class BesselianElements
     private $tanF1 = 0.0;
     private $tanF2 = 0.0;
 
+    private $latGreatestEclipse = 0.0;
+    private $lonGreatestEclipse = 0.0;
 
-    /**
-     * BesselianElements constructor.
-     * @param array $data
-     */
     public function __construct(array $data)
     {
         $this->tMax = $data['tMax'];
@@ -39,198 +39,106 @@ class BesselianElements
 
         $this->tanF1 = $data['tanF1'];
         $this->tanF2 = $data['tanF2'];
+
+        $this->latGreatestEclipse = $data['latGreatestEclipse'];
+        $this->lonGreatestEclipse = $data['lonGreatestEclipse'];
     }
 
-    /**
-     * Get time of greatest eclipse
-     * @return float
-     */
     public function getTMax()
     {
         return $this->tMax;
     }
 
-
-    /**
-     * Get t0
-     * @return float
-     */
     public function getT0()
     {
         return $this->t0;
     }
 
-
-    /**
-     * Get delta t
-     * @return float
-     */
     public function getDeltaT()
     {
         return $this->dT;
     }
 
-
-    /**
-     * Get x
-     * @param $t
-     * @return float
-     */
     public function getX($t)
     {
         return $this->evaluate($this->x, $t);
     }
 
-
-    /**
-     * Get dx
-     * @param $t
-     * @return float
-     */
     public function getDX($t)
     {
         return $this->evaluateD($this->x, $t);
     }
 
-
-    /**
-     * Get y
-     * @param $t
-     * @return float
-     */
     public function getY($t)
     {
         return $this->evaluate($this->y, $t);
     }
 
-
-    /**
-     * Get dy
-     * @param $t
-     * @return float
-     */
     public function getDY($t)
     {
         return $this->evaluateD($this->y, $t);
     }
 
-
-    /**
-     * Get d
-     * @param $t
-     * @return float
-     */
     public function getD($t)
     {
         return $this->evaluate($this->d, $t);
     }
 
-
-    /**
-     * Get dd
-     * @param $t
-     * @return float
-     */
     public function getDD($t)
     {
         return $this->evaluateD($this->d, $t);
     }
 
-
-    /**
-     * Get m
-     * @param $t
-     * @return float
-     */
     public function getMu($t)
     {
         return $this->evaluate($this->mu, $t);
     }
 
-
-    /**
-     * Get dd
-     * @param $t
-     * @return float
-     */
     public function getDMu($t)
     {
         return $this->evaluateD($this->mu, $t);
     }
 
-
-    /**
-     * Get l1
-     * @param $t
-     * @return float
-     */
     public function getL1($t)
     {
-
         return $this->evaluate($this->l1, $t);
     }
 
-
-    /**
-     * Get dl1
-     * @param $t
-     * @return float
-     */
     public function getDL1($t)
     {
         return $this->evaluateD($this->l1, $t);
     }
 
-
-    /**
-     * Get l2
-     * @param $t
-     * @return float
-     */
     public function getL2($t)
     {
-
         return $this->evaluate($this->l2, $t);
     }
 
-
-    /**
-     * Get dl2
-     * @param $t
-     * @return float
-     */
     public function getDL2($t)
     {
         return $this->evaluateD($this->l2, $t);
     }
 
-
-    /**
-     * Get tan f1
-     * @return float
-     */
     public function getTanF1()
     {
         return $this->tanF1;
     }
 
-
-    /**
-     * Get tan f2
-     * @return float
-     */
     public function getTanF2()
     {
         return $this->tanF2;
     }
 
+    public function getLatitudeGreatestEclipse()
+    {
+        return $this->latGreatestEclipse;
+    }
 
-    /**
-     * Evaluate
-     * @param $dataArray
-     * @param $t
-     * @return float
-     */
+    public function getLongitudeGreatestEclipse()
+    {
+        return $this->lonGreatestEclipse;
+    }
+
     private function evaluate($dataArray, $t)
     {
         $result = 0.0;
@@ -242,13 +150,6 @@ class BesselianElements
         return $result;
     }
 
-
-    /**
-     * Evaluate D
-     * @param $dataArray
-     * @param $t
-     * @return float
-     */
     private function evaluateD($dataArray, $t)
     {
         $result = 0.0;

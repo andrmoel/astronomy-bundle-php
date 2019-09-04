@@ -17,11 +17,35 @@ class BesselianElementsParser extends AbstractParser
             't0' => $this->parseT0(),
             'tanF1' => $tanF1F2['tanF1'],
             'tanF2' => $tanF1F2['tanF2'],
+            'latGreatestEclipse' => $this->parseLatitudeGreatestEclipse(),
+            'lonGreatestEclipse' => $this->parseLongitudeGreatestEclipse(),
         ];
 
         $data = array_merge_recursive($data, $polynomials);
 
         return new BesselianElements($data);
+    }
+
+    private function parseLatitudeGreatestEclipse(): float
+    {
+        $pattern = '/Latitude:([0-9. ]+)° (N|S)/si';
+
+        if (preg_match($pattern, $this->data, $matches)) {
+            return floatval($matches[1]) * ($matches[2] === 'N' ? 1 : -1);
+        }
+
+        return 0.0;
+    }
+
+    private function parseLongitudeGreatestEclipse(): float
+    {
+        $pattern = '/Longitude:([0-9. ]+)° (W|E)/si';
+
+        if (preg_match($pattern, $this->data, $matches)) {
+            return floatval($matches[1]) * ($matches[2] === 'E' ? 1 : -1);
+        }
+
+        return 0.0;
     }
 
     private function parseTMax(): float
