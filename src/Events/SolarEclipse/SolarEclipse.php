@@ -92,7 +92,7 @@ class SolarEclipse
         $lat = $this->besselianElements->getLatitudeGreatestEclipse();
         $lon = $this->besselianElements->getLongitudeGreatestEclipse();
 
-        return new Location($lat, $lon);
+        return Location::create($lat, $lon);
     }
 
     public function getTimeOfInterest(SolarEclipseCircumstances $circumstances = null): TimeOfInterest
