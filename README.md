@@ -271,7 +271,7 @@ An astronomical object **must** be initialized with the TOI. If you don't pass t
 ```php
 $toi = TimeOfInterest::createFromString('2017-07-02 12:00:00');
 
-$moon = new Moon($toi);
+$moon = Moon::create($toi);
 ```
 
 <a name="sun"></a>
@@ -285,7 +285,7 @@ $moon = new Moon($toi);
 ```php
 $toi = TimeOfInterest::createFromString('2019-05-17 17:50');
 
-$sun = new Sun($toi);
+$sun = Sun::create($toi);
 
 $geoEclSphCoordinates = $sun->getGeocentricEclipticalSphericalCoordinates();
 $lon = $geoEclSphCoordinates->getLongitude();
@@ -303,7 +303,7 @@ $toi = TimeOfInterest::createFromString('2019-05-17 17:50');
 
 $location = Location::create(52.524, 13.411); // Berlin
 
-$sun = new Sun($toi);
+$sun = Sun::create($toi);
 
 $locHorCoord = $sun->getLocalHorizontalCoordinates($location);
 $azimuth = $locHorCoord->getAzimuth();
@@ -325,7 +325,7 @@ To obtain the local horizontal coordinates **without correction of refraction**,
 **Example 1**: The current distance of the sun in kilometers can be calculated as follow:
 
 ```php
-$sun = new Sun();
+$sun = Sun::create();
 
 $distance = $sun->getDistanceToEarth();
 ```
@@ -337,7 +337,7 @@ The result should be between 147.1 mio and 152.1 mio kilometers.
 ```php
 $toi = TimeOfInterest::createFromString('2017-06-05 20:50');
 
-$sun = new Sun($toi);
+$sun = Sun::create($toi);
 
 $distance = $sun->getDistanceToEarth();
 ```
@@ -354,7 +354,7 @@ $toi = TimeOfInterest::createFromString('2019-05-17');
 
 $location = Location::create(52.524, 13.411); // Berlin
 
-$sun = new Sun($toi);
+$sun = Sun::create($toi);
 
 // Results are TimeOfInterest objects
 $sunrise = $sun->getSunrise($location);
@@ -378,7 +378,7 @@ The result of the calculation should be:\
 ```php
 $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
-$moon = new Moon($toi);
+$moon = Moon::create($toi);
 
 $geoEquSphCoord = $moon->getGeocentricEquatorialSphericalCoordinates();
 $rightAscension = $geoEquSphCoord->getRightAscension();
@@ -396,7 +396,7 @@ $toi = TimeOfInterest::createFromString('2019-05-20 23:00:00');
 
 $location = Location::create(52.524, 13.411); // Berlin
 
-$moon = new Moon($toi);
+$moon = Moon::create($toi);
 
 $locHorCoord = $moon->getLocalHorizontalCoordinates($location);
 $azimuth = $locHorCoord->getAzimuth();
@@ -418,7 +418,7 @@ To obtain the local horizontal coordinates **without correction of refraction**,
 **Example 1**: The current distance of the moon in kimometers can be calculated as follow:
 
 ```php
-$moon = new Moon();
+$moon = Moon::create();
 
 $distance = $moon->getDistanceToEarth();
 ```
@@ -430,7 +430,7 @@ The result should be between 363300km and 405500km.
 ```php
 $toi = TimeOfInterest::createFromString('2017-06-05 20:50');
 
-$moon = new Moon($toi);
+$moon = Moon::create($toi);
 
 $distance = $moon->getDistanceToEarth();
 ```
@@ -451,7 +451,7 @@ for an specific date. In this example it is 13 May 2019 at 21:30 UTC.
 ```php
 $toi = TimeOfInterest::createFromString('2019-05-13 21:30:00');
 
-$moon = new Moon($toi);
+$moon = Moon::create($toi);
 
 $isWaxing = $moon->isWaxingMoon();
 $illumination = $moon->getIlluminatedFraction();
@@ -474,14 +474,14 @@ If no TimeOfInteressed is passed, the **current date and time** are used for fur
 ```php
 $toi = TimeOfInterest::createFromString('2018-06-03 19:00:00');
 
-$mercury = new Mercury();  // Time = now
-$venus = new Venus($toi); // Time = 2018-06-03 19:00:00
-$earth = new Earth($toi);
-$mars = new Mars($toi);
-$jupiter = new Jupiter($toi);
-$saturn = new Saturn($toi);
-$uranus = new Uranus($toi);
-$neptune = new Neptune($toi);
+$mercury = Mercury::create();  // Time = now
+$venus = Venus::create($toi); // Time = 2018-06-03 19:00:00
+$earth = Earth::create($toi);
+$mars = Mars::create($toi);
+$jupiter = Jupiter::create($toi);
+$saturn = Saturn::create($toi);
+$uranus = Uranus::create($toi);
+$neptune = Neptune::create($toi);
 ```
 
 <a name="planet-hel-pos"></a>

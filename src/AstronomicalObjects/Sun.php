@@ -23,11 +23,16 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
     const TWILIGHT_ASTRONOMICAL = 3;
     const TWILIGHT_NIGHT = 4;
 
+    public static function create(TimeOfInterest $toi = null): self
+    {
+        return new self($toi);
+    }
+
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
         $T = $this->T;
 
-        $earth = new Earth($this->toi);
+        $earth = Earth::create($this->toi);
         $helEclSphCoord = $earth->getHeliocentricEclipticalSphericalCoordinates();
 
         $L = $helEclSphCoord->getLongitude();
@@ -62,7 +67,7 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
     {
         $T = $this->T;
 
-        $earth = new Earth($this->toi);
+        $earth = Earth::create($this->toi);
         $helEclSphCoord = $earth->getHeliocentricEclipticalSphericalCoordinates();
 
         $B = $helEclSphCoord->getLatitude();
@@ -92,8 +97,10 @@ class Sun extends AstronomicalObject implements AstronomicalObjectInterface
             ->getGeocentricEquatorialSphericalCoordinates($this->T);
     }
 
-    public function getLocalHorizontalCoordinates(Location $location, bool $refraction = true): LocalHorizontalCoordinates
-    {
+    public function getLocalHorizontalCoordinates(
+        Location $location,
+        bool $refraction = true
+    ): LocalHorizontalCoordinates {
         $locHorCoord = $this
             ->getGeocentricEquatorialSphericalCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->T);

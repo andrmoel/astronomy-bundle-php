@@ -21,20 +21,17 @@ $location = Location::create(52.524, 13.411);
 $toi = TimeOfInterest::createFromString('2019-05-24 22:00:00');
 
 $planets = array(
-    new Mercury($toi),
-    new Venus($toi),
-    new Mars($toi),
-    new Jupiter($toi),
-    new Saturn($toi),
-    new Uranus($toi),
-    new Neptune($toi),
+    Mercury::create($toi),
+    Venus::create($toi),
+    Mars::create($toi),
+    Jupiter::create($toi),
+    Saturn::create($toi),
+    Uranus::create($toi),
+    Neptune::create($toi),
 );
 
 /** @var Planet $planet */
 foreach ($planets as $planet) {
-    // Create planet
-    $planet = new $planet($toi);
-
     // Get planet name from class
     $planetName = get_class($planet);
     $tmp = explode('/', $planetName);

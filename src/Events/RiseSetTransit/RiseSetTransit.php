@@ -30,7 +30,7 @@ class RiseSetTransit
         $toiJD0 = TimeOfInterest::createFromJulianDay($JD0);
 
         /** @var AstronomicalObjectInterface $astronomicalObject */
-        $astronomicalObject = new $astronomicalObjectClass();
+        $astronomicalObject = $astronomicalObjectClass::create();
         $astronomicalObject->setTimeOfInterest($toiJD0);
 
         $this->astronomicalObject = $astronomicalObject;
@@ -195,8 +195,7 @@ class RiseSetTransit
 
     private function getGeocentricEquatorialCoordinatesOfAstronomicalObject(
         int $diff = 0
-    ): GeocentricEquatorialSphericalCoordinates
-    {
+    ): GeocentricEquatorialSphericalCoordinates {
         $jd0 = $this->toi->getJulianDay0();
         $toi = TimeOfInterest::createFromJulianDay($jd0 + $diff);
 

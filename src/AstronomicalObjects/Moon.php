@@ -17,6 +17,11 @@ use Andrmoel\AstronomyBundle\Utils\DistanceUtil;
 
 class Moon extends AstronomicalObject implements AstronomicalObjectInterface
 {
+    public static function create(TimeOfInterest $toi = null): self
+    {
+        return new self($toi);
+    }
+
     public function getGeocentricEclipticalSphericalCoordinates(): GeocentricEclipticalSphericalCoordinates
     {
         $T = $this->T;
@@ -46,8 +51,10 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
             ->getGeocentricEquatorialSphericalCoordinates($this->T);
     }
 
-    public function getLocalHorizontalCoordinates(Location $location, bool $refraction = true): LocalHorizontalCoordinates
-    {
+    public function getLocalHorizontalCoordinates(
+        Location $location,
+        bool $refraction = true
+    ): LocalHorizontalCoordinates {
         $locHorCoord = $this
             ->getGeocentricEquatorialSphericalCoordinates()
             ->getLocalHorizontalCoordinates($location, $this->T);
@@ -80,7 +87,7 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
         $dMoon = $geoEquCoordinatesMoon->getDeclination();
         $distMoon = MoonCalc::getDistanceToEarth($T);
 
-        $sun = new Sun($this->toi);
+        $sun = Sun::create($this->toi);
         $geoEquCoordinatesSun = $sun->getGeocentricEquatorialSphericalCoordinates();
         $aSun = $geoEquCoordinatesSun->getRightAscension();
         $dSun = $geoEquCoordinatesSun->getDeclination();
@@ -111,7 +118,7 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
         $JDFuture = $this->toi->getJulianDay() + 1; // Tomorrow
         $toiFuture = TimeOfInterest::createFromJulianDay($JDFuture);
 
-        $moon = new Moon($toiFuture);
+        $moon = Moon::create($toiFuture);
         $illuminatedFraction2 = $moon->getIlluminatedFraction();
 
 
@@ -120,7 +127,7 @@ class Moon extends AstronomicalObject implements AstronomicalObjectInterface
 
     public function getPositionAngleOfMoonsBrightLimb(): float
     {
-        $sun = new Sun($this->toi);
+        $sun = Sun::create($this->toi);
 
         $geoEquCoordinatesMoon = $this->getGeocentricEquatorialSphericalCoordinates();
         $geoEquCoordinatesSun = $sun->getGeocentricEquatorialSphericalCoordinates();

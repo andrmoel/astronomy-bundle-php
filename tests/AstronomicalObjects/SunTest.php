@@ -17,7 +17,7 @@ class SunTest extends TestCase
     {
         $toi = TimeOfInterest::createFromString('1992-10-13 00:00:00');
 
-        $sun = new Sun($toi);
+        $sun = Sun::create($toi);
         $geoEclSphCoord = $sun->getGeocentricEclipticalSphericalCoordinates();
 
         $lon = $geoEclSphCoord->getLongitude();
@@ -35,7 +35,7 @@ class SunTest extends TestCase
     {
         $toi = TimeOfInterest::createFromString('1992-10-13 00:00:00');
 
-        $sun = new Sun($toi);
+        $sun = Sun::create($toi);
         $geoEquRecCoordinates = $sun->getGeocentricEquatorialRectangularCoordinates();
 
         $X = $geoEquRecCoordinates->getX();
@@ -55,7 +55,7 @@ class SunTest extends TestCase
     {
         $toi = TimeOfInterest::createFromString('1992-10-13 00:00:00');
 
-        $sun = new Sun($toi);
+        $sun = Sun::create($toi);
         $geoEquCoordinates = $sun->getGeocentricEquatorialSphericalCoordinates();
 
         $rightAscension = $geoEquCoordinates->getRightAscension();
@@ -88,7 +88,7 @@ class SunTest extends TestCase
         foreach ($data as $t) {
             $toi = TimeOfInterest::createFromString($t[0]);
 
-            $sun = new Sun($toi);
+            $sun = Sun::create($toi);
             $this->assertEquals($t[1], $sun->getTwilight($location));
         }
     }

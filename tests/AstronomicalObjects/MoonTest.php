@@ -17,7 +17,7 @@ class MoonTest extends TestCase
     {
         $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
-        $moon = new Moon($toi);
+        $moon = Moon::create($toi);
         $geoEclSphCoordinates = $moon->getGeocentricEclipticalSphericalCoordinates();
 
         $longitude = $geoEclSphCoordinates->getLongitude();
@@ -36,7 +36,7 @@ class MoonTest extends TestCase
     {
         $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
-        $moon = new Moon($toi);
+        $moon = Moon::create($toi);
         $geoEquRecCoords = $moon->getGeocentricEquatorialRectangularCoordinates();
 
         $X = $geoEquRecCoords->getX();
@@ -56,7 +56,7 @@ class MoonTest extends TestCase
     {
         $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
-        $moon = new Moon($toi);
+        $moon = Moon::create($toi);
         $geoEquSphCoordinates = $moon->getGeocentricEquatorialSphericalCoordinates();
 
         $rightAscension = $geoEquSphCoordinates->getRightAscension();
@@ -77,7 +77,7 @@ class MoonTest extends TestCase
         // Berlin
         $location = Location::create(52.524, 13.411);
 
-        $moon = new Moon($toi);
+        $moon = Moon::create($toi);
         $localHorizontalCoordinates = $moon->getLocalHorizontalCoordinates($location, false);
 
         $azimuth = $localHorizontalCoordinates->getAzimuth();
@@ -95,7 +95,7 @@ class MoonTest extends TestCase
     {
         $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
-        $moon = new Moon($toi);
+        $moon = Moon::create($toi);
         $illuminatedFraction = $moon->getIlluminatedFraction();
 
         $this->assertEquals(0.68, round($illuminatedFraction, 2));
@@ -108,14 +108,14 @@ class MoonTest extends TestCase
     {
         $toi = TimeOfInterest::createFromString('2018-09-17 00:00:00');
 
-        $moon = new Moon($toi);
+        $moon = Moon::create($toi);
         $isWaxingMoon = $moon->isWaxingMoon();
 
         $this->assertTrue($isWaxingMoon);
 
         $toi = TimeOfInterest::createFromString('2018-10-02 00:00:00');
 
-        $moon = new Moon($toi);
+        $moon = Moon::create($toi);
         $isWaxingMoon = $moon->isWaxingMoon();
 
         $this->assertFalse($isWaxingMoon);
@@ -129,7 +129,7 @@ class MoonTest extends TestCase
     {
         $toi = TimeOfInterest::createFromString('1992-04-12 00:00:00');
 
-        $moon = new Moon($toi);
+        $moon = Moon::create($toi);
         $x = $moon->getPositionAngleOfMoonsBrightLimb();
 
         $this->assertEquals(285.0, round($x, 1));

@@ -12,7 +12,7 @@ date_default_timezone_set('UTC');
 $location = Location::create(52.52, 13.405);
 
 // Create moon
-$moon = new Moon();
+$moon = Moon::create();
 
 // Ecliptical spherical coordinates
 $geoEclSphCoordinates = $moon->getGeocentricEclipticalSphericalCoordinates();

@@ -13,7 +13,7 @@ date_default_timezone_set('UTC');
 $location = Location::create(52.524, 13.411);
 
 // Create sun
-$sun = new Sun();
+$sun = Sun::create();
 
 // Ecliptical spherical coordinates
 $geoEclSphCoordinates = $sun->getGeocentricEclipticalSphericalCoordinates();

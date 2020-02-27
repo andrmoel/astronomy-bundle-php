@@ -4,6 +4,7 @@ namespace Andrmoel\AstronomyBundle\AstronomicalObjects\Planets;
 
 use Andrmoel\AstronomyBundle\Calculations\VSOP87\EarthRectangularVSOP87;
 use Andrmoel\AstronomyBundle\Calculations\VSOP87\EarthSphericalVSOP87;
+use Andrmoel\AstronomyBundle\TimeOfInterest;
 
 class Earth extends Planet
 {
@@ -13,6 +14,11 @@ class Earth extends Planet
 
     protected $VSOP87_SPHERICAL = EarthSphericalVSOP87::class;
     protected $VSOP87_RECTANGULAR = EarthRectangularVSOP87::class;
+
+    public static function create(TimeOfInterest $toi = null): self
+    {
+        return new self($toi);
+    }
 
     /**
      * Get earth radius at equator

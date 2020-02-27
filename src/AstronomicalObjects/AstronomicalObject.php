@@ -12,7 +12,7 @@ abstract class AstronomicalObject
     /** @var float julian day since J2000.0 */
     protected $T = 0;
 
-    public function __construct(TimeOfInterest $toi = null)
+    protected function __construct(TimeOfInterest $toi = null)
     {
         $this->toi = $toi ? $toi : TimeOfInterest::createFromCurrentTime();
         $this->T = $this->toi->getJulianCenturiesFromJ2000();
