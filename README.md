@@ -494,7 +494,7 @@ The calculations use the VSOP87 theory to obtain the heliocentric position of a 
 ```php
 $toi = TimeOfInterest::createFromString('1992-12-20 00:00:00');
 
-$venus = new Venus($toi);
+$venus = Venus::create($toi);
 
 $helEclSphCoord = $venus->getHeliocentricEclipticalSphericalCoordinates();
 $lon = $helEclSphCoord->getLongitude();
@@ -525,7 +525,7 @@ That means the position of the planet is corrected by light time and aberration.
 ```php
 $toi = TimeOfInterest::createFromString('2018-10-25 07:15:00');
 
-$venus = new Venus($toi);
+$venus = Venus::create($toi);
 
 $geoEclSphCoords = $venus->getGeocentricEclipticalSphericalCoordinates();
 $lon = $geoEclSphCoords->getLongitude();
@@ -549,7 +549,7 @@ $location = Location::create(52.524, 13.411); // Berlin
 
 $toi = TimeOfInterest::createFromString('2018-10-25 07:15:00');
 
-$venus = new Venus($toi);
+$venus = Venus::create($toi);
 
 $locHorCoords = $venus->getLocalHorizontalCoordinates($location);
 $azimuth = $locHorCoords->getAzimuth();
@@ -575,7 +575,7 @@ $location = Location::create(52.524, 13.411); // Berlin
 
 $toi = TimeOfInterest::createFromString('2018-10-25 07:15:00');
 
-$venus = new Venus($toi);
+$venus = Venus::create($toi);
 
 // Results are TimeOfInterest objects
 $rise = $venus->getRise($location);
