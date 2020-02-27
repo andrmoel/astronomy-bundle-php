@@ -16,7 +16,7 @@ class VenusTest extends TestCase
     {
         $toi = TimeOfInterest::createFromString('1992-12-20 00:00:00');
 
-        $venus = new Venus($toi);
+        $venus = Venus::create($toi);
 
         $helEclSphCoordinates = $venus->getHeliocentricEclipticalSphericalCoordinates();
 
@@ -37,7 +37,7 @@ class VenusTest extends TestCase
     {
         $toi = TimeOfInterest::createFromString('1992-12-20 00:00:00');
 
-        $venus = new Venus($toi);
+        $venus = Venus::create($toi);
 
         $helEclRecCoordinates = $venus->getHeliocentricEclipticalRectangularCoordinates();
 
