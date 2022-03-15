@@ -13,7 +13,7 @@ class HeliocentricEclipticalSphericalCoordinatesTest extends TestCase
     /** @var HeliocentricEclipticalSphericalCoordinates */
     private $helEclSphCoord;
 
-    public function setUp()
+    public function setUp(): void
     {
         $longitude = 26.115216;
         $latitude = -2.620557;

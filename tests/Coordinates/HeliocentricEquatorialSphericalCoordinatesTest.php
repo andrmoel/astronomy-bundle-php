@@ -13,7 +13,7 @@ class HeliocentricEquatorialSphericalCoordinatesTest extends TestCase
     /** @var HeliocentricEquatorialSphericalCoordinates */
     private $helEquSphCoord;
 
-    public function setUp()
+    public function setUp(): void
     {
         $rightAscension = 25.175663;
         $declination = 7.641117;

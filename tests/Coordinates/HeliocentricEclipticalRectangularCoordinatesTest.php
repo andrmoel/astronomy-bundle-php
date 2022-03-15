@@ -13,7 +13,7 @@ class HeliocentricEclipticalRectangularCoordinatesTest extends TestCase
     /** @var HeliocentricEclipticalRectangularCoordinates */
     private $helEclRecCoord;
 
-    public function setUp()
+    public function setUp(): void
     {
         $x = 0.6499472;
         $y = 0.3186199;
