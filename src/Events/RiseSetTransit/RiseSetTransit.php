@@ -65,7 +65,7 @@ class RiseSetTransit
         return $toi;
     }
 
-    public function getSet(): TimeOfInterest
+    public function getSet(): ?TimeOfInterest
     {
         $jd0 = $this->toi->getJulianDay0();
         $m = $this->getApproximatedM(self::EVENT_TYPE_SET);
@@ -92,6 +92,8 @@ class RiseSetTransit
         $d2 = $coord2->getDeclination();
         $ra3 = $coord3->getRightAscension();
         $d3 = $coord3->getDeclination();
+
+        list($ra1, $ra2, $ra3) = $this->fix360Crossing([$ra1, $ra2, $ra3]);
 
         $m = $this->getApproximatedM($eventType);
 
@@ -215,4 +217,37 @@ class RiseSetTransit
 
         return $m;
     }
+
+    private function fix360Crossing(array $raArray): array
+    {
+        $result = [];
+
+        $add = 0;
+        $previousValue = 0;
+
+        for ($i = 0; $i < count($raArray); $i++) {
+            $currentValue = $raArray[$i];
+
+            if ($i > 0 && $previousValue - $currentValue > 270) {
+                $add += 360;
+            }
+
+            if ($i > 0 && $currentValue - $previousValue > 270) {
+                $add -= 360;
+            }
+
+            $result[] = $currentValue + $add;
+            $previousValue = $currentValue;
+        }
+
+        if ($add < 0) {
+            return array_map(function ($e) {
+                return $e + 360;
+            }, $result);
+        }
+
+        return $result;
+    }
+
+
 }

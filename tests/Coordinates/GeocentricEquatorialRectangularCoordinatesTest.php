@@ -13,7 +13,7 @@ class GeocentricEquatorialRectangularCoordinatesTest extends TestCase
     /** @var GeocentricEquatorialRectangularCoordinates */
     private $geoEquRecCoord;
 
-    public function setUp()
+    public function setUp(): void
     {
         $x = 0.6217509;
         $y = -0.5967581;
