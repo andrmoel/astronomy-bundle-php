@@ -311,7 +311,7 @@ class TimeCalc
         $second = 60 * ($minuteFloat - $minute);
         $second = round($second);
 
-        return new Time($year, $month, $day, $hour, $minute, $second);
+        return new Time($year, $month, (int)$day, (int)$hour, (int)$minute, (int)$second);
     }
 
 
@@ -330,7 +330,7 @@ class TimeCalc
     public static function getDayOfWeek(float $JD): int
     {
         // Meeus 7.e
-        $DOW = ($JD + 1.5) % 7;
+        $DOW = (int)($JD + 1.5) % 7;
 
         return $DOW;
     }

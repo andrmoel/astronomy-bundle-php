@@ -13,7 +13,7 @@ class GeocentricEquatorialSphericalCoordinatesTest extends TestCase
     /** @var GeocentricEquatorialSphericalCoordinates */
     private $geoEquSphCoord;
 
-    public function setUp()
+    public function setUp(): void
     {
         $rightAscension = 316.175027;
         $declination = -18.887572;
